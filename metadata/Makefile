@@ -27,3 +27,8 @@ stats.json: stats.src
 diff:
 	grep -v "^  " stats.src | diff stats.org.gen -
 
+test-stats.json.sample: stats.json.sample
+	cat stats.json.sample | python -m json.tool
+
+test-stats.json: stats.json
+	cat stats.json | python -m json.tool

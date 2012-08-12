@@ -1,0 +1,19 @@
+{
+  "mc-sample_metric": {
+    "name": "sample_metric",
+    "-name-meta":
+      "string - name or key of the metric from the stats.org file",
+
+    "desc": "this is a fake, sample metric to describe each metadata field",
+    "-desc-meta":
+      "string - short description of the metric",
+
+    "section": "Sample Stats",
+    "-section-meta":
+      "string - section in stats.org that lists the metric",
+
+    "pos": 0,
+    "-pos-meta":
+      "number - useful for display ordering, from the stats.org file"
+  }
+}

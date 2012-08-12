@@ -59,6 +59,9 @@ with open(sys.argv[1]) as f:
 
 start_entry(None, None, '')
 
+def clean(s):
+    return s.replace('"', '')
+
 seen = {}
 
 i = 0
@@ -69,14 +72,19 @@ for section, entries in sections:
             if seen.get(entry_name):
                 sys.exit("error: saw %s twice" % entry_name)
 
-            print '  "mc-%s": {' % entry_name
-            print '    "section": "%s",' % section
-            print '    "name": "%s",' % entry_name
-            print '    "desc": "%s",' % entry_desc
-            print '    "pos": %s",' % i
+            if i > 0:
+                print ","
+
+            print '  "mc-%s": {' % clean(entry_name)
+            print '    "name": "%s",' % clean(entry_name)
+            print '    "desc": "%s",' % clean(entry_desc)
+            print '    "section": "%s",' % clean(section)
+            print '    "pos": %s' % i
             if entry_more:
+                print '    ,'
                 print entry_more
-            print '  },'
+            print '  }'
+
             i = i + 1
 print "}"
 
