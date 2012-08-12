@@ -2,17 +2,47 @@
   "storageTotals": {
     "ram": {
       "usedByData": 36881456,
+      "-usedByData": {
+        "units": "bytes"
+      },
       "total": 2108153856,
+      "-total": {
+        "units": "bytes"
+      },
       "quotaTotal": 1686110208,
+      "-quotaTotal": {
+        "units": "bytes"
+      },
       "quotaUsed": 524288000,
-      "used": 1962496000
+      "-quotaUsed": {
+        "units": "bytes"
+      },
+      "used": 1962496000,
+      "-used": {
+        "used": "bytes"
+      }
     },
     "hdd": {
       "usedByData": 40654168,
+      "-usedByData": {
+        "units": "bytes"
+      },
       "total": 56327458816,
+      "-total": {
+        "units": "bytes"
+      },
       "quotaTotal": 56327458816,
+      "-quotaTotal": {
+        "units": "bytes"
+      },
       "used": 7885844234,
-      "free": 48441614582
+      "-used": {
+        "units": "bytes"
+      },
+      "free": 48441614582,
+      "-free": {
+        "units": "bytes"
+      }
     }
   },
   "name": "default",
@@ -24,19 +54,52 @@
     {
       "systemStats": {
         "cpu_utilization_rate": 1.0050251256281,
+        "-cpu_utilization_rate": {
+          "units": "percent"
+        },
         "swap_total": 6140452864,
-        "swap_used": 86016
+        "-swap_total": {
+          "units": "bytes"
+        },
+        "swap_used": 86016,
+        "-swap_used": {
+          "units": "bytes"
+        }
       },
       "interestingStats": {
         "curr_items": 10000,
+        "-curr_items": {
+          "units": "items"
+        },
         "curr_items_tot": 10000,
-        "vb_replica_curr_items": 0
+        "-curr_items_tot": {
+          "units": "items"
+        },
+        "vb_replica_curr_items": 0,
+        "-vb_replica_curr_items": {
+          "units": "items"
+        }
       },
       "uptime": "25826",
+      "-uptime": {
+        "units": "seconds"
+      },
       "memoryTotal": 2108153856,
+      "-memoryTotal": {
+        "units": "bytes"
+      },
       "memoryFree": 145657856,
+      "-memoryFree": {
+        "units": "bytes"
+      },
       "mcdMemoryReserved": 1608,
+      "-mcdMemoryReserved": {
+        "units": "megabytes"
+      },
       "mcdMemoryAllocated": 1608,
+      "-mcdMemoryAllocated": {
+        "units": "megabytes"
+      },
       "couchApiBase": "http://10.5.2.20:8092/",
       "clusterMembership": "active",
       "status": "healthy",
@@ -52,7 +115,10 @@
     }
   ],
   "buckets": {
-    "uri": "/pools/default/buckets?v=129642483&uuid=8a7a52c13efedbfce51980c6832a2f35"
+    "uri": "/pools/default/buckets?v=129642483&uuid=8a7a52c13efedbfce51980c6832a2f35",
+    "-uri": {
+      "follow": true
+    }
   },
   "remoteClusters": {
     "uri": "/pools/default/remoteClusters?uuid=8a7a52c13efedbfce51980c6832a2f35",
@@ -81,7 +147,13 @@
     "replication": {
       "createURI": "/controller/createReplication?uuid=8a7a52c13efedbfce51980c6832a2f35",
       "replicatorDBURI": "/couchBase/_replicator",
-      "infosURI": "/couchBase/_replicator/_design/_replicator_info/_view/infos?group_level=1"
+      "-replicatorDBURI": {
+        "follow": true
+      },
+      "infosURI": "/couchBase/_replicator/_design/_replicator_info/_view/infos?group_level=1",
+      "-infosURI": {
+        "follow": true
+      }
     },
     "setFastWarmup": {
       "uri": "/controller/setFastWarmup?uuid=8a7a52c13efedbfce51980c6832a2f35",
@@ -94,16 +166,28 @@
   ],
   "rebalanceStatus": "none",
   "rebalanceProgressUri": "/pools/default/rebalanceProgress",
+  "-rebalanceProgressUri": {
+    "follow": true
+  },
   "stopRebalanceUri": "/controller/stopRebalance?uuid=8a7a52c13efedbfce51980c6832a2f35",
   "nodeStatusesUri": "/nodeStatuses",
+  "-nodeStatusesUri": {
+    "follow": true
+  },
   "autoCompactionSettings": {
     "parallelDBAndViewCompaction": false,
     "databaseFragmentationThreshold": {
       "percentage": 30,
+      "-percentage": {
+        "units": "percent"
+      },
       "size": "undefined"
     },
     "viewFragmentationThreshold": {
       "percentage": 30,
+      "-percentage": {
+        "units": "percent"
+      },
       "size": "undefined"
     }
   },
@@ -113,10 +197,16 @@
     "minItemsThreshold": 10
   },
   "tasks": {
-    "uri": "/pools/default/tasks?v=84138772"
+    "uri": "/pools/default/tasks?v=84138772",
+    "-uri": {
+      "follow": true
+    }
   },
   "stats": {
-    "uri": "/pools/default/stats"
+    "uri": "/pools/default/stats",
+    "-uri": {
+      "follow": true
+    }
   },
   "counters": {
 
