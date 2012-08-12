@@ -1,0 +1,125 @@
+{
+  "storageTotals": {
+    "ram": {
+      "usedByData": 36881456,
+      "total": 2108153856,
+      "quotaTotal": 1686110208,
+      "quotaUsed": 524288000,
+      "used": 1962496000
+    },
+    "hdd": {
+      "usedByData": 40654168,
+      "total": 56327458816,
+      "quotaTotal": 56327458816,
+      "used": 7885844234,
+      "free": 48441614582
+    }
+  },
+  "name": "default",
+  "alerts": [
+
+  ],
+  "alertsSilenceURL": "/controller/resetAlerts?token=0&uuid=8a7a52c13efedbfce51980c6832a2f35",
+  "nodes": [
+    {
+      "systemStats": {
+        "cpu_utilization_rate": 1.0050251256281,
+        "swap_total": 6140452864,
+        "swap_used": 86016
+      },
+      "interestingStats": {
+        "curr_items": 10000,
+        "curr_items_tot": 10000,
+        "vb_replica_curr_items": 0
+      },
+      "uptime": "25826",
+      "memoryTotal": 2108153856,
+      "memoryFree": 145657856,
+      "mcdMemoryReserved": 1608,
+      "mcdMemoryAllocated": 1608,
+      "couchApiBase": "http://10.5.2.20:8092/",
+      "clusterMembership": "active",
+      "status": "healthy",
+      "thisNode": true,
+      "hostname": "10.5.2.20:8091",
+      "clusterCompatibility": 131072,
+      "version": "2.0.0-1559-rel-community",
+      "os": "x86_64-unknown-linux-gnu",
+      "ports": {
+        "proxy": 11211,
+        "direct": 11210
+      }
+    }
+  ],
+  "buckets": {
+    "uri": "/pools/default/buckets?v=129642483&uuid=8a7a52c13efedbfce51980c6832a2f35"
+  },
+  "remoteClusters": {
+    "uri": "/pools/default/remoteClusters?uuid=8a7a52c13efedbfce51980c6832a2f35",
+    "validateURI": "/pools/default/remoteClusters?just_validate=1"
+  },
+  "controllers": {
+    "addNode": {
+      "uri": "/controller/addNode?uuid=8a7a52c13efedbfce51980c6832a2f35"
+    },
+    "rebalance": {
+      "uri": "/controller/rebalance?uuid=8a7a52c13efedbfce51980c6832a2f35"
+    },
+    "failOver": {
+      "uri": "/controller/failOver?uuid=8a7a52c13efedbfce51980c6832a2f35"
+    },
+    "reAddNode": {
+      "uri": "/controller/reAddNode?uuid=8a7a52c13efedbfce51980c6832a2f35"
+    },
+    "ejectNode": {
+      "uri": "/controller/ejectNode?uuid=8a7a52c13efedbfce51980c6832a2f35"
+    },
+    "setAutoCompaction": {
+      "uri": "/controller/setAutoCompaction?uuid=8a7a52c13efedbfce51980c6832a2f35",
+      "validateURI": "/controller/setAutoCompaction?just_validate=1"
+    },
+    "replication": {
+      "createURI": "/controller/createReplication?uuid=8a7a52c13efedbfce51980c6832a2f35",
+      "replicatorDBURI": "/couchBase/_replicator",
+      "infosURI": "/couchBase/_replicator/_design/_replicator_info/_view/infos?group_level=1"
+    },
+    "setFastWarmup": {
+      "uri": "/controller/setFastWarmup?uuid=8a7a52c13efedbfce51980c6832a2f35",
+      "validateURI": "/controller/setFastWarmup?just_validate=1"
+    }
+  },
+  "balanced": true,
+  "failoverWarnings": [
+
+  ],
+  "rebalanceStatus": "none",
+  "rebalanceProgressUri": "/pools/default/rebalanceProgress",
+  "stopRebalanceUri": "/controller/stopRebalance?uuid=8a7a52c13efedbfce51980c6832a2f35",
+  "nodeStatusesUri": "/nodeStatuses",
+  "autoCompactionSettings": {
+    "parallelDBAndViewCompaction": false,
+    "databaseFragmentationThreshold": {
+      "percentage": 30,
+      "size": "undefined"
+    },
+    "viewFragmentationThreshold": {
+      "percentage": 30,
+      "size": "undefined"
+    }
+  },
+  "fastWarmupSettings": {
+    "fastWarmupEnabled": true,
+    "minMemoryThreshold": 10,
+    "minItemsThreshold": 10
+  },
+  "tasks": {
+    "uri": "/pools/default/tasks?v=84138772"
+  },
+  "stats": {
+    "uri": "/pools/default/stats"
+  },
+  "counters": {
+
+  },
+  "stopRebalanceIsSafe": true
+}

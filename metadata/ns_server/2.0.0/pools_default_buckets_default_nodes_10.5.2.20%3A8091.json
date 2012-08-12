@@ -1,0 +1,9 @@
+{
+  "hostname": "10.5.2.20:8091",
+  "bucket": {
+    "uri": "/pools/default/buckets/default"
+  },
+  "stats": {
+    "uri": "/pools/default/buckets/default/nodes/10.5.2.20%3A8091/stats"
+  }
+}
