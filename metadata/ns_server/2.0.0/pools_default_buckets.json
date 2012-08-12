@@ -46,10 +46,16 @@
         }
       }
     ],
+    "-nodes": {
+      "ignore": true
+    },
     "stats": {
       "uri": "/pools/default/buckets/default/stats",
       "directoryURI": "/pools/default/buckets/default/statsDirectory",
-      "nodeStatsListURI": "/pools/default/buckets/default/nodes"
+      "nodeStatsListURI": "/pools/default/buckets/default/nodes",
+      "-nodeStatsListURI": {
+        "follow": true
+      }
     },
     "ddocs": {
       "uri": "/pools/default/buckets/default/ddocs"
@@ -64,6 +70,9 @@
       "serverList": [
         "10.5.2.20:11210"
       ],
+      "-serverList": {
+        "visit": "mc-stats"
+      },
       "vBucketMap": [
         [
           0
@@ -3142,17 +3151,38 @@
     "replicaNumber": 0,
     "quota": {
       "ram": 524288000,
-      "rawRAM": 524288000
+      "-ram": {
+        "units": "bytes"
+      },
+      "rawRAM": 524288000,
+      "-rawRAM": {
+        "units": "bytes"
+      }
     },
     "basicStats": {
       "quotaPercentUsed": 7.0345855712891,
+      "-quotaPercentUsed": {
+        "units": "percent"
+      },
       "opsPerSec": 0,
       "viewOps": 0,
       "diskFetches": 0,
       "itemCount": 10000,
+      "-itemCount": {
+        "units": "items"
+      },
       "diskUsed": 40654168,
+      "-diskUsed": {
+        "units": "bytes"
+      },
       "dataUsed": 852616,
-      "memUsed": 36881488
+      "-dataUsed": {
+        "units": "bytes"
+      },
+      "memUsed": 36881488,
+      "-memUsed": {
+        "units": "bytes"
+      }
     },
     "bucketCapabilitiesVer": "",
     "bucketCapabilities": [
