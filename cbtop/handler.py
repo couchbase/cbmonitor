@@ -4,9 +4,9 @@ class Handler:
     """
     interface all data handlers should follow
     """
-    def handle(self, data):
+    def handle(self, source):
         """
-        consume and handle data
+        consume and handle data source
         """
         raise NotImplementedError(
             "handle() has not been implemented")
