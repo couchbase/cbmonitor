@@ -200,14 +200,18 @@ def retrieve_meta(context, path):
     """Retrieves the parsed json metadata that corresponds to
        the given parts of an ns_server URL.
        A path can look like '/pools/default?not=used&ignored=yes'."""
+    with open(meta_path(context, path)) as f:
+        return json.loads(f.read())
+
+def meta_path(context, path):
+    """Calculates the path of the metadata JSON file given a data/URL path."""
     path = path.split('?')[0]
     path = re.sub("/buckets/[^/]+/", "/buckets/BUCKET/", path)
     path = re.sub("/buckets/[^/]+$", "/buckets/BUCKET", path)
     path = re.sub("/nodes/[^/]+/", "/nodes/HOST%3APORT/", path)
     path = re.sub("/nodes/[^/]+$", "/nodes/HOST%3APORT", path)
     fname = "./ns_server/2.0.0/%s.json" % (path[1:].replace("/", "_"))
-    with open(fname) as f:
-        return json.loads(f.read())
+    return fname
 
 def log(*args):
     print >> sys.stderr, " ".join([str(x) for x in args])
