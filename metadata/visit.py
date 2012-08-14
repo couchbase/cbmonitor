@@ -95,6 +95,10 @@ def visit_entry_default(root, parents, data, meta, coll,
         if emit_kind is None:
             emit_kind = EMIT_SLOW
 
+        if emit_kind & EMIT_FAST:
+            log(prefix, "mc-" + '-'.join(path), '=', int(val))
+            # TODO: Save into fast-changing time-series DB here.
+
         if emit_kind & EMIT_SLOW:
             debug(prefix, key, '=', val)
             coll[key] = val

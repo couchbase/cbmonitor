@@ -5,9 +5,15 @@
   "update_seq": 1,
   "purge_seq": 0,
   "compact_running": false,
+  "-compact_running": {
+    "visit": "fast"
+  },
   "disk_size": 4175,
   "data_size": 2984,
   "instance_start_time": "1344534111778900",
   "disk_format_version": 10,
+  "-disk_format_version": {
+    "visit": "slow"
+  },
   "committed_update_seq": 1
 }
