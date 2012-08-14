@@ -17,3 +17,12 @@ Web application setup
     python webapp/manage.py syncdb
 
     python webapp/manage.py runserver 0.0.0.0:8000
+
+Testing
+-------
+
+    pip install lettuce
+
+    pip install nose
+
+    python webapp/manage.py harvest -d webapp
