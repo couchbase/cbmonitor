@@ -92,3 +92,12 @@ def synchronized(lock_name):
                 return func(self, *args, **kwargs)
         return _inner
     return _outer
+
+def is_num(str):
+    """check if a string is numeric"""
+    try:
+        i = float(str)
+    except ValueError, TypeError:
+        return False
+
+    return True

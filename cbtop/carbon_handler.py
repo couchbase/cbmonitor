@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import logging
-import time
+from sys_helper import is_num
 
 from handler import Handler
 from libcarbon.carbon_feeder import CarbonFeeder
@@ -46,5 +46,7 @@ class CarbonHandler(Handler):
         for key_val in source.gen_stats():
             # TODO: tweak the key? reuse connection?
             key, val = key_val
-            c_key = CarbonKey("cb", ip, "mc-" + key)
-            c_feeder.feed(key, val)
+            if not is_num(val):
+                continue
+            c_key = CarbonKey("mc", ip, key)
+            c_feeder.feed(c_key, val, caching=False)
