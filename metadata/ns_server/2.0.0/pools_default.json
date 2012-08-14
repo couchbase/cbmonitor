@@ -82,7 +82,8 @@
       },
       "uptime": "25826",
       "-uptime": {
-        "units": "seconds"
+        "units": "seconds",
+        "visit": "int"
       },
       "memoryTotal": 2108153856,
       "-memoryTotal": {
@@ -111,11 +112,11 @@
       "ports": {
         "proxy": 11211,
         "-proxy": {
-          "visit": "skip"
+          "visit": "slow"
         },
         "direct": 11210,
         "-direct": {
-          "visit": "skip"
+          "visit": "slow"
         }
       }
     }
@@ -185,14 +186,16 @@
     "databaseFragmentationThreshold": {
       "percentage": 30,
       "-percentage": {
-        "units": "percent"
+        "units": "percent",
+        "visit": "slow"
       },
       "size": "undefined"
     },
     "viewFragmentationThreshold": {
       "percentage": 30,
       "-percentage": {
-        "units": "percent"
+        "units": "percent",
+        "visit": "slow"
       },
       "size": "undefined"
     }
@@ -200,7 +203,13 @@
   "fastWarmupSettings": {
     "fastWarmupEnabled": true,
     "minMemoryThreshold": 10,
-    "minItemsThreshold": 10
+    "-minMemoryThreshold": {
+      "visit": "slow"
+    },
+    "minItemsThreshold": 10,
+    "-minItemsThreshold": {
+      "visit": "slow"
+    }
   },
   "tasks": {
     "uri": "/pools/default/tasks?v=84138772",
