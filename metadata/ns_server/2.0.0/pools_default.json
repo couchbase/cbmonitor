@@ -7,11 +7,13 @@
       },
       "total": 2108153856,
       "-total": {
-        "units": "bytes"
+        "units": "bytes",
+        "visit": "slow"
       },
       "quotaTotal": 1686110208,
       "-quotaTotal": {
-        "units": "bytes"
+        "units": "bytes",
+        "visit": "slow"
       },
       "quotaUsed": 524288000,
       "-quotaUsed": {
@@ -29,11 +31,13 @@
       },
       "total": 56327458816,
       "-total": {
-        "units": "bytes"
+        "units": "bytes",
+        "visit": "slow"
       },
       "quotaTotal": 56327458816,
       "-quotaTotal": {
-        "units": "bytes"
+        "units": "bytes",
+        "visit": "slow"
       },
       "used": 7885844234,
       "-used": {
@@ -59,7 +63,8 @@
         },
         "swap_total": 6140452864,
         "-swap_total": {
-          "units": "bytes"
+          "units": "bytes",
+          "visit": "slow"
         },
         "swap_used": 86016,
         "-swap_used": {
@@ -87,7 +92,8 @@
       },
       "memoryTotal": 2108153856,
       "-memoryTotal": {
-        "units": "bytes"
+        "units": "bytes",
+        "visit": "slow"
       },
       "memoryFree": 145657856,
       "-memoryFree": {
@@ -95,11 +101,13 @@
       },
       "mcdMemoryReserved": 1608,
       "-mcdMemoryReserved": {
-        "units": "megabytes"
+        "units": "megabytes",
+        "visit": "slow"
       },
       "mcdMemoryAllocated": 1608,
       "-mcdMemoryAllocated": {
-        "units": "megabytes"
+        "units": "megabytes",
+        "visit": "slow"
       },
       "couchApiBase": "http://10.5.2.20:8092/",
       "clusterMembership": "active",
@@ -107,6 +115,9 @@
       "thisNode": true,
       "hostname": "10.5.2.20:8091",
       "clusterCompatibility": 131072,
+      "-clusterCompatibility": {
+        "visit": "slow"
+      },
       "version": "2.0.0-1559-rel-community",
       "os": "x86_64-unknown-linux-gnu",
       "ports": {
