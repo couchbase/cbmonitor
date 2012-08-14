@@ -46,7 +46,6 @@ def visit_url(context, path):
          root["run"]["data"],
          root["run"]["meta"],
          root["run"]["coll"])
-    log("tot_fast =", root["run"]["tot_fast"])
     return root
 
 EMIT_NONE = 0x00
@@ -226,17 +225,28 @@ def store_slow(root, parents, data, meta, coll,
     coll[key] = val
     root["run"]["tot_slow"] += 1
 
-def main(host, port, path, store):
+def url_before(context, path):
+    log("=====", path)
+    return context, path
+
+def url_after(context, path, root):
+    log("tot_fast =", root["run"]["tot_fast"])
+    log("-----", path)
+    log(json.dumps(root["run"]["coll"], sort_keys=True, indent=4))
+
+def main(host, port, path, store, callbacks):
     todo = []
     todo.append(({"host": host, "port": port, "store": store, "todo": todo}, path))
     while todo:
-        next = todo.pop()
-        log("[fast] =====", next[1])
-        root = visit_url(next[0], next[1])
-        log("[slow] -----", next[1])
-        log(json.dumps(root["run"]["coll"], sort_keys=True, indent=4))
+        context, path = todo.pop()
+        context, path = callbacks["url_before"](context, path)
+        root = visit_url(context, path)
+        callbacks["url_after"](context, path, root)
 
 if __name__ == '__main__':
     main("127.0.0.1", 8091, "/pools/default",
-         {"fast": store_fast, "slow": store_slow})
+         {"fast": store_fast,
+          "slow": store_slow},
+         {"url_before": url_before,
+          "url_after": url_after})
 
