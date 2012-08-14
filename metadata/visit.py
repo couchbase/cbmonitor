@@ -35,11 +35,17 @@ def visit_url(context, path):
     """Recursively visits a ns_server URL, driven by metadata
        to follow links and process data."""
     root = dict(context) # Makes a copy.
-    root["root_data"] = retrieve_data(context, path)
-    root["root_meta"] = retrieve_meta(context, path)
-    root["root_coll"] = type(root["root_meta"])()
-    func = VISIT_CONTAINER_FUNCS[str(type(root["root_meta"]))]
-    func(root, [], root["root_data"], root["root_meta"], root["root_coll"])
+    root["run"] = {}
+    root["run"]["data"] = retrieve_data(context, path)
+    root["run"]["meta"] = retrieve_meta(context, path)
+    root["run"]["coll"] = type(root["run"]["meta"])() # Collection/hiearchy of slow data.
+    root["run"]["tot_fast"] = 0
+    func = VISIT_CONTAINER_FUNCS[str(type(root["run"]["meta"]))]
+    func(root, [],
+         root["run"]["data"],
+         root["run"]["meta"],
+         root["run"]["coll"])
+    log("tot_fast =", root["run"]["tot_fast"])
     return root
 
 EMIT_NONE = 0x00
@@ -75,10 +81,9 @@ def visit_entry_default(root, parents, data, meta, coll,
             # Handle follow metadata, when val is URL/URI,
             # by pushing work onto the todo queue.
             if meta_inf and meta_inf.get('follow', None):
-                root["todo"].append(({"host": root["host"],
-                                      "port": root["port"],
-                                      "todo": root["todo"]},
-                                     val))
+                context = dict(root) # Copy the context for recursion.
+                del context["run"]   # But, not the current run info.
+                root["todo"].append((context, val))
 
     elif t == float or t == int: # Scalar numeric entry.
         if emit_kind is None:
@@ -90,6 +95,7 @@ def visit_entry_default(root, parents, data, meta, coll,
                 units = meta_inf.get("units", '')
             log(prefix, "mc-" + '-'.join(path), '=', val, units)
             # TODO: Save into fast-changing time-series DB here.
+            root["run"]["tot_fast"] += 1
 
         if emit_kind & EMIT_SLOW:
             debug(prefix, key, '=', val)
@@ -102,6 +108,7 @@ def visit_entry_default(root, parents, data, meta, coll,
         if emit_kind & EMIT_FAST:
             log(prefix, "mc-" + '-'.join(path), '=', int(val))
             # TODO: Save into fast-changing time-series DB here.
+            root["run"]["tot_fast"] += 1
 
         if emit_kind & EMIT_SLOW:
             debug(prefix, key, '=', val)
@@ -212,7 +219,7 @@ def main(host, port, path):
         log("[fast] =====", next[1])
         root = visit_url(next[0], next[1])
         log("[slow] -----", next[1])
-        log(json.dumps(root["root_coll"], sort_keys=True, indent=4))
+        log(json.dumps(root["run"]["coll"], sort_keys=True, indent=4))
 
 if __name__ == '__main__':
     main("127.0.0.1", 8091, "/pools/default")
