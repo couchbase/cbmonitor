@@ -11,6 +11,10 @@ Dependencies
 
     pip install docutils
 
+    pip install lettuce
+
+    pip install nose
+
 Web application setup
 ---------------------
 
@@ -20,9 +24,5 @@ Web application setup
 
 Testing
 -------
-
-    pip install lettuce
-
-    pip install nose
 
     python webapp/manage.py harvest -d webapp
