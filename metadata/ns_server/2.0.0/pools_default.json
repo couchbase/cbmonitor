@@ -110,7 +110,13 @@
       "os": "x86_64-unknown-linux-gnu",
       "ports": {
         "proxy": 11211,
-        "direct": 11210
+        "-proxy": {
+          "visit": "skip"
+        },
+        "direct": 11210,
+        "-direct": {
+          "visit": "skip"
+        }
       }
     }
   ],

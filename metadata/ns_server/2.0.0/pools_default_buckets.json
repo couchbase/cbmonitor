@@ -47,7 +47,7 @@
       }
     ],
     "-nodes": {
-      "ignore": true
+      "visit": "strip"
     },
     "stats": {
       "uri": "/pools/default/buckets/default/stats",
@@ -71,7 +71,7 @@
         "10.5.2.20:11210"
       ],
       "-serverList": {
-        "visit": "mc-stats"
+        "visit": "collect_mc_stats"
       },
       "vBucketMap": [
         [
@@ -3147,6 +3147,9 @@
           0
         ]
       ]
+    },
+    "-vBucketMap": {
+      "visit": "skip"
     },
     "replicaNumber": 0,
     "quota": {
