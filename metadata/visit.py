@@ -41,7 +41,7 @@ def visit_url(context, path):
     root["run"]["coll"] = type(root["run"]["meta"])() # Collection/hiearchy of slow data.
     root["run"]["tot_fast"] = 0
     root["run"]["tot_slow"] = 0
-    func = VISIT_COLLECTION_FUNCS[str(type(root["run"]["meta"]))]
+    func = root["collection_funcs"][str(type(root["run"]["meta"]))]
     func(root, [],
          root["run"]["data"],
          root["run"]["meta"],
@@ -183,7 +183,7 @@ def visit_entry(root, parents, data, meta, coll,
     else:
         visit = "default"
 
-    visit_entry_func = VISIT_ENTRY_FUNCS.get(visit)
+    visit_entry_func = root["entry_funcs"].get(visit)
     if not visit_entry_func:
         sys.exit("error: unknown visit function: %s; at %s" %
                  (meta_inf["visit"], parents + [key]))
@@ -238,9 +238,20 @@ def url_after(context, path, root):
     log("-----", path)
     log(json.dumps(root["run"]["coll"], sort_keys=True, indent=4))
 
-def main(host, port, path, store, callbacks):
+def main(host, port, path, store, callbacks,
+         collection_funcs=None,
+         entry_funcs=None):
+    if not collection_funcs:
+        collection_funcs = VISIT_COLLECTION_FUNCS
+    if not entry_funcs:
+        entry_funcs = VISIT_ENTRY_FUNCS
+
     todo = []
-    todo.append(({"host": host, "port": port, "store": store, "todo": todo}, path))
+    todo.append(({"host": host, "port": port, "store": store, "todo": todo,
+                  "collection_funcs": collection_funcs,
+                  "entry_funcs": entry_funcs},
+                 path))
+
     while todo:
         context, path = todo.pop()
         context, path = callbacks["url_before"](context, path)
