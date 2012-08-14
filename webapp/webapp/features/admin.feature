@@ -1,4 +1,4 @@
-Feature: Admin module
+Feature: Administration framework
 
     Scenario: Accessing login page
         Given I access the url "/admin/login/"
