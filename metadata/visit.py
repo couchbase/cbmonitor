@@ -66,9 +66,12 @@ def visit_entry_default(root, parents, data, meta, coll,
 
     t = type(val)
     if t != type(meta_val):
-        log("warning: unexpected type: %s; expected %s; at: %s" %
-            (t, type(meta_val), path))
-        return
+        if type(meta_val) == float or type(meta_val) == int:
+            val = type(meta_val)(val)
+        else:
+            log("warning: unexpected type: %s; expected %s; at: %s" %
+                (t, type(meta_val), path))
+            return
 
     if t == str or t == unicode: # Scalar string entry.
         if emit_kind is None:
