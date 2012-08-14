@@ -40,6 +40,7 @@ def visit_url(context, path):
     root["run"]["meta"] = retrieve_meta(context, path)
     root["run"]["coll"] = type(root["run"]["meta"])() # Collection/hiearchy of slow data.
     root["run"]["tot_fast"] = 0
+    root["run"]["tot_slow"] = 0
     func = VISIT_CONTAINER_FUNCS[str(type(root["run"]["meta"]))]
     func(root, [],
          root["run"]["data"],
@@ -76,7 +77,8 @@ def visit_entry_default(root, parents, data, meta, coll,
 
         if emit_kind & EMIT_SLOW:
             debug(prefix, key, '=', '"%s"' % val)
-            coll[key] = val
+            root["store"]["slow"](root, parents, data, meta, coll,
+                                  key, val, meta_val, meta_inf, level)
 
             # Handle follow metadata, when val is URL/URI,
             # by pushing work onto the todo queue.
@@ -93,26 +95,29 @@ def visit_entry_default(root, parents, data, meta, coll,
             units = ''
             if meta_inf:
                 units = meta_inf.get("units", '')
-            log(prefix, "mc-" + '-'.join(path), '=', val, units)
-            # TODO: Save into fast-changing time-series DB here.
-            root["run"]["tot_fast"] += 1
+            log(prefix, "ns-" + '-'.join(path), '=', val, units)
+            root["store"]["fast"](root, parents, data, meta, coll,
+                                  key, val, meta_val, meta_inf, level)
 
         if emit_kind & EMIT_SLOW:
             debug(prefix, key, '=', val)
-            coll[key] = val
+            root["store"]["slow"](root, parents, data, meta, coll,
+                                  key, val, meta_val, meta_inf, level)
 
     elif t == bool: # Scalar boolean entry.
         if emit_kind is None:
             emit_kind = EMIT_SLOW
 
         if emit_kind & EMIT_FAST:
-            log(prefix, "mc-" + '-'.join(path), '=', int(val))
-            # TODO: Save into fast-changing time-series DB here.
+            log(prefix, "ns-" + '-'.join(path), '=', int(val))
+            root["store"]["fast"](root, parents, data, meta, coll,
+                                  key, val, meta_val, meta_inf, level)
             root["run"]["tot_fast"] += 1
 
         if emit_kind & EMIT_SLOW:
             debug(prefix, key, '=', val)
-            coll[key] = val
+            root["store"]["slow"](root, parents, data, meta, coll,
+                                  key, val, meta_val, meta_inf, level)
 
     elif t == dict or t == list: # Non-scalar entry.
         child_coll = t()
@@ -211,9 +216,19 @@ def log(*args):
 def debug(*args):
     return
 
-def main(host, port, path):
+def store_fast(root, parents, data, meta, coll,
+               key, val, meta_val, meta_inf, level):
+    # TODO: Store numeric or boolean metric into fast-changing time-series DB.
+    root["run"]["tot_fast"] += 1
+
+def store_slow(root, parents, data, meta, coll,
+               key, val, meta_val, meta_inf, level):
+    coll[key] = val
+    root["run"]["tot_slow"] += 1
+
+def main(host, port, path, store):
     todo = []
-    todo.append(({"host": host, "port": port, "todo": todo}, path))
+    todo.append(({"host": host, "port": port, "store": store, "todo": todo}, path))
     while todo:
         next = todo.pop()
         log("[fast] =====", next[1])
@@ -222,5 +237,6 @@ def main(host, port, path):
         log(json.dumps(root["run"]["coll"], sort_keys=True, indent=4))
 
 if __name__ == '__main__':
-    main("127.0.0.1", 8091, "/pools/default")
+    main("127.0.0.1", 8091, "/pools/default",
+         {"fast": store_fast, "slow": store_slow})
 
