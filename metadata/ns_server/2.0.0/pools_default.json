@@ -19,7 +19,7 @@
       },
       "used": 1962496000,
       "-used": {
-        "used": "bytes"
+        "units": "bytes"
       }
     },
     "hdd": {
