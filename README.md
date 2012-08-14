@@ -26,3 +26,5 @@ Testing
 -------
 
     python webapp/manage.py harvest -d webapp
+
+    lettuce whisper
