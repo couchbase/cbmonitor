@@ -13,7 +13,6 @@ class MemcachedCollector(Collector):
     def __init__(self, sources=None, handlers=None):
         self.sources = sources      # [@class MemcachedSource]
         self.handlers = handlers    # [@class Handler]
-        self.stats = {}
 
     def collect(self):
         """
@@ -24,19 +23,16 @@ class MemcachedCollector(Collector):
             logging.error("invalid sources: must be a list")
             return False
 
-        self.stats = {}
-
         for source in self.sources:
             if not isinstance(source, MemcachedSource):
                 logging.error("not a MemcachedSource, skipped")
                 continue
 
-            server = source.server[ip]
+            logging.info(
+                "collecting mc stats from server %s" %source.server.ip)
             source.connect()
-            self.stats[server] = source.feed()
+            source.feed()
             source.disconnect()
-
-        return self.stats
 
     def process(self):
         raise NotImplementedError(
@@ -52,4 +48,5 @@ class MemcachedCollector(Collector):
             return False
 
         for handler in self.handlers:
-            handler.handle(self.stats)
+            for source in self.sources:
+                handler.handle(source)
