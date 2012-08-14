@@ -72,9 +72,13 @@ def visit_entry_default(root, parents, data, meta, coll,
             debug(prefix, key, '=', '"%s"' % val)
             coll[key] = val
 
-            # Handle follow metadata, when val is URL/URI.
+            # Handle follow metadata, when val is URL/URI,
+            # by pushing work onto the todo queue.
             if meta_inf and meta_inf.get('follow', None):
-                todo.append(({"host": root["host"], "port": root["port"]}, val))
+                root["todo"].append(({"host": root["host"],
+                                      "port": root["port"],
+                                      "todo": root["todo"]},
+                                     val))
 
     elif t == float or t == int: # Scalar numeric entry.
         if emit_kind is None:
@@ -200,11 +204,16 @@ def log(*args):
 def debug(*args):
     return
 
-todo = [({"host": "127.0.0.1", "port": 8091}, "/pools/default")]
-while todo:
-    next = todo[0]
-    todo = todo[1:]
-    log("=========", next)
-    root = visit_url(next[0], next[1])
-    log("---------")
-    log(json.dumps(root["root_coll"], sort_keys=True, indent=4))
+def main(host, port, path):
+    todo = []
+    todo.append(({"host": host, "port": port, "todo": todo}, path))
+    while todo:
+        next = todo.pop()
+        log("[fast] =====", next[1])
+        root = visit_url(next[0], next[1])
+        log("[slow] -----", next[1])
+        log(json.dumps(root["root_coll"], sort_keys=True, indent=4))
+
+if __name__ == '__main__':
+    main("127.0.0.1", 8091, "/pools/default")
+
