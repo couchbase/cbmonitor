@@ -28,8 +28,8 @@ def visit_list(root, parents, data, meta, coll, level=0):
         visit_entry(root, parents, data, meta, coll,
                     idx, val, meta_val, None, level=next_level)
 
-VISIT_CONTAINER_FUNCS = {"<type 'dict'>": visit_dict,
-                         "<type 'list'>": visit_list}
+VISIT_COLLECTION_FUNCS = {"<type 'dict'>": visit_dict,
+                          "<type 'list'>": visit_list}
 
 def visit_url(context, path):
     """Recursively visits a ns_server URL, driven by metadata
@@ -41,7 +41,7 @@ def visit_url(context, path):
     root["run"]["coll"] = type(root["run"]["meta"])() # Collection/hiearchy of slow data.
     root["run"]["tot_fast"] = 0
     root["run"]["tot_slow"] = 0
-    func = VISIT_CONTAINER_FUNCS[str(type(root["run"]["meta"]))]
+    func = VISIT_COLLECTION_FUNCS[str(type(root["run"]["meta"]))]
     func(root, [],
          root["run"]["data"],
          root["run"]["meta"],
@@ -127,7 +127,7 @@ def visit_entry_default(root, parents, data, meta, coll,
         else:
             coll.append(child_coll)
 
-        func = VISIT_CONTAINER_FUNCS[str(t)]
+        func = VISIT_COLLECTION_FUNCS[str(t)]
         func(root, path, val, meta_val, child_coll, level=level)
 
     else:
