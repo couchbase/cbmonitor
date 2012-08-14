@@ -16,6 +16,7 @@ class MemcachedSource(Source):
         self.server = server        # @class: Server
         self.bucket = bucket
         self.mc = mc
+        self.data = {}
 
     def connect(self):
         if not self.server or \
@@ -32,17 +33,26 @@ class MemcachedSource(Source):
             logging.error("unable to connect to server : %s" % self.server)
             return None
 
-        ret = {}
+        self.data = {}
         for key in MemcachedSource.MC_STATS:
             try:
                 if key != "":
-                    ret[key] = self.mc.stats(key)
+                    self.data[key] = self.mc.stats(key)
                 else:
-                    ret["all"] = self.mc.stats(key)
+                    self.data["all"] = self.mc.stats(key)
             except Exception, e:
                 logging.error("exception for key %s : %s" % (key, e))
 
-        return ret
+        return self.data
 
     def disconnect(self):
         self.mc.close()
+
+    def gen_stats(self):
+        """
+        generate individual stats
+        @note: on safety check, since we know what the data looks like
+        """
+        for data in self.data.itervalues():
+            for key_val in data.iteritems():
+                yield key_val
