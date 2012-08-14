@@ -58,9 +58,6 @@ def visit_entry_default(root, parents, data, meta, coll,
     """Records a scalar entry into the either the slow-changing or
        fast-changing time-series DB, depending on the emit_kind param.
        Recurses via visit_dict() or visit_list() to handle non-scalar entry."""
-    if (type(key) == str or type(key) == unicode) and key[0] == '-':
-        return
-
     path = parents + [str(key)]
     prefix = "  " * level
 
@@ -178,8 +175,9 @@ VISIT_ENTRY_FUNCS = {"default": visit_entry_default,
 def visit_entry(root, parents, data, meta, coll,
                 key, val, meta_val, meta_inf, level=0):
     """Invokes the right visit_entry_func on an entry."""
-    if (type(key) == str or type(key) == unicode) and key[0] == '-':
-        return
+    if (type(key) == str or type(key) == unicode) and key.startswith('-'):
+        if root.get("strip_meta", True):
+            return
 
     if meta_inf:
         visit = meta_inf.get("visit", "default")
@@ -243,7 +241,8 @@ def url_after(context, path, root):
 
 def main(host, port, path, store, callbacks,
          collection_funcs=None,
-         entry_funcs=None):
+         entry_funcs=None,
+         strip_meta=True):
     if not collection_funcs:
         collection_funcs = VISIT_COLLECTION_FUNCS
     if not entry_funcs:
@@ -252,7 +251,8 @@ def main(host, port, path, store, callbacks,
     todo = []
     todo.append(({"host": host, "port": port, "store": store, "todo": todo,
                   "collection_funcs": collection_funcs,
-                  "entry_funcs": entry_funcs},
+                  "entry_funcs": entry_funcs,
+                  "strip_meta": strip_meta},
                  path))
 
     while todo:
