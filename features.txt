@@ -55,9 +55,6 @@ Feature: works on EC2
 Feature: works on multiple platforms including linux and windows
 
 Feature: easily add new metrics
-  In order to have higher productivity
-  As a programmer
-  The stats collector should allow new metrics just by recording them out of the blue.
 
 Feature: support compression for lower disk usage
 
@@ -70,5 +67,4 @@ Feature: ability to handle missing in metrics, such as when comparing old runs w
 Feature: licenses are shippable friendly
 
 Feature: entire system is packagable/shippable to customers
-
 
