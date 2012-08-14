@@ -8791,6 +8791,9 @@
     "lastTStamp": 1344559963782,
     "interval": 1000
   },
+  "-op": {
+    "visit": "strip"
+  },
   "hot_keys": [
     {
       "name": "9682",
@@ -8832,5 +8835,8 @@
       "name": "9158",
       "ops": 3.8782237735117e-5
     }
-  ]
+  ],
+  "-hot_keys": {
+    "visit": "strip"
+  }
 }

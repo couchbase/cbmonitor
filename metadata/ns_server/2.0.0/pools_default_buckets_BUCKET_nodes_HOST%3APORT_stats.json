@@ -42,6 +42,9 @@
       "ops": 3.8147554741741e-5
     }
   ],
+  "-hot_keys": {
+    "visit": "strip"
+  },
   "op": {
     "samples": {
       "cpu_idle_ms": [
@@ -9382,5 +9385,8 @@
     "isPersistent": true,
     "lastTStamp": 1344560394782,
     "interval": 1000
+  },
+  "-op": {
+    "visit": "strip"
   }
 }

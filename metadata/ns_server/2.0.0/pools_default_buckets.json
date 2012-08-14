@@ -5,6 +5,9 @@
     "authType": "sasl",
     "saslPassword": "",
     "proxyPort": 0,
+    "-proxyPort": {
+      "visit": "slow"
+    },
     "replicaIndex": false,
     "uri": "/pools/default/buckets/default?bucket_uuid=6b22a23338675f894575e6ce2c9c37ad",
     "streamingUri": "/pools/default/bucketsStreaming/default?bucket_uuid=6b22a23338675f894575e6ce2c9c37ad",
@@ -3146,20 +3149,25 @@
         [
           0
         ]
-      ]
-    },
-    "-vBucketMap": {
-      "visit": "slow"
+      ],
+      "-vBucketMap": {
+        "visit": "strip"
+      }
     },
     "replicaNumber": 0,
+    "-replicaNumber": {
+      "visit": "slow"
+    },
     "quota": {
       "ram": 524288000,
       "-ram": {
-        "units": "bytes"
+        "units": "bytes",
+        "visit": "slow"
       },
       "rawRAM": 524288000,
       "-rawRAM": {
-        "units": "bytes"
+        "units": "bytes",
+        "visit": "slow"
       }
     },
     "basicStats": {
@@ -3191,6 +3199,9 @@
     "bucketCapabilities": [
       "touch",
       "couchapi"
-    ]
+    ],
+    "-bucketCapabilities": {
+      "visit": "strip"
+    }
   }
 ]
