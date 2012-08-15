@@ -50,8 +50,7 @@ class MemcachedSource(Source):
 
     def gen_stats(self):
         """
-        generate individual stats
-        @note: no safety check, since we know what the data looks like
+        Generate individual stats
         """
         for data in self.data.itervalues():
             for key_val in data.iteritems():

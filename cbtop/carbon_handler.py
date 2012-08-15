@@ -17,7 +17,7 @@ class CarbonHandler(Handler):
 
     def handle(self, source):
         """
-        put data into carbon
+        Dump data to carbon
         """
         if not source or \
            not source.data or \
@@ -44,7 +44,6 @@ class CarbonHandler(Handler):
 
         ip = source.server.ip
         for key,val in source.gen_stats():
-            # TODO: tweak the key? reuse connection?
             if is_num(val):
                 c_key = CarbonKey("mc", ip, key)
                 c_feeder.feed(c_key, val)

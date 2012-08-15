@@ -2,11 +2,11 @@
 
 class Handler:
     """
-    interface all data handlers should follow
+    Interface all data handlers should follow
     """
     def handle(self, source):
         """
-        consume and handle data source
+        Consume and handle a data source
         """
         raise NotImplementedError(
             "handle() has not been implemented")

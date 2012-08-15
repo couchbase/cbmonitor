@@ -12,10 +12,7 @@ class JsonHandler(Handler):
         self.filename = filename
 
     def handle(self, source):
-        """
-        wrap the data into a json doc
-        dump to current directory
-        """
+        """Wrap data into json doc and dump to a file"""
         if not source or \
             not source.data:
             logging.error("unable to handle : invalid data")
@@ -23,8 +20,8 @@ class JsonHandler(Handler):
 
         if not self.filename:
             self.filename = \
-                source.__class__.__name__ + "-" + \
-                source.server.ip.replace(".", "-") \
+                source.__class__.__name__ + "-" \
+                + source.server.ip.replace(".", "-") \
                 + ".json"
 
         with open(self.filename, "w") as f:

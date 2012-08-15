@@ -6,8 +6,8 @@ from mc_source import MemcachedSource
 
 class MemcachedCollector(Collector):
     """
-    Collect memcached stats across the cluster,
-    optionally process results and emit to the data handler.
+    Collect memcached stats across the cluster, \
+    optionally process results and emit to the data handlers.
     """
 
     def __init__(self, sources=None, handlers=None):
@@ -16,7 +16,7 @@ class MemcachedCollector(Collector):
 
     def collect(self):
         """
-        collect stats from data sources
+        Collect stats from data sources
         """
         if not self.sources or \
             not isinstance(self.sources, list):
@@ -40,7 +40,7 @@ class MemcachedCollector(Collector):
 
     def emit(self):
         """
-        emit stats to data handlers
+        Emit stats to data handlers
         """
         if not self.handlers or \
             not isinstance(self.handlers, list):
