@@ -93,11 +93,11 @@ def synchronized(lock_name):
         return _inner
     return _outer
 
-def is_num(str):
+def is_num(val):
     """check if a string is numeric"""
     try:
-        i = float(str)
-    except ValueError, TypeError:
+        float(val)
+    except ValueError:
         return False
 
     return True

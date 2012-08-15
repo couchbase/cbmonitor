@@ -43,10 +43,8 @@ class CarbonHandler(Handler):
             return False
 
         ip = source.server.ip
-        for key_val in source.gen_stats():
+        for key,val in source.gen_stats():
             # TODO: tweak the key? reuse connection?
-            key, val = key_val
-            if not is_num(val):
-                continue
-            c_key = CarbonKey("mc", ip, key)
-            c_feeder.feed(c_key, val, caching=False)
+            if is_num(val):
+                c_key = CarbonKey("mc", ip, key)
+                c_feeder.feed(c_key, val)
