@@ -240,13 +240,9 @@ def url_after(context, path, root):
     log(json.dumps(root["run"]["coll"], sort_keys=True, indent=4))
 
 def main(host, port, path, store, callbacks,
-         collection_funcs=None,
-         entry_funcs=None,
+         collection_funcs=VISIT_COLLECTION_FUNCS,
+         entry_funcs=VISIT_ENTRY_FUNCS,
          strip_meta=True):
-    if not collection_funcs:
-        collection_funcs = VISIT_COLLECTION_FUNCS
-    if not entry_funcs:
-        entry_funcs = VISIT_ENTRY_FUNCS
 
     todo = []
     todo.append(({"host": host, "port": port, "store": store, "todo": todo,
