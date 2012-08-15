@@ -3,7 +3,7 @@
 import json
 import visit
 
-"""Visits metadata and emits cleansed versions where
+"""Visits ns_server metadata and emits cleansed versions where
    values are converted to zeros. By zero'ing out values,
    the metadata becomes more easily diff'able."""
 
