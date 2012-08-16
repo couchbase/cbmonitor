@@ -7,7 +7,10 @@ import sys
 def visit_dict(root, parents, data, meta, coll, level=0):
     """Invoked when data is a dict."""
     next_level = level + 1
-    for key, val in data.iteritems():
+    for key in sorted(data.keys(),
+                      cmp=lambda x, y: cmp(hyphen_last(x),
+                                           hyphen_last(y))):
+        val = data[key]
         meta_val = meta.get(key, None)
         if meta_val is None:
             log("warning: missing metadata entry at: %s; key: %s" %
@@ -126,7 +129,7 @@ def visit_entry_default(root, parents, data, meta, coll,
         else:
             coll.append(child_coll)
 
-        func = VISIT_COLLECTION_FUNCS[str(t)]
+        func = root["collection_funcs"][str(t)]
         func(root, path, val, meta_val, child_coll, level=level)
 
     else:
@@ -220,6 +223,13 @@ def log(*args):
 def debug(*args):
     return
 
+def hyphen_last(s):
+    """Converts '-foo' to 'foo-', so that 'foo-' comes after 'foo'
+       which is useful for sorting."""
+    if s.startswith('-'):
+        return s[1:] + '-'
+    return s
+
 def store_fast(root, parents, data, meta, coll,
                key, val, meta_val, meta_inf, level):
     # TODO: Store numeric or boolean metric into fast-changing time-series DB.
@@ -243,14 +253,12 @@ def main(host, port, path, store, callbacks,
          collection_funcs=VISIT_COLLECTION_FUNCS,
          entry_funcs=VISIT_ENTRY_FUNCS,
          strip_meta=True):
-
     todo = []
     todo.append(({"host": host, "port": port, "store": store, "todo": todo,
                   "collection_funcs": collection_funcs,
                   "entry_funcs": entry_funcs,
                   "strip_meta": strip_meta},
                  path))
-
     while todo:
         context, path = todo.pop()
         context, path = callbacks["url_before"](context, path)
