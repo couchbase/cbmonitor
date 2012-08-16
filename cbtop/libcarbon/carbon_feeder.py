@@ -28,7 +28,7 @@ class CarbonFeeder:
             self.skt.connect((self.host, self.port))
         except Exception, e:
             logging.error("could not connect to [%s:%s] : %s",
-                self.host, self.host, e)
+                self.host, self.port, e)
             self.skt = None
             return False
 
