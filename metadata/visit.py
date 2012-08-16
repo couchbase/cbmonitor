@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import json
 import re
 import sys
@@ -218,7 +219,8 @@ def meta_path(context, path):
     path = re.sub("/buckets/[^/]+$", "/buckets/BUCKET", path)
     path = re.sub("/nodes/[^/]+/", "/nodes/HOST%3APORT/", path)
     path = re.sub("/nodes/[^/]+$", "/nodes/HOST%3APORT", path)
-    fname = "./ns_server/2.0.0/%s.json" % (path[1:].replace("/", "_"))
+    fname = os.path.dirname(__file__) \
+            + "/ns_server/2.0.0/%s.json" % (path[1:].replace("/", "_"))
     return fname
 
 def log(*args):
