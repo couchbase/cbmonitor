@@ -4,7 +4,7 @@ import logging
 import socket
 from Queue import Queue, Empty as QEmpty, Full as QFull
 
-from sys_helper import SocketHelper
+from libcbtop.sys_helper import SocketHelper
 from carbon_msg import CarbonMessage
 
 class CarbonFeeder:
