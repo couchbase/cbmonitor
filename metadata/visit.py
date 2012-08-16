@@ -4,7 +4,8 @@ import json
 import re
 import sys
 
-def visit_dict(root, parents, data, meta, coll, level=0):
+def visit_dict(root, parents, data, meta, coll, level=0,
+               up_key=None, up_data=None, up_coll=None):
     """Invoked when data is a dict."""
     next_level = level + 1
     for key in sorted(data.keys(),
@@ -20,7 +21,8 @@ def visit_dict(root, parents, data, meta, coll, level=0):
         visit_entry(root, parents, data, meta, coll,
                     key, val, meta_val, meta_inf, level=next_level)
 
-def visit_list(root, parents, data, meta, coll, level=0):
+def visit_list(root, parents, data, meta, coll, level=0,
+               up_key=None, up_data=None, up_coll=None):
     """Invoked when data is a list."""
     next_level = level + 1
     if len(meta) <= 0:
@@ -97,7 +99,7 @@ def visit_entry_default(root, parents, data, meta, coll,
             units = ''
             if meta_inf:
                 units = meta_inf.get("units", '')
-            log(prefix, "ns-" + '-'.join(path), '=', val, units)
+            debug(prefix, "ns-" + '-'.join(path), '=', val, units)
             root["store"]["fast"](root, parents, data, meta, coll,
                                   key, val, meta_val, meta_inf, level)
 
@@ -111,7 +113,7 @@ def visit_entry_default(root, parents, data, meta, coll,
             emit_kind = EMIT_SLOW
 
         if emit_kind & EMIT_FAST:
-            log(prefix, "ns-" + '-'.join(path), '=', int(val))
+            debug(prefix, "ns-" + '-'.join(path), '=', int(val))
             root["store"]["fast"](root, parents, data, meta, coll,
                                   key, val, meta_val, meta_inf, level)
             root["run"]["tot_fast"] += 1
@@ -130,7 +132,8 @@ def visit_entry_default(root, parents, data, meta, coll,
             coll.append(child_coll)
 
         func = root["collection_funcs"][str(t)]
-        func(root, path, val, meta_val, child_coll, level=level)
+        func(root, path, val, meta_val, child_coll, level=level,
+             up_key=key, up_data=data, up_coll=coll)
 
     else:
         log("warning: unhandled type for val: %s; in key: %s" % (val, key))
@@ -162,11 +165,12 @@ def visit_entry_strip(root, parents, data, meta, coll,
 
 def visit_entry_collect_mc_stats(root, parents, data, meta, coll,
                                  key, val, meta_val, meta_inf, level=0):
-    """Collects memcached stats from the val, which should be an array
-       of "HOST:PORT", like ["couchbase-01:11210, couchbase-02:11211"].
-       The root and parents path should have bucket and SASL auth info."""
-    log("  " * level, "MC-STATS", val)
-    return # TODO.
+    """A different implementation could collects memcached stats from the
+       val, which should be an array of "HOST:PORT", like
+       ["couchbase-01:11210, couchbase-02:11211"].  The root and
+       parents path should have bucket and SASL auth info.
+       Use the main(entry_funcs) parameter to specify your own implementation."""
+    debug("  " * level, "MC-STATS", val)
 
 VISIT_ENTRY_FUNCS = {"default": visit_entry_default,
                      "fast": visit_entry_fast,
