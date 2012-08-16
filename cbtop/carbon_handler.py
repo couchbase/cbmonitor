@@ -12,8 +12,9 @@ class CarbonHandler(Handler):
     """
     Handler to dump data to carbon
     """
-    def __init__(self, host):
+    def __init__(self, host="127.0.0.1", c_feeder=None):
         self.host = host    # hostname or ip of the carbon server
+        self.c_feeder = c_feeder
 
     def handle(self, source):
         """
@@ -26,6 +27,9 @@ class CarbonHandler(Handler):
                 "unable to handle : invalid source or hostname")
             return False
 
+        if not self.c_feeder:
+            self.c_feeder = CarbonFeeder(self.host)
+
         # unpack data and send to carbon
         if isinstance(source, MemcachedSource):
             return self._handle_mc(source)
@@ -37,8 +41,7 @@ class CarbonHandler(Handler):
             logging.error("invalid source")
             return False
 
-        c_feeder = CarbonFeeder(self.host)
-        if not c_feeder:
+        if not self.c_feeder:
             logging.error("unable to create carbon feeder")
             return False
 
@@ -46,4 +49,4 @@ class CarbonHandler(Handler):
         for key,val in source.gen_stats():
             if is_num(val):
                 c_key = CarbonKey("mc", ip, key)
-                c_feeder.feed(c_key, val)
+                self.c_feeder.feed(c_key, val)
