@@ -7,10 +7,10 @@
 #     ==> [json conversion (stats-conv.py stats.src)] ==>
 #   stats.json
 #
-all: stats.org.gen stats.json
+all: stats.org.gen stats.json ns_server.json
 
 clean:
-	rm -f stats.org stats.org.gen stats.json
+	rm -f stats.org stats.org.gen stats.json ns_server.json
 
 stats.org:
 	wget https://raw.github.com/couchbase/ep-engine/master/docs/stats.org
@@ -32,3 +32,6 @@ test-stats.json.sample: stats.json.sample
 
 test-stats.json: stats.json
 	cat stats.json | python -m json.tool
+
+ns_server.json:
+	./visit_conv.py > ns_server.json

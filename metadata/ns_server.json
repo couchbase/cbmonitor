@@ -1,0 +1,159 @@
+{
+  "ns-nodes-0-uptime": {
+    "name": "nodes-0-uptime"
+    ,
+    "units": "seconds"
+    ,
+    "visit": "int"
+  }
+,
+  "ns-nodes-0-interestingStats-curr_items_tot": {
+    "name": "nodes-0-interestingStats-curr_items_tot"
+    ,
+    "units": "items"
+  }
+,
+  "ns-nodes-0-interestingStats-vb_replica_curr_items": {
+    "name": "nodes-0-interestingStats-vb_replica_curr_items"
+    ,
+    "units": "items"
+  }
+,
+  "ns-nodes-0-interestingStats-curr_items": {
+    "name": "nodes-0-interestingStats-curr_items"
+    ,
+    "units": "items"
+  }
+,
+  "ns-nodes-0-memoryFree": {
+    "name": "nodes-0-memoryFree"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-nodes-0-systemStats-swap_used": {
+    "name": "nodes-0-systemStats-swap_used"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-nodes-0-systemStats-cpu_utilization_rate": {
+    "name": "nodes-0-systemStats-cpu_utilization_rate"
+    ,
+    "units": "percent"
+  }
+,
+  "ns-storageTotals-hdd-free": {
+    "name": "storageTotals-hdd-free"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-storageTotals-hdd-used": {
+    "name": "storageTotals-hdd-used"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-storageTotals-hdd-usedByData": {
+    "name": "storageTotals-hdd-usedByData"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-storageTotals-ram-quotaUsed": {
+    "name": "storageTotals-ram-quotaUsed"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-storageTotals-ram-used": {
+    "name": "storageTotals-ram-used"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-storageTotals-ram-usedByData": {
+    "name": "storageTotals-ram-usedByData"
+    ,
+    "units": "bytes"
+  }
+  "ns-update_seq": {
+    "name": "update_seq"
+  }
+,
+  "ns-disk_size": {
+    "name": "disk_size"
+  }
+,
+  "ns-purge_seq": {
+    "name": "purge_seq"
+  }
+,
+  "ns-doc_count": {
+    "name": "doc_count"
+  }
+,
+  "ns-compact_running": {
+    "name": "compact_running"
+    ,
+    "visit": "fast"
+  }
+,
+  "ns-doc_del_count": {
+    "name": "doc_del_count"
+  }
+,
+  "ns-committed_update_seq": {
+    "name": "committed_update_seq"
+  }
+,
+  "ns-data_size": {
+    "name": "data_size"
+  }
+  "ns-0-vBucketServerMap-numReplicas": {
+    "name": "0-vBucketServerMap-numReplicas"
+  }
+,
+  "ns-0-basicStats-diskUsed": {
+    "name": "0-basicStats-diskUsed"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-0-basicStats-memUsed": {
+    "name": "0-basicStats-memUsed"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-0-basicStats-viewOps": {
+    "name": "0-basicStats-viewOps"
+  }
+,
+  "ns-0-basicStats-diskFetches": {
+    "name": "0-basicStats-diskFetches"
+  }
+,
+  "ns-0-basicStats-quotaPercentUsed": {
+    "name": "0-basicStats-quotaPercentUsed"
+    ,
+    "units": "percent"
+  }
+,
+  "ns-0-basicStats-opsPerSec": {
+    "name": "0-basicStats-opsPerSec"
+  }
+,
+  "ns-0-basicStats-dataUsed": {
+    "name": "0-basicStats-dataUsed"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-0-basicStats-itemCount": {
+    "name": "0-basicStats-itemCount"
+    ,
+    "units": "items"
+  }
+}

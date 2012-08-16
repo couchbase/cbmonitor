@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+
+import json
+import visit
+
+"""Visits ns_server metadata and emits flat metatdata
+   on the fast-changing time-series metrics to stdout as JSON."""
+
+def store_zero_fast(root, parents, data, meta, coll,
+                    key, val, meta_val, meta_inf, level):
+    if root["run"]["tot_fast"] > 0:
+        print ","
+    name = '-'.join(parents + [key])
+    print '  "ns-%s": {' % name
+    print '    "name": "%s"' % name
+    if meta_inf:
+        i = 0
+        for k, v in meta_inf.iteritems():
+            print '    ,'
+            print '    "%s": "%s"' % (k, v)
+            i = i + 1
+    print '  }'
+    root["run"]["tot_fast"] += 1
+
+def store_zero_slow(root, parents, data, meta, coll,
+                    key, val, meta_val, meta_inf, level):
+    root["run"]["tot_slow"] += 1
+
+def url_zero_before(context, path):
+    return context, path
+
+def url_zero_after(context, path, root):
+    return
+
+if __name__ == '__main__':
+    print "{"
+    visit.main("127.0.0.1", 8091, "/pools/default",
+               {"fast": store_zero_fast,
+                "slow": store_zero_slow},
+               {"url_before": url_zero_before,
+                "url_after": url_zero_after})
+    print "}"
+
