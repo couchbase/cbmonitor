@@ -28,3 +28,14 @@ Testing
     python webapp/manage.py harvest -d webapp
 
     lettuce whisper
+
+virtualenv tips
+---------------
+
+    virtualenv -p python2.6 --no-site-packages priority15
+
+    source priority15/bin/activate
+
+    ...
+
+    deactivate
