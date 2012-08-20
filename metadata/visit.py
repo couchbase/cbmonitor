@@ -260,7 +260,8 @@ def main(host, port, path, store, callbacks,
          entry_funcs=VISIT_ENTRY_FUNCS,
          strip_meta=True):
     todo = []
-    todo.append(({"host": host, "port": port, "store": store, "todo": todo,
+    todo.append(({"host": host, "port": port, "store": store,
+                  "path": path, "todo": todo,
                   "collection_funcs": collection_funcs,
                   "entry_funcs": entry_funcs,
                   "strip_meta": strip_meta},
