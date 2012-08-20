@@ -7,8 +7,12 @@ class DataHelper:
     @staticmethod
     def get_bucket(root, parents):
         """Get bucket name from root and parent nodes"""
-        #TODO
-        return "default"
+        path = root.get("path", "")
+        if path:
+            # assume path like /pools/default
+            return path.split("/")[-1]
+        else:
+            return "default"
 
     @staticmethod
     def get_ip(root, parent):
@@ -18,5 +22,4 @@ class DataHelper:
         Carbon needs to know the originator of the fast changing data, \
         for the purpose of contruct the metric info.
         """
-        #TODO
-        return "127.0.0.1"
+        return root.get("host", "127.0.0.1")
