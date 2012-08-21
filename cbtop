@@ -3,17 +3,35 @@
 import logging
 import time
 import sys
+import signal
 from optparse import OptionParser
 
 from metadata.visit import main, url_after, url_before, VISIT_ENTRY_FUNCS
 from libcarbon.carbon_feeder import CarbonFeeder
 from libcbtop.visitor_cb import VisitorCallback
 
+def handle_signal(signum, frame):
+    """
+    Handles registered signals and exit.
+    """
+    logging.info("received signal %s, aborting" % signum)
+
+    if VisitorCallback.C_FEEDER:
+        VisitorCallback.C_FEEDER.flush()
+
+    global RUN_OK
+    RUN_OK = False
+
+    signal.alarm(5)        # TODO: 5 seconds?
+
 def usage():
     # TODO usage printout
     sys.exit(-1)
 
 if __name__ == "__main__":
+
+    RUN_OK = True
+    signal.signal(signal.SIGINT, handle_signal)
 
     parser = OptionParser()
     parser.add_option("-f", "--freq", dest="freq", default="5",
@@ -35,7 +53,7 @@ if __name__ == "__main__":
 
     VisitorCallback.C_FEEDER = CarbonFeeder(_carbon)
 
-    while True:
+    while RUN_OK:
 
         visit_entry_func = VISIT_ENTRY_FUNCS.copy()
         visit_entry_func["collect_mc_stats"] = \
