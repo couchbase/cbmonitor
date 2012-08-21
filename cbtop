@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import logging
+import logging.config
 import time
 import sys
 import signal
@@ -32,6 +33,8 @@ if __name__ == "__main__":
 
     RUN_OK = True
     signal.signal(signal.SIGINT, handle_signal)
+
+    logging.config.fileConfig("logging.conf")
 
     parser = OptionParser()
     parser.add_option("-f", "--freq", dest="freq", default="5",
