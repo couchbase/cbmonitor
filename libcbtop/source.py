@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-class Source:
+class Source(object):
     """
-    Interface all data sources should follow.
+    Base class for all data sources
     """
     def connect(self):
         """

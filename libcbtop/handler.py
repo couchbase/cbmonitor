@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-class Handler:
+class Handler(object):
     """
-    Interface all data handlers should follow
+    Base class for data handlers
     """
     def handle(self, source):
         """

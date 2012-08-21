@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-class Server:
+class Server(object):
 
     def __init__(self, ip="127.0.0.1", port="8091",ssh_username="root",
                  ssh_password="coucbhase", ssh_key="",

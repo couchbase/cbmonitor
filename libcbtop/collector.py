@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-class Collector:
+class Collector(object):
     """
     Collector to collect data from data @class Source
     Emit data to different types of data handlers
