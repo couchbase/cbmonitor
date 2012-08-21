@@ -8,6 +8,10 @@ import sys
 def visit_dict(root, parents, data, meta, coll, level=0,
                up_key=None, up_data=None, up_coll=None):
     """Invoked when data is a dict."""
+    if not isinstance(data, dict):
+        log(data, " is not a dict")
+        return
+
     next_level = level + 1
     for key in sorted(data.keys(),
                       cmp=lambda x, y: cmp(hyphen_last(x),
@@ -25,6 +29,10 @@ def visit_dict(root, parents, data, meta, coll, level=0,
 def visit_list(root, parents, data, meta, coll, level=0,
                up_key=None, up_data=None, up_coll=None):
     """Invoked when data is a list."""
+    if not isinstance(data, list):
+        log(data, " is not a list")
+        return
+
     next_level = level + 1
     if len(meta) <= 0:
         log("warning: missing list metadata entry at: %s" % (parents))
