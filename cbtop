@@ -10,12 +10,15 @@ from optparse import OptionParser
 from metadata.visit import main, url_after, url_before, VISIT_ENTRY_FUNCS
 from libcarbon.carbon_feeder import CarbonFeeder
 from libcbtop.visitor_cb import VisitorCallback
+from libcbtop.bls_helper import BLSHelper
 
 def handle_signal(signum, frame):
     """
     Handles registered signals and exit.
     """
     logging.info("received signal %s, aborting" % signum)
+    BLSHelper.exit_fullscreen()
+    print "cbtop: cleaning up..."
 
     if VisitorCallback.C_FEEDER:
         VisitorCallback.C_FEEDER.flush()
@@ -55,6 +58,9 @@ if __name__ == "__main__":
         usage()
 
     VisitorCallback.C_FEEDER = CarbonFeeder(_carbon)
+
+    BLSHelper.enter_fullscreen()
+    BLSHelper.show_carbon(_carbon)
 
     while RUN_OK:
 

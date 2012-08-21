@@ -4,6 +4,7 @@ import logging
 from sys_helper import is_num
 
 from libcarbon.carbon_key import CarbonKey
+from bls_helper import BLSHelper
 from server import Server
 from mc_source import MemcachedSource
 from mc_collector import MemcachedCollector
@@ -63,6 +64,7 @@ class VisitorCallback:
                     "unable to collect mc stats from %s : %s" % (server, e))
                 continue
 
+            BLSHelper.add_server(ip)
             mc_server = Server(ip)
 
             # get bucket name from root and parent nodes
