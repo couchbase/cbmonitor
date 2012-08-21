@@ -5,6 +5,10 @@ import json
 import re
 import sys
 
+from lib.membase.api.rest_client import RestConnection
+from lib.membase.api.exception import ServerUnavailableException
+from libcbtop.server import Server
+
 def visit_dict(root, parents, data, meta, coll, level=0,
                up_key=None, up_data=None, up_coll=None):
     """Invoked when data is a dict."""
@@ -32,7 +36,6 @@ def visit_list(root, parents, data, meta, coll, level=0,
     if not isinstance(data, list):
         log(data, " is not a list")
         return
-
     next_level = level + 1
     if len(meta) <= 0:
         log("warning: missing list metadata entry at: %s" % (parents))
@@ -209,8 +212,20 @@ def visit_entry(root, parents, data, meta, coll,
                             key, val, meta_val, meta_inf, level=level)
 
 def retrieve_data(context, path):
-    # TODO: Fake implementation for now, since we can pretend
-    # that a metadata file is actually a data result from ns_server.
+    # TODO: use cbtestlib
+    server = Server(context.get("host", "127.0.0.1"))
+    rest = RestConnection(server)
+    api = rest.baseUrl + path
+
+    try:
+        status, content, header = rest._http_request(api)   #TODO: expose
+    except ServerUnavailableException, e:
+        log(e)
+        return retrieve_meta(context, path)
+
+    if status:
+        return json.loads(content)
+
     return retrieve_meta(context, path)
 
 def retrieve_meta(context, path):
