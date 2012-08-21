@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import logging
 import os
 import json
 import re
@@ -247,7 +248,8 @@ def meta_path(context, path):
     return fname
 
 def log(*args):
-    print >> sys.stderr, " ".join([str(x) for x in args])
+    # TODO: remove me
+    logging.debug(" ".join([str(x) for x in args]))
 
 def debug(*args):
     return
