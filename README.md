@@ -15,6 +15,8 @@ Dependencies
 
     pip install nose
 
+    pip install blessings
+
 Web application setup
 ---------------------
 
@@ -39,3 +41,10 @@ virtualenv tips
     ...
 
     deactivate
+
+Loggings
+--------
+
+    Use standard python logging component
+
+    Configuration file: logging.conf
