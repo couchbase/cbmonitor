@@ -18,7 +18,14 @@ if __name__ == "__main__":
     parser = OptionParser()
     parser.add_option("-f", "--freq", dest="freq", default="5",
         help="stats polling frequency (sec)")
+    parser.add_option("-c", "--carbon", dest="carbon", default="127.0.0.1",
+        help="hostname or ip address of the carbon stats server")
+    parser.add_option("-s", "--server", dest="server", default="127.0.0.1",
+        help="hostname or ip address of the target server")
     (options, args) = parser.parse_args()
+
+    _carbon = options.carbon
+    _server = options.server
 
     try:
         _freq = int(options.freq)
@@ -26,7 +33,7 @@ if __name__ == "__main__":
         logging.error("invalid polling freq: %s" % options.freq)
         usage()
 
-    VisitorCallback.C_FEEDER = CarbonFeeder("10.3.121.220")
+    VisitorCallback.C_FEEDER = CarbonFeeder(_carbon)
 
     while True:
 
@@ -34,7 +41,7 @@ if __name__ == "__main__":
         visit_entry_func["collect_mc_stats"] = \
             VisitorCallback.collect_mc_stats
 
-        main("10.3.121.217", 8091, "/pools/default",
+        main(_server, 8091, "/pools/default",
              {"fast": VisitorCallback.store_fast,
               "slow": VisitorCallback.store_slow},
              {"url_before": url_before,
