@@ -39,6 +39,8 @@ class VisitorCallback:
                    key, val, meta_val, meta_inf, level):
         """Store time-series data into slow-changing database"""
         #TODO
+        if key == "status":
+            BLSHelper.show_status(val)
         return True
 
     @staticmethod

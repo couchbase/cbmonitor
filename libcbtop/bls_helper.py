@@ -10,6 +10,22 @@ except ImportError:
     print "check out http://pypi.python.org/pypi/blessings/"
     sys.exit(-1)
 
+class BLSConstant:
+    """
+    Wrapper to store constant mappings
+    """
+    COLOR = {"black": 0,
+             "red": 1,
+             "green": 2,
+             "yellow": 3,
+             "blue": 4,
+             "magenta": 5,
+             "cyan": 6,
+             "white": 7}
+
+    STATUS = {"healthy": COLOR["green"],
+              "unhealthy": COLOR["red"]}
+
 class BLSHelper:
     """
     Helper class to refresh terminal screen,
@@ -23,7 +39,7 @@ class BLSHelper:
     @staticmethod
     def show_carbon(carbon):
         """Print out carbon server address"""
-        with BLSHelper._TERM.location(0, 0):
+        with BLSHelper._TERM.location(0, 1):
             print BLSHelper._TERM.bold("carbon: %s" %carbon)
 
     @staticmethod
@@ -51,6 +67,15 @@ class BLSHelper:
             print "servers: (%d)" % len(BLSHelper._SERVERS)
             for server in BLSHelper._SERVERS:
                 print server
+
+    @staticmethod
+    def show_status(status):
+        """Print out status of the cluster"""
+        color = BLSConstant.STATUS.get(
+            status, BLSConstant.COLOR["blue"])
+
+        with BLSHelper._TERM.location(30, 2):
+            print BLSHelper._TERM.color(color)("[" + status + "]")
 
     @staticmethod
     def enter_fullscreen():
