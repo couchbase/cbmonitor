@@ -18,6 +18,8 @@ class VisitorCallback:
     """
     C_FEEDER = None        # @class CarbonFeeder
 
+    SLOW_STATS_FUNCS = {"status": BLSHelper.show_status}
+
     @staticmethod
     def store_fast(root, parents, data, meta, coll,
                    key, val, meta_val, meta_inf, level):
@@ -39,8 +41,7 @@ class VisitorCallback:
                    key, val, meta_val, meta_inf, level):
         """Store time-series data into slow-changing database"""
         #TODO
-        if key == "status":
-            BLSHelper.show_status(val)
+        VisitorCallback._show_slow_stats(key, val)
         return True
 
     @staticmethod
@@ -83,3 +84,17 @@ class VisitorCallback:
             mc_coll = MemcachedCollector([mc_source], [c_handler, j_handler])
             mc_coll.collect()
             mc_coll.emit()
+
+    @staticmethod
+    def _show_slow_stats(key, val):
+        """
+        Show slow changing stats on cbtop
+        Dispatch to handling function based on @dict SLOW_STATS_FUNCS
+        """
+        func = VisitorCallback.SLOW_STATS_FUNCS.get(key, None)
+        if not func:
+            logging.error("failed to find func to show "\
+                          "slow changing stats: %s - %s" % (key, val))
+            return
+
+        func(val)
