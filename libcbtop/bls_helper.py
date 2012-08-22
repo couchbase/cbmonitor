@@ -102,6 +102,8 @@ class BLSHelper:
         """
         BLSHelper._TERM.stream.write(
             BLSHelper._TERM.enter_fullscreen)
+        BLSHelper._TERM.stream.write(
+            BLSHelper._TERM.hide_cursor)
 
     @staticmethod
     def exit_fullscreen():
@@ -111,3 +113,5 @@ class BLSHelper:
         """
         BLSHelper._TERM.stream.write(
             BLSHelper._TERM.exit_fullscreen)
+        BLSHelper._TERM.stream.write(
+            BLSHelper._TERM.normal_cursor)
