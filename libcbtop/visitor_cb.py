@@ -18,7 +18,8 @@ class VisitorCallback:
     """
     C_FEEDER = None        # @class CarbonFeeder
 
-    SLOW_STATS_FUNCS = {"status": BLSHelper.show_status}
+    SLOW_STATS_FUNCS = {"status": BLSHelper.show_status,
+                        "balanced": BLSHelper.show_balanced}
 
     @staticmethod
     def store_fast(root, parents, data, meta, coll,

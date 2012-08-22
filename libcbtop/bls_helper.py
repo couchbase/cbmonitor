@@ -23,6 +23,9 @@ class BLSConstant:
              "cyan": 6,
              "white": 7}
 
+    TF = {True: COLOR["green"],
+          False: COLOR["red"]}
+
     STATUS = {"healthy": COLOR["green"],
               "unhealthy": COLOR["red"]}
 
@@ -75,6 +78,20 @@ class BLSHelper:
             status, BLSConstant.COLOR["blue"])
 
         with BLSHelper._TERM.location(30, 2):
+            print BLSHelper._TERM.color(color)("[" + status + "]")
+
+    @staticmethod
+    def show_balanced(tf):
+        """Print out balanced info"""
+        color = BLSConstant.TF.get(
+            tf, BLSConstant.COLOR["blue"])
+
+        if tf:
+            status = "balanced"
+        else:
+            status = "unbalanced"
+
+        with BLSHelper._TERM.location(40, 2):
             print BLSHelper._TERM.color(color)("[" + status + "]")
 
     @staticmethod
