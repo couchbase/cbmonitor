@@ -10,6 +10,8 @@ from lib.membase.api.rest_client import RestConnection
 from lib.membase.api.exception import ServerUnavailableException
 from libcbtop.server import Server
 
+VISIT_OK = True
+
 def visit_dict(root, parents, data, meta, coll, level=0,
                up_key=None, up_data=None, up_coll=None):
     """Invoked when data is a dict."""
@@ -280,6 +282,11 @@ def url_after(context, path, root):
     log("-----", path)
     log(json.dumps(root["run"]["coll"], sort_keys=True, indent=4))
 
+def stop():
+    # TODO: future event to force breaking out of the loop
+    global VISIT_OK
+    VISIT_OK = False
+
 def main(host, port, path, store, callbacks,
          collection_funcs=VISIT_COLLECTION_FUNCS,
          entry_funcs=VISIT_ENTRY_FUNCS,
@@ -291,7 +298,8 @@ def main(host, port, path, store, callbacks,
                   "entry_funcs": entry_funcs,
                   "strip_meta": strip_meta},
                  path))
-    while todo:
+    global VISIT_OK
+    while todo and VISIT_OK:
         context, path = todo.pop()
         context, path = callbacks["url_before"](context, path)
         root = visit_url(context, path)
