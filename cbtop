@@ -7,8 +7,8 @@ import sys
 import signal
 from optparse import OptionParser
 
-from metadata.visit \
-    import main, url_after, url_before, VISIT_ENTRY_FUNCS, stop as stop_visit
+from metadata.visit import main as visit,\
+    url_after, url_before, VISIT_ENTRY_FUNCS, stop as stop_visit
 from libcarbon.carbon_feeder import CarbonFeeder
 from libcbtop.visitor_cb import VisitorCallback
 from libcbtop.bls_helper import BLSHelper
@@ -21,9 +21,6 @@ def handle_signal(signum, frame):
     BLSHelper.exit_fullscreen()
     print "cbtop: cleaning up..."
 
-    if VisitorCallback.C_FEEDER:
-        VisitorCallback.C_FEEDER.flush()
-
     global RUN_OK
     RUN_OK = False
 
@@ -32,6 +29,18 @@ def handle_signal(signum, frame):
 def usage():
     # TODO usage printout
     sys.exit(-1)
+
+def main(vc, server, port=8091, path="/pools/default"):
+
+    visit_entry_func = VISIT_ENTRY_FUNCS.copy()
+    visit_entry_func["collect_mc_stats"] = vc.collect_mc_stats
+
+    visit(server, port, path,
+         {"fast": vc.store_fast,
+          "slow": vc.store_slow},
+         {"url_before": url_before,
+          "url_after": url_after},
+          entry_funcs=visit_entry_func)
 
 if __name__ == "__main__":
 
@@ -58,23 +67,13 @@ if __name__ == "__main__":
         logging.error("invalid polling freq: %s" % options.freq)
         usage()
 
-    VisitorCallback.C_FEEDER = CarbonFeeder(_carbon)
+    c_feeder = CarbonFeeder(_carbon)
+    vc = VisitorCallback(c_feeder)
 
     BLSHelper.enter_fullscreen()
     BLSHelper.show_carbon(_carbon)
 
     while RUN_OK:
-
-        visit_entry_func = VISIT_ENTRY_FUNCS.copy()
-        visit_entry_func["collect_mc_stats"] = \
-            VisitorCallback.collect_mc_stats
-
-        main(_server, 8091, "/pools/default",
-             {"fast": VisitorCallback.store_fast,
-              "slow": VisitorCallback.store_slow},
-             {"url_before": url_before,
-              "url_after": url_after},
-             entry_funcs=visit_entry_func)
-
+        main(vc, _server)
         logging.info("sleep for %s seconds" % _freq)
         time.sleep(_freq)

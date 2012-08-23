@@ -12,20 +12,20 @@ from carbon_handler import CarbonHandler
 from json_handler import JsonHandler
 from metadata.data_helper import DataHelper
 
-class VisitorCallback:
+class VisitorCallback(object):
     """
     Callbacks for metadata visitor
     """
-    C_FEEDER = None        # @class CarbonFeeder
-
     SLOW_STATS_FUNCS = {"status": BLSHelper.show_status,
                         "balanced": BLSHelper.show_balanced}
 
-    @staticmethod
-    def store_fast(root, parents, data, meta, coll,
+    def __init__(self, c_feeder):
+        self.c_feeder = c_feeder
+
+    def store_fast(self, root, parents, data, meta, coll,
                    key, val, meta_val, meta_inf, level):
         """Store time-series data into fast-changing database"""
-        if not VisitorCallback.C_FEEDER:
+        if not self.c_feeder:
             logging.error(
                 "unable to store fast changing data : invalid CarbonFeeder")
             return False
@@ -33,20 +33,18 @@ class VisitorCallback:
         if is_num(val):
             ip = DataHelper.get_ip(root, parents)
             c_key = CarbonKey("ns", ip, key)
-            VisitorCallback.C_FEEDER.feed(c_key, val)
+            self.c_feeder.feed(c_key, val)
 
         return True
 
-    @staticmethod
-    def store_slow(root, parents, data, meta, coll,
+    def store_slow(self, root, parents, data, meta, coll,
                    key, val, meta_val, meta_inf, level):
         """Store time-series data into slow-changing database"""
         #TODO
         VisitorCallback._show_slow_stats(key, val)
         return True
 
-    @staticmethod
-    def collect_mc_stats(root, parents, data, meta, coll,
+    def collect_mc_stats(self, root, parents, data, meta, coll,
                          key, val, meta_val, meta_inf, level=0):
         """
         Collect memcached stats
@@ -78,7 +76,7 @@ class VisitorCallback:
             mc_source = MemcachedSource(mc_server, bucket)
 
             # initialize handlers to dump data to carbon and json doc
-            c_handler = CarbonHandler(c_feeder=VisitorCallback.C_FEEDER)
+            c_handler = CarbonHandler(c_feeder=self.c_feeder)
             j_handler = JsonHandler()
 
             # collect data from source and emit to handlers
