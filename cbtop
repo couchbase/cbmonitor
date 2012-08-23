@@ -8,7 +8,7 @@ import signal
 from optparse import OptionParser
 
 from metadata.visit import main as visit,\
-    url_after, url_before, VISIT_ENTRY_FUNCS, stop as stop_visit
+    url_after, url_before, VISIT_ENTRY_FUNCS
 from libcarbon.carbon_feeder import CarbonFeeder
 from libcbtop.visitor_cb import VisitorCallback
 from libcbtop.bls_helper import BLSHelper
@@ -18,24 +18,24 @@ def handle_signal(signum, frame):
     Handles registered signals and exit.
     """
     logging.info("received signal %s, aborting" % signum)
+
     BLSHelper.exit_fullscreen()
-    print "cbtop: cleaning up..."
 
-    global RUN_OK
-    RUN_OK = False
+    print "cleaning up..."
 
-    stop_visit()
+    global ctl
+    ctl["run_ok"] = False
 
 def usage():
     # TODO usage printout
     sys.exit(-1)
 
-def main(vc, server, port=8091, path="/pools/default"):
+def main(ctl, vc, server, port=8091, path="/pools/default"):
 
     visit_entry_func = VISIT_ENTRY_FUNCS.copy()
     visit_entry_func["collect_mc_stats"] = vc.collect_mc_stats
 
-    visit(server, port, path,
+    visit(ctl, server, port, path,
          {"fast": vc.store_fast,
           "slow": vc.store_slow},
          {"url_before": url_before,
@@ -44,7 +44,6 @@ def main(vc, server, port=8091, path="/pools/default"):
 
 if __name__ == "__main__":
 
-    RUN_OK = True
     signal.signal(signal.SIGINT, handle_signal)
 
     logging.config.fileConfig("logging.conf")
@@ -73,7 +72,9 @@ if __name__ == "__main__":
     BLSHelper.enter_fullscreen()
     BLSHelper.show_carbon(_carbon)
 
-    while RUN_OK:
-        main(vc, _server)
+    ctl = {"run_ok": True}
+
+    while ctl["run_ok"]:
+        main(ctl, vc, _server)
         logging.info("sleep for %s seconds" % _freq)
         time.sleep(_freq)
