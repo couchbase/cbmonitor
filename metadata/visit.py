@@ -6,10 +6,6 @@ import json
 import re
 import sys
 
-from lib.membase.api.rest_client import RestConnection
-from lib.membase.api.exception import ServerUnavailableException
-from libcbtop.server import Server
-
 def visit_dict(root, parents, data, meta, coll, level=0,
                up_key=None, up_data=None, up_coll=None):
     """Invoked when data is a dict."""
@@ -98,11 +94,11 @@ def visit_entry_default(root, parents, data, meta, coll,
                                   key, val, meta_val, meta_inf, level)
 
             # Handle follow metadata, when val is URL/URI,
-            # by pushing work onto the todo queue.
+            # by pushing work onto the to-be-visited queue.
             if meta_inf and meta_inf.get('follow', None):
                 context = dict(root) # Copy the context for recursion.
                 del context["run"]   # But, not the current run info.
-                root["todo"].append((context, val))
+                root["queue"].append((context, val))
 
     elif t == float or t == int: # Scalar numeric entry.
         if emit_kind is None:
@@ -213,20 +209,7 @@ def visit_entry(root, parents, data, meta, coll,
                             key, val, meta_val, meta_inf, level=level)
 
 def retrieve_data(context, path):
-    # TODO: use cbtestlib
-    server = Server(context.get("host", "127.0.0.1"))
-    rest = RestConnection(server)
-    api = rest.baseUrl + path
-
-    try:
-        status, content, header = rest._http_request(api)   #TODO: expose
-    except ServerUnavailableException, e:
-        log(e)
-        return retrieve_meta(context, path)
-
-    if status:
-        return json.loads(content)
-
+    """This simple implementation just pretends that metadata is data."""
     return retrieve_meta(context, path)
 
 def retrieve_meta(context, path):
@@ -248,7 +231,6 @@ def meta_path(context, path):
     return fname
 
 def log(*args):
-    # TODO: remove me
     logging.debug(" ".join([str(x) for x in args]))
 
 def debug(*args):
@@ -263,7 +245,8 @@ def hyphen_last(s):
 
 def store_fast(root, parents, data, meta, coll,
                key, val, meta_val, meta_inf, level):
-    # TODO: Store numeric or boolean metric into fast-changing time-series DB.
+    """A real implementation would store numeric or boolean metric into
+       fast-changing time-series DB."""
     root["run"]["tot_fast"] += 1
 
 def store_slow(root, parents, data, meta, coll,
@@ -280,22 +263,36 @@ def url_after(context, path, root):
     log("-----", path)
     log(json.dumps(root["run"]["coll"], sort_keys=True, indent=4))
 
-def main(ctl, host, port, path, store, callbacks,
+def main(host, port, path, store, callbacks,
          collection_funcs=VISIT_COLLECTION_FUNCS,
          entry_funcs=VISIT_ENTRY_FUNCS,
-         strip_meta=True):
-    todo = []
-    todo.append(({"host": host, "port": port, "store": store,
-                  "path": path, "todo": todo,
-                  "collection_funcs": collection_funcs,
-                  "entry_funcs": entry_funcs,
-                  "strip_meta": strip_meta},
-                 path))
-    while  ctl["run_ok"] and todo:
-        context, path = todo.pop()
-        context, path = callbacks["url_before"](context, path)
+         strip_meta=True, ctl=None, queue=None):
+    context = make_context(host, port, path, store, callbacks,
+                           collection_funcs=VISIT_COLLECTION_FUNCS,
+                           entry_funcs=VISIT_ENTRY_FUNCS,
+                           strip_meta=strip_meta, ctl=ctl, queue=queue)
+    context["queue"].append((context, path))
+    return main_loop(context["queue"])
+
+def make_context(host, port, path, store, callbacks,
+                 collection_funcs=VISIT_COLLECTION_FUNCS,
+                 entry_funcs=VISIT_ENTRY_FUNCS,
+                 strip_meta=True, ctl=None, queue=None):
+    return {"host": host, "port": port, "store": store,
+            "path": path, "queue": queue or [], "ctl": ctl,
+            "collection_funcs": collection_funcs,
+            "entry_funcs": entry_funcs,
+            "strip_meta": strip_meta,
+            "callbacks": callbacks}
+
+def main_loop(queue):
+    while queue:
+        context, path = queue.pop()
+        if (context.get("ctl") or {}).get("stop"):
+            return context.get("ctl").get("stop")
+        context, path = context["callbacks"]["url_before"](context, path)
         root = visit_url(context, path)
-        callbacks["url_after"](context, path, root)
+        context["callbacks"]["url_after"](context, path, root)
 
 if __name__ == '__main__':
     main("127.0.0.1", 8091, "/pools/default",
