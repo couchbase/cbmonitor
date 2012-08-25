@@ -17,6 +17,8 @@ Dependencies
 
     pip install blessings
 
+    pip install numpy
+
 Web application setup
 ---------------------
 
@@ -42,7 +44,7 @@ virtualenv tips
 
     deactivate
 
-Loggings
+Logging
 --------
 
     Use standard python logging component
