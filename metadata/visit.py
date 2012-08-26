@@ -264,18 +264,16 @@ def main(host, port, path, store, callbacks,
          collection_funcs=VISIT_COLLECTION_FUNCS,
          entry_funcs=VISIT_ENTRY_FUNCS,
          strip_meta=True, ctl=None, queue=None):
-    """The usual, single-threaded entry-point for to kick off a visit()."""
+    """The ease-of-use entry-point to kick off a URL visit()."""
     context = make_context(host, port, path, store, callbacks,
-                           collection_funcs=VISIT_COLLECTION_FUNCS,
-                           entry_funcs=VISIT_ENTRY_FUNCS,
+                           collection_funcs=collection_funcs,
+                           entry_funcs=entry_funcs,
                            strip_meta=strip_meta, ctl=ctl, queue=queue)
     context["queue"].append((context, path))
     return main_loop(context["queue"])
 
 def make_context(host, port, path, store, callbacks,
-                 collection_funcs=VISIT_COLLECTION_FUNCS,
-                 entry_funcs=VISIT_ENTRY_FUNCS,
-                 strip_meta=True, ctl=None, queue=None):
+                 collection_funcs, entry_funcs, strip_meta, ctl, queue):
     return {"host": host, "port": port, "store": store,
             "path": path, "queue": queue or [], "ctl": ctl,
             "collection_funcs": collection_funcs,
@@ -290,7 +288,7 @@ def main_loop(queue):
             return context.get("ctl").get("stop")
         context, path = context["callbacks"]["url_before"](context, path)
         root = visit_url(context, path)
-        context["callbacks"]["url_after"](context, path, root)
+        root["callbacks"]["url_after"](root, path, root)
 
 if __name__ == '__main__':
     main("127.0.0.1", 8091, "/pools/default",

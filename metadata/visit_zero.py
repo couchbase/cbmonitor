@@ -63,7 +63,8 @@ def visit_zero_dict(root, parents, data, meta, coll, level=0,
         prefix = ''
     suffix = comma(up_data, up_coll, offset=0)
     emit(level, prefix + "{")
-    visit.visit_dict(root, parents, data, meta, coll, level=level)
+    visit.visit_dict(root, parents, data, meta, coll, level=level,
+                     up_key=up_key, up_data=up_data, up_coll=up_coll)
     emit(level, "}" + suffix)
 
 def visit_zero_list(root, parents, data, meta, coll, level=0,
@@ -74,7 +75,8 @@ def visit_zero_list(root, parents, data, meta, coll, level=0,
         prefix = ''
     suffix = comma(up_data, up_coll, offset=0)
     emit(level, prefix + "[")
-    visit.visit_list(root, parents, data, meta, coll, level=level)
+    visit.visit_list(root, parents, data, meta, coll, level=level,
+                     up_key=up_key, up_data=up_data, up_coll=up_coll)
     emit(level, "]" + suffix)
 
 def url_zero_before(context, path):
@@ -85,13 +87,13 @@ def url_zero_after(context, path, root):
     return
 
 if __name__ == '__main__':
-    # Override the visit entry funcs to not strip any data.
-    visit_entry_funcs = dict(visit.VISIT_ENTRY_FUNCS)
-    visit_entry_funcs["strip"] = visit_entry_funcs["default"]
-
     visit_collection_funcs = {}
     visit_collection_funcs["<type 'dict'>"] = visit_zero_dict
     visit_collection_funcs["<type 'list'>"] = visit_zero_list
+
+    # We override to not perform a real strip.
+    visit_entry_funcs = dict(visit.VISIT_ENTRY_FUNCS)
+    visit_entry_funcs["strip"] = visit_entry_funcs["default"]
 
     visit.main("127.0.0.1", 8091, "/pools/default",
                {"fast": store_zero_fast,
