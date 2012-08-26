@@ -288,7 +288,7 @@ def main_loop(queue):
             return context.get("ctl").get("stop")
         context, path = context["callbacks"]["url_before"](context, path)
         root = visit_url(context, path)
-        root["callbacks"]["url_after"](root, path, root)
+        context["callbacks"]["url_after"](context, path, root)
 
 if __name__ == '__main__':
     main("127.0.0.1", 8091, "/pools/default",
