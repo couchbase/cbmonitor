@@ -10,7 +10,7 @@ from mc_source import MemcachedSource
 from mc_collector import MemcachedCollector
 from carbon_handler import CarbonHandler
 from json_handler import JsonHandler
-from metadata.data_helper import DataHelper
+from data_helper import DataHelper
 
 class VisitorCallback(object):
     """
