@@ -1,10 +1,8 @@
 {
-  "ns-nodes-0-uptime": {
-    "name": "nodes-0-uptime"
+  "ns-nodes-0-interestingStats-curr_items": {
+    "name": "nodes-0-interestingStats-curr_items"
     ,
-    "units": "seconds"
-    ,
-    "visit": "int"
+    "units": "items"
   }
 ,
   "ns-nodes-0-interestingStats-curr_items_tot": {
@@ -19,20 +17,8 @@
     "units": "items"
   }
 ,
-  "ns-nodes-0-interestingStats-curr_items": {
-    "name": "nodes-0-interestingStats-curr_items"
-    ,
-    "units": "items"
-  }
-,
   "ns-nodes-0-memoryFree": {
     "name": "nodes-0-memoryFree"
-    ,
-    "units": "bytes"
-  }
-,
-  "ns-nodes-0-systemStats-swap_used": {
-    "name": "nodes-0-systemStats-swap_used"
     ,
     "units": "bytes"
   }
@@ -41,6 +27,20 @@
     "name": "nodes-0-systemStats-cpu_utilization_rate"
     ,
     "units": "percent"
+  }
+,
+  "ns-nodes-0-systemStats-swap_used": {
+    "name": "nodes-0-systemStats-swap_used"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-nodes-0-uptime": {
+    "name": "nodes-0-uptime"
+    ,
+    "units": "seconds"
+    ,
+    "visit": "int"
   }
 ,
   "ns-storageTotals-hdd-free": {
@@ -78,20 +78,8 @@
     ,
     "units": "bytes"
   }
-  "ns-update_seq": {
-    "name": "update_seq"
-  }
-,
-  "ns-disk_size": {
-    "name": "disk_size"
-  }
-,
-  "ns-purge_seq": {
-    "name": "purge_seq"
-  }
-,
-  "ns-doc_count": {
-    "name": "doc_count"
+  "ns-committed_update_seq": {
+    "name": "committed_update_seq"
   }
 ,
   "ns-compact_running": {
@@ -100,19 +88,37 @@
     "visit": "fast"
   }
 ,
+  "ns-data_size": {
+    "name": "data_size"
+  }
+,
+  "ns-disk_size": {
+    "name": "disk_size"
+  }
+,
+  "ns-doc_count": {
+    "name": "doc_count"
+  }
+,
   "ns-doc_del_count": {
     "name": "doc_del_count"
   }
 ,
-  "ns-committed_update_seq": {
-    "name": "committed_update_seq"
+  "ns-purge_seq": {
+    "name": "purge_seq"
   }
 ,
-  "ns-data_size": {
-    "name": "data_size"
+  "ns-update_seq": {
+    "name": "update_seq"
   }
-  "ns-0-vBucketServerMap-numReplicas": {
-    "name": "0-vBucketServerMap-numReplicas"
+  "ns-0-basicStats-dataUsed": {
+    "name": "0-basicStats-dataUsed"
+    ,
+    "units": "bytes"
+  }
+,
+  "ns-0-basicStats-diskFetches": {
+    "name": "0-basicStats-diskFetches"
   }
 ,
   "ns-0-basicStats-diskUsed": {
@@ -121,18 +127,20 @@
     "units": "bytes"
   }
 ,
+  "ns-0-basicStats-itemCount": {
+    "name": "0-basicStats-itemCount"
+    ,
+    "units": "items"
+  }
+,
   "ns-0-basicStats-memUsed": {
     "name": "0-basicStats-memUsed"
     ,
     "units": "bytes"
   }
 ,
-  "ns-0-basicStats-viewOps": {
-    "name": "0-basicStats-viewOps"
-  }
-,
-  "ns-0-basicStats-diskFetches": {
-    "name": "0-basicStats-diskFetches"
+  "ns-0-basicStats-opsPerSec": {
+    "name": "0-basicStats-opsPerSec"
   }
 ,
   "ns-0-basicStats-quotaPercentUsed": {
@@ -141,19 +149,11 @@
     "units": "percent"
   }
 ,
-  "ns-0-basicStats-opsPerSec": {
-    "name": "0-basicStats-opsPerSec"
+  "ns-0-basicStats-viewOps": {
+    "name": "0-basicStats-viewOps"
   }
 ,
-  "ns-0-basicStats-dataUsed": {
-    "name": "0-basicStats-dataUsed"
-    ,
-    "units": "bytes"
-  }
-,
-  "ns-0-basicStats-itemCount": {
-    "name": "0-basicStats-itemCount"
-    ,
-    "units": "items"
+  "ns-0-vBucketServerMap-numReplicas": {
+    "name": "0-vBucketServerMap-numReplicas"
   }
 }
