@@ -34,4 +34,4 @@ test-stats.json: stats.json
 	cat stats.json | python -m json.tool
 
 ns_server.json:
-	./visit_conv.py > ns_server.json
+	./visit_conv > ns_server.json
