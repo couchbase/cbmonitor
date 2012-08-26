@@ -78,6 +78,7 @@
     ,
     "units": "bytes"
   }
+,
   "ns-committed_update_seq": {
     "name": "committed_update_seq"
   }
@@ -111,6 +112,7 @@
   "ns-update_seq": {
     "name": "update_seq"
   }
+,
   "ns-0-basicStats-dataUsed": {
     "name": "0-basicStats-dataUsed"
     ,
