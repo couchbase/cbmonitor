@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
+import json
 import logging
 import os
-import json
 import re
 import sys
 
@@ -12,11 +12,9 @@ def visit_dict(root, parents, data, meta, coll, level=0,
     if not isinstance(data, dict):
         log(data, " is not a dict")
         return
-
     next_level = level + 1
-    for key in sorted(data.keys(),
-                      cmp=lambda x, y: cmp(hyphen_last(x),
-                                           hyphen_last(y))):
+    for key in sorted(data.keys(), cmp=lambda x, y: cmp(hyphen_last(x),
+                                                        hyphen_last(y))):
         val = data[key]
         meta_val = meta.get(key, None)
         if meta_val is None:
@@ -46,7 +44,7 @@ VISIT_COLLECTION_FUNCS = {"<type 'dict'>": visit_dict,
                           "<type 'list'>": visit_list}
 
 def visit_url(context, path):
-    """Recursively visits a ns_server URL, driven by metadata
+    """Recursively visits the JSON response from a URL, driven by metadata
        to follow links and process data."""
     root = dict(context) # Makes a copy.
     root["run"] = {}
@@ -87,7 +85,6 @@ def visit_entry_default(root, parents, data, meta, coll,
     if t == str or t == unicode: # Scalar string entry.
         if emit_kind is None:
             emit_kind = EMIT_SLOW
-
         if emit_kind & EMIT_SLOW:
             debug(prefix, key, '=', '"%s"' % val)
             root["store"]["slow"](root, parents, data, meta, coll,
@@ -103,7 +100,6 @@ def visit_entry_default(root, parents, data, meta, coll,
     elif t == float or t == int: # Scalar numeric entry.
         if emit_kind is None:
             emit_kind = EMIT_FAST
-
         if emit_kind & EMIT_FAST:
             units = ''
             if meta_inf:
@@ -111,7 +107,6 @@ def visit_entry_default(root, parents, data, meta, coll,
             debug(prefix, "ns-" + '-'.join(path), '=', val, units)
             root["store"]["fast"](root, parents, data, meta, coll,
                                   key, val, meta_val, meta_inf, level)
-
         if emit_kind & EMIT_SLOW:
             debug(prefix, key, '=', val)
             root["store"]["slow"](root, parents, data, meta, coll,
@@ -120,13 +115,11 @@ def visit_entry_default(root, parents, data, meta, coll,
     elif t == bool: # Scalar boolean entry.
         if emit_kind is None:
             emit_kind = EMIT_SLOW
-
         if emit_kind & EMIT_FAST:
             debug(prefix, "ns-" + '-'.join(path), '=', int(val))
             root["store"]["fast"](root, parents, data, meta, coll,
                                   key, val, meta_val, meta_inf, level)
             root["run"]["tot_fast"] += 1
-
         if emit_kind & EMIT_SLOW:
             debug(prefix, key, '=', val)
             root["store"]["slow"](root, parents, data, meta, coll,
@@ -209,7 +202,8 @@ def visit_entry(root, parents, data, meta, coll,
                             key, val, meta_val, meta_inf, level=level)
 
 def retrieve_data(context, path):
-    """This simple implementation just pretends that metadata is data."""
+    """This simple implementation for testing just pretends that metadata
+       is data."""
     return retrieve_meta(context, path)
 
 def retrieve_meta(context, path):
@@ -245,20 +239,23 @@ def hyphen_last(s):
 
 def store_fast(root, parents, data, meta, coll,
                key, val, meta_val, meta_inf, level):
-    """A real implementation would store numeric or boolean metric into
-       fast-changing time-series DB."""
+    """Instead of this sample callback, a real implementation would store
+       numeric or boolean metric into fast-changing time-series DB."""
     root["run"]["tot_fast"] += 1
 
 def store_slow(root, parents, data, meta, coll,
                key, val, meta_val, meta_inf, level):
+    """Example callback when visit encounters a slow-changing value."""
     coll[key] = val
     root["run"]["tot_slow"] += 1
 
 def url_before(context, path):
+    """Example callback invoked by visit() on a new URL."""
     log("=====", path)
     return context, path
 
 def url_after(context, path, root):
+    """Example callback invoked by visit() after visiting a URL."""
     log("tot_fast =", root["run"]["tot_fast"])
     log("-----", path)
     log(json.dumps(root["run"]["coll"], sort_keys=True, indent=4))
@@ -267,6 +264,7 @@ def main(host, port, path, store, callbacks,
          collection_funcs=VISIT_COLLECTION_FUNCS,
          entry_funcs=VISIT_ENTRY_FUNCS,
          strip_meta=True, ctl=None, queue=None):
+    """The usual, single-threaded entry-point for to kick off a visit()."""
     context = make_context(host, port, path, store, callbacks,
                            collection_funcs=VISIT_COLLECTION_FUNCS,
                            entry_funcs=VISIT_ENTRY_FUNCS,
