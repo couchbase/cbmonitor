@@ -45,8 +45,6 @@ virtualenv tips
     deactivate
 
 Logging
---------
+-------
 
-    Use standard python logging component
-
-    Configuration file: logging.conf
+Use standard python logging component. Configuration file is **logging.conf**.
