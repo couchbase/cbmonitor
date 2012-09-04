@@ -2,6 +2,9 @@
 
 import sys
 
+"""Parses input of stats.org format (originally from ep-engine) into
+   JSON format for use as metadata."""
+
 # List of sub-commands supported by cbstats...
 #
 #   ('all', stats_all, 'all')
