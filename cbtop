@@ -35,12 +35,12 @@ def main(ctl, vc, server, port=8091, path="/pools/default"):
     visit_entry_func = VISIT_ENTRY_FUNCS.copy()
     visit_entry_func["collect_mc_stats"] = vc.collect_mc_stats
 
-    visit(ctl, server, port, path,
-         {"fast": vc.store_fast,
-          "slow": vc.store_slow},
-         {"url_before": url_before,
-          "url_after": url_after},
-          entry_funcs=visit_entry_func)
+    visit(server, port, path,
+          {"fast": vc.store_fast,
+           "slow": vc.store_slow},
+          {"url_before": url_before,
+           "url_after": url_after},
+          entry_funcs=visit_entry_func, ctl=ctl)
 
 if __name__ == "__main__":
 
