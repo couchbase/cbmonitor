@@ -1,19 +1,19 @@
 {
-  "db_name": "_replicator",
-  "doc_count": 1,
-  "doc_del_count": 0,
-  "update_seq": 1,
-  "purge_seq": 0,
-  "compact_running": false,
-  "-compact_running": {
-    "visit": "fast"
-  },
-  "disk_size": 4175,
-  "data_size": 2984,
-  "instance_start_time": "1344534111778900",
-  "disk_format_version": 10,
-  "-disk_format_version": {
-    "visit": "slow"
-  },
-  "committed_update_seq": 1
+ "committed_update_seq": 0,
+ "compact_running": false,
+ "-compact_running": {
+  "visit": "fast"
+ },
+ "data_size": 0,
+ "db_name": "_replicator",
+ "disk_format_version": 0,
+ "-disk_format_version": {
+  "visit": "slow"
+ },
+ "disk_size": 0,
+ "doc_count": 0,
+ "doc_del_count": 0,
+ "instance_start_time": "0",
+ "purge_seq": 0,
+ "update_seq": 0
 }

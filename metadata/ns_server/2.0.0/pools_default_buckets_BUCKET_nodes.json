@@ -1,14 +1,14 @@
 {
-  "servers": [
-    {
-      "hostname": "10.5.2.20:8091",
-      "uri": "/pools/default/buckets/default/nodes/10.5.2.20%3A8091",
-      "stats": {
-        "uri": "/pools/default/buckets/default/nodes/10.5.2.20%3A8091/stats",
-        "-uri": {
-          "follow": true
-        }
-      }
+ "servers": [
+  {
+   "hostname": "127.0.0.1:8091",
+   "stats": {
+    "uri": "/pools/default/buckets/default/nodes/127.0.0.1%3A8091/stats",
+    "-uri": {
+     "follow": false
     }
-  ]
+   },
+   "uri": "/pools/default/buckets/default/nodes/127.0.0.1%3A8091"
+  }
+ ]
 }
