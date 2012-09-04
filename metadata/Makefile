@@ -4,7 +4,7 @@
 #   stats.org.gen
 #     ==> [manual annotation (cp stats.org.gen stats.src && emacs stats.src)] ==>
 #   stats.src
-#     ==> [json conversion (stats-conv.py stats.src)] ==>
+#     ==> [json conversion (stats-conv stats.src)] ==>
 #   stats.json
 #
 all: stats.org.gen stats.json ns_server.json
@@ -22,7 +22,7 @@ stats.org.gen: stats.org
     > stats.org.gen
 
 stats.json: stats.src
-	./stats-conv.py stats.src > stats.json
+	./stats-conv stats.src > stats.json
 
 diff:
 	grep -v "^  " stats.src | diff stats.org.gen -
@@ -34,4 +34,4 @@ test-stats.json: stats.json
 	cat stats.json | python -m json.tool
 
 ns_server.json:
-	./visit_conv > ns_server.json
+	./visit-conv > ns_server.json
