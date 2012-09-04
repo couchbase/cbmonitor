@@ -26,7 +26,8 @@ def zero(val):
         if val.startswith('/'):
             val = val.split('?')[0]
         try:
-            return int(val) # Try zero'ing things like uptime.
+            i = int(val) # If it looks like a int, then return zero string.
+            return '"0"'
         except ValueError:
             pass
         # Convert IP addresses to 127.0.0.1.
