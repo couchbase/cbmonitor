@@ -6,6 +6,10 @@ import os
 import re
 import sys
 
+"""Helper functions which can recursively traverse or visit couchbase
+   REST / management data, driven by metadata.  Users can change
+   behavior by passing in different visitor callback functions."""
+
 def visit_dict(root, parents, data, meta, coll, level=0,
                up_key=None, up_data=None, up_coll=None):
     """Invoked when data is a dict."""
@@ -40,6 +44,8 @@ def visit_list(root, parents, data, meta, coll, level=0,
         visit_entry(root, parents, data, meta, coll,
                     idx, val, meta_val, None, level=next_level)
 
+"""Callbacks when visiting collections of different types.
+"""
 VISIT_COLLECTION_FUNCS = {"<type 'dict'>": visit_dict,
                           "<type 'list'>": visit_list}
 
@@ -174,6 +180,8 @@ def visit_entry_collect_mc_stats(root, parents, data, meta, coll,
        Use the main(entry_funcs) parameter to specify your own implementation."""
     debug("  " * level, "MC-STATS", val)
 
+"""Callbacks when visiting scalar values, driven by 'visit' metadata.
+"""
 VISIT_ENTRY_FUNCS = {"default": visit_entry_default,
                      "fast": visit_entry_fast,
                      "slow": visit_entry_slow,
@@ -260,28 +268,8 @@ def url_after(context, path, root):
     log("-----", path)
     log(json.dumps(root["run"]["coll"], sort_keys=True, indent=4))
 
-def main(host, port, path, store, callbacks,
-         collection_funcs=VISIT_COLLECTION_FUNCS,
-         entry_funcs=VISIT_ENTRY_FUNCS,
-         strip_meta=True, ctl=None, queue=None):
-    """The ease-of-use entry-point to kick off a URL visit()."""
-    context = make_context(host, port, path, store, callbacks,
-                           collection_funcs=collection_funcs,
-                           entry_funcs=entry_funcs,
-                           strip_meta=strip_meta, ctl=ctl, queue=queue)
-    context["queue"].append((context, path))
-    return main_loop(context["queue"])
-
-def make_context(host, port, path, store, callbacks,
-                 collection_funcs, entry_funcs, strip_meta, ctl, queue):
-    return {"host": host, "port": port, "store": store,
-            "path": path, "queue": queue or [], "ctl": ctl,
-            "collection_funcs": collection_funcs,
-            "entry_funcs": entry_funcs,
-            "strip_meta": strip_meta,
-            "callbacks": callbacks}
-
-def main_loop(queue):
+def visit_queue(queue):
+    """Visits all the URL's on a queue, potentially concurrently."""
     while queue:
         context, path = queue.pop()
         if (context.get("ctl") or {}).get("stop"):
@@ -289,6 +277,30 @@ def main_loop(queue):
         context, path = context["callbacks"]["url_before"](context, path)
         root = visit_url(context, path)
         context["callbacks"]["url_after"](context, path, root)
+
+# ----------------------------------------------------------------
+
+def main(host, port, path, store, callbacks,
+         collection_funcs=VISIT_COLLECTION_FUNCS,
+         entry_funcs=VISIT_ENTRY_FUNCS,
+         strip_meta=True, ctl=None, queue=None):
+    """The ease-of-use entry-point to start a recursive URL visit()."""
+    context = make_context(host, port, path, store, callbacks,
+                           collection_funcs=collection_funcs,
+                           entry_funcs=entry_funcs,
+                           strip_meta=strip_meta, ctl=ctl, queue=queue)
+    context["queue"].append((context, path))
+    return visit_queue(context["queue"])
+
+def make_context(host, port, path, store, callbacks,
+                 collection_funcs, entry_funcs, strip_meta, ctl, queue):
+    """Returns a context object which is passed around by visit()."""
+    return {"host": host, "port": port, "store": store,
+            "path": path, "queue": queue or [], "ctl": ctl,
+            "collection_funcs": collection_funcs,
+            "entry_funcs": entry_funcs,
+            "strip_meta": strip_meta,
+            "callbacks": callbacks}
 
 if __name__ == '__main__':
     main("127.0.0.1", 8091, "/pools/default",

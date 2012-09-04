@@ -3,7 +3,7 @@
 import json
 import visit
 
-"""Visits ns_server metadata and emits flat metatdata
+"""Visits ns_server metadata and emits flat metadata
    on the fast-changing time-series metrics to stdout as JSON."""
 
 first = True
