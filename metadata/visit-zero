@@ -24,6 +24,10 @@ def zero(val):
     elif t == str or t == unicode:
         if val.startswith('/'):
             val = val.split('?')[0]
+        try:
+            return int(val) # Try zero'ing things like uptime.
+        except ValueError:
+            pass
         return '"%s"' % val
     else:
         sys.exit("error: unhandled zero val: %s; which has type: %s" % (val, t))
