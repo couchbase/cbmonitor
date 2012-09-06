@@ -17,7 +17,7 @@ Dependencies
 
     pip install blessings
 
-    pip install numpy
+    pip install tabula
 
 Web application setup
 ---------------------
