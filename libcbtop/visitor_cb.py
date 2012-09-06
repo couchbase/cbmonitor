@@ -16,9 +16,6 @@ class VisitorCallback(object):
     """
     Callbacks for metadata visitor
     """
-    SLOW_STATS_FUNCS = {"status": BLSHelper.show_status,
-                        "balanced": BLSHelper.show_balanced}
-
     def __init__(self, c_feeder):
         self.c_feeder = c_feeder
 
@@ -83,17 +80,3 @@ class VisitorCallback(object):
             mc_coll = MemcachedCollector([mc_source], [c_handler, j_handler])
             mc_coll.collect()
             mc_coll.emit()
-
-    @staticmethod
-    def _show_slow_stats(key, val):
-        """
-        Show slow changing stats on cbtop
-        Dispatch to handling function based on @dict SLOW_STATS_FUNCS
-        """
-        func = VisitorCallback.SLOW_STATS_FUNCS.get(key, None)
-        if not func:
-            logging.error("failed to find func to show "\
-                          "slow changing stats: %s - %s" % (key, val))
-            return
-
-        func(val)
