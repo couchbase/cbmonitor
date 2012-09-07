@@ -7,7 +7,10 @@
    "percentage": 0,
    "-percentage": {
     "units": "percent",
-    "visit": "slow"
+    "visit": "slow",
+    "section": "settings",
+    "new_row": "true",
+    "col": "DB Compaction"
    },
    "size": "undefined"
   },
@@ -16,7 +19,9 @@
    "percentage": 0,
    "-percentage": {
     "units": "percent",
-    "visit": "slow"
+    "visit": "slow",
+    "section": "settings",
+    "col": "View Compaction"
    },
    "size": "undefined"
   }
@@ -72,11 +77,15 @@
   "fastWarmupEnabled": false,
   "minItemsThreshold": 0,
   "-minItemsThreshold": {
-   "visit": "slow"
+   "visit": "slow",
+   "section": "settings",
+   "col": "Min Items Threshold"
   },
   "minMemoryThreshold": 0,
   "-minMemoryThreshold": {
-   "visit": "slow"
+   "visit": "slow",
+   "section": "settings",
+   "col": "Min Memory Threshold"
   }
  },
  "name": "default",
@@ -93,29 +102,39 @@
    "clusterMembership": "active",
    "couchApiBase": "http://127.0.0.1:8092/",
    "hostname": "127.0.0.1:8091",
+   "-hostname": {
+     "visit": "slow",
+     "section": "nodes",
+     "new_row": "true"
+   },
    "interestingStats": {
     "curr_items": 0,
     "-curr_items": {
-     "units": "items"
+     "units": "items",
+     "section": "nodes"
     },
     "curr_items_tot": 0,
     "-curr_items_tot": {
-     "units": "items"
+     "units": "items",
+     "section": "nodes"
     },
     "vb_replica_curr_items": 0,
     "-vb_replica_curr_items": {
-     "units": "items"
+     "units": "items",
+     "section": "nodes"
     }
    },
    "mcdMemoryAllocated": 0,
    "-mcdMemoryAllocated": {
     "units": "megabytes",
-    "visit": "slow"
+    "visit": "slow",
+    "section": "nodes"
    },
    "mcdMemoryReserved": 0,
    "-mcdMemoryReserved": {
     "units": "megabytes",
-    "visit": "slow"
+    "visit": "slow",
+    "section": "nodes"
    },
    "memoryFree": 0,
    "-memoryFree": {
@@ -124,29 +143,35 @@
    "memoryTotal": 0,
    "-memoryTotal": {
     "units": "bytes",
-    "visit": "slow"
+    "visit": "slow",
+    "section": "nodes"
    },
    "os": "x86_64-unknown-linux-gnu",
    "ports": {
     "direct": 0,
     "-direct": {
-     "visit": "slow"
+     "visit": "slow",
+     "section": "nodes"
     },
     "proxy": 0,
     "-proxy": {
-     "visit": "slow"
+     "visit": "slow",
+     "section": "nodes"
     }
    },
    "status": "healthy",
    "systemStats": {
     "cpu_utilization_rate": 0.0,
     "-cpu_utilization_rate": {
-     "units": "percent"
+     "units": "percent",
+     "section": "nodes",
+     "col": "cpu_util"
     },
     "swap_total": 0,
     "-swap_total": {
      "units": "bytes",
-     "visit": "slow"
+     "visit": "slow",
+     "section": "nodes"
     },
     "swap_used": 0,
     "-swap_used": {
@@ -188,27 +213,38 @@
    "quotaTotal": 0,
    "-quotaTotal": {
     "units": "bytes",
-    "visit": "slow"
+    "visit": "slow",
+    "section": "storage",
+    "new_row": "true",
+    "col": "HDD Quota"
    },
    "total": 0,
    "-total": {
     "units": "bytes",
-    "visit": "slow"
+    "visit": "slow",
+    "section": "storage",
+    "col": "HDD Total"
    },
    "used": 0,
    "-used": {
-    "units": "bytes"
+    "units": "bytes",
+    "section": "storage",
+    "col": "HDD Used"
    },
    "usedByData": 0,
    "-usedByData": {
-    "units": "bytes"
+    "units": "bytes",
+    "section": "storage",
+    "col": "HDD Used By Data"
    }
   },
   "ram": {
    "quotaTotal": 0,
    "-quotaTotal": {
     "units": "bytes",
-    "visit": "slow"
+    "visit": "slow",
+    "section": "storage",
+    "col": "RAM Quota"
    },
    "quotaUsed": 0,
    "-quotaUsed": {
@@ -217,15 +253,21 @@
    "total": 0,
    "-total": {
     "units": "bytes",
-    "visit": "slow"
+    "visit": "slow",
+    "section": "storage",
+    "col": "RAM Total"
    },
    "used": 0,
    "-used": {
-    "units": "bytes"
+    "units": "bytes",
+    "section": "storage",
+    "col": "RAM Used"
    },
    "usedByData": 0,
    "-usedByData": {
-    "units": "bytes"
+    "units": "bytes",
+    "section": "storage",
+    "col": "RAM Used By Data"
    }
   }
  },
