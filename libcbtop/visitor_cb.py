@@ -19,6 +19,9 @@ from data_helper import DataHelper
 SECTION_CONFIG = {"settings": {"show_row_hdrs": False,
                                "show_col_hdrs": False,
                                "show_col_hdr_in_cell": True},
+                  "storage": {"show_row_hdrs": False,
+                               "show_col_hdrs": False,
+                               "show_col_hdr_in_cell": True},
                   "nodes": {"show_row_hdrs": False,
                             "show_col_hdrs": True,
                             "show_col_hdr_in_cell": False}}
