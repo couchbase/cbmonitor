@@ -19,7 +19,7 @@ from data_helper import DataHelper
 SECTION_CONFIG = {"settings": {"show_row_hdrs": False,
                                "show_col_hdrs": False,
                                "show_col_hdr_in_cell": True},
-                  "nodes": {"show_row_hdrs": True,
+                  "nodes": {"show_row_hdrs": False,
                             "show_col_hdrs": True,
                             "show_col_hdr_in_cell": False}}
 
@@ -60,20 +60,20 @@ class VisitorCallback(object):
                                config["show_col_hdr_in_cell"])
             self.tbl.add_section(section)
 
+        if "col" in meta_inf:
+            col = str(meta_inf["col"])
+        else:
+            col = str(key)
+
         if "new_row" in meta_inf:
-            # create a new row using the name
-            section.add_cell(val, sec_nam, val, "S50")
+            # create a new row using the col name
+            section.add_cell(val, col, val, "S50")
             self.cur_row[sec_nam] = val
             return True
 
         if not sec_nam in self.cur_row:
             logging.debug("stats %s is not associated with a section" % key)
             return True
-
-        if "col" in meta_inf:
-            col = str(meta_inf["col"])
-        else:
-            col = str(key)
 
         row = self.cur_row[sec_nam]
         section.add_cell(row, col, val, type="S50")
