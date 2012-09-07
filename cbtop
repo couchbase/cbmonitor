@@ -7,8 +7,11 @@ import sys
 import signal
 from optparse import OptionParser
 
+from tabula.table import Table
+from tabula.painter import BlessingPainter
+
 from metadata.visit import main as visit,\
-    url_after, url_before, VISIT_ENTRY_FUNCS
+     url_after, url_before, VISIT_ENTRY_FUNCS
 from libcarbon.carbon_feeder import CarbonFeeder
 from libcbtop.visitor_cb import VisitorCallback
 from libcbtop.bls_helper import BLSHelper
@@ -19,7 +22,6 @@ def handle_signal(signum, frame):
     """
     logging.info("received signal %s, aborting" % signum)
 
-    BLSHelper.exit_fullscreen()
 
     print "cleaning up..."
 
@@ -66,15 +68,15 @@ if __name__ == "__main__":
         logging.error("invalid polling freq: %s" % options.freq)
         usage()
 
+    tbl = Table("cbtop")
     c_feeder = CarbonFeeder(_carbon)
-    vc = VisitorCallback(c_feeder)
-
-    BLSHelper.enter_fullscreen()
-    BLSHelper.show_carbon(_carbon)
+    vc = VisitorCallback(c_feeder, tbl)
+    painter = BlessingPainter()
 
     ctl = {"run_ok": True}
 
     while ctl["run_ok"]:
         main(ctl, vc, _server)
+        painter.paint(tbl)
         logging.info("sleep for %s seconds" % _freq)
         time.sleep(_freq)
