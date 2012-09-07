@@ -86,17 +86,7 @@ class VisitorCallback(object):
     def store_fast(self, root, parents, data, meta, coll,
                    key, val, meta_val, meta_inf, level):
         """Store time-series data into fast-changing database"""
-        if not self.c_feeder:
-            logging.error(
-                "unable to store fast changing data : invalid CarbonFeeder")
-            return False
-
-        if is_num(val):
-            ip = DataHelper.get_ip(root, parents)
-            c_key = CarbonKey("ns", ip, key)
-            self.c_feeder.feed(c_key, val)
-
-        return True
+        return self._show_stats(key, val, meta_inf)
 
     def store_slow(self, root, parents, data, meta, coll,
                    key, val, meta_val, meta_inf, level):
