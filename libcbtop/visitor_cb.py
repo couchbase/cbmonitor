@@ -15,6 +15,14 @@ from carbon_handler import CarbonHandler
 from json_handler import JsonHandler
 from data_helper import DataHelper
 
+# configuration for each tabula.section
+SECTION_CONFIG = {"settings": {"show_row_hdrs": False,
+                               "show_col_hdrs": False,
+                               "show_col_hdr_in_cell": True},
+                  "nodes": {"show_row_hdrs": True,
+                            "show_col_hdrs": True,
+                            "show_col_hdr_in_cell": False}}
+
 class VisitorCallback(object):
     """
     Callbacks for metadata visitor
@@ -45,6 +53,11 @@ class VisitorCallback(object):
 
         if not section:
             section = Section(sec_nam)
+            if sec_nam in SECTION_CONFIG:
+                config = SECTION_CONFIG[sec_nam]
+                section.config(config["show_row_hdrs"],
+                               config["show_col_hdrs"],
+                               config["show_col_hdr_in_cell"])
             self.tbl.add_section(section)
 
         if "new_row" in meta_inf:
