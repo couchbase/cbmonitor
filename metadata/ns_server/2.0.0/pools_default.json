@@ -30,7 +30,7 @@
  "buckets": {
   "uri": "/pools/default/buckets",
   "-uri": {
-   "follow": false
+   "follow": true
   }
  },
  "controllers": {
@@ -53,11 +53,11 @@
    "createURI": "/controller/createReplication",
    "infosURI": "/couchBase/_replicator/_design/_replicator_info/_view/infos",
    "-infosURI": {
-    "follow": false
+    "follow": true
    },
    "replicatorDBURI": "/couchBase/_replicator",
    "-replicatorDBURI": {
-    "follow": false
+    "follow": true
    }
   },
   "setAutoCompaction": {
@@ -91,7 +91,7 @@
  "name": "default",
  "nodeStatusesUri": "/nodeStatuses",
  "-nodeStatusesUri": {
-  "follow": false
+  "follow": true
  },
  "nodes": [
   {
@@ -189,7 +189,7 @@
  ],
  "rebalanceProgressUri": "/pools/default/rebalanceProgress",
  "-rebalanceProgressUri": {
-  "follow": false
+  "follow": true
  },
  "rebalanceStatus": "none",
  "remoteClusters": {
@@ -199,7 +199,7 @@
  "stats": {
   "uri": "/pools/default/stats",
   "-uri": {
-   "follow": false
+   "follow": true
   }
  },
  "stopRebalanceIsSafe": false,
@@ -274,7 +274,7 @@
  "tasks": {
   "uri": "/pools/default/tasks",
   "-uri": {
-   "follow": false
+   "follow": true
   }
  }
 }

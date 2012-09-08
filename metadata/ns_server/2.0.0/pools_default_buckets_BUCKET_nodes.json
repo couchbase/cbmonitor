@@ -5,7 +5,7 @@
    "stats": {
     "uri": "/pools/default/buckets/default/nodes/127.0.0.1%3A8091/stats",
     "-uri": {
-     "follow": false
+     "follow": true
     }
    },
    "uri": "/pools/default/buckets/default/nodes/127.0.0.1%3A8091"

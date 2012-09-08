@@ -109,7 +109,7 @@
    "directoryURI": "/pools/default/buckets/default/statsDirectory",
    "nodeStatsListURI": "/pools/default/buckets/default/nodes",
    "-nodeStatsListURI": {
-    "follow": false
+    "follow": true
    },
    "uri": "/pools/default/buckets/default/stats"
   },
@@ -3198,7 +3198,7 @@
    ],
    "-vBucketMap": {
     "visit": "strip"
-   },
+   }
   }
  }
 ]
