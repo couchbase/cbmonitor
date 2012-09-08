@@ -54,8 +54,8 @@ def visit_url(context, path):
        to follow links and process data."""
     root = dict(context) # Makes a copy.
     root["run"] = {}
-    root["run"]["data"] = root["retrieve_funcs"].get("retrieve_data", retrieve_data)(context, path)
-    root["run"]["meta"] = root["retrieve_funcs"].get("retrieve_meta", retrieve_meta)(context, path)
+    root["run"]["data"] = root["retrieve_funcs"]["retrieve_data"](context, path)
+    root["run"]["meta"] = root["retrieve_funcs"]["retrieve_meta"](context, path)
     root["run"]["coll"] = type(root["run"]["meta"])() # Collection/hiearchy of slow data.
     root["run"]["tot_fast"] = 0
     root["run"]["tot_slow"] = 0
