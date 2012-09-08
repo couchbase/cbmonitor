@@ -54,8 +54,8 @@ def visit_url(context, path):
        to follow links and process data."""
     root = dict(context) # Makes a copy.
     root["run"] = {}
-    root["run"]["data"] = root.get("retrieve_data", retrieve_data)(context, path)
-    root["run"]["meta"] = root.get("retrieve_meta", retrieve_meta)(context, path)
+    root["run"]["data"] = root["retrieve_funcs"].get("retrieve_data", retrieve_data)(context, path)
+    root["run"]["meta"] = root["retrieve_funcs"].get("retrieve_meta", retrieve_meta)(context, path)
     root["run"]["coll"] = type(root["run"]["meta"])() # Collection/hiearchy of slow data.
     root["run"]["tot_fast"] = 0
     root["run"]["tot_slow"] = 0
@@ -221,6 +221,11 @@ def retrieve_meta(context, path):
     with open(meta_path(context, path)) as f:
         return json.loads(f.read())
 
+"""Functions used when visit needs to retrieve data, metadata, etc.
+"""
+VISIT_RETRIEVE_FUNCS = {"retrieve_data": retrieve_data,
+                        "retrieve_meta": retrieve_meta}
+
 def meta_path(context, path):
     """Calculates the path of the metadata JSON file given a data/URL path."""
     path = path.split('?')[0]
@@ -282,22 +287,26 @@ def visit_queue(queue):
 
 def main(host, port, path, store, callbacks,
          collection_funcs=VISIT_COLLECTION_FUNCS,
+         retrieve_funcs=VISIT_RETRIEVE_FUNCS,
          entry_funcs=VISIT_ENTRY_FUNCS,
          strip_meta=True, ctl=None, queue=None):
     """The ease-of-use entry-point to start a recursive URL visit()."""
     context = make_context(host, port, path, store, callbacks,
                            collection_funcs=collection_funcs,
+                           retrieve_funcs=retrieve_funcs,
                            entry_funcs=entry_funcs,
                            strip_meta=strip_meta, ctl=ctl, queue=queue)
     context["queue"].append((context, path))
     return visit_queue(context["queue"])
 
 def make_context(host, port, path, store, callbacks,
-                 collection_funcs, entry_funcs, strip_meta, ctl, queue):
+                 collection_funcs, retrieve_funcs, entry_funcs,
+                 strip_meta, ctl, queue):
     """Returns a context object which is passed around by visit()."""
     return {"host": host, "port": port, "store": store,
             "path": path, "queue": queue or [], "ctl": ctl,
             "collection_funcs": collection_funcs,
+            "retrieve_funcs": retrieve_funcs,
             "entry_funcs": entry_funcs,
             "strip_meta": strip_meta,
             "callbacks": callbacks}
