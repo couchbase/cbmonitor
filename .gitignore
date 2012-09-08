@@ -1,3 +1,4 @@
-*.pyc
-*.idea
 *.db
+*.idea
+*.log
+*.pyc
