@@ -6,6 +6,9 @@
   "databaseFragmentationThreshold": {
    "percentage": 0,
    "-percentage": {
+    "col": "DB Compaction",
+    "new_row": "true",
+    "section": "settings",
     "units": "percent",
     "visit": "slow"
    },
@@ -15,6 +18,8 @@
   "viewFragmentationThreshold": {
    "percentage": 0,
    "-percentage": {
+    "col": "View Compaction",
+    "section": "settings",
     "units": "percent",
     "visit": "slow"
    },
@@ -72,10 +77,14 @@
   "fastWarmupEnabled": false,
   "minItemsThreshold": 0,
   "-minItemsThreshold": {
+   "col": "Min Items Threshold",
+   "section": "settings",
    "visit": "slow"
   },
   "minMemoryThreshold": 0,
   "-minMemoryThreshold": {
+   "col": "Min Memory Threshold",
+   "section": "settings",
    "visit": "slow"
   }
  },
@@ -93,27 +102,37 @@
    "clusterMembership": "active",
    "couchApiBase": "http://127.0.0.1:8092/",
    "hostname": "127.0.0.1:8091",
+   "-hostname": {
+    "new_row": "true",
+    "section": "nodes",
+    "visit": "slow"
+   },
    "interestingStats": {
     "curr_items": 0,
     "-curr_items": {
+     "section": "nodes",
      "units": "items"
     },
     "curr_items_tot": 0,
     "-curr_items_tot": {
+     "section": "nodes",
      "units": "items"
     },
     "vb_replica_curr_items": 0,
     "-vb_replica_curr_items": {
+     "section": "nodes",
      "units": "items"
     }
    },
    "mcdMemoryAllocated": 0,
    "-mcdMemoryAllocated": {
+    "section": "nodes",
     "units": "megabytes",
     "visit": "slow"
    },
    "mcdMemoryReserved": 0,
    "-mcdMemoryReserved": {
+    "section": "nodes",
     "units": "megabytes",
     "visit": "slow"
    },
@@ -123,6 +142,7 @@
    },
    "memoryTotal": 0,
    "-memoryTotal": {
+    "section": "nodes",
     "units": "bytes",
     "visit": "slow"
    },
@@ -130,10 +150,12 @@
    "ports": {
     "direct": 0,
     "-direct": {
+     "section": "nodes",
      "visit": "slow"
     },
     "proxy": 0,
     "-proxy": {
+     "section": "nodes",
      "visit": "slow"
     }
    },
@@ -141,10 +163,13 @@
    "systemStats": {
     "cpu_utilization_rate": 0.0,
     "-cpu_utilization_rate": {
+     "col": "cpu_util",
+     "section": "nodes",
      "units": "percent"
     },
     "swap_total": 0,
     "-swap_total": {
+     "section": "nodes",
      "units": "bytes",
      "visit": "slow"
     },
@@ -187,26 +212,37 @@
    },
    "quotaTotal": 0,
    "-quotaTotal": {
+    "col": "HDD Quota",
+    "new_row": "true",
+    "section": "storage",
     "units": "bytes",
     "visit": "slow"
    },
    "total": 0,
    "-total": {
+    "col": "HDD Total",
+    "section": "storage",
     "units": "bytes",
     "visit": "slow"
    },
    "used": 0,
    "-used": {
+    "col": "HDD Used",
+    "section": "storage",
     "units": "bytes"
    },
    "usedByData": 0,
    "-usedByData": {
+    "col": "HDD Used By Data",
+    "section": "storage",
     "units": "bytes"
    }
   },
   "ram": {
    "quotaTotal": 0,
    "-quotaTotal": {
+    "col": "RAM Quota",
+    "section": "storage",
     "units": "bytes",
     "visit": "slow"
    },
@@ -216,15 +252,21 @@
    },
    "total": 0,
    "-total": {
+    "col": "RAM Total",
+    "section": "storage",
     "units": "bytes",
     "visit": "slow"
    },
    "used": 0,
    "-used": {
+    "col": "RAM Used",
+    "section": "storage",
     "units": "bytes"
    },
    "usedByData": 0,
    "-usedByData": {
+    "col": "RAM Used By Data",
+    "section": "storage",
     "units": "bytes"
    }
   }
