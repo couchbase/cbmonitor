@@ -8,7 +8,7 @@ import visit
 
 first = True
 
-def store_zero_fast(root, parents, data, meta, coll,
+def store_conv_fast(root, parents, data, meta, coll,
                     key, val, meta_val, meta_inf, level):
     global first
     if not first:
@@ -26,22 +26,22 @@ def store_zero_fast(root, parents, data, meta, coll,
     print '  }'
     root["run"]["tot_fast"] += 1
 
-def store_zero_slow(root, parents, data, meta, coll,
+def store_conv_slow(root, parents, data, meta, coll,
                     key, val, meta_val, meta_inf, level):
     root["run"]["tot_slow"] += 1
 
-def url_zero_before(context, path):
+def url_conv_before(context, path):
     return context, path
 
-def url_zero_after(context, path, root):
+def url_conv_after(context, path, root):
     return
 
 if __name__ == '__main__':
     print "{"
     visit.main("127.0.0.1", 8091, "/pools/default",
-               {"fast": store_zero_fast,
-                "slow": store_zero_slow},
-               {"url_before": url_zero_before,
-                "url_after": url_zero_after})
+               {"fast": store_conv_fast,
+                "slow": store_conv_slow},
+               {"url_before": url_conv_before,
+                "url_after": url_conv_after})
     print "}"
 
