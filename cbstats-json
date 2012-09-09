@@ -22,8 +22,7 @@ placing output into DIRECTORY/YYYYMMDD-HHMMSS/*.json files.
 Examples:
   %prog                   -- defaults to 127.0.0.1
   %prog 10.3.121.192
-  %prog 10.3.121.192:8091
-"""
+  %prog 10.3.121.192:8091"""
 
 class VisitorToJSON(object):
     """Implements callbacks for metadata.visit, saving metrics/data
@@ -34,7 +33,7 @@ class VisitorToJSON(object):
         self.user = user
         self.pswd = pswd
         self.directory = directory
-        self.start = time.time()
+        self.start = time.localtime()
         self.slow = {}
         self.fast = {}
         self.ctl = {}
@@ -62,16 +61,18 @@ class VisitorToJSON(object):
         return context, path
 
     def url_after(self, context, path, root):
-        path = path.split('?')[0]
-        print context['host'], context['port'], path
+        if not self.slow and not self.fast:
+            return
+        d = os.path.join(self.directory, time.strftime("%Y%m%d-%H%M%S", self.start))
+        if not os.path.exists(d):
+            os.makedirs(d)
+        p = urllib.quote_plus(path.split('?')[0])
         if self.slow:
-            slow = json.dumps(self.slow)
-            with open(os.path.join(self.directory, "slow." + urllib.quote_plus(path)), 'w') as f:
-                print >> f, slow
+            with open(os.path.join(d, "slow." + p), 'w') as f:
+                print >> f, json.dumps(self.slow)
         if self.fast:
-            fast = json.dumps(self.fast)
-            with open(os.path.join(self.directory, "fast." + urllib.quote_plus(path)), 'w') as f:
-                print >> f, fast
+            with open(os.path.join(d, "fast." + p), 'w') as f:
+                print >> f, json.dumps(self.fast)
 
     def store_fast(self, root, parents, data, meta, coll,
                    key, val, meta_val, meta_inf, level):
