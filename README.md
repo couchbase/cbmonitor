@@ -56,7 +56,7 @@ Cbtop tells you about a couchbase cluster.
 
 Simply point it to one of the servers:
 
-    ./cbtop -s 10.2.1.65
+    ./cbtop 10.2.1.65
 
     hostname        curr_items  curr_items_tot  vb_replica_curr_items  mcdMemoryAllocated  mcdMemoryReserved  memoryTotal  direct  proxy  cpu_util       swap_total
     10.2.1.67:8091  2088356     3484748         1396392                25678               25678              33657663488  11210   11211  53.634085213   10701078528
