@@ -47,7 +47,6 @@ def comma(data, coll, offset=1):
 def store_zero_fast(root, parents, data, meta, coll,
                     key, val, meta_val, meta_inf, level):
     zero = root.get("zero", zero_str)
-    print parents, zero, val
     if type(coll) == list:
         emit(root['out'], level, zero(val) + comma(data, coll))
         coll.append(zero(val))
@@ -59,7 +58,6 @@ def store_zero_fast(root, parents, data, meta, coll,
 def store_zero_slow(root, parents, data, meta, coll,
                     key, val, meta_val, meta_inf, level):
     zero = root.get("zero", zero_str)
-    print parents, zero, val
     if type(coll) == list:
         emit(root['out'], level, zero(val) + comma(data, coll))
         coll.append(zero(val))
