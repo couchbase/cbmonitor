@@ -12,7 +12,6 @@ from tabula.painter import BlessingPainter
 
 from metadata.visit import main as visit,\
      url_after, url_before, VISIT_ENTRY_FUNCS, retrieve_meta
-from libcarbon.carbon_feeder import CarbonFeeder
 from libcbtop.visitor_cb import VisitorCallback
 
 USAGE = """./%prog HOST [options]
@@ -81,6 +80,7 @@ if __name__ == "__main__":
     vc = VisitorCallback(tbl)
     painter = BlessingPainter()
 
+    painter.enter_fullscreen()
     ctl = {"run_ok": True}
 
     while ctl["run_ok"]:
