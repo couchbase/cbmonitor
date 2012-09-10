@@ -15,6 +15,17 @@ from metadata.visit import main as visit,\
 from libcarbon.carbon_feeder import CarbonFeeder
 from libcbtop.visitor_cb import VisitorCallback
 
+USAGE = """./%prog HOST [options]
+
+Monitor a couchbase cluster.
+
+Examples:
+    ./%prog                     -- defaults to 127.0.0.1
+    ./%prog 10.2.1.65
+    ./%prog 10.2.1.65 -i 4"""
+
+HOST = "127.0.0.1"
+
 def handle_signal(signum, frame):
     """
     Handles registered signals and exit.
@@ -27,7 +38,7 @@ def handle_signal(signum, frame):
     ctl["run_ok"] = False
 
 def usage():
-    # TODO usage printout
+    print USAGE
     sys.exit(-1)
 
 def main(ctl, vc, server, port=8091, path="/pools/default"):
@@ -50,19 +61,20 @@ if __name__ == "__main__":
 
     logging.config.fileConfig("logging.conf")
 
-    parser = OptionParser()
-    parser.add_option("-f", "--freq", dest="freq", default="5",
-        help="stats polling frequency (sec)")
-    parser.add_option("-s", "--server", dest="server", default="127.0.0.1",
-        help="hostname or ip address of the target server")
+    parser = OptionParser(usage=USAGE)
+    parser.add_option("-i", "--itv", dest="itv", default="5",
+        help="stats polling interval (sec)")
     (options, args) = parser.parse_args()
 
-    _server = options.server
+    if len(args) > 0:
+        _server = args[0]
+    else:
+        _server = HOST
 
     try:
-        _freq = int(options.freq)
+        _itv = int(options.itv)
     except ValueError, e:
-        logging.error("invalid polling freq: %s" % options.freq)
+        logging.error("invalid polling interval: %s" % options.itv)
         usage()
 
     tbl = Table("cbtop")
@@ -74,5 +86,5 @@ if __name__ == "__main__":
     while ctl["run_ok"]:
         main(ctl, vc, _server)
         painter.paint(tbl)
-        logging.info("sleep for %s seconds" % _freq)
-        time.sleep(_freq)
+        logging.info("sleep for %s seconds" % _itv)
+        time.sleep(_itv)
