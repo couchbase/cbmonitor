@@ -134,13 +134,13 @@ def visit_entry_default(root, parents, data, meta, coll,
     elif t == dict or t == list: # Non-scalar entry.
         child_coll = t()
         debug(prefix, key, "= ...")
-        func = root["collection_funcs"][str(t)]
-        func(root, path, val, meta_val, child_coll, level=level,
-             up_key=key, up_data=data, up_coll=coll)
         if type(coll) == dict:
             coll[key] = child_coll
         else:
             coll.append(child_coll)
+        func = root["collection_funcs"][str(t)]
+        func(root, path, val, meta_val, child_coll, level=level,
+             up_key=key, up_data=data, up_coll=coll)
     else:
         log("warning: unhandled type for val: %s; in key: %s" % (val, key))
 

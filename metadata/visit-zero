@@ -36,11 +36,11 @@ def zero_str(val):
     else:
         sys.exit("error: unhandled zero val: %s; which has type: %s" % (val, t))
 
-def comma(data, coll, offset=1):
+def comma(data, coll):
     """Helper function to add a comma suffix to a line, to meet JSON spec."""
     if data is None or coll is None:
         return ""
-    if len(coll) >= len(data) - offset:
+    if len(coll) >= len(data):
         return ""
     return ","
 
@@ -48,22 +48,22 @@ def store_zero_fast(root, parents, data, meta, coll,
                     key, val, meta_val, meta_inf, level):
     zero = root.get("zero", zero_str)
     if type(coll) == list:
-        emit(root['out'], level, zero(val) + comma(data, coll))
         coll.append(zero(val))
+        emit(root['out'], level, zero(val) + comma(data, coll))
     else:
-        emit(root['out'], level, ('"%s"' % (key)) + ': ' + str(zero(val)) + comma(data, coll))
         coll[key] = zero(val)
+        emit(root['out'], level, ('"%s"' % (key)) + ': ' + str(zero(val)) + comma(data, coll))
     root["run"]["tot_fast"] += 1
 
 def store_zero_slow(root, parents, data, meta, coll,
                     key, val, meta_val, meta_inf, level):
     zero = root.get("zero", zero_str)
     if type(coll) == list:
-        emit(root['out'], level, zero(val) + comma(data, coll))
         coll.append(zero(val))
+        emit(root['out'], level, zero(val) + comma(data, coll))
     else:
-        emit(root['out'], level, ('"%s"' % (key)) + ': ' + str(zero(val)) + comma(data, coll))
         coll[key] = zero(val)
+        emit(root['out'], level, ('"%s"' % (key)) + ': ' + str(zero(val)) + comma(data, coll))
     root["run"]["tot_slow"] += 1
 
 def visit_zero_dict(root, parents, data, meta, coll, level=0,
