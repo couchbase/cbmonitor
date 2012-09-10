@@ -14,7 +14,6 @@ from metadata.visit import main as visit,\
      url_after, url_before, VISIT_ENTRY_FUNCS
 from libcarbon.carbon_feeder import CarbonFeeder
 from libcbtop.visitor_cb import VisitorCallback
-from libcbtop.bls_helper import BLSHelper
 
 def handle_signal(signum, frame):
     """

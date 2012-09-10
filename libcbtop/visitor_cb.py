@@ -6,7 +6,6 @@ from sys_helper import is_num
 from tabula.table import Table
 from tabula.section import Section
 
-from bls_helper import BLSHelper
 from server import Server
 from mc_source import MemcachedSource
 from mc_collector import MemcachedCollector
