@@ -66,7 +66,10 @@
     "os": "x86_64-unknown-linux-gnu",
     "ports": {
      "direct": 0,
-     "proxy": 0
+     "proxy": 0,
+     "-proxy": {
+      "visit": "collect_proxy_stats"
+     }
     },
     "replication": 0,
     "status": "healthy",
