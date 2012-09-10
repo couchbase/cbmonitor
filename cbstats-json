@@ -68,10 +68,10 @@ class VisitorToJSON(object):
             os.makedirs(d)
         p = urllib.quote_plus(path.split('?')[0])
         if self.slow:
-            with open(os.path.join(d, "slow." + p), 'w') as f:
-                print >> f, json.dumps(self.slow)
+            with open(os.path.join(d, "slow" + p + ".json"), 'w') as f:
+                print >> f, json.dumps(root['run']['coll'])
         if self.fast:
-            with open(os.path.join(d, "fast." + p), 'w') as f:
+            with open(os.path.join(d, "fast" + p + ".json"), 'w') as f:
                 print >> f, json.dumps(self.fast)
 
     def store_fast(self, root, parents, data, meta, coll,
@@ -83,6 +83,10 @@ class VisitorToJSON(object):
                    key, val, meta_val, meta_inf, level):
         name = '-'.join(parents + [key])
         self.slow[name] = val
+        if type(coll) == list:
+            coll.append(val)
+        else:
+            coll[key] = val
 
     def retrieve_data(self, context, path):
         err, rest_json, rest_data = rest_request_json(context['host'],
