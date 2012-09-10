@@ -6,11 +6,11 @@
   "databaseFragmentationThreshold": {
    "percentage": 0,
    "-percentage": {
-    "units": "percent",
-    "visit": "slow",
-    "section": "settings",
+    "col": "DB Compaction",
     "new_row": "true",
-    "col": "DB Compaction"
+    "section": "settings",
+    "units": "percent",
+    "visit": "slow"
    },
    "size": "undefined"
   },
@@ -18,10 +18,10 @@
   "viewFragmentationThreshold": {
    "percentage": 0,
    "-percentage": {
-    "units": "percent",
-    "visit": "slow",
+    "col": "View Compaction",
     "section": "settings",
-    "col": "View Compaction"
+    "units": "percent",
+    "visit": "slow"
    },
    "size": "undefined"
   }
@@ -77,15 +77,15 @@
   "fastWarmupEnabled": false,
   "minItemsThreshold": 0,
   "-minItemsThreshold": {
-   "visit": "slow",
+   "col": "Min Items Threshold",
    "section": "settings",
-   "col": "Min Items Threshold"
+   "visit": "slow"
   },
   "minMemoryThreshold": 0,
   "-minMemoryThreshold": {
-   "visit": "slow",
+   "col": "Min Memory Threshold",
    "section": "settings",
-   "col": "Min Memory Threshold"
+   "visit": "slow"
   }
  },
  "name": "default",
@@ -103,38 +103,38 @@
    "couchApiBase": "http://127.0.0.1:8092/",
    "hostname": "127.0.0.1:8091",
    "-hostname": {
-     "visit": "slow",
-     "section": "nodes",
-     "new_row": "true"
+    "new_row": "true",
+    "section": "nodes",
+    "visit": "slow"
    },
    "interestingStats": {
     "curr_items": 0,
     "-curr_items": {
-     "units": "items",
-     "section": "nodes"
+     "section": "nodes",
+     "units": "items"
     },
     "curr_items_tot": 0,
     "-curr_items_tot": {
-     "units": "items",
-     "section": "nodes"
+     "section": "nodes",
+     "units": "items"
     },
     "vb_replica_curr_items": 0,
     "-vb_replica_curr_items": {
-     "units": "items",
-     "section": "nodes"
+     "section": "nodes",
+     "units": "items"
     }
    },
    "mcdMemoryAllocated": 0,
    "-mcdMemoryAllocated": {
+    "section": "nodes",
     "units": "megabytes",
-    "visit": "slow",
-    "section": "nodes"
+    "visit": "slow"
    },
    "mcdMemoryReserved": 0,
    "-mcdMemoryReserved": {
+    "section": "nodes",
     "units": "megabytes",
-    "visit": "slow",
-    "section": "nodes"
+    "visit": "slow"
    },
    "memoryFree": 0,
    "-memoryFree": {
@@ -142,36 +142,36 @@
    },
    "memoryTotal": 0,
    "-memoryTotal": {
+    "section": "nodes",
     "units": "bytes",
-    "visit": "slow",
-    "section": "nodes"
+    "visit": "slow"
    },
    "os": "x86_64-unknown-linux-gnu",
    "ports": {
     "direct": 0,
     "-direct": {
-     "visit": "slow",
-     "section": "nodes"
+     "section": "nodes",
+     "visit": "slow"
     },
     "proxy": 0,
     "-proxy": {
-     "visit": "slow",
-     "section": "nodes"
+     "section": "nodes",
+     "visit": "slow"
     }
    },
    "status": "healthy",
    "systemStats": {
     "cpu_utilization_rate": 0.0,
     "-cpu_utilization_rate": {
-     "units": "percent",
+     "col": "cpu_util",
      "section": "nodes",
-     "col": "cpu_util"
+     "units": "percent"
     },
     "swap_total": 0,
     "-swap_total": {
+     "section": "nodes",
      "units": "bytes",
-     "visit": "slow",
-     "section": "nodes"
+     "visit": "slow"
     },
     "swap_used": 0,
     "-swap_used": {
@@ -212,39 +212,39 @@
    },
    "quotaTotal": 0,
    "-quotaTotal": {
-    "units": "bytes",
-    "visit": "slow",
-    "section": "storage",
+    "col": "HDD Quota",
     "new_row": "true",
-    "col": "HDD Quota"
+    "section": "storage",
+    "units": "bytes",
+    "visit": "slow"
    },
    "total": 0,
    "-total": {
-    "units": "bytes",
-    "visit": "slow",
+    "col": "HDD Total",
     "section": "storage",
-    "col": "HDD Total"
+    "units": "bytes",
+    "visit": "slow"
    },
    "used": 0,
    "-used": {
-    "units": "bytes",
+    "col": "HDD Used",
     "section": "storage",
-    "col": "HDD Used"
+    "units": "bytes"
    },
    "usedByData": 0,
    "-usedByData": {
-    "units": "bytes",
+    "col": "HDD Used By Data",
     "section": "storage",
-    "col": "HDD Used By Data"
+    "units": "bytes"
    }
   },
   "ram": {
    "quotaTotal": 0,
    "-quotaTotal": {
-    "units": "bytes",
-    "visit": "slow",
+    "col": "RAM Quota",
     "section": "storage",
-    "col": "RAM Quota"
+    "units": "bytes",
+    "visit": "slow"
    },
    "quotaUsed": 0,
    "-quotaUsed": {
@@ -252,22 +252,22 @@
    },
    "total": 0,
    "-total": {
-    "units": "bytes",
-    "visit": "slow",
+    "col": "RAM Total",
     "section": "storage",
-    "col": "RAM Total"
+    "units": "bytes",
+    "visit": "slow"
    },
    "used": 0,
    "-used": {
-    "units": "bytes",
+    "col": "RAM Used",
     "section": "storage",
-    "col": "RAM Used"
+    "units": "bytes"
    },
    "usedByData": 0,
    "-usedByData": {
-    "units": "bytes",
+    "col": "RAM Used By Data",
     "section": "storage",
-    "col": "RAM Used By Data"
+    "units": "bytes"
    }
   }
  },
