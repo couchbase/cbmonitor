@@ -12,7 +12,7 @@ import visit
 def emit(out, level, *args):
     print >> out, " " * level + " ".join([str(x) for x in args])
 
-def zero(val):
+def zero_str(val):
     """Converts values into string-ified, JSON-friendly zero values
        for easy diff'ability."""
     t = type(val)
@@ -46,6 +46,8 @@ def comma(data, coll, offset=1):
 
 def store_zero_fast(root, parents, data, meta, coll,
                     key, val, meta_val, meta_inf, level):
+    zero = root.get("zero", zero_str)
+    print parents, zero, val
     if type(coll) == list:
         emit(root['out'], level, zero(val) + comma(data, coll))
         coll.append(zero(val))
@@ -56,6 +58,8 @@ def store_zero_fast(root, parents, data, meta, coll,
 
 def store_zero_slow(root, parents, data, meta, coll,
                     key, val, meta_val, meta_inf, level):
+    zero = root.get("zero", zero_str)
+    print parents, zero, val
     if type(coll) == list:
         emit(root['out'], level, zero(val) + comma(data, coll))
         coll.append(zero(val))
@@ -68,6 +72,9 @@ def visit_zero_dict(root, parents, data, meta, coll, level=0,
                     up_key=None, up_data=None, up_coll=None):
     if type(up_data) == dict:
         prefix = '"%s": ' % parents[-1]
+        if parents[-1].startswith('-'):
+            root = dict(root)
+            root["zero"] = json.dumps
     else:
         prefix = ''
     suffix = comma(up_data, up_coll)
