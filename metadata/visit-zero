@@ -70,7 +70,7 @@ def visit_zero_dict(root, parents, data, meta, coll, level=0,
         prefix = '"%s": ' % parents[-1]
     else:
         prefix = ''
-    suffix = comma(up_data, up_coll, offset=0)
+    suffix = comma(up_data, up_coll)
     emit(root['out'], level, prefix + "{")
     visit.visit_dict(root, parents, data, meta, coll, level=level,
                      up_key=up_key, up_data=up_data, up_coll=up_coll)
@@ -82,7 +82,7 @@ def visit_zero_list(root, parents, data, meta, coll, level=0,
         prefix = '"%s": ' % parents[-1]
     else:
         prefix = ''
-    suffix = comma(up_data, up_coll, offset=0)
+    suffix = comma(up_data, up_coll)
     emit(root['out'], level, prefix + "[")
     visit.visit_list(root, parents, data, meta, coll, level=level,
                      up_key=up_key, up_data=up_data, up_coll=up_coll)
