@@ -122,6 +122,9 @@
   "vBucketServerMap": {
    "hashAlgorithm": "CRC",
    "numReplicas": 0,
+   "serverList": [
+     "127.0.0.1:11210"
+   ],
    "-serverList": {
     "visit": "collect_mc_stats"
    },
