@@ -14,15 +14,15 @@ import urllib
 from metadata.visit import main as visit_main
 from metadata.visit import VISIT_RETRIEVE_FUNCS
 
-USAGE = """%prog [HOST[:PORT]] DIRECTORY
+USAGE = """./%prog [HOST[:PORT]] DIRECTORY
 
 Collect raw JSON stats/metrics from a couchbase cluster,
 placing output into DIRECTORY/YYYYMMDD-HHMMSS/*.json files.
 
 Examples:
-  %prog                   -- defaults to 127.0.0.1
-  %prog 10.3.121.192
-  %prog 10.3.121.192:8091"""
+  ./%prog                   -- defaults to 127.0.0.1
+  ./%prog 10.3.121.192
+  ./%prog 10.3.121.192:8091"""
 
 class VisitorToJSON(object):
     """Implements callbacks for metadata.visit, saving metrics/data
