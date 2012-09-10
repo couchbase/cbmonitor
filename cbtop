@@ -11,7 +11,7 @@ from tabula.table import Table
 from tabula.painter import BlessingPainter
 
 from metadata.visit import main as visit,\
-     url_after, url_before, VISIT_ENTRY_FUNCS
+     url_after, url_before, VISIT_ENTRY_FUNCS, retrieve_meta
 from libcarbon.carbon_feeder import CarbonFeeder
 from libcbtop.visitor_cb import VisitorCallback
 
@@ -40,6 +40,8 @@ def main(ctl, vc, server, port=8091, path="/pools/default"):
            "slow": vc.store_slow},
           {"url_before": url_before,
            "url_after": url_after},
+          retrieve_funcs={"retrieve_data": vc.retrieve_data,
+                          "retrieve_meta": retrieve_meta},
           entry_funcs=visit_entry_func, ctl=ctl)
 
 if __name__ == "__main__":

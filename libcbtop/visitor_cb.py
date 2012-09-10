@@ -1,10 +1,16 @@
 #!/usr/bin/env python
 
 import logging
-from sys_helper import is_num
+import json
+
+from lib.membase.api.rest_client import RestConnection
+from lib.membase.api.exception import ServerUnavailableException
+from libcbtop.server import Server
 
 from tabula.table import Table
 from tabula.section import Section
+
+from metadata.visit import retrieve_meta
 
 from server import Server
 from mc_source import MemcachedSource
@@ -88,6 +94,24 @@ class VisitorCallback(object):
                    key, val, meta_val, meta_inf, level):
         """Store time-series data into slow-changing database"""
         return self._show_stats(key, val, meta_inf)
+
+    def retrieve_data(self, context, path):
+        """Retrieve json data from a couchbase server through REST calls"""
+        # TODO: use cbtestlib
+        server = Server(context.get("host", "127.0.0.1"))
+        rest = RestConnection(server)
+        api = rest.baseUrl + path
+
+        try:
+            status, content, header = rest._http_request(api)   #TODO: expose
+        except ServerUnavailableException, e:
+            logging.error("unable to retrieve data from %s: %s" % (server, e))
+            return retrieve_meta(context, path)
+
+        if status:
+            return json.loads(content)
+
+        return retrieve_meta(context, path)
 
     def collect_mc_stats(self, root, parents, data, meta, coll,
                          key, val, meta_val, meta_inf, level=0):
