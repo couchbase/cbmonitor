@@ -6,12 +6,10 @@ from sys_helper import is_num
 from tabula.table import Table
 from tabula.section import Section
 
-from libcarbon.carbon_key import CarbonKey
 from bls_helper import BLSHelper
 from server import Server
 from mc_source import MemcachedSource
 from mc_collector import MemcachedCollector
-from carbon_handler import CarbonHandler
 from json_handler import JsonHandler
 from data_helper import DataHelper
 
@@ -30,8 +28,7 @@ class VisitorCallback(object):
     """
     Callbacks for metadata visitor
     """
-    def __init__(self, c_feeder, tbl):
-        self.c_feeder = c_feeder
+    def __init__(self, tbl):
         self.tbl = tbl
         self.cur_row = {}      # {sec_nam: row name}
 
@@ -97,7 +94,7 @@ class VisitorCallback(object):
                          key, val, meta_val, meta_inf, level=0):
         """
         Collect memcached stats
-        Dump time series data to carbon and save a json snapshot
+        Dump time series data a json snapshot
         """
         if not isinstance(val, list):
             logging.error(
@@ -124,11 +121,10 @@ class VisitorCallback(object):
             # initialize memcached source
             mc_source = MemcachedSource(mc_server, bucket)
 
-            # initialize handlers to dump data to carbon and json doc
-            c_handler = CarbonHandler(c_feeder=self.c_feeder)
+            # initialize handlers to dump data json doc
             j_handler = JsonHandler()
 
             # collect data from source and emit to handlers
-            mc_coll = MemcachedCollector([mc_source], [c_handler, j_handler])
+            mc_coll = MemcachedCollector([mc_source], [j_handler])
             mc_coll.collect()
             mc_coll.emit()

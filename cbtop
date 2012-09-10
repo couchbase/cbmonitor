@@ -22,7 +22,6 @@ def handle_signal(signum, frame):
     """
     logging.info("received signal %s, aborting" % signum)
 
-
     print "cleaning up..."
 
     global ctl
@@ -53,13 +52,10 @@ if __name__ == "__main__":
     parser = OptionParser()
     parser.add_option("-f", "--freq", dest="freq", default="5",
         help="stats polling frequency (sec)")
-    parser.add_option("-c", "--carbon", dest="carbon", default="127.0.0.1",
-        help="hostname or ip address of the carbon stats server")
     parser.add_option("-s", "--server", dest="server", default="127.0.0.1",
         help="hostname or ip address of the target server")
     (options, args) = parser.parse_args()
 
-    _carbon = options.carbon
     _server = options.server
 
     try:
@@ -69,8 +65,7 @@ if __name__ == "__main__":
         usage()
 
     tbl = Table("cbtop")
-    c_feeder = CarbonFeeder(_carbon)
-    vc = VisitorCallback(c_feeder, tbl)
+    vc = VisitorCallback(tbl)
     painter = BlessingPainter()
 
     ctl = {"run_ok": True}
