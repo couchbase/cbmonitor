@@ -5,7 +5,6 @@ import json
 
 from lib.membase.api.rest_client import RestConnection
 from lib.membase.api.exception import ServerUnavailableException
-from libcbtop.server import Server
 
 from tabula.table import Table
 from tabula.section import Section
@@ -135,7 +134,6 @@ class VisitorCallback(object):
                     "unable to collect mc stats from %s : %s" % (server, e))
                 continue
 
-            BLSHelper.add_server(ip)
             mc_server = Server(ip)
 
             # get bucket name from root and parent nodes
