@@ -80,7 +80,7 @@ class VisitorCallback(object):
             return True
 
         row = self.cur_row[sec_nam]
-        section.add_cell(row, col, val, type="S50")
+        section.add_cell(row, col, val, type="S50", meta=meta_inf)
 
         return True
 
