@@ -12,7 +12,7 @@ import time
 import urllib
 
 from metadata.visit import main as visit_main
-from metadata.visit import VISIT_RETRIEVE_FUNCS
+from metadata.visit import VISIT_RETRIEVE_FUNCS, VISIT_ENTRY_FUNCS
 
 USAGE = """./%prog [HOST[:PORT]] DIRECTORY
 
@@ -46,12 +46,17 @@ class VisitorToJSON(object):
         retrieve_funcs = dict(VISIT_RETRIEVE_FUNCS)
         retrieve_funcs["retrieve_data"] = self.retrieve_data
 
+        entry_funcs = dict(VISIT_ENTRY_FUNCS)
+        entry_funcs["collect_mc_stats"] = self.collect_mc_stats
+        entry_funcs["collect_proxy_stats"] = self.collect_proxy_stats
+
         host = (self.host_port + ":8091").split(':')[0]
         port = (self.host_port + ":8091").split(':')[1]
         visit_main(host, port, "/pools/default",
                    {"fast": self.store_fast, "slow": self.store_slow},
                    {"url_before": self.url_before, "url_after": self.url_after},
-                   retrieve_funcs=retrieve_funcs, ctl=self.ctl)
+                   retrieve_funcs=retrieve_funcs, entry_funcs=entry_funcs,
+                   ctl=self.ctl)
 
         return self.ctl.get("stop", 0)
 
@@ -95,6 +100,21 @@ class VisitorToJSON(object):
         if err:
             self.ctl["stop"] = err
         return rest_data
+
+    def collect_mc_stats(self, root, parents, data, meta, coll,
+                         key, val, meta_val, meta_inf, level=0):
+        logging.debug("collect_mc_stats", val)
+
+    def collect_proxy_stats(self, root, parents, data, meta, coll,
+                            key, val, meta_val, meta_inf, level=0):
+        c = root['run']['coll']
+        for k, v in enumerate(parents[0:-1]):
+            if type(c) == list:
+                c = c[int(v)]
+            else:
+                c = c[v]
+        host = c['hostname'].replace('"', '').split(':')[0]
+        logging.debug("collect_proxy_stats", host, val)
 
 
 # TODO: Perhaps pull these rest_xxx() helper functions to another file.
