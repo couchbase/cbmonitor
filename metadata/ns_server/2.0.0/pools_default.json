@@ -156,7 +156,7 @@
     "proxy": 0,
     "-proxy": {
      "section": "nodes",
-     "visit": "slow"
+     "visit": "collect_proxy_stats"
     }
    },
    "status": "healthy",

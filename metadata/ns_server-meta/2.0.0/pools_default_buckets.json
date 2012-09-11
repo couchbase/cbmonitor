@@ -66,9 +66,7 @@
     "os": "x86_64-unknown-linux-gnu",
     "ports": {
      "direct": 0,
-     "-proxy": {
-      "visit": "collect_proxy_stats"
-     },
+     "proxy": 0
     },
     "replication": 0,
     "status": "healthy",
@@ -121,6 +119,9 @@
   "vBucketServerMap": {
    "hashAlgorithm": "CRC",
    "numReplicas": 0,
+   "serverList": [
+    "127.0.0.1:11210"
+   ],
    "-serverList": {
     "visit": "collect_mc_stats"
    },
