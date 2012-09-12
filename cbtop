@@ -77,7 +77,7 @@ if __name__ == "__main__":
         logging.error("invalid polling interval: %s" % options.itv)
         usage()
 
-    tbl = Table("cbtop")
+    tbl = Table("cbtop", sep=" ")
     vc = VisitorCallback(tbl)
     painter = BlessingPainter()
 
