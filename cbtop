@@ -32,7 +32,6 @@ def handle_signal(signum, frame):
     logging.info("received signal %s, aborting" % signum)
 
     painter.exit_fullscreen()
-    print "\ncleaning up..."
 
     global ctl
     ctl["run_ok"] = False
