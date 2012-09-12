@@ -18,13 +18,16 @@ from json_handler import JsonHandler
 from data_helper import DataHelper
 
 # configuration for each tabula.section
-SECTION_CONFIG = {"settings": {"show_row_hdrs": False,
+SECTION_CONFIG = {"settings": {"id": 0,
+                               "show_row_hdrs": False,
                                "show_col_hdrs": False,
                                "show_col_hdr_in_cell": True},
-                  "storage": {"show_row_hdrs": False,
-                               "show_col_hdrs": False,
-                               "show_col_hdr_in_cell": True},
-                  "nodes": {"show_row_hdrs": False,
+                  "storage": {"id": 1,
+                              "show_row_hdrs": False,
+                              "show_col_hdrs": False,
+                              "show_col_hdr_in_cell": True},
+                  "nodes": {"id": 2,
+                            "show_row_hdrs": False,
                             "show_col_hdrs": True,
                             "show_col_hdr_in_cell": False}}
 
@@ -56,12 +59,14 @@ class VisitorCallback(object):
         section = self.tbl.get_section(sec_nam)
 
         if not section:
-            section = Section(sec_nam)
             if sec_nam in SECTION_CONFIG:
                 config = SECTION_CONFIG[sec_nam]
+                section = Section(sec_nam, config["id"])
                 section.config(config["show_row_hdrs"],
                                config["show_col_hdrs"],
                                config["show_col_hdr_in_cell"])
+            else:
+                section = Section(sec_nam)
             self.tbl.add_section(section)
 
         if "col" in meta_inf:
