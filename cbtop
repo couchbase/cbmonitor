@@ -5,6 +5,7 @@ import logging.config
 import time
 import sys
 import signal
+import multiprocessing
 from optparse import OptionParser
 
 from tabula.painter import BlessingPainter
@@ -80,6 +81,11 @@ if __name__ == "__main__":
     painter.enter_fullscreen()
 
     ctl = {"run_ok": True}
+
+    mc_proc = multiprocessing.Process(target=vc.mc_worker,
+                                      args=(vc.mc_jobs, ctl))
+    mc_proc.daemon = True
+    mc_proc.start()
 
     while ctl["run_ok"]:
         main(ctl, _server)

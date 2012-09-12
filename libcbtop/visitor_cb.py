@@ -2,6 +2,9 @@
 
 import logging
 import json
+import time
+import multiprocessing
+import Queue
 
 from lib.membase.api.rest_client import RestConnection
 from lib.membase.api.exception import ServerUnavailableException
@@ -37,6 +40,7 @@ SECTION_CONFIG = {"settings": {"id": 0,
 
 tbl = Table("cbtop", sep=" ")
 cur_row = {}      # {sec_nam: row name}
+mc_jobs = multiprocessing.Queue(1)
 
 def _show_stats(key, val, meta_inf):
     """
@@ -127,29 +131,52 @@ def collect_mc_stats(root, parents, data, meta, coll,
             "unable to collect mc stats: val must be a list - %s" % val)
         return False
 
-    logging.info("collecting mc stats from %s" % val)
+    try:
+        mc_jobs.put([root, parents, val], block=False)
+        return True
+    except Queue.Full:
+        logging.debug("unable to collect mcstats : queue is full")
+        return False
 
-    for server in val:
+def mc_worker(jobs, ctl, timeout=5):
+    logging.error("mc_worker started")
 
+    while ctl["run_ok"]:
         try:
-            ip, port = server.split(":")
-        except (ValueError, AttributeError), e:
-            logging.error(
-                "unable to collect mc stats from %s : %s" % (server, e))
+            root, parents, val = jobs.get(block=True, timeout=timeout)
+        except Queue.Empty:
+            logging.debug("mc_worker hasn't received jobs for %s seconds"
+                          % timeout)
             continue
 
-        mc_server = Server(ip)
+        start = time.time()
 
-        # get bucket name from root and parent nodes
-        bucket = DataHelper.get_bucket(root, parents)
+        for server in val:
 
-        # initialize memcached source
-        mc_source = MemcachedSource(mc_server, bucket)
+            try:
+                ip, port = server.split(":")
+            except (ValueError, AttributeError), e:
+                logging.error(
+                    "unable to collect mc stats from %s : %s" % (server, e))
+                continue
 
-        # initialize handlers to dump data json doc
-        j_handler = JsonHandler()
+            mc_server = Server(ip)
 
-        # collect data from source and emit to handlers
-        mc_coll = MemcachedCollector([mc_source], [j_handler])
-        mc_coll.collect()
-        mc_coll.emit()
+            # get bucket name from root and parent nodes
+            bucket = DataHelper.get_bucket(root, parents)
+
+            # initialize memcached source
+            mc_source = MemcachedSource(mc_server, bucket)
+
+            # initialize handlers to dump data json doc
+            j_handler = JsonHandler()
+
+            # collect data from source and emit to handlers
+            mc_coll = MemcachedCollector([mc_source], [j_handler])
+            mc_coll.collect()
+            mc_coll.emit()
+
+        logging.debug("collected mc stats from %s, took %s seconds"
+                      % (val, time.time() - start))
+
+    logging.error("mc_worker stopped")
