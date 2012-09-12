@@ -80,7 +80,7 @@ class VisitorCallback(object):
 
         if "new_row" in meta_inf:
             # create a new row using the col name
-            section.add_cell(val, col, val, "S50")
+            section.add_cell(val, col, val, "S50", meta=meta_inf)
             self.cur_row[sec_nam] = val
             return True
 
