@@ -62,8 +62,8 @@ if __name__ == "__main__":
     logging.config.fileConfig("logging.conf")
 
     parser = OptionParser(usage=USAGE)
-    parser.add_option("-i", "--itv", dest="itv", default="5",
-        help="stats polling interval (sec)")
+    parser.add_option("-i", "--itv", dest="itv", default="1",
+        help="stats polling interval (seconds)")
     (options, args) = parser.parse_args()
 
     if len(args) > 0:
