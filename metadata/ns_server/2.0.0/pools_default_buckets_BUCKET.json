@@ -3145,18 +3145,9 @@
     }
   },
   "replicaNumber": 0,
-  "-replicaNumber": {
-    "visit": "slow"
-  },
   "quota": {
     "ram": 524288000,
-    "-ram": {
-      "visit": "slow"
-    },
     "rawRAM": 524288000,
-    "-rawRAM": {
-      "visit": "slow"
-    }
   },
   "basicStats": {
     "quotaPercentUsed": 7.0345764160156,
