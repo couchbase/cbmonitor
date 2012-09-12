@@ -2,12 +2,16 @@
  "committed_update_seq": 0,
  "compact_running": false,
  "-compact_running": {
+  "col": "Compact Running",
+  "section": "settings",
   "visit": "fast"
  },
  "data_size": 0,
  "db_name": "_replicator",
  "disk_format_version": 0,
  "-disk_format_version": {
+  "col": "Disk Format Ver",
+  "section": "settings",
   "visit": "slow"
  },
  "disk_size": 0,
