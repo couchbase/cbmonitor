@@ -7,12 +7,11 @@ import sys
 import signal
 from optparse import OptionParser
 
-from tabula.table import Table
 from tabula.painter import BlessingPainter
 
 from metadata.visit import main as visit,\
      url_after, url_before, VISIT_ENTRY_FUNCS, retrieve_meta
-from libcbtop.visitor_cb import VisitorCallback
+import libcbtop.visitor_cb as vc
 
 USAGE = """./%prog HOST [options]
 
@@ -41,7 +40,7 @@ def usage():
     print USAGE
     sys.exit(-1)
 
-def main(ctl, vc, server, port=8091, path="/pools/default"):
+def main(ctl, server, port=8091, path="/pools/default"):
 
     visit_entry_func = VISIT_ENTRY_FUNCS.copy()
     visit_entry_func["collect_mc_stats"] = vc.collect_mc_stats
@@ -77,15 +76,13 @@ if __name__ == "__main__":
         logging.error("invalid polling interval: %s" % options.itv)
         usage()
 
-    tbl = Table("cbtop", sep=" ")
-    vc = VisitorCallback(tbl)
     painter = BlessingPainter()
-
     painter.enter_fullscreen()
+
     ctl = {"run_ok": True}
 
     while ctl["run_ok"]:
-        main(ctl, vc, _server)
-        painter.paint(tbl)
+        main(ctl, _server)
+        painter.paint(vc.tbl)
         logging.info("sleep for %s seconds" % _itv)
         time.sleep(_itv)
