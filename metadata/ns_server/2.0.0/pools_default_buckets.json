@@ -5,24 +5,29 @@
   "basicStats": {
    "dataUsed": 0,
    "-dataUsed": {
+    "section": "buckets",
     "units": "bytes"
    },
    "diskFetches": 0,
    "diskUsed": 0,
    "-diskUsed": {
+    "section": "buckets",
     "units": "bytes"
    },
    "itemCount": 0,
    "-itemCount": {
+    "section": "buckets",
     "units": "items"
    },
    "memUsed": 0,
    "-memUsed": {
+    "section": "buckets",
     "units": "bytes"
    },
    "opsPerSec": 0,
    "quotaPercentUsed": 0.0,
    "-quotaPercentUsed": {
+    "section": "buckets",
     "units": "percent"
    },
    "viewOps": 0
@@ -36,6 +41,10 @@
   },
   "bucketCapabilitiesVer": "",
   "bucketType": "membase",
+  "-bucketType": {
+    "col": "type",
+    "section": "buckets"
+  },
   "controllers": {
    "compactAll": "/pools/default/buckets/default/controller/compactBucket",
    "compactDB": "/pools/default/buckets/default/controller/compactDatabases",
@@ -47,6 +56,12 @@
   "fastWarmupSettings": false,
   "localRandomKeyUri": "/pools/default/buckets/default/localRandomKey",
   "name": "default",
+  "-name": {
+      "col": "bucket",
+      "new_row": "true",
+      "section": "buckets",
+      "visit": "slow"
+  },
   "nodeLocator": "vbucket",
   "nodes": [
    {
@@ -85,16 +100,19 @@
   },
   "proxyPort": 0,
   "-proxyPort": {
+   "section": "buckets",
    "visit": "slow"
   },
   "quota": {
    "ram": 0,
    "-ram": {
+    "section": "buckets",
     "units": "bytes",
     "visit": "slow"
    },
    "rawRAM": 0,
    "-rawRAM": {
+    "section": "buckets",
     "units": "bytes",
     "visit": "slow"
    }
@@ -102,6 +120,7 @@
   "replicaIndex": false,
   "replicaNumber": 0,
   "-replicaNumber": {
+   "section": "buckets",
    "visit": "slow"
   },
   "saslPassword": "",
