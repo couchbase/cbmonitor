@@ -175,7 +175,9 @@
     },
     "swap_used": 0,
     "-swap_used": {
-     "units": "bytes"
+     "section": "nodes",
+     "units": "bytes",
+     "visit": "slow"
     }
    },
    "thisNode": false,
