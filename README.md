@@ -58,26 +58,22 @@ Simply point it to one of the servers:
 
     ./cbtop 10.2.1.65
 
-    hostname        curr_items  curr_items_tot  vb_replica_curr_items  mcdMemoryAllocated
-    mcdMemoryReserved  memoryTotal  direct  cpu_util       swap_total
-
-    10.2.1.66:8091  4.79M       9.58M           4.79M                  25678
-    25678              31.35G       11210   11.5           9.95G
-
-    10.2.1.67:8091  4.79M       9.58M           4.79M                  25678
-    25678              31.35G       11210   16.5           9.97G
-
-    10.2.1.65:8091  4.79M       9.58M           4.79M                  25678
-    25678              31.35G       11210   13.4663341646  10.57G
-
-    10.2.1.68:8091  4.79M       9.58M           4.79M                  25678
-    25678              31.35G       11210   14.5           9.95G
+    DB Compaction: 30.00  View Compaction: 30.00  Min Items Threshold: 10  Min Memory Threshold: 10  Compact Running: False  Disk Format Ver: 0
 
 
-    ---------------------------------------------------------------------------------------------
-    HDD Quota:3642808487936  HDD Total:3.31T  HDD Used:127.25G  HDD Used By Data:100.62G
-    RAM Quota:78.12G  RAM Total:125.38G  RAM Used:124.73G  RAM Used By Data:56.53G
+    HDD Quota: 3.31T  HDD Total: 3.31T  HDD Used: 33.93G  HDD Used By Data: 933.66M  RAM Quota: 62.50G  RAM Total: 125.38G  RAM Used: 57.06G 
+    RAM Used By Data: 992.36M
 
 
-    ---------------------------------------------------------------------------------------------
-    DB Compaction:30  View Compaction:30  Min Items Threshold:10  Min Memory Threshold:10
+    BUCKET   PROXY  RAM     RAW_RAM   #REPL  DATA_USED  DISK_USED  #ITEMS   #MEM_USED  %MEM_USED  TYPE   
+    bucket1  0      7.81G   1.95G     1      187.00K    16.21M     0.00     59.98M     0.75       membase
+    bucket2  0      7.81G   1.95G     1      187.00K    16.21M     0.00     59.98M     0.30       membase
+    bucket3  0      19.53G  4.88G     1      731.03M    885.03M    147.43K  812.43M    20.31      membase
+    default  0      3.91G   1000.00M  1      187.00K    16.21M     0.00     59.97M     0.75       membase
+
+
+    HOST            #ITEMS  #ITEMS_TOT  #REPL_ITEMS  MCD_MEM_ALLOC  MCD_MEM_RSVD  MEM_FREE  MEM_TOT  PORT   STATUS   %CPU  SWAP_TOT  SWAP_USED
+    10.2.1.65:8091  0.00    49.24K      49.24K       25678.00       25678.00      17.02G    31.35G   11210  healthy  3.75  10.57G    148.00K  
+    10.2.1.66:8091  65.80K  82.04K      16.25K       25678.00       25678.00      17.04G    31.35G   11210  healthy  5.49  9.95G     148.00K  
+    10.2.1.67:8091  81.63K  98.10K      16.47K       25678.00       25678.00      16.93G    31.35G   11210  healthy  5.01  9.97G     148.00K  
+    10.2.1.68:8091  0.00    65.47K      65.47K       25678.00       25678.00      17.34G    31.35G   11210  healthy  7.25  9.95G     148.00K 
