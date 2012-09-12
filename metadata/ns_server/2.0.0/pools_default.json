@@ -103,6 +103,7 @@
    "couchApiBase": "http://127.0.0.1:8092/",
    "hostname": "127.0.0.1:8091",
    "-hostname": {
+    "col": "HOST",
     "new_row": "true",
     "section": "nodes",
     "visit": "slow"
@@ -110,38 +111,46 @@
    "interestingStats": {
     "curr_items": 0,
     "-curr_items": {
+     "col": "#ITEMS",
      "section": "nodes",
      "units": "items"
     },
     "curr_items_tot": 0,
     "-curr_items_tot": {
+     "col": "#ITEMS_TOT",
      "section": "nodes",
      "units": "items"
     },
     "vb_replica_curr_items": 0,
     "-vb_replica_curr_items": {
+     "col": "#REPL_ITEMS",
      "section": "nodes",
      "units": "items"
     }
    },
    "mcdMemoryAllocated": 0,
    "-mcdMemoryAllocated": {
+    "col": "MCD_MEM_ALLOC",
     "section": "nodes",
     "units": "megabytes",
     "visit": "slow"
    },
    "mcdMemoryReserved": 0,
    "-mcdMemoryReserved": {
+    "col": "MCD_MEM_RSVD",
     "section": "nodes",
     "units": "megabytes",
     "visit": "slow"
    },
    "memoryFree": 0,
    "-memoryFree": {
+    "col": "MEM_FREE",
+    "section": "nodes",
     "units": "bytes"
    },
    "memoryTotal": 0,
    "-memoryTotal": {
+    "col": "MEM_TOT",
     "section": "nodes",
     "units": "bytes",
     "visit": "slow"
@@ -150,35 +159,40 @@
    "ports": {
     "direct": 0,
     "-direct": {
+     "col": "PORT",
      "section": "nodes",
      "visit": "slow"
     },
     "proxy": 0,
     "-proxy": {
+     "PROXY": "PROXY",
      "section": "nodes",
      "visit": "collect_proxy_stats"
     }
    },
    "status": "healthy",
    "-status": {
+    "col": "STATUS",
     "section": "nodes",
     "visit": "slow"
    },
    "systemStats": {
     "cpu_utilization_rate": 0.0,
     "-cpu_utilization_rate": {
-     "col": "cpu_util",
+     "col": "%CPU",
      "section": "nodes",
      "units": "percent"
     },
     "swap_total": 0,
     "-swap_total": {
+     "col": "SWAP_TOT",
      "section": "nodes",
      "units": "bytes",
      "visit": "slow"
     },
     "swap_used": 0,
     "-swap_used": {
+     "col": "SWAP_USED",
      "section": "nodes",
      "units": "bytes",
      "visit": "slow"
@@ -187,8 +201,9 @@
    "thisNode": false,
    "uptime": 0,
    "-uptime": {
+    "col": "UPTIME",
     "units": "seconds",
-    "visit": "int"
+    "visit": "fast"
    },
    "version": "2.0.0-1559-rel-community"
   }

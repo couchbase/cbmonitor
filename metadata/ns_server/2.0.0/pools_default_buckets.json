@@ -5,28 +5,33 @@
   "basicStats": {
    "dataUsed": 0,
    "-dataUsed": {
+    "col": "DATA_USED",
     "section": "buckets",
     "units": "bytes"
    },
    "diskFetches": 0,
    "diskUsed": 0,
    "-diskUsed": {
+    "col": "DISK_USED",
     "section": "buckets",
     "units": "bytes"
    },
    "itemCount": 0,
    "-itemCount": {
+    "col": "#ITEMS",
     "section": "buckets",
     "units": "items"
    },
    "memUsed": 0,
    "-memUsed": {
+    "col": "#MEM_USED",
     "section": "buckets",
     "units": "bytes"
    },
    "opsPerSec": 0,
    "quotaPercentUsed": 0.0,
    "-quotaPercentUsed": {
+    "col": "%MEM_USED",
     "section": "buckets",
     "units": "percent"
    },
@@ -42,7 +47,7 @@
   "bucketCapabilitiesVer": "",
   "bucketType": "membase",
   "-bucketType": {
-    "col": "type",
+    "col": "TYPE",
     "section": "buckets"
   },
   "controllers": {
@@ -57,7 +62,7 @@
   "localRandomKeyUri": "/pools/default/buckets/default/localRandomKey",
   "name": "default",
   "-name": {
-      "col": "bucket",
+      "col": "BUCKET",
       "new_row": "true",
       "section": "buckets",
       "visit": "slow"
@@ -100,18 +105,21 @@
   },
   "proxyPort": 0,
   "-proxyPort": {
+   "col": "PROXY",
    "section": "buckets",
    "visit": "slow"
   },
   "quota": {
    "ram": 0,
    "-ram": {
+    "col": "RAM",
     "section": "buckets",
     "units": "bytes",
     "visit": "slow"
    },
    "rawRAM": 0,
    "-rawRAM": {
+    "col": "RAW_RAM",
     "section": "buckets",
     "units": "bytes",
     "visit": "slow"
@@ -120,6 +128,7 @@
   "replicaIndex": false,
   "replicaNumber": 0,
   "-replicaNumber": {
+   "col": "#REPL",
    "section": "buckets",
    "visit": "slow"
   },
