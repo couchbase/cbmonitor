@@ -160,6 +160,10 @@
     }
    },
    "status": "healthy",
+   "-status": {
+    "section": "nodes",
+    "visit": "slow"
+   },
    "systemStats": {
     "cpu_utilization_rate": 0.0,
     "-cpu_utilization_rate": {
