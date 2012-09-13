@@ -15,6 +15,25 @@ UNITS_SUFFIX = ["", "K", "M", "G", "T"]
 
 term = Terminal()
 
+STYLES = {"bold": term.bold,
+          "reverse": term.reverse,
+          "underline": term.underline,
+          "blink": term.blink,
+          "italic": term.italic,
+          "shadow": term.shadow,
+          "standout": term.standout,
+          "subscript": term.subscript,
+          "superscript": term.superscript,
+          "flash": term.flash}
+
+COLORS = {"red": term.red,
+          "black": term.black,
+          "green": term.green,
+          "yellow": term.yellow,
+          "blue": term.blue,
+          "magenta": term.magenta,
+          "white": term.white}
+
 def conv_units(val, meta):
     """
     Callback function for tabula
@@ -42,7 +61,43 @@ def conv_units(val, meta):
 
     return "%.2f" % val
 
-TABULA_META_FUNCS = {"units": conv_units}
+def change_style(val, meta):
+    """
+    Callback function for tabula
+
+    Change style to display the value, for blessings terminal only
+
+    Supported style: bold, reverse, underline, blink, normal, etc
+    """
+    if not val or not meta:
+        return val
+
+    if meta in STYLES:
+        return STYLES[meta](val)
+
+    return val
+
+def change_color(val, meta):
+    """
+    Callback function for tabula
+
+    Change color to display the value, for blessings terminal only
+    """
+    if not val or not meta:
+        return val
+
+    if meta in COLORS:
+        return COLORS[meta](val)
+
+    return val
+
+"""
+Functions to format the value using its meta,
+which are called in alphabecial order.
+"""
+TABULA_META_FUNCS = {"units": conv_units,
+                     "v_style": change_style,
+                     "v_color": change_color}
 
 def enter_fullscreen():
     """
