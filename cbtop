@@ -78,7 +78,7 @@ if __name__ == "__main__":
         logging.error("invalid polling interval: %s" % options.itv)
         usage()
 
-    vc.tbl.set_ftr("cbtop %time")
+    vc.tbl.set_ftr("Last Update: %time")
     pt.enter_fullscreen()
 
     ctl = {"run_ok": True}
