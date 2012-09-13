@@ -76,6 +76,7 @@ if __name__ == "__main__":
         logging.error("invalid polling interval: %s" % options.itv)
         usage()
 
+    vc.tbl.set_ftr("cbtop %time")
     painter = BlessingPainter()
     painter.enter_fullscreen()
 
