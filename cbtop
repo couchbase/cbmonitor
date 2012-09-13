@@ -9,7 +9,7 @@ import multiprocessing
 from optparse import OptionParser
 
 from metadata.visit import main as visit,\
-     url_after, url_before, VISIT_ENTRY_FUNCS, retrieve_meta
+    url_after, url_before, VISIT_ENTRY_FUNCS, retrieve_meta
 import libcbtop.visitor_cb as vc
 import libcbtop.paint as pt
 
@@ -24,6 +24,7 @@ Examples:
 
 HOST = "127.0.0.1"
 
+
 def handle_signal(signum, frame):
     """
     Handles registered signals and exit.
@@ -35,9 +36,11 @@ def handle_signal(signum, frame):
     global ctl
     ctl["run_ok"] = False
 
+
 def usage():
     print USAGE
     sys.exit(-1)
+
 
 def main(ctl, server, port=8091, path="/pools/default"):
 
@@ -61,7 +64,7 @@ if __name__ == "__main__":
 
     parser = OptionParser(usage=USAGE)
     parser.add_option("-i", "--itv", dest="itv", default="1",
-        help="stats polling interval (seconds)")
+                      help="stats polling interval (seconds)")
     (options, args) = parser.parse_args()
 
     if len(args) > 0:
