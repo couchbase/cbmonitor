@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import logging
 import json
 import time
@@ -14,6 +13,7 @@ from tabula.section import Section
 
 from metadata.visit import retrieve_meta
 
+from paint import TABULA_META_FUNCS
 from server import Server
 from mc_source import MemcachedSource
 from mc_collector import MemcachedCollector
@@ -64,7 +64,8 @@ def _show_stats(key, val, meta_inf):
     if not section:
         if sec_nam in SECTION_CONFIG:
             config = SECTION_CONFIG[sec_nam]
-            section = Section(sec_nam, config["id"])
+            section = Section(sec_nam, config["id"],
+                              meta_funcs=TABULA_META_FUNCS)
             section.config(config["show_row_hdrs"],
                 config["show_col_hdrs"],
                 config["show_col_hdr_in_cell"])

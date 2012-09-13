@@ -8,11 +8,10 @@ import signal
 import multiprocessing
 from optparse import OptionParser
 
-from tabula.painter import BlessingPainter
-
 from metadata.visit import main as visit,\
      url_after, url_before, VISIT_ENTRY_FUNCS, retrieve_meta
 import libcbtop.visitor_cb as vc
+import libcbtop.paint as pt
 
 USAGE = """./%prog HOST [options]
 
@@ -31,7 +30,7 @@ def handle_signal(signum, frame):
     """
     logging.info("received signal %s, aborting" % signum)
 
-    painter.exit_fullscreen()
+    pt.exit_fullscreen()
 
     global ctl
     ctl["run_ok"] = False
@@ -77,8 +76,7 @@ if __name__ == "__main__":
         usage()
 
     vc.tbl.set_ftr("cbtop %time")
-    painter = BlessingPainter()
-    painter.enter_fullscreen()
+    pt.enter_fullscreen()
 
     ctl = {"run_ok": True}
 
@@ -89,6 +87,6 @@ if __name__ == "__main__":
 
     while ctl["run_ok"]:
         main(ctl, _server)
-        painter.paint(vc.tbl)
+        pt.paint(vc.tbl)
         logging.info("sleep for %s seconds" % _itv)
         time.sleep(_itv)
