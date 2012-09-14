@@ -1,0 +1,101 @@
+#!/usr/bin/env python
+from optparse import OptionParser
+import time
+import sys
+
+import requests
+from seriesly import Seriesly
+
+from metadata.visit import main as visit_main, VISIT_RETRIEVE_FUNCS
+
+
+class VisitorToSeriesly(object):
+    """Implements callbacks for metadata.visit, saving metrics/data to Seriesly
+    database"""
+
+    def __init__(self, in_host, out_host, database):
+        self.host = in_host
+        self.port = 8091
+        self.database = database
+        self.ctl = {}
+        self.seriesly = Seriesly(host=out_host)
+        if database not in self.seriesly.list_dbs():
+            self.seriesly.create_db(database)
+
+    def go(self):
+        retrieve_funcs = dict(VISIT_RETRIEVE_FUNCS)
+        retrieve_funcs['retrieve_data'] = self.retrieve_data
+
+        visit_main(
+            host=self.host, port=self.port, path="/pools/default",
+            store={"fast": self.store_fast, "slow": self.store_slow},
+            callbacks={"url_before": self.url_before,
+                       "url_after": self.url_after},
+            retrieve_funcs=retrieve_funcs,
+            ctl=self.ctl)
+
+        return self.ctl.get("stop", 0)
+
+    def url_before(self, context, path):
+        self.slow = {}
+        self.fast = {}
+        return context, path
+
+    def url_after(self, *args):
+        if self.fast:
+            self.seriesly[self.database].append(self.fast)
+
+    def store_fast(self, root, parents, data, meta, coll, key, val, meta_val,
+                   meta_inf, level):
+        name = '-'.join(parents + [key])
+        self.fast[name] = val
+
+    def store_slow(*args, **kargs):
+        return
+
+    def retrieve_data(self, context, path):
+        url = "http://{0[host]}:{0[port]}{1}".format(context, path)
+        r = requests.get(url)
+        if r.status_code != requests.codes.ok:
+            self.ctl["stop"] = True
+        return r.json
+
+
+def parse_args():
+    usage = "usage: %prog [options]\n\n" +\
+            "Example: %prog -i 127.0.0.1 -o 127.0.0.1 -d seriesly_db "
+
+    parser = OptionParser(usage)
+
+    parser.add_option('-i', dest='in_host', default='127.0.0.1',
+                      help='input address', metavar='127.0.0.1')
+    parser.add_option('-o', dest='out_host', default='127.0.0.1',
+                      help='output address', metavar='127.0.0.1')
+    parser.add_option('-d', dest='database',
+                      help='database name', metavar='seriesly_db')
+
+    options, args = parser.parse_args()
+
+    if not options.database:
+        parser.print_help()
+        sys.exit()
+
+    return options
+
+
+def main():
+    options = parse_args()
+
+    v2s = VisitorToSeriesly(in_host=options.in_host,
+                            out_host=options.out_host,
+                            database=options.database)
+    while True:
+        try:
+            v2s.go()
+            time.sleep(2)
+            print "Collecting and storing data"
+        except KeyboardInterrupt:
+            break
+
+if __name__ == '__main__':
+    main()
