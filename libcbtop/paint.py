@@ -8,6 +8,8 @@
 """
 
 import logging
+import ast
+
 from blessings import Terminal
 from tabula.table import Table
 
@@ -91,6 +93,33 @@ def change_color(val, meta):
 
     return val
 
+def check_range(val, meta):
+    """
+    Callback function for tabula
+
+    Check the range of acceptance defined in metadata
+    and display error on screen
+
+    Range is a str literal which evaluates to a @tuple or @list pair
+    e.g - (10,100), [20,50]
+
+    Value and edges are converted to float before comparison
+    """
+    if not val or not meta:
+        return val
+
+    try:
+        f_val = float(val)
+        f_min, f_max = map(lambda x: float(x), ast.literal_eval(meta))
+    except (SyntaxError, ValueError), e:
+        logging.error("unable to parse range string - %s: %s" % (meta, e))
+        return val
+
+    if f_val < f_min or f_val > f_max:
+        return COLORS["red"](val)
+
+    return val
+
 """
 Functions to format the value using its meta,
 which are called in alphabecial order.
@@ -98,7 +127,8 @@ which are called in alphabecial order.
 TABULA_CONV_FUNCS = {"units": conv_units}
 
 TABULA_DECO_FUNCS = {"style": change_style,
-                     "color": change_color}
+                     "color": change_color,
+                     "range": check_range}
 
 def enter_fullscreen():
     """
