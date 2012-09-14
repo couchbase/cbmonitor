@@ -10,7 +10,7 @@ from optparse import OptionParser
 
 from metadata.visit import main as visit,\
     url_after, url_before, VISIT_ENTRY_FUNCS, retrieve_meta
-import libcbtop.visitor_cb as vc
+import libcbtop.visit_cb as vc
 import libcbtop.paint as pt
 
 USAGE = """./%prog HOST [options]
@@ -55,7 +55,7 @@ def main(ctl, server, port=8091, path="/pools/default"):
           retrieve_funcs={"retrieve_data": vc.retrieve_data,
                           "retrieve_meta": retrieve_meta},
           entry_funcs=visit_entry_func, ctl=ctl)
-    
+
     pt.paint(vc.tbl)
 
 if __name__ == "__main__":
