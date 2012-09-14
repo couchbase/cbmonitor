@@ -55,6 +55,8 @@ def main(ctl, server, port=8091, path="/pools/default"):
           retrieve_funcs={"retrieve_data": vc.retrieve_data,
                           "retrieve_meta": retrieve_meta},
           entry_funcs=visit_entry_func, ctl=ctl)
+    
+    pt.paint(vc.tbl)
 
 if __name__ == "__main__":
 
@@ -90,6 +92,5 @@ if __name__ == "__main__":
 
     while ctl["run_ok"]:
         main(ctl, _server)
-        pt.paint(vc.tbl)
         logging.info("sleep for %s seconds" % _itv)
         time.sleep(_itv)
