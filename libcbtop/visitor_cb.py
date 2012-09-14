@@ -13,7 +13,7 @@ from tabula.section import Section
 
 from metadata.visit import retrieve_meta
 
-from paint import TABULA_META_FUNCS
+from paint import TABULA_CONV_FUNCS, TABULA_DECO_FUNCS
 from server import Server
 from mc_source import MemcachedSource
 from mc_collector import MemcachedCollector
@@ -65,7 +65,8 @@ def _show_stats(key, val, meta_inf):
         if sec_nam in SECTION_CONFIG:
             config = SECTION_CONFIG[sec_nam]
             section = Section(sec_nam, config["id"],
-                              meta_funcs=TABULA_META_FUNCS)
+                              conv_funcs=TABULA_CONV_FUNCS,
+                              deco_funcs=TABULA_DECO_FUNCS)
             section.config(config["show_row_hdrs"],
                 config["show_col_hdrs"],
                 config["show_col_hdr_in_cell"])

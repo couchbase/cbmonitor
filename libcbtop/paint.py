@@ -95,9 +95,10 @@ def change_color(val, meta):
 Functions to format the value using its meta,
 which are called in alphabecial order.
 """
-TABULA_META_FUNCS = {"units": conv_units,
-                     "v_style": change_style,
-                     "v_color": change_color}
+TABULA_CONV_FUNCS = {"units": conv_units}
+
+TABULA_DECO_FUNCS = {"style": change_style,
+                     "color": change_color}
 
 def enter_fullscreen():
     """
