@@ -181,6 +181,7 @@
     "-cpu_utilization_rate": {
      "col": "%CPU",
      "section": "nodes",
+     "range": "[0,70]",
      "units": "percent"
     },
     "swap_total": 0,

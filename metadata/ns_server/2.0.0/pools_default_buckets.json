@@ -33,6 +33,7 @@
    "-quotaPercentUsed": {
     "col": "%MEM_USED",
     "section": "buckets",
+    "range": "[0,70]",
     "units": "percent"
    },
    "viewOps": 0
