@@ -121,8 +121,11 @@ def check_range(val, meta):
     return val
 
 """
-Functions to format the value using its meta,
+Functions to format a value using its meta,
 which are called in alphabecial order.
+
+TABULA_CONV_FUNCS: convert value before column alignments
+TABULA_DECO_FUNCS: decorate value after column alignments
 """
 TABULA_CONV_FUNCS = {"units": conv_units}
 
