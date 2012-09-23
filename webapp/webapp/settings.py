@@ -93,4 +93,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'lettuce.django',
+    'httpproxy',
 )
+
+# Proxy settings
+PROXY_DOMAIN = 'localhost'
+PROXY_PORT = 3133

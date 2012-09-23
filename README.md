@@ -19,6 +19,10 @@ Dependencies
 
     pip install tabula
 
+    pip install django-http-proxy
+
+    pip install httplib2
+
 Web application setup
 ---------------------
 
