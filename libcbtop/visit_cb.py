@@ -10,6 +10,7 @@ from lib.membase.api.exception import ServerUnavailableException
 
 from tabula.table import Table
 from tabula.section import Section
+from seriesly import Seriesly
 
 from metadata.visit import retrieve_meta
 
@@ -41,6 +42,31 @@ SECTION_CONFIG = {"settings": {"id": 0,
 tbl = Table("cbtop", sep=" ")
 cur_row = {}      # {sec_nam: row name}
 mc_jobs = multiprocessing.Queue(1)
+store = None
+
+class SerieslyStore(object):
+
+    def __init__(self, host, db):
+        self.slow = {}
+        self.fast = {}
+        self.db = db
+        self.seriesly = Seriesly(host=host)
+        if db not in self.seriesly.list_dbs():
+            self.seriesly.create_db(db)
+
+    def clear(self):
+        self.slow = {}
+        self.fast = {}
+
+    def add_fast(self, key, val):
+        self.fast[key] = val
+
+    def add_slow(self, key, val):
+        self.slow[key] = val
+
+    def persist(self):
+        if self.fast:
+            self.seriesly[self.db].append(self.fast)
 
 def _show_stats(key, val, meta_inf):
     """
@@ -97,12 +123,21 @@ def _show_stats(key, val, meta_inf):
 def store_fast(root, parents, data, meta, coll,
                key, val, meta_val, meta_inf, level):
     """Store time-series data into fast-changing database"""
+    store.add_fast(key, val)
     return _show_stats(key, val, meta_inf)
 
 def store_slow(root, parents, data, meta, coll,
                key, val, meta_val, meta_inf, level):
     """Store time-series data into slow-changing database"""
+    store.add_slow(key, val)
     return _show_stats(key, val, meta_inf)
+
+def url_before(context, path):
+    store.clear()
+    return context, path
+
+def url_after(context, path, root):
+    store.persist()
 
 def retrieve_data(context, path):
     """Retrieve json data from a couchbase server through REST calls"""
