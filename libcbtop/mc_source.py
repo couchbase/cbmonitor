@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import logging
+import json
 from source import Source
 from server import Server
 
@@ -8,15 +9,21 @@ from lib.memcached.helper.data_helper import MemcachedClientHelper
 
 class MemcachedSource(Source):
 
+    META_FILE = "./metadata/stats.json"
     MC_STATS = ["", "allocator", "checkpoint", "config", "dispatcher",
                 "hash", "kvstore", "kvtimings", "memory", "prev-vbucket",
                 "tap", "tapagg", "timings", "vbucket", "vbucket-details"]
 
-    def __init__(self, server, bucket, mc=None):
+    def __init__(self, server, bucket, meta_file=META_FILE, mc=None):
         self.server = server        # @class: Server
         self.bucket = bucket
         self.mc = mc
         self.data = {}
+        self.meta = self.get_meta(meta_file)
+
+    def get_meta(self, meta_file):
+        with open(meta_file) as f:
+            return json.loads(f.read())
 
     def connect(self):
         if not self.server or \
