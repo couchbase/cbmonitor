@@ -57,6 +57,7 @@ def main(ctl, server, itv, dbhost, dbslow, dbfast,
 
     while ctl["run_ok"]:
 
+        vc.store.clear()
         visit(server, port, path,
               {"fast": vc.store_fast,
                "slow": vc.store_slow},
@@ -65,6 +66,7 @@ def main(ctl, server, itv, dbhost, dbslow, dbfast,
               retrieve_funcs={"retrieve_data": vc.retrieve_data,
                               "retrieve_meta": retrieve_meta},
               entry_funcs=visit_entry_func, ctl=ctl)
+        vc.store.persist()
 
         pt.paint(vc.tbl)
         logging.info("sleep for %s seconds" % itv)

@@ -138,11 +138,10 @@ def store_slow(root, parents, data, meta, coll,
     return _show_stats(key, val, meta_inf)
 
 def url_before(context, path):
-    store.clear()
     return context, path
 
 def url_after(context, path, root):
-    store.persist()
+    pass
 
 def retrieve_data(context, path):
     """Retrieve json data from a couchbase server through REST calls"""
