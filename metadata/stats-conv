@@ -82,7 +82,8 @@ for section, entries in sections:
             print '    "name": "%s",' % clean(entry_name)
             print '    "desc": "%s",' % clean(entry_desc)
             print '    "section": "%s",' % clean(section)
-            print '    "pos": %s' % i
+            print '    "pos": %s,' % i
+            print '    "visit": "fast"'
             if entry_more:
                 print '    ,'
                 print entry_more
