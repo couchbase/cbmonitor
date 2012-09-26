@@ -51,9 +51,10 @@ def main(ctl, server, itv, dbhost, db, port=8091, path="/pools/default"):
     mc_proc.daemon = True
     mc_proc.start()
 
+    visit_entry_func = VISIT_ENTRY_FUNCS.copy()
+    visit_entry_func["collect_mc_stats"] = vc.collect_mc_stats
+
     while ctl["run_ok"]:
-        visit_entry_func = VISIT_ENTRY_FUNCS.copy()
-        visit_entry_func["collect_mc_stats"] = vc.collect_mc_stats
 
         visit(server, port, path,
               {"fast": vc.store_fast,
@@ -65,8 +66,8 @@ def main(ctl, server, itv, dbhost, db, port=8091, path="/pools/default"):
               entry_funcs=visit_entry_func, ctl=ctl)
 
         pt.paint(vc.tbl)
-        logging.info("sleep for %s seconds" % _itv)
-        time.sleep(_itv)
+        logging.info("sleep for %s seconds" % itv)
+        time.sleep(itv)
 
 if __name__ == "__main__":
 
