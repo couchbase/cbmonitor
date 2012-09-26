@@ -8,8 +8,7 @@ import signal
 import multiprocessing
 from optparse import OptionParser
 
-from metadata.visit import main as visit,\
-    url_after, url_before, VISIT_ENTRY_FUNCS, retrieve_meta
+from metadata.visit import main as visit, VISIT_ENTRY_FUNCS, retrieve_meta
 import libcbtop.visit_cb as vc
 import libcbtop.paint as pt
 
@@ -50,8 +49,8 @@ def main(ctl, server, port=8091, path="/pools/default"):
     visit(server, port, path,
           {"fast": vc.store_fast,
            "slow": vc.store_slow},
-          {"url_before": url_before,
-           "url_after": url_after},
+          {"url_before": vc.url_before,
+           "url_after": vc.url_after},
           retrieve_funcs={"retrieve_data": vc.retrieve_data,
                           "retrieve_meta": retrieve_meta},
           entry_funcs=visit_entry_func, ctl=ctl)
@@ -67,7 +66,11 @@ if __name__ == "__main__":
     parser = OptionParser(usage=USAGE)
     parser.add_option("-i", "--itv", dest="itv", default="1",
                       help="stats polling interval (seconds)")
-    (options, args) = parser.parse_args()
+    parser.add_option("-d", "--database", dest="db", default="cbtop",
+                      help="seriesly database to store time series data")
+    parser.add_option("-s", "--dbhost", dest="dbhost", default="localhost",
+                      help="host where seriesly is located")
+    options, args = parser.parse_args()
 
     if len(args) > 0:
         _server = args[0]
@@ -80,6 +83,7 @@ if __name__ == "__main__":
         logging.error("invalid polling interval: %s" % options.itv)
         usage()
 
+    vc.store = vc.SerieslyStore(options.dbhost, options.db)
     vc.tbl.set_ftr("Last Update: %time")
     pt.enter_fullscreen()
 
