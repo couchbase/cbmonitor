@@ -40,22 +40,33 @@ def usage():
     print USAGE
     sys.exit(-1)
 
+def main(ctl, server, itv, dbhost, db, port=8091, path="/pools/default"):
 
-def main(ctl, server, port=8091, path="/pools/default"):
+    vc.store = vc.SerieslyStore(dbhost, db)
+    vc.tbl.set_ftr("Last Update: %time")
+    pt.enter_fullscreen()
 
-    visit_entry_func = VISIT_ENTRY_FUNCS.copy()
-    visit_entry_func["collect_mc_stats"] = vc.collect_mc_stats
+    mc_proc = multiprocessing.Process(target=vc.mc_worker,
+                                      args=(vc.mc_jobs, ctl))
+    mc_proc.daemon = True
+    mc_proc.start()
 
-    visit(server, port, path,
-          {"fast": vc.store_fast,
-           "slow": vc.store_slow},
-          {"url_before": vc.url_before,
-           "url_after": vc.url_after},
-          retrieve_funcs={"retrieve_data": vc.retrieve_data,
-                          "retrieve_meta": retrieve_meta},
-          entry_funcs=visit_entry_func, ctl=ctl)
+    while ctl["run_ok"]:
+        visit_entry_func = VISIT_ENTRY_FUNCS.copy()
+        visit_entry_func["collect_mc_stats"] = vc.collect_mc_stats
 
-    pt.paint(vc.tbl)
+        visit(server, port, path,
+              {"fast": vc.store_fast,
+               "slow": vc.store_slow},
+              {"url_before": vc.url_before,
+               "url_after": vc.url_after},
+              retrieve_funcs={"retrieve_data": vc.retrieve_data,
+                              "retrieve_meta": retrieve_meta},
+              entry_funcs=visit_entry_func, ctl=ctl)
+
+        pt.paint(vc.tbl)
+        logging.info("sleep for %s seconds" % _itv)
+        time.sleep(_itv)
 
 if __name__ == "__main__":
 
@@ -83,18 +94,8 @@ if __name__ == "__main__":
         logging.error("invalid polling interval: %s" % options.itv)
         usage()
 
-    vc.store = vc.SerieslyStore(options.dbhost, options.db)
-    vc.tbl.set_ftr("Last Update: %time")
-    pt.enter_fullscreen()
+    _dbhost = options.dbhost
+    _db = options.db
 
     ctl = {"run_ok": True}
-
-    mc_proc = multiprocessing.Process(target=vc.mc_worker,
-                                      args=(vc.mc_jobs, ctl))
-    mc_proc.daemon = True
-    mc_proc.start()
-
-    while ctl["run_ok"]:
-        main(ctl, _server)
-        logging.info("sleep for %s seconds" % _itv)
-        time.sleep(_itv)
+    main(ctl, _server, _itv, _dbhost, _db)
