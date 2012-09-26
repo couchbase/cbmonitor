@@ -232,7 +232,12 @@ def mc_worker(jobs, ctl, store, timeout=5):
             mc_coll.collect()
             mc_coll.emit()
 
+        delta = time.time() - start
         logging.debug("collected mc stats from %s, took %s seconds"
-                      % (val, time.time() - start))
+                      % (val, delta))
+
+        if delta < timeout:
+            logging.debug("mc_worker sleep for %s seconds" % (timeout -delta))
+            time.sleep(timeout - delta)
 
     logging.error("mc_worker stopped")
