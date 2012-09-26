@@ -46,13 +46,16 @@ store = None
 
 class SerieslyStore(object):
 
-    def __init__(self, host, db):
+    def __init__(self, host, dbslow, dbfast):
         self.slow = {}
         self.fast = {}
-        self.db = db
+        self.dbslow = dbslow
+        self.dbfast = dbfast
         self.seriesly = Seriesly(host=host)
-        if db not in self.seriesly.list_dbs():
-            self.seriesly.create_db(db)
+        if dbslow not in self.seriesly.list_dbs():
+            self.seriesly.create_db(dbslow)
+        if dbfast not in self.seriesly.list_dbs():
+            self.seriesly.create_db(dbfast)
 
     def clear(self):
         self.slow = {}
@@ -65,8 +68,10 @@ class SerieslyStore(object):
         self.slow[key] = val
 
     def persist(self):
+        if self.slow:
+            self.seriesly[self.dbslow].append(self.slow)
         if self.fast:
-            self.seriesly[self.db].append(self.fast)
+            self.seriesly[self.dbfast].append(self.fast)
 
 def _show_stats(key, val, meta_inf):
     """
