@@ -20,6 +20,7 @@ from server import Server
 from mc_source import MemcachedSource
 from mc_collector import MemcachedCollector
 from json_handler import JsonHandler
+from seriesly_handler import SerieslyHandler
 from data_helper import DataHelper
 
 # configuration for each tabula.section
@@ -192,7 +193,7 @@ def collect_mc_stats(root, parents, data, meta, coll,
         logging.debug("unable to collect mcstats : queue is full")
         return False
 
-def mc_worker(jobs, ctl, timeout=5):
+def mc_worker(jobs, ctl, store, timeout=5):
     logging.error("mc_worker started")
 
     while ctl["run_ok"]:
@@ -224,9 +225,10 @@ def mc_worker(jobs, ctl, timeout=5):
 
             # initialize handlers to dump data json doc
             j_handler = JsonHandler()
+            s_hanlder = SerieslyHandler(store)
 
             # collect data from source and emit to handlers
-            mc_coll = MemcachedCollector([mc_source], [j_handler])
+            mc_coll = MemcachedCollector([mc_source], [j_handler, s_hanlder])
             mc_coll.collect()
             mc_coll.emit()
 
