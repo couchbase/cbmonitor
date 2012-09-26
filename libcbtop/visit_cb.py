@@ -11,6 +11,7 @@ from lib.membase.api.exception import ServerUnavailableException
 from tabula.table import Table
 from tabula.section import Section
 from seriesly import Seriesly
+import seriesly.exceptions
 
 from metadata.visit import retrieve_meta
 
@@ -52,9 +53,15 @@ class SerieslyStore(object):
         self.dbslow = dbslow
         self.dbfast = dbfast
         self.seriesly = Seriesly(host=host)
-        if dbslow not in self.seriesly.list_dbs():
+        try:
+            dbs = self.seriesly.list_dbs()
+        except seriesly.exceptions.ConnectionError, e:
+            logging.error("unable to connect to seriesly server: %s" % e)
+            return
+
+        if dbslow not in dbs:
             self.seriesly.create_db(dbslow)
-        if dbfast not in self.seriesly.list_dbs():
+        if dbfast not in dbs:
             self.seriesly.create_db(dbfast)
 
     def clear(self):
@@ -68,10 +75,16 @@ class SerieslyStore(object):
         self.slow[key] = val
 
     def persist(self):
-        if self.slow:
-            self.seriesly[self.dbslow].append(self.slow)
-        if self.fast:
-            self.seriesly[self.dbfast].append(self.fast)
+        try:
+            if self.slow:
+                self.seriesly[self.dbslow].append(self.slow)
+            if self.fast:
+                self.seriesly[self.dbfast].append(self.fast)
+        except seriesly.exceptions.ConnectionError, e:
+            logging.error("unable to connect to seriesly server: %s" % e)
+            return False
+
+        return True
 
 def _show_stats(key, val, meta_inf):
     """
