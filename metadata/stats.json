@@ -1,2929 +1,2929 @@
 {
   "mc-ep_version": {
-    "name": "ep_version",
+    "col": "ep_version",
     "desc": "Version number of ep_engine.",
-    "section": "Toplevel Stats",
-    "pos": 0,
-    "visit": "slow"
-  }
-,
-  "mc-ep_storage_age": {
-    "name": "ep_storage_age",
-    "desc": "Seconds since most recently stored object was initially queued.",
     "section": "Toplevel Stats",
     "pos": 1,
     "visit": "fast"
   }
 ,
-  "mc-ep_storage_age_highwat": {
-    "name": "ep_storage_age_highwat",
-    "desc": "ep_storage_age high water mark",
+  "mc-ep_storage_age": {
+    "col": "ep_storage_age",
+    "desc": "Seconds since most recently stored object was initially queued.",
     "section": "Toplevel Stats",
     "pos": 2,
-    "visit": "slow"
+    "visit": "fast"
+  }
+,
+  "mc-ep_storage_age_highwat": {
+    "col": "ep_storage_age_highwat",
+    "desc": "ep_storage_age high water mark",
+    "section": "Toplevel Stats",
+    "pos": 3,
+    "visit": "fast"
   }
 ,
   "mc-ep_min_data_age": {
-    "name": "ep_min_data_age",
+    "col": "ep_min_data_age",
     "desc": "Minimum data age setting.",
     "section": "Toplevel Stats",
-    "pos": 3,
-    "visit": "slow"
+    "pos": 4,
+    "visit": "fast"
   }
 ,
   "mc-ep_startup_time": {
-    "name": "ep_startup_time",
+    "col": "ep_startup_time",
     "desc": "System-generated engine startup time",
     "section": "Toplevel Stats",
-    "pos": 4,
-    "visit": "slow"
+    "pos": 5,
+    "visit": "fast"
   }
 ,
   "mc-ep_queue_age_cap": {
-    "name": "ep_queue_age_cap",
+    "col": "ep_queue_age_cap",
     "desc": "Queue age cap setting.",
-    "section": "Toplevel Stats",
-    "pos": 5,
-    "visit": "slow"
-  }
-,
-  "mc-ep_max_txn_size": {
-    "name": "ep_max_txn_size",
-    "desc": "Max number of updates per transaction.",
     "section": "Toplevel Stats",
     "pos": 6,
     "visit": "fast"
   }
 ,
-  "mc-ep_data_age": {
-    "name": "ep_data_age",
-    "desc": "Seconds since most recently stored object was modified.",
+  "mc-ep_max_txn_size": {
+    "col": "ep_max_txn_size",
+    "desc": "Max number of updates per transaction.",
     "section": "Toplevel Stats",
     "pos": 7,
     "visit": "fast"
   }
 ,
-  "mc-ep_data_age_highwat": {
-    "name": "ep_data_age_highwat",
-    "desc": "ep_data_age high water mark",
+  "mc-ep_data_age": {
+    "col": "ep_data_age",
+    "desc": "Seconds since most recently stored object was modified.",
     "section": "Toplevel Stats",
     "pos": 8,
-    "visit": "slow"
+    "visit": "fast"
   }
 ,
-  "mc-ep_too_young": {
-    "name": "ep_too_young",
-    "desc": "Number of times an object was not stored due to being too young.",
+  "mc-ep_data_age_highwat": {
+    "col": "ep_data_age_highwat",
+    "desc": "ep_data_age high water mark",
     "section": "Toplevel Stats",
     "pos": 9,
     "visit": "fast"
   }
 ,
-  "mc-ep_too_old": {
-    "name": "ep_too_old",
-    "desc": "Number of times an object was stored after being dirty too long.",
+  "mc-ep_too_young": {
+    "col": "ep_too_young",
+    "desc": "Number of times an object was not stored due to being too young.",
     "section": "Toplevel Stats",
     "pos": 10,
     "visit": "fast"
   }
 ,
-  "mc-ep_total_enqueued": {
-    "name": "ep_total_enqueued",
-    "desc": "Total number of items queued for persistence.",
+  "mc-ep_too_old": {
+    "col": "ep_too_old",
+    "desc": "Number of times an object was stored after being dirty too long.",
     "section": "Toplevel Stats",
     "pos": 11,
     "visit": "fast"
   }
 ,
-  "mc-ep_total_new_items": {
-    "name": "ep_total_new_items",
-    "desc": "Total number of persisted new items.",
+  "mc-ep_total_enqueued": {
+    "col": "ep_total_enqueued",
+    "desc": "Total number of items queued for persistence.",
     "section": "Toplevel Stats",
     "pos": 12,
     "visit": "fast"
   }
 ,
-  "mc-ep_total_del_items": {
-    "name": "ep_total_del_items",
-    "desc": "Total number of persisted deletions.",
+  "mc-ep_total_new_items": {
+    "col": "ep_total_new_items",
+    "desc": "Total number of persisted new items.",
     "section": "Toplevel Stats",
     "pos": 13,
     "visit": "fast"
   }
 ,
-  "mc-ep_total_persisted": {
-    "name": "ep_total_persisted",
-    "desc": "Total number of items persisted.",
+  "mc-ep_total_del_items": {
+    "col": "ep_total_del_items",
+    "desc": "Total number of persisted deletions.",
     "section": "Toplevel Stats",
     "pos": 14,
     "visit": "fast"
   }
 ,
-  "mc-ep_item_flush_failed": {
-    "name": "ep_item_flush_failed",
-    "desc": "Number of times an item failed to flush due to storage errors.",
+  "mc-ep_total_persisted": {
+    "col": "ep_total_persisted",
+    "desc": "Total number of items persisted.",
     "section": "Toplevel Stats",
     "pos": 15,
     "visit": "fast"
   }
 ,
-  "mc-ep_item_commit_failed": {
-    "name": "ep_item_commit_failed",
-    "desc": "Number of times a transaction failed to commit due to storage errors.",
+  "mc-ep_item_flush_failed": {
+    "col": "ep_item_flush_failed",
+    "desc": "Number of times an item failed to flush due to storage errors.",
     "section": "Toplevel Stats",
     "pos": 16,
     "visit": "fast"
   }
 ,
-  "mc-ep_item_begin_failed": {
-    "name": "ep_item_begin_failed",
-    "desc": "Number of times a transaction failed to start due to storage errors.",
+  "mc-ep_item_commit_failed": {
+    "col": "ep_item_commit_failed",
+    "desc": "Number of times a transaction failed to commit due to storage errors.",
     "section": "Toplevel Stats",
     "pos": 17,
     "visit": "fast"
   }
 ,
-  "mc-ep_expired_access": {
-    "name": "ep_expired_access",
-    "desc": "Number of times an item was expired on application access.",
+  "mc-ep_item_begin_failed": {
+    "col": "ep_item_begin_failed",
+    "desc": "Number of times a transaction failed to start due to storage errors.",
     "section": "Toplevel Stats",
     "pos": 18,
     "visit": "fast"
   }
 ,
-  "mc-ep_expired_pager": {
-    "name": "ep_expired_pager",
-    "desc": "Number of times an item was expired by ep engine item pager.",
+  "mc-ep_expired_access": {
+    "col": "ep_expired_access",
+    "desc": "Number of times an item was expired on application access.",
     "section": "Toplevel Stats",
     "pos": 19,
     "visit": "fast"
   }
 ,
-  "mc-ep_item_flush_expired": {
-    "name": "ep_item_flush_expired",
-    "desc": "Number of times an item is not flushed due to the expiry of the item",
+  "mc-ep_expired_pager": {
+    "col": "ep_expired_pager",
+    "desc": "Number of times an item was expired by ep engine item pager.",
     "section": "Toplevel Stats",
     "pos": 20,
     "visit": "fast"
   }
 ,
-  "mc-ep_queue_size": {
-    "name": "ep_queue_size",
-    "desc": "Number of items queued for storage.",
+  "mc-ep_item_flush_expired": {
+    "col": "ep_item_flush_expired",
+    "desc": "Number of times an item is not flushed due to the expiry of the item",
     "section": "Toplevel Stats",
     "pos": 21,
     "visit": "fast"
   }
 ,
-  "mc-ep_flusher_todo": {
-    "name": "ep_flusher_todo",
-    "desc": "Number of items remaining to be written.",
+  "mc-ep_queue_size": {
+    "col": "ep_queue_size",
+    "desc": "Number of items queued for storage.",
     "section": "Toplevel Stats",
     "pos": 22,
     "visit": "fast"
   }
 ,
-  "mc-ep_flusher_num_completed": {
-    "name": "ep_flusher_num_completed",
-    "desc": "Number of times the flusher completes persisting all items from the checkpoint queues.",
+  "mc-ep_flusher_todo": {
+    "col": "ep_flusher_todo",
+    "desc": "Number of items remaining to be written.",
     "section": "Toplevel Stats",
     "pos": 23,
     "visit": "fast"
   }
 ,
-  "mc-ep_flusher_state": {
-    "name": "ep_flusher_state",
-    "desc": "Current state of the flusher thread.",
+  "mc-ep_flusher_num_completed": {
+    "col": "ep_flusher_num_completed",
+    "desc": "Number of times the flusher completes persisting all items from the checkpoint queues.",
     "section": "Toplevel Stats",
     "pos": 24,
-    "visit": "slow"
+    "visit": "fast"
   }
 ,
-  "mc-ep_commit_num": {
-    "name": "ep_commit_num",
-    "desc": "Total number of write commits.",
+  "mc-ep_flusher_state": {
+    "col": "ep_flusher_state",
+    "desc": "Current state of the flusher thread.",
     "section": "Toplevel Stats",
     "pos": 25,
     "visit": "fast"
   }
 ,
-  "mc-ep_commit_time": {
-    "name": "ep_commit_time",
-    "desc": "Number of milliseconds of most recent commit.",
+  "mc-ep_commit_num": {
+    "col": "ep_commit_num",
+    "desc": "Total number of write commits.",
     "section": "Toplevel Stats",
     "pos": 26,
     "visit": "fast"
   }
 ,
-  "mc-ep_commit_time_total": {
-    "name": "ep_commit_time_total",
-    "desc": "Cumulative milliseconds spent committing.",
+  "mc-ep_commit_time": {
+    "col": "ep_commit_time",
+    "desc": "Number of milliseconds of most recent commit.",
     "section": "Toplevel Stats",
     "pos": 27,
     "visit": "fast"
   }
 ,
-  "mc-ep_vbucket_del": {
-    "name": "ep_vbucket_del",
-    "desc": "Number of vbucket deletion events.",
+  "mc-ep_commit_time_total": {
+    "col": "ep_commit_time_total",
+    "desc": "Cumulative milliseconds spent committing.",
     "section": "Toplevel Stats",
     "pos": 28,
     "visit": "fast"
   }
 ,
-  "mc-ep_vbucket_del_fail": {
-    "name": "ep_vbucket_del_fail",
-    "desc": "Number of failed vbucket deletion events.",
+  "mc-ep_vbucket_del": {
+    "col": "ep_vbucket_del",
+    "desc": "Number of vbucket deletion events.",
     "section": "Toplevel Stats",
     "pos": 29,
     "visit": "fast"
   }
 ,
-  "mc-ep_vbucket_del_max_walltime": {
-    "name": "ep_vbucket_del_max_walltime",
-    "desc": "Max wall time (µs) spent by deleting a vbucket",
+  "mc-ep_vbucket_del_fail": {
+    "col": "ep_vbucket_del_fail",
+    "desc": "Number of failed vbucket deletion events.",
     "section": "Toplevel Stats",
     "pos": 30,
     "visit": "fast"
   }
 ,
-  "mc-ep_vbucket_del_total_walltime": {
-    "name": "ep_vbucket_del_total_walltime",
-    "desc": "Total wall time (µs) spent by deleting vbuckets",
+  "mc-ep_vbucket_del_max_walltime": {
+    "col": "ep_vbucket_del_max_walltime",
+    "desc": "Max wall time (µs) spent by deleting a vbucket",
     "section": "Toplevel Stats",
     "pos": 31,
     "visit": "fast"
   }
 ,
-  "mc-ep_vbucket_del_avg_walltime": {
-    "name": "ep_vbucket_del_avg_walltime",
-    "desc": "Avg wall time (µs) spent by deleting a vbucket",
+  "mc-ep_vbucket_del_total_walltime": {
+    "col": "ep_vbucket_del_total_walltime",
+    "desc": "Total wall time (µs) spent by deleting vbuckets",
     "section": "Toplevel Stats",
     "pos": 32,
     "visit": "fast"
   }
 ,
-  "mc-ep_flush_duration": {
-    "name": "ep_flush_duration",
-    "desc": "Number of seconds of most recent flush.",
+  "mc-ep_vbucket_del_avg_walltime": {
+    "col": "ep_vbucket_del_avg_walltime",
+    "desc": "Avg wall time (µs) spent by deleting a vbucket",
     "section": "Toplevel Stats",
     "pos": 33,
     "visit": "fast"
   }
 ,
-  "mc-ep_flush_duration_total": {
-    "name": "ep_flush_duration_total",
-    "desc": "Cumulative seconds spent flushing.",
+  "mc-ep_flush_duration": {
+    "col": "ep_flush_duration",
+    "desc": "Number of seconds of most recent flush.",
     "section": "Toplevel Stats",
     "pos": 34,
     "visit": "fast"
   }
 ,
-  "mc-ep_flush_duration_highwat": {
-    "name": "ep_flush_duration_highwat",
-    "desc": "ep_flush_duration high water mark.",
+  "mc-ep_flush_duration_total": {
+    "col": "ep_flush_duration_total",
+    "desc": "Cumulative seconds spent flushing.",
     "section": "Toplevel Stats",
     "pos": 35,
-    "visit": "slow"
+    "visit": "fast"
   }
 ,
-  "mc-ep_flush_all": {
-    "name": "ep_flush_all",
-    "desc": "True if disk flush_all is scheduled",
+  "mc-ep_flush_duration_highwat": {
+    "col": "ep_flush_duration_highwat",
+    "desc": "ep_flush_duration high water mark.",
     "section": "Toplevel Stats",
     "pos": 36,
     "visit": "fast"
   }
 ,
-  "mc-ep_num_ops_get_meta": {
-    "name": "ep_num_ops_get_meta",
-    "desc": "Number of getMeta operations",
+  "mc-ep_flush_all": {
+    "col": "ep_flush_all",
+    "desc": "True if disk flush_all is scheduled",
     "section": "Toplevel Stats",
     "pos": 37,
     "visit": "fast"
   }
 ,
-  "mc-ep_num_ops_set_meta": {
-    "name": "ep_num_ops_set_meta",
-    "desc": "Number of setWithMeta operations",
+  "mc-ep_num_ops_get_meta": {
+    "col": "ep_num_ops_get_meta",
+    "desc": "Number of getMeta operations",
     "section": "Toplevel Stats",
     "pos": 38,
     "visit": "fast"
   }
 ,
-  "mc-ep_num_ops_del_meta": {
-    "name": "ep_num_ops_del_meta",
-    "desc": "Number of delWithMeta operations",
+  "mc-ep_num_ops_set_meta": {
+    "col": "ep_num_ops_set_meta",
+    "desc": "Number of setWithMeta operations",
     "section": "Toplevel Stats",
     "pos": 39,
     "visit": "fast"
   }
 ,
-  "mc-curr_items": {
-    "name": "curr_items",
-    "desc": "Num items in active vbuckets (temp + live)",
+  "mc-ep_num_ops_del_meta": {
+    "col": "ep_num_ops_del_meta",
+    "desc": "Number of delWithMeta operations",
     "section": "Toplevel Stats",
     "pos": 40,
     "visit": "fast"
   }
 ,
-  "mc-curr_temp_items": {
-    "name": "curr_temp_items",
-    "desc": "Num temp items in active vbuckets",
+  "mc-curr_items": {
+    "col": "curr_items",
+    "desc": "Num items in active vbuckets (temp + live)",
     "section": "Toplevel Stats",
     "pos": 41,
     "visit": "fast"
   }
 ,
-  "mc-curr_items_tot": {
-    "name": "curr_items_tot",
-    "desc": "Num current items including those not active (replica, dead and pending states)",
+  "mc-curr_temp_items": {
+    "col": "curr_temp_items",
+    "desc": "Num temp items in active vbuckets",
     "section": "Toplevel Stats",
     "pos": 42,
     "visit": "fast"
   }
 ,
-  "mc-ep_kv_size": {
-    "name": "ep_kv_size",
-    "desc": "Memory used to store item metadata, keys and values, no matter the vbucket's state. If an item's value is ejected, this stat will be decremented by the size of the item's value.",
+  "mc-curr_items_tot": {
+    "col": "curr_items_tot",
+    "desc": "Num current items including those not active (replica, dead and pending states)",
     "section": "Toplevel Stats",
     "pos": 43,
     "visit": "fast"
   }
 ,
-  "mc-ep_value_size": {
-    "name": "ep_value_size",
-    "desc": "Memory used to store values for resident keys.",
+  "mc-ep_kv_size": {
+    "col": "ep_kv_size",
+    "desc": "Memory used to store item metadata, keys and values, no matter the vbucket's state. If an item's value is ejected, this stat will be decremented by the size of the item's value.",
     "section": "Toplevel Stats",
     "pos": 44,
     "visit": "fast"
   }
 ,
-  "mc-ep_overhead": {
-    "name": "ep_overhead",
-    "desc": "Extra memory used by transient data like persistence queues, replication queues, checkpoints, etc.",
+  "mc-ep_value_size": {
+    "col": "ep_value_size",
+    "desc": "Memory used to store values for resident keys.",
     "section": "Toplevel Stats",
     "pos": 45,
     "visit": "fast"
   }
 ,
-  "mc-ep_max_data_size": {
-    "name": "ep_max_data_size",
-    "desc": "Max amount of data allowed in memory.",
+  "mc-ep_overhead": {
+    "col": "ep_overhead",
+    "desc": "Extra memory used by transient data like persistence queues, replication queues, checkpoints, etc.",
     "section": "Toplevel Stats",
     "pos": 46,
-    "visit": "slow"
+    "visit": "fast"
+  }
+,
+  "mc-ep_max_data_size": {
+    "col": "ep_max_data_size",
+    "desc": "Max amount of data allowed in memory.",
+    "section": "Toplevel Stats",
+    "pos": 47,
+    "visit": "fast"
   }
 ,
   "mc-ep_mem_low_wat": {
-    "name": "ep_mem_low_wat",
+    "col": "ep_mem_low_wat",
     "desc": "Low water mark for auto-evictions.",
     "section": "Toplevel Stats",
-    "pos": 47,
-    "visit": "slow"
+    "pos": 48,
+    "visit": "fast"
   }
 ,
   "mc-ep_mem_high_wat": {
-    "name": "ep_mem_high_wat",
+    "col": "ep_mem_high_wat",
     "desc": "High water mark for auto-evictions.",
-    "section": "Toplevel Stats",
-    "pos": 48,
-    "visit": "slow"
-  }
-,
-  "mc-ep_total_cache_size": {
-    "name": "ep_total_cache_size",
-    "desc": "The total byte size of all items, no matter the vbucket's state, no matter if an item's value is ejected.",
     "section": "Toplevel Stats",
     "pos": 49,
     "visit": "fast"
   }
 ,
-  "mc-ep_oom_errors": {
-    "name": "ep_oom_errors",
-    "desc": "Number of times unrecoverable OOMs happened while processing operations",
+  "mc-ep_total_cache_size": {
+    "col": "ep_total_cache_size",
+    "desc": "The total byte size of all items, no matter the vbucket's state, no matter if an item's value is ejected.",
     "section": "Toplevel Stats",
     "pos": 50,
     "visit": "fast"
   }
 ,
-  "mc-ep_tmp_oom_errors": {
-    "name": "ep_tmp_oom_errors",
-    "desc": "Number of times temporary OOMs happened while processing operations",
+  "mc-ep_oom_errors": {
+    "col": "ep_oom_errors",
+    "desc": "Number of times unrecoverable OOMs happened while processing operations",
     "section": "Toplevel Stats",
     "pos": 51,
     "visit": "fast"
   }
 ,
-  "mc-ep_mem_tracker_enabled": {
-    "name": "ep_mem_tracker_enabled",
-    "desc": "True if memory usage tracker is enabled",
+  "mc-ep_tmp_oom_errors": {
+    "col": "ep_tmp_oom_errors",
+    "desc": "Number of times temporary OOMs happened while processing operations",
     "section": "Toplevel Stats",
     "pos": 52,
-    "visit": "slow"
+    "visit": "fast"
   }
 ,
-  "mc-ep_bg_fetched": {
-    "name": "ep_bg_fetched",
-    "desc": "Number of items fetched from disk.",
+  "mc-ep_mem_tracker_enabled": {
+    "col": "ep_mem_tracker_enabled",
+    "desc": "True if memory usage tracker is enabled",
     "section": "Toplevel Stats",
     "pos": 53,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_fetched": {
-    "name": "ep_tap_bg_fetched",
-    "desc": "Number of tap disk fetches",
+  "mc-ep_bg_fetched": {
+    "col": "ep_bg_fetched",
+    "desc": "Number of items fetched from disk.",
     "section": "Toplevel Stats",
     "pos": 54,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_fetch_requeued": {
-    "name": "ep_tap_bg_fetch_requeued",
-    "desc": "Number of times a tap bg fetch task is requeued.",
+  "mc-ep_tap_bg_fetched": {
+    "col": "ep_tap_bg_fetched",
+    "desc": "Number of tap disk fetches",
     "section": "Toplevel Stats",
     "pos": 55,
     "visit": "fast"
   }
 ,
-  "mc-ep_num_pager_runs": {
-    "name": "ep_num_pager_runs",
-    "desc": "Number of times we ran pager loops to seek additional memory.",
+  "mc-ep_tap_bg_fetch_requeued": {
+    "col": "ep_tap_bg_fetch_requeued",
+    "desc": "Number of times a tap bg fetch task is requeued.",
     "section": "Toplevel Stats",
     "pos": 56,
     "visit": "fast"
   }
 ,
-  "mc-ep_num_expiry_pager_runs": {
-    "name": "ep_num_expiry_pager_runs",
-    "desc": "Number of times we ran expiry pager loops to purge expired items from memory/disk",
+  "mc-ep_num_pager_runs": {
+    "col": "ep_num_pager_runs",
+    "desc": "Number of times we ran pager loops to seek additional memory.",
     "section": "Toplevel Stats",
     "pos": 57,
     "visit": "fast"
   }
 ,
-  "mc-ep_num_access_scanner_runs": {
-    "name": "ep_num_access_scanner_runs",
-    "desc": "Number of times we ran accesss scanner to snapshot working set",
+  "mc-ep_num_expiry_pager_runs": {
+    "col": "ep_num_expiry_pager_runs",
+    "desc": "Number of times we ran expiry pager loops to purge expired items from memory/disk",
     "section": "Toplevel Stats",
     "pos": 58,
-    "visit": "slow"
+    "visit": "fast"
+  }
+,
+  "mc-ep_num_access_scanner_runs": {
+    "col": "ep_num_access_scanner_runs",
+    "desc": "Number of times we ran accesss scanner to snapshot working set",
+    "section": "Toplevel Stats",
+    "pos": 59,
+    "visit": "fast"
   }
 ,
   "mc-ep_access_scanner_task_time": {
-    "name": "ep_access_scanner_task_time",
+    "col": "ep_access_scanner_task_time",
     "desc": "Time of the next access scanner task (GMT)",
-    "section": "Toplevel Stats",
-    "pos": 59,
-    "visit": "slow"
-  }
-,
-  "mc-ep_num_checkpoint_remover_runs": {
-    "name": "ep_num_checkpoint_remover_runs",
-    "desc": "Number of times we ran checkpoint remover to remove closed unreferenced checkpoints.",
     "section": "Toplevel Stats",
     "pos": 60,
     "visit": "fast"
   }
 ,
-  "mc-ep_items_rm_from_checkpoints": {
-    "name": "ep_items_rm_from_checkpoints",
-    "desc": "Number of items removed from closed unreferenced checkpoints.",
+  "mc-ep_num_checkpoint_remover_runs": {
+    "col": "ep_num_checkpoint_remover_runs",
+    "desc": "Number of times we ran checkpoint remover to remove closed unreferenced checkpoints.",
     "section": "Toplevel Stats",
     "pos": 61,
     "visit": "fast"
   }
 ,
-  "mc-ep_num_value_ejects": {
-    "name": "ep_num_value_ejects",
-    "desc": "Number of times item values got ejected from memory to disk ejected from memory to disk",
+  "mc-ep_items_rm_from_checkpoints": {
+    "col": "ep_items_rm_from_checkpoints",
+    "desc": "Number of items removed from closed unreferenced checkpoints.",
     "section": "Toplevel Stats",
     "pos": 62,
     "visit": "fast"
   }
 ,
-  "mc-ep_num_eject_failures": {
-    "name": "ep_num_eject_failures",
-    "desc": "Number of items that could not be ejected",
+  "mc-ep_num_value_ejects": {
+    "col": "ep_num_value_ejects",
+    "desc": "Number of times item values got ejected from memory to disk ejected from memory to disk",
     "section": "Toplevel Stats",
     "pos": 63,
     "visit": "fast"
   }
 ,
-  "mc-ep_num_not_my_vbuckets": {
-    "name": "ep_num_not_my_vbuckets",
-    "desc": "Number of times Not My VBucket exception happened during runtime",
+  "mc-ep_num_eject_failures": {
+    "col": "ep_num_eject_failures",
+    "desc": "Number of items that could not be ejected",
     "section": "Toplevel Stats",
     "pos": 64,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_keepalive": {
-    "name": "ep_tap_keepalive",
-    "desc": "Tap keepalive time.",
+  "mc-ep_num_not_my_vbuckets": {
+    "col": "ep_num_not_my_vbuckets",
+    "desc": "Number of times Not My VBucket exception happened during runtime",
     "section": "Toplevel Stats",
     "pos": 65,
     "visit": "fast"
   }
 ,
-  "mc-ep_dbname": {
-    "name": "ep_dbname",
-    "desc": "DB path.",
+  "mc-ep_tap_keepalive": {
+    "col": "ep_tap_keepalive",
+    "desc": "Tap keepalive time.",
     "section": "Toplevel Stats",
     "pos": 66,
-    "visit": "slow"
+    "visit": "fast"
+  }
+,
+  "mc-ep_dbname": {
+    "col": "ep_dbname",
+    "desc": "DB path.",
+    "section": "Toplevel Stats",
+    "pos": 67,
+    "visit": "fast"
   }
 ,
   "mc-ep_dbinit": {
-    "name": "ep_dbinit",
+    "col": "ep_dbinit",
     "desc": "Number of seconds to initialize DB.",
     "section": "Toplevel Stats",
-    "pos": 67,
-    "visit": "slow"
+    "pos": 68,
+    "visit": "fast"
   }
 ,
   "mc-ep_dbshards": {
-    "name": "ep_dbshards",
+    "col": "ep_dbshards",
     "desc": "Number of shards for db store",
     "section": "Toplevel Stats",
-    "pos": 68,
-    "visit": "slow"
+    "pos": 69,
+    "visit": "fast"
   }
 ,
   "mc-ep_db_strategy": {
-    "name": "ep_db_strategy",
+    "col": "ep_db_strategy",
     "desc": "SQLite db strategy",
-    "section": "Toplevel Stats",
-    "pos": 69,
-    "visit": "slow"
-  }
-,
-  "mc-ep_io_num_read": {
-    "name": "ep_io_num_read",
-    "desc": "Number of io read operations",
     "section": "Toplevel Stats",
     "pos": 70,
     "visit": "fast"
   }
 ,
-  "mc-ep_io_num_write": {
-    "name": "ep_io_num_write",
-    "desc": "Number of io write operations",
+  "mc-ep_io_num_read": {
+    "col": "ep_io_num_read",
+    "desc": "Number of io read operations",
     "section": "Toplevel Stats",
     "pos": 71,
     "visit": "fast"
   }
 ,
-  "mc-ep_io_read_bytes": {
-    "name": "ep_io_read_bytes",
-    "desc": "Number of bytes read (key + values)",
+  "mc-ep_io_num_write": {
+    "col": "ep_io_num_write",
+    "desc": "Number of io write operations",
     "section": "Toplevel Stats",
     "pos": 72,
     "visit": "fast"
   }
 ,
-  "mc-ep_io_write_bytes": {
-    "name": "ep_io_write_bytes",
-    "desc": "Number of bytes written (key + values)",
+  "mc-ep_io_read_bytes": {
+    "col": "ep_io_read_bytes",
+    "desc": "Number of bytes read (key + values)",
     "section": "Toplevel Stats",
     "pos": 73,
     "visit": "fast"
   }
 ,
-  "mc-ep_pending_ops": {
-    "name": "ep_pending_ops",
-    "desc": "Number of ops awaiting pending vbuckets",
+  "mc-ep_io_write_bytes": {
+    "col": "ep_io_write_bytes",
+    "desc": "Number of bytes written (key + values)",
     "section": "Toplevel Stats",
     "pos": 74,
     "visit": "fast"
   }
 ,
-  "mc-ep_pending_ops_total": {
-    "name": "ep_pending_ops_total",
-    "desc": "Total blocked pending ops since reset",
+  "mc-ep_pending_ops": {
+    "col": "ep_pending_ops",
+    "desc": "Number of ops awaiting pending vbuckets",
     "section": "Toplevel Stats",
     "pos": 75,
     "visit": "fast"
   }
 ,
-  "mc-ep_pending_ops_max": {
-    "name": "ep_pending_ops_max",
-    "desc": "Max ops seen awaiting 1 pending vbucket",
+  "mc-ep_pending_ops_total": {
+    "col": "ep_pending_ops_total",
+    "desc": "Total blocked pending ops since reset",
     "section": "Toplevel Stats",
     "pos": 76,
     "visit": "fast"
   }
 ,
-  "mc-ep_pending_ops_max_duration": {
-    "name": "ep_pending_ops_max_duration",
-    "desc": "Max time (µs) used waiting on pending vbuckets",
+  "mc-ep_pending_ops_max": {
+    "col": "ep_pending_ops_max",
+    "desc": "Max ops seen awaiting 1 pending vbucket",
     "section": "Toplevel Stats",
     "pos": 77,
     "visit": "fast"
   }
 ,
-  "mc-ep_bg_num_samples": {
-    "name": "ep_bg_num_samples",
-    "desc": "The number of samples included in the avg",
+  "mc-ep_pending_ops_max_duration": {
+    "col": "ep_pending_ops_max_duration",
+    "desc": "Max time (µs) used waiting on pending vbuckets",
     "section": "Toplevel Stats",
     "pos": 78,
     "visit": "fast"
   }
 ,
-  "mc-ep_bg_min_wait": {
-    "name": "ep_bg_min_wait",
-    "desc": "The shortest time (µs) in the wait queue",
+  "mc-ep_bg_num_samples": {
+    "col": "ep_bg_num_samples",
+    "desc": "The number of samples included in the avg",
     "section": "Toplevel Stats",
     "pos": 79,
     "visit": "fast"
   }
 ,
-  "mc-ep_bg_max_wait": {
-    "name": "ep_bg_max_wait",
-    "desc": "The longest time (µs) in the wait queue",
+  "mc-ep_bg_min_wait": {
+    "col": "ep_bg_min_wait",
+    "desc": "The shortest time (µs) in the wait queue",
     "section": "Toplevel Stats",
     "pos": 80,
     "visit": "fast"
   }
 ,
-  "mc-ep_bg_wait_avg": {
-    "name": "ep_bg_wait_avg",
-    "desc": "The average wait time (µs) for an item before it is serviced by the dispatcher",
+  "mc-ep_bg_max_wait": {
+    "col": "ep_bg_max_wait",
+    "desc": "The longest time (µs) in the wait queue",
     "section": "Toplevel Stats",
     "pos": 81,
     "visit": "fast"
   }
 ,
-  "mc-ep_bg_min_load": {
-    "name": "ep_bg_min_load",
-    "desc": "The shortest load time (µs)",
+  "mc-ep_bg_wait_avg": {
+    "col": "ep_bg_wait_avg",
+    "desc": "The average wait time (µs) for an item before it is serviced by the dispatcher",
     "section": "Toplevel Stats",
     "pos": 82,
     "visit": "fast"
   }
 ,
-  "mc-ep_bg_max_load": {
-    "name": "ep_bg_max_load",
-    "desc": "The longest load time (µs)",
+  "mc-ep_bg_min_load": {
+    "col": "ep_bg_min_load",
+    "desc": "The shortest load time (µs)",
     "section": "Toplevel Stats",
     "pos": 83,
     "visit": "fast"
   }
 ,
-  "mc-ep_bg_load_avg": {
-    "name": "ep_bg_load_avg",
-    "desc": "The average time (µs) for an item to be loaded from the persistence layer",
+  "mc-ep_bg_max_load": {
+    "col": "ep_bg_max_load",
+    "desc": "The longest load time (µs)",
     "section": "Toplevel Stats",
     "pos": 84,
     "visit": "fast"
   }
 ,
-  "mc-ep_num_non_resident": {
-    "name": "ep_num_non_resident",
-    "desc": "The number of non-resident items",
+  "mc-ep_bg_load_avg": {
+    "col": "ep_bg_load_avg",
+    "desc": "The average time (µs) for an item to be loaded from the persistence layer",
     "section": "Toplevel Stats",
     "pos": 85,
     "visit": "fast"
   }
 ,
-  "mc-ep_store_max_concurrency": {
-    "name": "ep_store_max_concurrency",
-    "desc": "Maximum allowed concurrency at the storage layer.",
+  "mc-ep_num_non_resident": {
+    "col": "ep_num_non_resident",
+    "desc": "The number of non-resident items",
     "section": "Toplevel Stats",
     "pos": 86,
-    "visit": "slow"
+    "visit": "fast"
+  }
+,
+  "mc-ep_store_max_concurrency": {
+    "col": "ep_store_max_concurrency",
+    "desc": "Maximum allowed concurrency at the storage layer.",
+    "section": "Toplevel Stats",
+    "pos": 87,
+    "visit": "fast"
   }
 ,
   "mc-ep_store_max_readers": {
-    "name": "ep_store_max_readers",
+    "col": "ep_store_max_readers",
     "desc": "Maximum number of concurrent read-only. storage threads.",
     "section": "Toplevel Stats",
-    "pos": 87,
-    "visit": "slow"
+    "pos": 88,
+    "visit": "fast"
   }
 ,
   "mc-ep_store_max_readwrite": {
-    "name": "ep_store_max_readwrite",
+    "col": "ep_store_max_readwrite",
     "desc": "Maximum number of concurrent read/write storage threads.",
     "section": "Toplevel Stats",
-    "pos": 88,
-    "visit": "slow"
+    "pos": 89,
+    "visit": "fast"
   }
 ,
   "mc-ep_db_cleaner_status": {
-    "name": "ep_db_cleaner_status",
+    "col": "ep_db_cleaner_status",
     "desc": "Status of database cleaner that cleans up invalid items with old vbucket versions",
-    "section": "Toplevel Stats",
-    "pos": 89,
-    "visit": "slow"
-  }
-,
-  "mc-ep_bg_wait": {
-    "name": "ep_bg_wait",
-    "desc": "The total elapse time for the wait queue",
     "section": "Toplevel Stats",
     "pos": 90,
     "visit": "fast"
   }
 ,
-  "mc-ep_bg_load": {
-    "name": "ep_bg_load",
-    "desc": "The total elapse time for items to be loaded from the persistence layer",
+  "mc-ep_bg_wait": {
+    "col": "ep_bg_wait",
+    "desc": "The total elapse time for the wait queue",
     "section": "Toplevel Stats",
     "pos": 91,
     "visit": "fast"
   }
 ,
-  "mc-ep_latency_get_cmd": {
-    "name": "ep_latency_get_cmd",
-    "desc": "The total elapse time for get command",
+  "mc-ep_bg_load": {
+    "col": "ep_bg_load",
+    "desc": "The total elapse time for items to be loaded from the persistence layer",
     "section": "Toplevel Stats",
     "pos": 92,
     "visit": "fast"
   }
 ,
-  "mc-ep_latency_arith_cmd": {
-    "name": "ep_latency_arith_cmd",
-    "desc": "The total eplase time for arith command",
+  "mc-ep_latency_get_cmd": {
+    "col": "ep_latency_get_cmd",
+    "desc": "The total elapse time for get command",
     "section": "Toplevel Stats",
     "pos": 93,
     "visit": "fast"
   }
 ,
-  "mc-ep_inconsistent_slave_chk": {
-    "name": "ep_inconsistent_slave_chk",
-    "desc": "Flag indicating if we allow a downstream master to receive checkpoint messages",
+  "mc-ep_latency_arith_cmd": {
+    "col": "ep_latency_arith_cmd",
+    "desc": "The total eplase time for arith command",
     "section": "Toplevel Stats",
     "pos": 94,
     "visit": "fast"
   }
 ,
-  "mc-ep_mlog_compactor_runs": {
-    "name": "ep_mlog_compactor_runs",
-    "desc": "Number of times mutation log compactor is executed.",
+  "mc-ep_inconsistent_slave_chk": {
+    "col": "ep_inconsistent_slave_chk",
+    "desc": "Flag indicating if we allow a downstream master to receive checkpoint messages",
     "section": "Toplevel Stats",
     "pos": 95,
     "visit": "fast"
   }
 ,
-  "mc-ep_vb_total": {
-    "name": "ep_vb_total",
-    "desc": "Total vBuckets (count)",
-    "section": "vBucket total stats",
+  "mc-ep_mlog_compactor_runs": {
+    "col": "ep_mlog_compactor_runs",
+    "desc": "Number of times mutation log compactor is executed.",
+    "section": "Toplevel Stats",
     "pos": 96,
     "visit": "fast"
   }
 ,
-  "mc-curr_items_tot": {
-    "name": "curr_items_tot",
-    "desc": "Total number of items",
+  "mc-ep_vb_total": {
+    "col": "ep_vb_total",
+    "desc": "Total vBuckets (count)",
     "section": "vBucket total stats",
     "pos": 97,
     "visit": "fast"
   }
 ,
-  "mc-curr_items": {
-    "name": "curr_items",
-    "desc": "Number of active items in memory",
+  "mc-curr_items_tot": {
+    "col": "curr_items_tot",
+    "desc": "Total number of items",
     "section": "vBucket total stats",
     "pos": 98,
     "visit": "fast"
   }
 ,
-  "mc-curr_temp_items": {
-    "name": "curr_temp_items",
-    "desc": "Number of temporary items in memory",
+  "mc-curr_items": {
+    "col": "curr_items",
+    "desc": "Number of active items in memory",
     "section": "vBucket total stats",
     "pos": 99,
     "visit": "fast"
   }
 ,
-  "mc-vb_dead_num": {
-    "name": "vb_dead_num",
-    "desc": "Number of dead vBuckets",
+  "mc-curr_temp_items": {
+    "col": "curr_temp_items",
+    "desc": "Number of temporary items in memory",
     "section": "vBucket total stats",
     "pos": 100,
     "visit": "fast"
   }
 ,
-  "mc-ep_diskqueue_items": {
-    "name": "ep_diskqueue_items",
-    "desc": "Total items in disk queue",
+  "mc-vb_dead_num": {
+    "col": "vb_dead_num",
+    "desc": "Number of dead vBuckets",
     "section": "vBucket total stats",
     "pos": 101,
     "visit": "fast"
   }
 ,
-  "mc-ep_diskqueue_memory": {
-    "name": "ep_diskqueue_memory",
-    "desc": "Total memory used in disk queue",
+  "mc-ep_diskqueue_items": {
+    "col": "ep_diskqueue_items",
+    "desc": "Total items in disk queue",
     "section": "vBucket total stats",
     "pos": 102,
     "visit": "fast"
   }
 ,
-  "mc-ep_diskqueue_fill": {
-    "name": "ep_diskqueue_fill",
-    "desc": "Total enqueued items on disk queue",
+  "mc-ep_diskqueue_memory": {
+    "col": "ep_diskqueue_memory",
+    "desc": "Total memory used in disk queue",
     "section": "vBucket total stats",
     "pos": 103,
     "visit": "fast"
   }
 ,
-  "mc-ep_diskqueue_drain": {
-    "name": "ep_diskqueue_drain",
-    "desc": "Total drained items on disk queue",
+  "mc-ep_diskqueue_fill": {
+    "col": "ep_diskqueue_fill",
+    "desc": "Total enqueued items on disk queue",
     "section": "vBucket total stats",
     "pos": 104,
     "visit": "fast"
   }
 ,
-  "mc-ep_diskqueue_pending": {
-    "name": "ep_diskqueue_pending",
-    "desc": "Total bytes of pending writes",
+  "mc-ep_diskqueue_drain": {
+    "col": "ep_diskqueue_drain",
+    "desc": "Total drained items on disk queue",
     "section": "vBucket total stats",
     "pos": 105,
     "visit": "fast"
   }
 ,
-  "mc-ep_vb_snapshot_total": {
-    "name": "ep_vb_snapshot_total",
-    "desc": "Total VB state snapshots persisted in disk",
+  "mc-ep_diskqueue_pending": {
+    "col": "ep_diskqueue_pending",
+    "desc": "Total bytes of pending writes",
     "section": "vBucket total stats",
     "pos": 106,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_num": {
-    "name": "vb_active_num",
-    "desc": "Number of active vBuckets",
-    "section": "Active vBucket class stats",
+  "mc-ep_vb_snapshot_total": {
+    "col": "ep_vb_snapshot_total",
+    "desc": "Total VB state snapshots persisted in disk",
+    "section": "vBucket total stats",
     "pos": 107,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_curr_items": {
-    "name": "vb_active_curr_items",
-    "desc": "Number of in memory items",
+  "mc-vb_active_num": {
+    "col": "vb_active_num",
+    "desc": "Number of active vBuckets",
     "section": "Active vBucket class stats",
     "pos": 108,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_num_non_resident": {
-    "name": "vb_active_num_non_resident",
-    "desc": "Number of non-resident items",
+  "mc-vb_active_curr_items": {
+    "col": "vb_active_curr_items",
+    "desc": "Number of in memory items",
     "section": "Active vBucket class stats",
     "pos": 109,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_perc_mem_resident": {
-    "name": "vb_active_perc_mem_resident",
-    "desc": "% memory resident",
+  "mc-vb_active_num_non_resident": {
+    "col": "vb_active_num_non_resident",
+    "desc": "Number of non-resident items",
     "section": "Active vBucket class stats",
     "pos": 110,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_eject": {
-    "name": "vb_active_eject",
-    "desc": "Number of times item values got ejected",
+  "mc-vb_active_perc_mem_resident": {
+    "col": "vb_active_perc_mem_resident",
+    "desc": "% memory resident",
     "section": "Active vBucket class stats",
     "pos": 111,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_expired": {
-    "name": "vb_active_expired",
-    "desc": "Number of times an item was expired",
+  "mc-vb_active_eject": {
+    "col": "vb_active_eject",
+    "desc": "Number of times item values got ejected",
     "section": "Active vBucket class stats",
     "pos": 112,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_ht_memory": {
-    "name": "vb_active_ht_memory",
-    "desc": "Memory overhead of the hashtable",
+  "mc-vb_active_expired": {
+    "col": "vb_active_expired",
+    "desc": "Number of times an item was expired",
     "section": "Active vBucket class stats",
     "pos": 113,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_itm_memory": {
-    "name": "vb_active_itm_memory",
-    "desc": "Total item memory",
+  "mc-vb_active_ht_memory": {
+    "col": "vb_active_ht_memory",
+    "desc": "Memory overhead of the hashtable",
     "section": "Active vBucket class stats",
     "pos": 114,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_meta_data_memory": {
-    "name": "vb_active_meta_data_memory",
-    "desc": "Total metadata memory",
+  "mc-vb_active_itm_memory": {
+    "col": "vb_active_itm_memory",
+    "desc": "Total item memory",
     "section": "Active vBucket class stats",
     "pos": 115,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_ops_create": {
-    "name": "vb_active_ops_create",
-    "desc": "Number of create operations",
+  "mc-vb_active_meta_data_memory": {
+    "col": "vb_active_meta_data_memory",
+    "desc": "Total metadata memory",
     "section": "Active vBucket class stats",
     "pos": 116,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_ops_update": {
-    "name": "vb_active_ops_update",
-    "desc": "Number of update operations",
+  "mc-vb_active_ops_create": {
+    "col": "vb_active_ops_create",
+    "desc": "Number of create operations",
     "section": "Active vBucket class stats",
     "pos": 117,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_ops_delete": {
-    "name": "vb_active_ops_delete",
-    "desc": "Number of delete operations",
+  "mc-vb_active_ops_update": {
+    "col": "vb_active_ops_update",
+    "desc": "Number of update operations",
     "section": "Active vBucket class stats",
     "pos": 118,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_ops_reject": {
-    "name": "vb_active_ops_reject",
-    "desc": "Number of rejected operations",
+  "mc-vb_active_ops_delete": {
+    "col": "vb_active_ops_delete",
+    "desc": "Number of delete operations",
     "section": "Active vBucket class stats",
     "pos": 119,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_queue_size": {
-    "name": "vb_active_queue_size",
-    "desc": "Active items in disk queue",
+  "mc-vb_active_ops_reject": {
+    "col": "vb_active_ops_reject",
+    "desc": "Number of rejected operations",
     "section": "Active vBucket class stats",
     "pos": 120,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_queue_memory": {
-    "name": "vb_active_queue_memory",
-    "desc": "Memory used for disk queue",
+  "mc-vb_active_queue_size": {
+    "col": "vb_active_queue_size",
+    "desc": "Active items in disk queue",
     "section": "Active vBucket class stats",
     "pos": 121,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_queue_age": {
-    "name": "vb_active_queue_age",
-    "desc": "Sum of disk queue item age in milliseconds",
+  "mc-vb_active_queue_memory": {
+    "col": "vb_active_queue_memory",
+    "desc": "Memory used for disk queue",
     "section": "Active vBucket class stats",
     "pos": 122,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_queue_pending": {
-    "name": "vb_active_queue_pending",
-    "desc": "Total bytes of pending writes",
+  "mc-vb_active_queue_age": {
+    "col": "vb_active_queue_age",
+    "desc": "Sum of disk queue item age in milliseconds",
     "section": "Active vBucket class stats",
     "pos": 123,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_queue_fill": {
-    "name": "vb_active_queue_fill",
-    "desc": "Total enqueued items",
+  "mc-vb_active_queue_pending": {
+    "col": "vb_active_queue_pending",
+    "desc": "Total bytes of pending writes",
     "section": "Active vBucket class stats",
     "pos": 124,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_queue_drain": {
-    "name": "vb_active_queue_drain",
-    "desc": "Total drained items",
+  "mc-vb_active_queue_fill": {
+    "col": "vb_active_queue_fill",
+    "desc": "Total enqueued items",
     "section": "Active vBucket class stats",
     "pos": 125,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_num_ref_items": {
-    "name": "vb_active_num_ref_items",
-    "desc": "Number of referenced items",
+  "mc-vb_active_queue_drain": {
+    "col": "vb_active_queue_drain",
+    "desc": "Total drained items",
     "section": "Active vBucket class stats",
     "pos": 126,
     "visit": "fast"
   }
 ,
-  "mc-vb_active_num_ref_ejects": {
-    "name": "vb_active_num_ref_ejects",
-    "desc": "Number of times referenced item values got ejected",
+  "mc-vb_active_num_ref_items": {
+    "col": "vb_active_num_ref_items",
+    "desc": "Number of referenced items",
     "section": "Active vBucket class stats",
     "pos": 127,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_num": {
-    "name": "vb_replica_num",
-    "desc": "Number of replica vBuckets",
-    "section": "Replica vBucket stats",
+  "mc-vb_active_num_ref_ejects": {
+    "col": "vb_active_num_ref_ejects",
+    "desc": "Number of times referenced item values got ejected",
+    "section": "Active vBucket class stats",
     "pos": 128,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_curr_items": {
-    "name": "vb_replica_curr_items",
-    "desc": "Number of in memory items",
+  "mc-vb_replica_num": {
+    "col": "vb_replica_num",
+    "desc": "Number of replica vBuckets",
     "section": "Replica vBucket stats",
     "pos": 129,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_num_non_resident": {
-    "name": "vb_replica_num_non_resident",
-    "desc": "Number of non-resident items",
+  "mc-vb_replica_curr_items": {
+    "col": "vb_replica_curr_items",
+    "desc": "Number of in memory items",
     "section": "Replica vBucket stats",
     "pos": 130,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_perc_mem_resident": {
-    "name": "vb_replica_perc_mem_resident",
-    "desc": "% memory resident",
+  "mc-vb_replica_num_non_resident": {
+    "col": "vb_replica_num_non_resident",
+    "desc": "Number of non-resident items",
     "section": "Replica vBucket stats",
     "pos": 131,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_eject": {
-    "name": "vb_replica_eject",
-    "desc": "Number of times item values got ejected",
+  "mc-vb_replica_perc_mem_resident": {
+    "col": "vb_replica_perc_mem_resident",
+    "desc": "% memory resident",
     "section": "Replica vBucket stats",
     "pos": 132,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_expired": {
-    "name": "vb_replica_expired",
-    "desc": "Number of times an item was expired",
+  "mc-vb_replica_eject": {
+    "col": "vb_replica_eject",
+    "desc": "Number of times item values got ejected",
     "section": "Replica vBucket stats",
     "pos": 133,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_ht_memory": {
-    "name": "vb_replica_ht_memory",
-    "desc": "Memory overhead of the hashtable",
+  "mc-vb_replica_expired": {
+    "col": "vb_replica_expired",
+    "desc": "Number of times an item was expired",
     "section": "Replica vBucket stats",
     "pos": 134,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_itm_memory": {
-    "name": "vb_replica_itm_memory",
-    "desc": "Total item memory",
+  "mc-vb_replica_ht_memory": {
+    "col": "vb_replica_ht_memory",
+    "desc": "Memory overhead of the hashtable",
     "section": "Replica vBucket stats",
     "pos": 135,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_meta_data_memory": {
-    "name": "vb_replica_meta_data_memory",
-    "desc": "Total metadata memory",
+  "mc-vb_replica_itm_memory": {
+    "col": "vb_replica_itm_memory",
+    "desc": "Total item memory",
     "section": "Replica vBucket stats",
     "pos": 136,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_ops_create": {
-    "name": "vb_replica_ops_create",
-    "desc": "Number of create operations",
+  "mc-vb_replica_meta_data_memory": {
+    "col": "vb_replica_meta_data_memory",
+    "desc": "Total metadata memory",
     "section": "Replica vBucket stats",
     "pos": 137,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_ops_update": {
-    "name": "vb_replica_ops_update",
-    "desc": "Number of update operations",
+  "mc-vb_replica_ops_create": {
+    "col": "vb_replica_ops_create",
+    "desc": "Number of create operations",
     "section": "Replica vBucket stats",
     "pos": 138,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_ops_delete": {
-    "name": "vb_replica_ops_delete",
-    "desc": "Number of delete operations",
+  "mc-vb_replica_ops_update": {
+    "col": "vb_replica_ops_update",
+    "desc": "Number of update operations",
     "section": "Replica vBucket stats",
     "pos": 139,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_ops_reject": {
-    "name": "vb_replica_ops_reject",
-    "desc": "Number of rejected operations",
+  "mc-vb_replica_ops_delete": {
+    "col": "vb_replica_ops_delete",
+    "desc": "Number of delete operations",
     "section": "Replica vBucket stats",
     "pos": 140,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_queue_size": {
-    "name": "vb_replica_queue_size",
-    "desc": "Replica items in disk queue",
+  "mc-vb_replica_ops_reject": {
+    "col": "vb_replica_ops_reject",
+    "desc": "Number of rejected operations",
     "section": "Replica vBucket stats",
     "pos": 141,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_queue_memory": {
-    "name": "vb_replica_queue_memory",
-    "desc": "Memory used for disk queue",
+  "mc-vb_replica_queue_size": {
+    "col": "vb_replica_queue_size",
+    "desc": "Replica items in disk queue",
     "section": "Replica vBucket stats",
     "pos": 142,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_queue_age": {
-    "name": "vb_replica_queue_age",
-    "desc": "Sum of disk queue item age in milliseconds",
+  "mc-vb_replica_queue_memory": {
+    "col": "vb_replica_queue_memory",
+    "desc": "Memory used for disk queue",
     "section": "Replica vBucket stats",
     "pos": 143,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_queue_pending": {
-    "name": "vb_replica_queue_pending",
-    "desc": "Total bytes of pending writes",
+  "mc-vb_replica_queue_age": {
+    "col": "vb_replica_queue_age",
+    "desc": "Sum of disk queue item age in milliseconds",
     "section": "Replica vBucket stats",
     "pos": 144,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_queue_fill": {
-    "name": "vb_replica_queue_fill",
-    "desc": "Total enqueued items",
+  "mc-vb_replica_queue_pending": {
+    "col": "vb_replica_queue_pending",
+    "desc": "Total bytes of pending writes",
     "section": "Replica vBucket stats",
     "pos": 145,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_queue_drain": {
-    "name": "vb_replica_queue_drain",
-    "desc": "Total drained items",
+  "mc-vb_replica_queue_fill": {
+    "col": "vb_replica_queue_fill",
+    "desc": "Total enqueued items",
     "section": "Replica vBucket stats",
     "pos": 146,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_num_ref_items": {
-    "name": "vb_replica_num_ref_items",
-    "desc": "Number of referenced items",
+  "mc-vb_replica_queue_drain": {
+    "col": "vb_replica_queue_drain",
+    "desc": "Total drained items",
     "section": "Replica vBucket stats",
     "pos": 147,
     "visit": "fast"
   }
 ,
-  "mc-vb_replica_num_ref_ejects": {
-    "name": "vb_replica_num_ref_ejects",
-    "desc": "Number of times referenced item values got ejected",
+  "mc-vb_replica_num_ref_items": {
+    "col": "vb_replica_num_ref_items",
+    "desc": "Number of referenced items",
     "section": "Replica vBucket stats",
     "pos": 148,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_num": {
-    "name": "vb_pending_num",
-    "desc": "Number of pending vBuckets",
-    "section": "Pending vBucket stats",
+  "mc-vb_replica_num_ref_ejects": {
+    "col": "vb_replica_num_ref_ejects",
+    "desc": "Number of times referenced item values got ejected",
+    "section": "Replica vBucket stats",
     "pos": 149,
-    "visit": "slow"
+    "visit": "fast"
   }
 ,
-  "mc-vb_pending_curr_items": {
-    "name": "vb_pending_curr_items",
-    "desc": "Number of in memory items",
+  "mc-vb_pending_num": {
+    "col": "vb_pending_num",
+    "desc": "Number of pending vBuckets",
     "section": "Pending vBucket stats",
     "pos": 150,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_num_non_resident": {
-    "name": "vb_pending_num_non_resident",
-    "desc": "Number of non-resident items",
+  "mc-vb_pending_curr_items": {
+    "col": "vb_pending_curr_items",
+    "desc": "Number of in memory items",
     "section": "Pending vBucket stats",
     "pos": 151,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_perc_mem_resident": {
-    "name": "vb_pending_perc_mem_resident",
-    "desc": "% memory resident",
+  "mc-vb_pending_num_non_resident": {
+    "col": "vb_pending_num_non_resident",
+    "desc": "Number of non-resident items",
     "section": "Pending vBucket stats",
     "pos": 152,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_eject": {
-    "name": "vb_pending_eject",
-    "desc": "Number of times item values got ejected",
+  "mc-vb_pending_perc_mem_resident": {
+    "col": "vb_pending_perc_mem_resident",
+    "desc": "% memory resident",
     "section": "Pending vBucket stats",
     "pos": 153,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_expired": {
-    "name": "vb_pending_expired",
-    "desc": "Number of times an item was expired",
+  "mc-vb_pending_eject": {
+    "col": "vb_pending_eject",
+    "desc": "Number of times item values got ejected",
     "section": "Pending vBucket stats",
     "pos": 154,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_ht_memory": {
-    "name": "vb_pending_ht_memory",
-    "desc": "Memory overhead of the hashtable",
+  "mc-vb_pending_expired": {
+    "col": "vb_pending_expired",
+    "desc": "Number of times an item was expired",
     "section": "Pending vBucket stats",
     "pos": 155,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_itm_memory": {
-    "name": "vb_pending_itm_memory",
-    "desc": "Total item memory",
+  "mc-vb_pending_ht_memory": {
+    "col": "vb_pending_ht_memory",
+    "desc": "Memory overhead of the hashtable",
     "section": "Pending vBucket stats",
     "pos": 156,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_meta_data_memory": {
-    "name": "vb_pending_meta_data_memory",
-    "desc": "Total metadata memory",
+  "mc-vb_pending_itm_memory": {
+    "col": "vb_pending_itm_memory",
+    "desc": "Total item memory",
     "section": "Pending vBucket stats",
     "pos": 157,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_ops_create": {
-    "name": "vb_pending_ops_create",
-    "desc": "Number of create operations",
+  "mc-vb_pending_meta_data_memory": {
+    "col": "vb_pending_meta_data_memory",
+    "desc": "Total metadata memory",
     "section": "Pending vBucket stats",
     "pos": 158,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_ops_update": {
-    "name": "vb_pending_ops_update",
-    "desc": "Number of update operations",
+  "mc-vb_pending_ops_create": {
+    "col": "vb_pending_ops_create",
+    "desc": "Number of create operations",
     "section": "Pending vBucket stats",
     "pos": 159,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_ops_delete": {
-    "name": "vb_pending_ops_delete",
-    "desc": "Number of delete operations",
+  "mc-vb_pending_ops_update": {
+    "col": "vb_pending_ops_update",
+    "desc": "Number of update operations",
     "section": "Pending vBucket stats",
     "pos": 160,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_ops_reject": {
-    "name": "vb_pending_ops_reject",
-    "desc": "Number of rejected operations",
+  "mc-vb_pending_ops_delete": {
+    "col": "vb_pending_ops_delete",
+    "desc": "Number of delete operations",
     "section": "Pending vBucket stats",
     "pos": 161,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_queue_size": {
-    "name": "vb_pending_queue_size",
-    "desc": "Pending items in disk queue",
+  "mc-vb_pending_ops_reject": {
+    "col": "vb_pending_ops_reject",
+    "desc": "Number of rejected operations",
     "section": "Pending vBucket stats",
     "pos": 162,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_queue_memory": {
-    "name": "vb_pending_queue_memory",
-    "desc": "Memory used for disk queue",
+  "mc-vb_pending_queue_size": {
+    "col": "vb_pending_queue_size",
+    "desc": "Pending items in disk queue",
     "section": "Pending vBucket stats",
     "pos": 163,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_queue_age": {
-    "name": "vb_pending_queue_age",
-    "desc": "Sum of disk queue item age in milliseconds",
+  "mc-vb_pending_queue_memory": {
+    "col": "vb_pending_queue_memory",
+    "desc": "Memory used for disk queue",
     "section": "Pending vBucket stats",
     "pos": 164,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_queue_pending": {
-    "name": "vb_pending_queue_pending",
-    "desc": "Total bytes of pending writes",
+  "mc-vb_pending_queue_age": {
+    "col": "vb_pending_queue_age",
+    "desc": "Sum of disk queue item age in milliseconds",
     "section": "Pending vBucket stats",
     "pos": 165,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_queue_fill": {
-    "name": "vb_pending_queue_fill",
-    "desc": "Total enqueued items",
+  "mc-vb_pending_queue_pending": {
+    "col": "vb_pending_queue_pending",
+    "desc": "Total bytes of pending writes",
     "section": "Pending vBucket stats",
     "pos": 166,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_queue_drain": {
-    "name": "vb_pending_queue_drain",
-    "desc": "Total drained items",
+  "mc-vb_pending_queue_fill": {
+    "col": "vb_pending_queue_fill",
+    "desc": "Total enqueued items",
     "section": "Pending vBucket stats",
     "pos": 167,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_num_ref_items": {
-    "name": "vb_pending_num_ref_items",
-    "desc": "Number of referenced items",
+  "mc-vb_pending_queue_drain": {
+    "col": "vb_pending_queue_drain",
+    "desc": "Total drained items",
     "section": "Pending vBucket stats",
     "pos": 168,
     "visit": "fast"
   }
 ,
-  "mc-vb_pending_num_ref_ejects": {
-    "name": "vb_pending_num_ref_ejects",
-    "desc": "Number of times referenced item values got ejected",
+  "mc-vb_pending_num_ref_items": {
+    "col": "vb_pending_num_ref_items",
+    "desc": "Number of referenced items",
     "section": "Pending vBucket stats",
     "pos": 169,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_total_queue": {
-    "name": "ep_tap_total_queue",
-    "desc": "Sum of tap queue sizes on the current tap queues",
-    "section": "Tap stats",
+  "mc-vb_pending_num_ref_ejects": {
+    "col": "vb_pending_num_ref_ejects",
+    "desc": "Number of times referenced item values got ejected",
+    "section": "Pending vBucket stats",
     "pos": 170,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_total_fetched": {
-    "name": "ep_tap_total_fetched",
-    "desc": "Sum of all tap messages sent",
+  "mc-ep_tap_total_queue": {
+    "col": "ep_tap_total_queue",
+    "desc": "Sum of tap queue sizes on the current tap queues",
     "section": "Tap stats",
     "pos": 171,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_max_pending": {
-    "name": "ep_tap_bg_max_pending",
-    "desc": "The maximum number of bg jobs a tap connection may have",
+  "mc-ep_tap_total_fetched": {
+    "col": "ep_tap_total_fetched",
+    "desc": "Sum of all tap messages sent",
     "section": "Tap stats",
     "pos": 172,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_fetched": {
-    "name": "ep_tap_bg_fetched",
-    "desc": "Number of tap disk fetches",
+  "mc-ep_tap_bg_max_pending": {
+    "col": "ep_tap_bg_max_pending",
+    "desc": "The maximum number of bg jobs a tap connection may have",
     "section": "Tap stats",
     "pos": 173,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_fetch_requeued": {
-    "name": "ep_tap_bg_fetch_requeued",
-    "desc": "Number of times a tap bg fetch task is requeued.",
+  "mc-ep_tap_bg_fetched": {
+    "col": "ep_tap_bg_fetched",
+    "desc": "Number of tap disk fetches",
     "section": "Tap stats",
     "pos": 174,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_fg_fetched": {
-    "name": "ep_tap_fg_fetched",
-    "desc": "Number of tap memory fetches",
+  "mc-ep_tap_bg_fetch_requeued": {
+    "col": "ep_tap_bg_fetch_requeued",
+    "desc": "Number of times a tap bg fetch task is requeued.",
     "section": "Tap stats",
     "pos": 175,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_deletes": {
-    "name": "ep_tap_deletes",
-    "desc": "Number of tap deletion messages sent",
+  "mc-ep_tap_fg_fetched": {
+    "col": "ep_tap_fg_fetched",
+    "desc": "Number of tap memory fetches",
     "section": "Tap stats",
     "pos": 176,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_throttled": {
-    "name": "ep_tap_throttled",
-    "desc": "Number of tap messages refused due to throttling.",
+  "mc-ep_tap_deletes": {
+    "col": "ep_tap_deletes",
+    "desc": "Number of tap deletion messages sent",
     "section": "Tap stats",
     "pos": 177,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_keepalive": {
-    "name": "ep_tap_keepalive",
-    "desc": "How long to keep tap connection state after client disconnect.",
+  "mc-ep_tap_throttled": {
+    "col": "ep_tap_throttled",
+    "desc": "Number of tap messages refused due to throttling.",
     "section": "Tap stats",
     "pos": 178,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_count": {
-    "name": "ep_tap_count",
-    "desc": "Number of tap connections.",
+  "mc-ep_tap_keepalive": {
+    "col": "ep_tap_keepalive",
+    "desc": "How long to keep tap connection state after client disconnect.",
     "section": "Tap stats",
     "pos": 179,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_num_samples": {
-    "name": "ep_tap_bg_num_samples",
-    "desc": "The number of tap bg fetch samples included in the avg",
+  "mc-ep_tap_count": {
+    "col": "ep_tap_count",
+    "desc": "Number of tap connections.",
     "section": "Tap stats",
     "pos": 180,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_min_wait": {
-    "name": "ep_tap_bg_min_wait",
-    "desc": "The shortest time (µs) for a tap item before it is serviced by the dispatcher",
+  "mc-ep_tap_bg_num_samples": {
+    "col": "ep_tap_bg_num_samples",
+    "desc": "The number of tap bg fetch samples included in the avg",
     "section": "Tap stats",
     "pos": 181,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_max_wait": {
-    "name": "ep_tap_bg_max_wait",
-    "desc": "The longest time (µs) for a tap item before it is serviced by the dispatcher",
+  "mc-ep_tap_bg_min_wait": {
+    "col": "ep_tap_bg_min_wait",
+    "desc": "The shortest time (µs) for a tap item before it is serviced by the dispatcher",
     "section": "Tap stats",
     "pos": 182,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_wait_avg": {
-    "name": "ep_tap_bg_wait_avg",
-    "desc": "The average wait time (µs) for a tap item before it is serviced by the dispatcher",
+  "mc-ep_tap_bg_max_wait": {
+    "col": "ep_tap_bg_max_wait",
+    "desc": "The longest time (µs) for a tap item before it is serviced by the dispatcher",
     "section": "Tap stats",
     "pos": 183,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_min_load": {
-    "name": "ep_tap_bg_min_load",
-    "desc": "The shortest time (µs) for a tap item to be loaded from the persistence layer",
+  "mc-ep_tap_bg_wait_avg": {
+    "col": "ep_tap_bg_wait_avg",
+    "desc": "The average wait time (µs) for a tap item before it is serviced by the dispatcher",
     "section": "Tap stats",
     "pos": 184,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_max_load": {
-    "name": "ep_tap_bg_max_load",
-    "desc": "The longest time (µs) for a tap item to be loaded from the persistence layer",
+  "mc-ep_tap_bg_min_load": {
+    "col": "ep_tap_bg_min_load",
+    "desc": "The shortest time (µs) for a tap item to be loaded from the persistence layer",
     "section": "Tap stats",
     "pos": 185,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_bg_load_avg": {
-    "name": "ep_tap_bg_load_avg",
-    "desc": "The average time (µs) for a tap item to be loaded from the persistence layer",
+  "mc-ep_tap_bg_max_load": {
+    "col": "ep_tap_bg_max_load",
+    "desc": "The longest time (µs) for a tap item to be loaded from the persistence layer",
     "section": "Tap stats",
     "pos": 186,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_noop_interval": {
-    "name": "ep_tap_noop_interval",
-    "desc": "The number of secs between a noop is added to an idle connection",
+  "mc-ep_tap_bg_load_avg": {
+    "col": "ep_tap_bg_load_avg",
+    "desc": "The average time (µs) for a tap item to be loaded from the persistence layer",
     "section": "Tap stats",
     "pos": 187,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_backoff_period": {
-    "name": "ep_tap_backoff_period",
-    "desc": "The number of seconds the tap connection should back off after receiving ETMPFAIL",
+  "mc-ep_tap_noop_interval": {
+    "col": "ep_tap_noop_interval",
+    "desc": "The number of secs between a noop is added to an idle connection",
     "section": "Tap stats",
     "pos": 188,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_queue_fill": {
-    "name": "ep_tap_queue_fill",
-    "desc": "Total enqueued items",
+  "mc-ep_tap_backoff_period": {
+    "col": "ep_tap_backoff_period",
+    "desc": "The number of seconds the tap connection should back off after receiving ETMPFAIL",
     "section": "Tap stats",
     "pos": 189,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_queue_drain": {
-    "name": "ep_tap_queue_drain",
-    "desc": "Total drained items",
+  "mc-ep_tap_queue_fill": {
+    "col": "ep_tap_queue_fill",
+    "desc": "Total enqueued items",
     "section": "Tap stats",
     "pos": 190,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_queue_backoff": {
-    "name": "ep_tap_queue_backoff",
-    "desc": "Total back-off items",
+  "mc-ep_tap_queue_drain": {
+    "col": "ep_tap_queue_drain",
+    "desc": "Total drained items",
     "section": "Tap stats",
     "pos": 191,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_queue_backfill": {
-    "name": "ep_tap_queue_backfill",
-    "desc": "Number of backfill remaining",
+  "mc-ep_tap_queue_backoff": {
+    "col": "ep_tap_queue_backoff",
+    "desc": "Total back-off items",
     "section": "Tap stats",
     "pos": 192,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_queue_itemondisk": {
-    "name": "ep_tap_queue_itemondisk",
-    "desc": "Number of items remaining on disk",
+  "mc-ep_tap_queue_backfill": {
+    "col": "ep_tap_queue_backfill",
+    "desc": "Number of backfill remaining",
     "section": "Tap stats",
     "pos": 193,
     "visit": "fast"
   }
 ,
-  "mc-ep_tap_throttle_threshold": {
-    "name": "ep_tap_throttle_threshold",
-    "desc": "Percentage of memory in use before we throttle tap streams",
+  "mc-ep_tap_queue_itemondisk": {
+    "col": "ep_tap_queue_itemondisk",
+    "desc": "Number of items remaining on disk",
     "section": "Tap stats",
     "pos": 194,
-    "visit": "slow"
+    "visit": "fast"
   }
 ,
-  "mc-ep_tap_throttle_queue_cap": {
-    "name": "ep_tap_throttle_queue_cap",
-    "desc": "Disk write queue cap to throttle tap streams",
+  "mc-ep_tap_throttle_threshold": {
+    "col": "ep_tap_throttle_threshold",
+    "desc": "Percentage of memory in use before we throttle tap streams",
     "section": "Tap stats",
     "pos": 195,
     "visit": "fast"
   }
 ,
+  "mc-ep_tap_throttle_queue_cap": {
+    "col": "ep_tap_throttle_queue_cap",
+    "desc": "Disk write queue cap to throttle tap streams",
+    "section": "Tap stats",
+    "pos": 196,
+    "visit": "fast"
+  }
+,
   "mc-type": {
-    "name": "type",
+    "col": "type",
     "desc": "The kind of tap connection (producer or consumer)",
     "section": "Per Tap Client Stats",
-    "pos": 196,
-    "visit": "slow"
+    "pos": 197,
+    "visit": "fast"
   }
 ,
   "mc-created": {
-    "name": "created",
+    "col": "created",
     "desc": "Creation time for the tap connection",
     "section": "Per Tap Client Stats",
-    "pos": 197,
-    "visit": "slow"
+    "pos": 198,
+    "visit": "fast"
   }
 ,
   "mc-supports_ack": {
-    "name": "supports_ack",
+    "col": "supports_ack",
     "desc": "true if the connection use acks",
     "section": "Per Tap Client Stats",
-    "pos": 198,
-    "visit": "slow"
+    "pos": 199,
+    "visit": "fast"
   }
 ,
   "mc-connected": {
-    "name": "connected",
+    "col": "connected",
     "desc": "true if this client is connected",
-    "section": "Per Tap Client Stats",
-    "pos": 199,
-    "visit": "slow"
-  }
-,
-  "mc-disconnects": {
-    "name": "disconnects",
-    "desc": "Number of disconnects from this client.",
     "section": "Per Tap Client Stats",
     "pos": 200,
     "visit": "fast"
   }
 ,
-  "mc-qlen": {
-    "name": "qlen",
-    "desc": "Queue size for the given client_id.",
+  "mc-disconnects": {
+    "col": "disconnects",
+    "desc": "Number of disconnects from this client.",
     "section": "Per Tap Client Stats",
     "pos": 201,
     "visit": "fast"
   }
 ,
-  "mc-qlen_high_pri": {
-    "name": "qlen_high_pri",
-    "desc": "High priority tap queue items.",
+  "mc-qlen": {
+    "col": "qlen",
+    "desc": "Queue size for the given client_id.",
     "section": "Per Tap Client Stats",
     "pos": 202,
     "visit": "fast"
   }
 ,
-  "mc-qlen_low_pri": {
-    "name": "qlen_low_pri",
-    "desc": "Low priority tap queue items.",
+  "mc-qlen_high_pri": {
+    "col": "qlen_high_pri",
+    "desc": "High priority tap queue items.",
     "section": "Per Tap Client Stats",
     "pos": 203,
     "visit": "fast"
   }
 ,
-  "mc-vb_filters": {
-    "name": "vb_filters",
-    "desc": "Size of connection vbucket filter set.",
+  "mc-qlen_low_pri": {
+    "col": "qlen_low_pri",
+    "desc": "Low priority tap queue items.",
     "section": "Per Tap Client Stats",
     "pos": 204,
     "visit": "fast"
   }
 ,
-  "mc-vb_filter": {
-    "name": "vb_filter",
-    "desc": "The content of the vbucket filter",
+  "mc-vb_filters": {
+    "col": "vb_filters",
+    "desc": "Size of connection vbucket filter set.",
     "section": "Per Tap Client Stats",
     "pos": 205,
     "visit": "fast"
   }
 ,
-  "mc-rec_fetched": {
-    "name": "rec_fetched",
-    "desc": "Tap messages sent to the client.",
+  "mc-vb_filter": {
+    "col": "vb_filter",
+    "desc": "The content of the vbucket filter",
     "section": "Per Tap Client Stats",
     "pos": 206,
     "visit": "fast"
   }
 ,
-  "mc-rec_skipped": {
-    "name": "rec_skipped",
-    "desc": "Number of messages skipped due to tap reconnect with a different filter",
+  "mc-rec_fetched": {
+    "col": "rec_fetched",
+    "desc": "Tap messages sent to the client.",
     "section": "Per Tap Client Stats",
     "pos": 207,
     "visit": "fast"
   }
 ,
-  "mc-idle": {
-    "name": "idle",
-    "desc": "True if this connection is idle.",
+  "mc-rec_skipped": {
+    "col": "rec_skipped",
+    "desc": "Number of messages skipped due to tap reconnect with a different filter",
     "section": "Per Tap Client Stats",
     "pos": 208,
-    "visit": "slow"
+    "visit": "fast"
   }
 ,
-  "mc-has_queued_item": {
-    "name": "has_queued_item",
-    "desc": "True if there are any remaining items from hash table or disk.",
+  "mc-idle": {
+    "col": "idle",
+    "desc": "True if this connection is idle.",
     "section": "Per Tap Client Stats",
     "pos": 209,
     "visit": "fast"
   }
 ,
-  "mc-bg_result_size": {
-    "name": "bg_result_size",
-    "desc": "Number of ready background results.",
+  "mc-has_queued_item": {
+    "col": "has_queued_item",
+    "desc": "True if there are any remaining items from hash table or disk.",
     "section": "Per Tap Client Stats",
     "pos": 210,
     "visit": "fast"
   }
 ,
-  "mc-bg_jobs_issued": {
-    "name": "bg_jobs_issued",
-    "desc": "Number of background jobs started.",
+  "mc-bg_result_size": {
+    "col": "bg_result_size",
+    "desc": "Number of ready background results.",
     "section": "Per Tap Client Stats",
     "pos": 211,
     "visit": "fast"
   }
 ,
-  "mc-bg_jobs_completed": {
-    "name": "bg_jobs_completed",
-    "desc": "Number of background jobs completed.",
+  "mc-bg_jobs_issued": {
+    "col": "bg_jobs_issued",
+    "desc": "Number of background jobs started.",
     "section": "Per Tap Client Stats",
     "pos": 212,
     "visit": "fast"
   }
 ,
-  "mc-flags": {
-    "name": "flags",
-    "desc": "Connection flags set by the client.",
+  "mc-bg_jobs_completed": {
+    "col": "bg_jobs_completed",
+    "desc": "Number of background jobs completed.",
     "section": "Per Tap Client Stats",
     "pos": 213,
     "visit": "fast"
   }
 ,
-  "mc-pending_disconnect": {
-    "name": "pending_disconnect",
-    "desc": "true if we're hanging up on this client",
+  "mc-flags": {
+    "col": "flags",
+    "desc": "Connection flags set by the client.",
     "section": "Per Tap Client Stats",
     "pos": 214,
-    "visit": "slow"
+    "visit": "fast"
+  }
+,
+  "mc-pending_disconnect": {
+    "col": "pending_disconnect",
+    "desc": "true if we're hanging up on this client",
+    "section": "Per Tap Client Stats",
+    "pos": 215,
+    "visit": "fast"
   }
 ,
   "mc-paused": {
-    "name": "paused",
+    "col": "paused",
     "desc": "true if this client is blocked",
     "section": "Per Tap Client Stats",
-    "pos": 215,
-    "visit": "slow"
+    "pos": 216,
+    "visit": "fast"
   }
 ,
   "mc-pending_backfill": {
-    "name": "pending_backfill",
+    "col": "pending_backfill",
     "desc": "true if we're still backfilling keys for this connection",
     "section": "Per Tap Client Stats",
-    "pos": 216,
-    "visit": "slow"
+    "pos": 217,
+    "visit": "fast"
   }
 ,
   "mc-pending_disk_backfill": {
-    "name": "pending_disk_backfill",
+    "col": "pending_disk_backfill",
     "desc": "true if we're still backfilling keys from disk for this connection",
     "section": "Per Tap Client Stats",
-    "pos": 217,
-    "visit": "slow"
+    "pos": 218,
+    "visit": "fast"
   }
 ,
   "mc-backfill_completed": {
-    "name": "backfill_completed",
+    "col": "backfill_completed",
     "desc": "true if all items from backfill is successfully transmitted to the client",
-    "section": "Per Tap Client Stats",
-    "pos": 218,
-    "visit": "slow"
-  }
-,
-  "mc-reconnects": {
-    "name": "reconnects",
-    "desc": "Number of reconnects from this client.",
     "section": "Per Tap Client Stats",
     "pos": 219,
     "visit": "fast"
   }
 ,
-  "mc-backfill_age": {
-    "name": "backfill_age",
-    "desc": "The age of the start of the backfill.",
+  "mc-reconnects": {
+    "col": "reconnects",
+    "desc": "Number of reconnects from this client.",
     "section": "Per Tap Client Stats",
     "pos": 220,
     "visit": "fast"
   }
 ,
-  "mc-ack_seqno": {
-    "name": "ack_seqno",
-    "desc": "The current tap ACK sequence number.",
+  "mc-backfill_age": {
+    "col": "backfill_age",
+    "desc": "The age of the start of the backfill.",
     "section": "Per Tap Client Stats",
     "pos": 221,
     "visit": "fast"
   }
 ,
-  "mc-recv_ack_seqno": {
-    "name": "recv_ack_seqno",
-    "desc": "Last receive tap ACK sequence number.",
+  "mc-ack_seqno": {
+    "col": "ack_seqno",
+    "desc": "The current tap ACK sequence number.",
     "section": "Per Tap Client Stats",
     "pos": 222,
     "visit": "fast"
   }
 ,
-  "mc-ack_log_size": {
-    "name": "ack_log_size",
-    "desc": "Tap ACK backlog size.",
+  "mc-recv_ack_seqno": {
+    "col": "recv_ack_seqno",
+    "desc": "Last receive tap ACK sequence number.",
     "section": "Per Tap Client Stats",
     "pos": 223,
     "visit": "fast"
   }
 ,
-  "mc-ack_window_full": {
-    "name": "ack_window_full",
-    "desc": "true if our tap ACK window is full.",
+  "mc-ack_log_size": {
+    "col": "ack_log_size",
+    "desc": "Tap ACK backlog size.",
     "section": "Per Tap Client Stats",
     "pos": 224,
-    "visit": "slow"
+    "visit": "fast"
   }
 ,
-  "mc-expires": {
-    "name": "expires",
-    "desc": "When this ACK backlog expires.",
+  "mc-ack_window_full": {
+    "col": "ack_window_full",
+    "desc": "true if our tap ACK window is full.",
     "section": "Per Tap Client Stats",
     "pos": 225,
     "visit": "fast"
   }
 ,
-  "mc-queue_memory": {
-    "name": "queue_memory",
-    "desc": "Memory used for tap queue",
+  "mc-expires": {
+    "col": "expires",
+    "desc": "When this ACK backlog expires.",
     "section": "Per Tap Client Stats",
     "pos": 226,
     "visit": "fast"
   }
 ,
-  "mc-queue_fill": {
-    "name": "queue_fill",
-    "desc": "Total queued items",
+  "mc-queue_memory": {
+    "col": "queue_memory",
+    "desc": "Memory used for tap queue",
     "section": "Per Tap Client Stats",
     "pos": 227,
     "visit": "fast"
   }
 ,
-  "mc-queue_drain": {
-    "name": "queue_drain",
-    "desc": "Total drained items",
+  "mc-queue_fill": {
+    "col": "queue_fill",
+    "desc": "Total queued items",
     "section": "Per Tap Client Stats",
     "pos": 228,
     "visit": "fast"
   }
 ,
-  "mc-queue_backoff": {
-    "name": "queue_backoff",
-    "desc": "Total back-off items",
+  "mc-queue_drain": {
+    "col": "queue_drain",
+    "desc": "Total drained items",
     "section": "Per Tap Client Stats",
     "pos": 229,
     "visit": "fast"
   }
 ,
-  "mc-queue_backfillremaining": {
-    "name": "queue_backfillremaining",
-    "desc": "Number of backfill remaining",
+  "mc-queue_backoff": {
+    "col": "queue_backoff",
+    "desc": "Total back-off items",
     "section": "Per Tap Client Stats",
     "pos": 230,
     "visit": "fast"
   }
 ,
-  "mc-queue_itemondisk": {
-    "name": "queue_itemondisk",
-    "desc": "Number of items remaining on disk",
+  "mc-queue_backfillremaining": {
+    "col": "queue_backfillremaining",
+    "desc": "Number of backfill remaining",
     "section": "Per Tap Client Stats",
     "pos": 231,
     "visit": "fast"
   }
 ,
-  "mc-total_backlog_size": {
-    "name": "total_backlog_size",
-    "desc": "Num of remaining items for replication",
+  "mc-queue_itemondisk": {
+    "col": "queue_itemondisk",
+    "desc": "Number of items remaining on disk",
     "section": "Per Tap Client Stats",
     "pos": 232,
     "visit": "fast"
   }
 ,
-  "mc-total_noops": {
-    "name": "total_noops",
-    "desc": "Number of NOOP messages sent",
+  "mc-total_backlog_size": {
+    "col": "total_backlog_size",
+    "desc": "Num of remaining items for replication",
     "section": "Per Tap Client Stats",
     "pos": 233,
     "visit": "fast"
   }
 ,
-  "mc-num_delete": {
-    "name": "num_delete",
-    "desc": "Number of delete operations consumed",
+  "mc-total_noops": {
+    "col": "total_noops",
+    "desc": "Number of NOOP messages sent",
     "section": "Per Tap Client Stats",
     "pos": 234,
     "visit": "fast"
   }
 ,
-  "mc-num_delete_failed": {
-    "name": "num_delete_failed",
-    "desc": "Number of failed delete operations",
+  "mc-num_delete": {
+    "col": "num_delete",
+    "desc": "Number of delete operations consumed",
     "section": "Per Tap Client Stats",
     "pos": 235,
     "visit": "fast"
   }
 ,
-  "mc-num_flush": {
-    "name": "num_flush",
-    "desc": "Number of flush operations",
+  "mc-num_delete_failed": {
+    "col": "num_delete_failed",
+    "desc": "Number of failed delete operations",
     "section": "Per Tap Client Stats",
     "pos": 236,
     "visit": "fast"
   }
 ,
-  "mc-num_flush_failed": {
-    "name": "num_flush_failed",
-    "desc": "Number of failed flush operations",
+  "mc-num_flush": {
+    "col": "num_flush",
+    "desc": "Number of flush operations",
     "section": "Per Tap Client Stats",
     "pos": 237,
     "visit": "fast"
   }
 ,
-  "mc-num_mutation": {
-    "name": "num_mutation",
-    "desc": "Number of mutation operations",
+  "mc-num_flush_failed": {
+    "col": "num_flush_failed",
+    "desc": "Number of failed flush operations",
     "section": "Per Tap Client Stats",
     "pos": 238,
     "visit": "fast"
   }
 ,
-  "mc-num_mutation_failed": {
-    "name": "num_mutation_failed",
-    "desc": "Number of failed mutation operations",
+  "mc-num_mutation": {
+    "col": "num_mutation",
+    "desc": "Number of mutation operations",
     "section": "Per Tap Client Stats",
     "pos": 239,
     "visit": "fast"
   }
 ,
-  "mc-num_opaque": {
-    "name": "num_opaque",
-    "desc": "Number of opaque operation consumed",
+  "mc-num_mutation_failed": {
+    "col": "num_mutation_failed",
+    "desc": "Number of failed mutation operations",
     "section": "Per Tap Client Stats",
     "pos": 240,
     "visit": "fast"
   }
 ,
-  "mc-num_opaque_failed": {
-    "name": "num_opaque_failed",
-    "desc": "Number of failed opaque operations",
+  "mc-num_opaque": {
+    "col": "num_opaque",
+    "desc": "Number of opaque operation consumed",
     "section": "Per Tap Client Stats",
     "pos": 241,
     "visit": "fast"
   }
 ,
-  "mc-num_vbucket_set": {
-    "name": "num_vbucket_set",
-    "desc": "Number of vbucket set operations",
+  "mc-num_opaque_failed": {
+    "col": "num_opaque_failed",
+    "desc": "Number of failed opaque operations",
     "section": "Per Tap Client Stats",
     "pos": 242,
     "visit": "fast"
   }
 ,
-  "mc-num_vbucket_set_failed": {
-    "name": "num_vbucket_set_failed",
-    "desc": "Number of failed vbucket set operations",
+  "mc-num_vbucket_set": {
+    "col": "num_vbucket_set",
+    "desc": "Number of vbucket set operations",
     "section": "Per Tap Client Stats",
     "pos": 243,
     "visit": "fast"
   }
 ,
-  "mc-num_unknown": {
-    "name": "num_unknown",
-    "desc": "Number of unknown operations",
+  "mc-num_vbucket_set_failed": {
+    "col": "num_vbucket_set_failed",
+    "desc": "Number of failed vbucket set operations",
     "section": "Per Tap Client Stats",
     "pos": 244,
     "visit": "fast"
   }
 ,
-  "mc-[prefix]:count": {
-    "name": "[prefix]:count",
-    "desc": "Number of connections matching this prefix",
-    "section": "Results",
+  "mc-num_unknown": {
+    "col": "num_unknown",
+    "desc": "Number of unknown operations",
+    "section": "Per Tap Client Stats",
     "pos": 245,
     "visit": "fast"
   }
 ,
-  "mc-[prefix]:qlen": {
-    "name": "[prefix]:qlen",
-    "desc": "Total length of queues with this prefix",
+  "mc-[prefix]:count": {
+    "col": "[prefix]:count",
+    "desc": "Number of connections matching this prefix",
     "section": "Results",
     "pos": 246,
     "visit": "fast"
   }
 ,
-  "mc-[prefix]:backfill_remaining": {
-    "name": "[prefix]:backfill_remaining",
-    "desc": "Number of items needing to be backfilled",
+  "mc-[prefix]:qlen": {
+    "col": "[prefix]:qlen",
+    "desc": "Total length of queues with this prefix",
     "section": "Results",
     "pos": 247,
     "visit": "fast"
   }
 ,
-  "mc-[prefix]:backoff": {
-    "name": "[prefix]:backoff",
-    "desc": "Total number of backoff events",
+  "mc-[prefix]:backfill_remaining": {
+    "col": "[prefix]:backfill_remaining",
+    "desc": "Number of items needing to be backfilled",
     "section": "Results",
     "pos": 248,
     "visit": "fast"
   }
 ,
-  "mc-[prefix]:drain": {
-    "name": "[prefix]:drain",
-    "desc": "Total number of items drained",
+  "mc-[prefix]:backoff": {
+    "col": "[prefix]:backoff",
+    "desc": "Total number of backoff events",
     "section": "Results",
     "pos": 249,
     "visit": "fast"
   }
 ,
-  "mc-[prefix]:fill": {
-    "name": "[prefix]:fill",
-    "desc": "Total number of items filled",
+  "mc-[prefix]:drain": {
+    "col": "[prefix]:drain",
+    "desc": "Total number of items drained",
     "section": "Results",
     "pos": 250,
     "visit": "fast"
   }
 ,
-  "mc-[prefix]:itemondisk": {
-    "name": "[prefix]:itemondisk",
-    "desc": "Number of items remaining on disk",
+  "mc-[prefix]:fill": {
+    "col": "[prefix]:fill",
+    "desc": "Total number of items filled",
     "section": "Results",
     "pos": 251,
     "visit": "fast"
   }
 ,
-  "mc-[prefix]:total_backlog_size": {
-    "name": "[prefix]:total_backlog_size",
-    "desc": "Num of remaining items for replication",
+  "mc-[prefix]:itemondisk": {
+    "col": "[prefix]:itemondisk",
+    "desc": "Number of items remaining on disk",
     "section": "Results",
     "pos": 252,
     "visit": "fast"
   }
 ,
-  "mc-bg_wait": {
-    "name": "bg_wait",
-    "desc": "bg fetches waiting in the dispatcher queue",
-    "section": "Available Stats",
+  "mc-[prefix]:total_backlog_size": {
+    "col": "[prefix]:total_backlog_size",
+    "desc": "Num of remaining items for replication",
+    "section": "Results",
     "pos": 253,
     "visit": "fast"
   }
 ,
-  "mc-bg_load": {
-    "name": "bg_load",
-    "desc": "bg fetches waiting for disk",
+  "mc-bg_wait": {
+    "col": "bg_wait",
+    "desc": "bg fetches waiting in the dispatcher queue",
     "section": "Available Stats",
     "pos": 254,
     "visit": "fast"
   }
 ,
-  "mc-bg_tap_wait": {
-    "name": "bg_tap_wait",
-    "desc": "tap bg fetches waiting in the dispatcher queue",
+  "mc-bg_load": {
+    "col": "bg_load",
+    "desc": "bg fetches waiting for disk",
     "section": "Available Stats",
     "pos": 255,
     "visit": "fast"
   }
 ,
-  "mc-bg_tap_laod": {
-    "name": "bg_tap_laod",
-    "desc": "tap bg fetches waiting for disk",
+  "mc-bg_tap_wait": {
+    "col": "bg_tap_wait",
+    "desc": "tap bg fetches waiting in the dispatcher queue",
     "section": "Available Stats",
     "pos": 256,
     "visit": "fast"
   }
 ,
-  "mc-pending_ops": {
-    "name": "pending_ops",
-    "desc": "client connections blocked for operations in pending vbuckets.",
+  "mc-bg_tap_laod": {
+    "col": "bg_tap_laod",
+    "desc": "tap bg fetches waiting for disk",
     "section": "Available Stats",
     "pos": 257,
     "visit": "fast"
   }
 ,
-  "mc-storage_age": {
-    "name": "storage_age",
-    "desc": "Analogous to ep_storage_age in main stats.",
+  "mc-pending_ops": {
+    "col": "pending_ops",
+    "desc": "client connections blocked for operations in pending vbuckets.",
     "section": "Available Stats",
     "pos": 258,
     "visit": "fast"
   }
 ,
-  "mc-data_age": {
-    "name": "data_age",
-    "desc": "Analogous to ep_data_age in main stats.",
+  "mc-storage_age": {
+    "col": "storage_age",
+    "desc": "Analogous to ep_storage_age in main stats.",
     "section": "Available Stats",
     "pos": 259,
     "visit": "fast"
   }
 ,
-  "mc-get_cmd": {
-    "name": "get_cmd",
-    "desc": "servicing get requests",
+  "mc-data_age": {
+    "col": "data_age",
+    "desc": "Analogous to ep_data_age in main stats.",
     "section": "Available Stats",
     "pos": 260,
     "visit": "fast"
   }
 ,
-  "mc-arith_cmd": {
-    "name": "arith_cmd",
-    "desc": "servicing incr/decr requests",
+  "mc-get_cmd": {
+    "col": "get_cmd",
+    "desc": "servicing get requests",
     "section": "Available Stats",
     "pos": 261,
     "visit": "fast"
   }
 ,
-  "mc-get_stats_cmd": {
-    "name": "get_stats_cmd",
-    "desc": "servicing get_stats requests",
+  "mc-arith_cmd": {
+    "col": "arith_cmd",
+    "desc": "servicing incr/decr requests",
     "section": "Available Stats",
     "pos": 262,
     "visit": "fast"
   }
 ,
-  "mc-get_vb_cmd": {
-    "name": "get_vb_cmd",
-    "desc": "servicing vbucket status requests",
+  "mc-get_stats_cmd": {
+    "col": "get_stats_cmd",
+    "desc": "servicing get_stats requests",
     "section": "Available Stats",
     "pos": 263,
     "visit": "fast"
   }
 ,
-  "mc-set_vb_cmd": {
-    "name": "set_vb_cmd",
-    "desc": "servicing vbucket set state commands",
+  "mc-get_vb_cmd": {
+    "col": "get_vb_cmd",
+    "desc": "servicing vbucket status requests",
     "section": "Available Stats",
     "pos": 264,
     "visit": "fast"
   }
 ,
-  "mc-del_vb_cmd": {
-    "name": "del_vb_cmd",
-    "desc": "servicing vbucket deletion commands",
+  "mc-set_vb_cmd": {
+    "col": "set_vb_cmd",
+    "desc": "servicing vbucket set state commands",
     "section": "Available Stats",
     "pos": 265,
     "visit": "fast"
   }
 ,
-  "mc-tap_vb_set": {
-    "name": "tap_vb_set",
-    "desc": "servicing tap vbucket set state commands",
+  "mc-del_vb_cmd": {
+    "col": "del_vb_cmd",
+    "desc": "servicing vbucket deletion commands",
     "section": "Available Stats",
     "pos": 266,
     "visit": "fast"
   }
 ,
-  "mc-tap_vb_reset": {
-    "name": "tap_vb_reset",
-    "desc": "servicing tap vbucket reset commands",
+  "mc-tap_vb_set": {
+    "col": "tap_vb_set",
+    "desc": "servicing tap vbucket set state commands",
     "section": "Available Stats",
     "pos": 267,
     "visit": "fast"
   }
 ,
-  "mc-tap_mutation": {
-    "name": "tap_mutation",
-    "desc": "servicing tap mutations",
+  "mc-tap_vb_reset": {
+    "col": "tap_vb_reset",
+    "desc": "servicing tap vbucket reset commands",
     "section": "Available Stats",
     "pos": 268,
     "visit": "fast"
   }
 ,
-  "mc-notify_io": {
-    "name": "notify_io",
-    "desc": "waking blocked connections",
+  "mc-tap_mutation": {
+    "col": "tap_mutation",
+    "desc": "servicing tap mutations",
     "section": "Available Stats",
     "pos": 269,
     "visit": "fast"
   }
 ,
-  "mc-paged_out_time": {
-    "name": "paged_out_time",
-    "desc": "time (in seconds) objects are non-resident",
+  "mc-notify_io": {
+    "col": "notify_io",
+    "desc": "waking blocked connections",
     "section": "Available Stats",
     "pos": 270,
     "visit": "fast"
   }
 ,
-  "mc-disk_insert": {
-    "name": "disk_insert",
-    "desc": "waiting for disk to store a new item",
+  "mc-paged_out_time": {
+    "col": "paged_out_time",
+    "desc": "time (in seconds) objects are non-resident",
     "section": "Available Stats",
     "pos": 271,
     "visit": "fast"
   }
 ,
-  "mc-disk_update": {
-    "name": "disk_update",
-    "desc": "waiting for disk to modify an existing item",
+  "mc-disk_insert": {
+    "col": "disk_insert",
+    "desc": "waiting for disk to store a new item",
     "section": "Available Stats",
     "pos": 272,
     "visit": "fast"
   }
 ,
-  "mc-disk_del": {
-    "name": "disk_del",
-    "desc": "waiting for disk to delete an item",
+  "mc-disk_update": {
+    "col": "disk_update",
+    "desc": "waiting for disk to modify an existing item",
     "section": "Available Stats",
     "pos": 273,
     "visit": "fast"
   }
 ,
-  "mc-disk_vb_del": {
-    "name": "disk_vb_del",
-    "desc": "waiting for disk to delete a vbucket",
+  "mc-disk_del": {
+    "col": "disk_del",
+    "desc": "waiting for disk to delete an item",
     "section": "Available Stats",
     "pos": 274,
     "visit": "fast"
   }
 ,
-  "mc-disk_commit": {
-    "name": "disk_commit",
-    "desc": "waiting for a commit after a batch of updates",
+  "mc-disk_vb_del": {
+    "col": "disk_vb_del",
+    "desc": "waiting for disk to delete a vbucket",
     "section": "Available Stats",
     "pos": 275,
     "visit": "fast"
   }
 ,
-  "mc-disk_vbstate_snapshot": {
-    "name": "disk_vbstate_snapshot",
-    "desc": "Time spent persisting vbucket state changes",
+  "mc-disk_commit": {
+    "col": "disk_commit",
+    "desc": "waiting for a commit after a batch of updates",
     "section": "Available Stats",
     "pos": 276,
     "visit": "fast"
   }
 ,
-  "mc-klogPadding": {
-    "name": "klogPadding",
-    "desc": "Amount of wasted padding space in the klog.",
+  "mc-disk_vbstate_snapshot": {
+    "col": "disk_vbstate_snapshot",
+    "desc": "Time spent persisting vbucket state changes",
     "section": "Available Stats",
     "pos": 277,
     "visit": "fast"
   }
 ,
-  "mc-klogFlushTime": {
-    "name": "klogFlushTime",
-    "desc": "Time spent flushing the klog.",
+  "mc-klogPadding": {
+    "col": "klogPadding",
+    "desc": "Amount of wasted padding space in the klog.",
     "section": "Available Stats",
     "pos": 278,
     "visit": "fast"
   }
 ,
-  "mc-klogSyncTime": {
-    "name": "klogSyncTime",
-    "desc": "Time spent syncing the klog.",
+  "mc-klogFlushTime": {
+    "col": "klogFlushTime",
+    "desc": "Time spent flushing the klog.",
     "section": "Available Stats",
     "pos": 279,
     "visit": "fast"
   }
 ,
-  "mc-klogCompactorTime": {
-    "name": "klogCompactorTime",
-    "desc": "Time spent by the mutation log compactor.",
+  "mc-klogSyncTime": {
+    "col": "klogSyncTime",
+    "desc": "Time spent syncing the klog.",
     "section": "Available Stats",
     "pos": 280,
     "visit": "fast"
   }
 ,
-  "mc-item_alloc_sizes": {
-    "name": "item_alloc_sizes",
-    "desc": "Item allocation size counters (in bytes).",
+  "mc-klogCompactorTime": {
+    "col": "klogCompactorTime",
+    "desc": "Time spent by the mutation log compactor.",
     "section": "Available Stats",
     "pos": 281,
     "visit": "fast"
   }
 ,
+  "mc-item_alloc_sizes": {
+    "col": "item_alloc_sizes",
+    "desc": "Item allocation size counters (in bytes).",
+    "section": "Available Stats",
+    "pos": 282,
+    "visit": "fast"
+  }
+,
   "mc-state": {
-    "name": "state",
+    "col": "state",
     "desc": "The current state of this vbucket",
     "section": "Hash Stats",
-    "pos": 282,
-    "visit": "slow"
+    "pos": 283,
+    "visit": "fast"
   }
 ,
   "mc-size": {
-    "name": "size",
+    "col": "size",
     "desc": "Number of hash buckets",
-    "section": "Hash Stats",
-    "pos": 283,
-    "visit": "slow"
-  }
-,
-  "mc-locks": {
-    "name": "locks",
-    "desc": "Number of locks covering hash table operations",
     "section": "Hash Stats",
     "pos": 284,
     "visit": "fast"
   }
 ,
-  "mc-min_depth": {
-    "name": "min_depth",
-    "desc": "Minimum number of items found in a bucket",
+  "mc-locks": {
+    "col": "locks",
+    "desc": "Number of locks covering hash table operations",
     "section": "Hash Stats",
     "pos": 285,
     "visit": "fast"
   }
 ,
-  "mc-max_depth": {
-    "name": "max_depth",
-    "desc": "Maximum number of items found in a bucket",
+  "mc-min_depth": {
+    "col": "min_depth",
+    "desc": "Minimum number of items found in a bucket",
     "section": "Hash Stats",
     "pos": 286,
     "visit": "fast"
   }
 ,
-  "mc-reported": {
-    "name": "reported",
-    "desc": "Number of items this hash table reports having",
+  "mc-max_depth": {
+    "col": "max_depth",
+    "desc": "Maximum number of items found in a bucket",
     "section": "Hash Stats",
     "pos": 287,
     "visit": "fast"
   }
 ,
-  "mc-counted": {
-    "name": "counted",
-    "desc": "Number of items found while walking the table",
+  "mc-reported": {
+    "col": "reported",
+    "desc": "Number of items this hash table reports having",
     "section": "Hash Stats",
     "pos": 288,
     "visit": "fast"
   }
 ,
-  "mc-resized": {
-    "name": "resized",
-    "desc": "Number of times the hash table resized.",
+  "mc-counted": {
+    "col": "counted",
+    "desc": "Number of items found while walking the table",
     "section": "Hash Stats",
     "pos": 289,
     "visit": "fast"
   }
 ,
-  "mc-mem_size": {
-    "name": "mem_size",
-    "desc": "Running sum of memory used by each item.",
+  "mc-resized": {
+    "col": "resized",
+    "desc": "Number of times the hash table resized.",
     "section": "Hash Stats",
     "pos": 290,
     "visit": "fast"
   }
 ,
-  "mc-mem_size_counted": {
-    "name": "mem_size_counted",
-    "desc": "Counted sum of current memory used by each item.",
+  "mc-mem_size": {
+    "col": "mem_size",
+    "desc": "Running sum of memory used by each item.",
     "section": "Hash Stats",
     "pos": 291,
     "visit": "fast"
   }
 ,
-  "mc-cursor_name:cursor_checkpoint_id": {
-    "name": "cursor_name:cursor_checkpoint_id",
-    "desc": "Checkpoint ID at which the cursor is name 'cursor_name' is pointing now",
-    "section": "Checkpoint Stats",
+  "mc-mem_size_counted": {
+    "col": "mem_size_counted",
+    "desc": "Counted sum of current memory used by each item.",
+    "section": "Hash Stats",
     "pos": 292,
     "visit": "fast"
   }
 ,
-  "mc-open_checkpoint_id": {
-    "name": "open_checkpoint_id",
-    "desc": "ID of the current open checkpoint",
+  "mc-cursor_name:cursor_checkpoint_id": {
+    "col": "cursor_name:cursor_checkpoint_id",
+    "desc": "Checkpoint ID at which the cursor is name 'cursor_name' is pointing now",
     "section": "Checkpoint Stats",
     "pos": 293,
     "visit": "fast"
   }
 ,
-  "mc-num_tap_cursors": {
-    "name": "num_tap_cursors",
-    "desc": "Number of referencing TAP cursors",
+  "mc-open_checkpoint_id": {
+    "col": "open_checkpoint_id",
+    "desc": "ID of the current open checkpoint",
     "section": "Checkpoint Stats",
     "pos": 294,
     "visit": "fast"
   }
 ,
-  "mc-num_checkpoint_items": {
-    "name": "num_checkpoint_items",
-    "desc": "Number of total items in a checkpoint datastructure",
+  "mc-num_tap_cursors": {
+    "col": "num_tap_cursors",
+    "desc": "Number of referencing TAP cursors",
     "section": "Checkpoint Stats",
     "pos": 295,
     "visit": "fast"
   }
 ,
-  "mc-num_open_checkpoint_items": {
-    "name": "num_open_checkpoint_items",
-    "desc": "Number of items in the open checkpoint",
+  "mc-num_checkpoint_items": {
+    "col": "num_checkpoint_items",
+    "desc": "Number of total items in a checkpoint datastructure",
     "section": "Checkpoint Stats",
     "pos": 296,
     "visit": "fast"
   }
 ,
-  "mc-num_checkpoints": {
-    "name": "num_checkpoints",
-    "desc": "Number of checkpoints in a checkpoint datastructure",
+  "mc-num_open_checkpoint_items": {
+    "col": "num_open_checkpoint_items",
+    "desc": "Number of items in the open checkpoint",
     "section": "Checkpoint Stats",
     "pos": 297,
     "visit": "fast"
   }
 ,
-  "mc-num_items_for_persistence": {
-    "name": "num_items_for_persistence",
-    "desc": "Number of items remaining for persistence",
+  "mc-num_checkpoints": {
+    "col": "num_checkpoints",
+    "desc": "Number of checkpoints in a checkpoint datastructure",
     "section": "Checkpoint Stats",
     "pos": 298,
     "visit": "fast"
   }
 ,
-  "mc-checkpoint_extension": {
-    "name": "checkpoint_extension",
-    "desc": "True if the open checkpoint is in the extension mode.",
+  "mc-num_items_for_persistence": {
+    "col": "num_items_for_persistence",
+    "desc": "Number of items remaining for persistence",
     "section": "Checkpoint Stats",
     "pos": 299,
     "visit": "fast"
   }
 ,
-  "mc-mem_used (deprecated)": {
-    "name": "mem_used (deprecated)",
-    "desc": "Engine's total memory usage",
-    "section": "Memory Stats",
+  "mc-checkpoint_extension": {
+    "col": "checkpoint_extension",
+    "desc": "True if the open checkpoint is in the extension mode.",
+    "section": "Checkpoint Stats",
     "pos": 300,
     "visit": "fast"
   }
 ,
-  "mc-bytes": {
-    "name": "bytes",
+  "mc-mem_used (deprecated)": {
+    "col": "mem_used (deprecated)",
     "desc": "Engine's total memory usage",
     "section": "Memory Stats",
     "pos": 301,
     "visit": "fast"
   }
 ,
-  "mc-ep_kv_size": {
-    "name": "ep_kv_size",
-    "desc": "Memory used to store item metadata, keys and values, no matter the vbucket's state. If an item's value is ejected, this stat will be decremented by the size of the item's value.",
+  "mc-bytes": {
+    "col": "bytes",
+    "desc": "Engine's total memory usage",
     "section": "Memory Stats",
     "pos": 302,
     "visit": "fast"
   }
 ,
-  "mc-ep_value_size": {
-    "name": "ep_value_size",
-    "desc": "Memory used to store values for resident keys.",
+  "mc-ep_kv_size": {
+    "col": "ep_kv_size",
+    "desc": "Memory used to store item metadata, keys and values, no matter the vbucket's state. If an item's value is ejected, this stat will be decremented by the size of the item's value.",
     "section": "Memory Stats",
     "pos": 303,
     "visit": "fast"
   }
 ,
-  "mc-ep_overhead": {
-    "name": "ep_overhead",
-    "desc": "Extra memory used by transient data like persistence queue, replication queues, checkpoints, etc.",
+  "mc-ep_value_size": {
+    "col": "ep_value_size",
+    "desc": "Memory used to store values for resident keys.",
     "section": "Memory Stats",
     "pos": 304,
     "visit": "fast"
   }
 ,
-  "mc-ep_max_data_size": {
-    "name": "ep_max_data_size",
-    "desc": "Max amount of data allowed in memory",
+  "mc-ep_overhead": {
+    "col": "ep_overhead",
+    "desc": "Extra memory used by transient data like persistence queue, replication queues, checkpoints, etc.",
     "section": "Memory Stats",
     "pos": 305,
     "visit": "fast"
   }
 ,
-  "mc-ep_mem_low_wat": {
-    "name": "ep_mem_low_wat",
-    "desc": "Low water mark for auto-evictions",
+  "mc-ep_max_data_size": {
+    "col": "ep_max_data_size",
+    "desc": "Max amount of data allowed in memory",
     "section": "Memory Stats",
     "pos": 306,
     "visit": "fast"
   }
 ,
-  "mc-ep_mem_high_wat": {
-    "name": "ep_mem_high_wat",
-    "desc": "High water mark for auto-evictions",
+  "mc-ep_mem_low_wat": {
+    "col": "ep_mem_low_wat",
+    "desc": "Low water mark for auto-evictions",
     "section": "Memory Stats",
     "pos": 307,
     "visit": "fast"
   }
 ,
-  "mc-ep_oom_errors": {
-    "name": "ep_oom_errors",
-    "desc": "Number of times unrecoverable OOMs happened while processing operations",
+  "mc-ep_mem_high_wat": {
+    "col": "ep_mem_high_wat",
+    "desc": "High water mark for auto-evictions",
     "section": "Memory Stats",
     "pos": 308,
     "visit": "fast"
   }
 ,
-  "mc-ep_tmp_oom_errors": {
-    "name": "ep_tmp_oom_errors",
-    "desc": "Number of times temporary OOMs happened while processing operations",
+  "mc-ep_oom_errors": {
+    "col": "ep_oom_errors",
+    "desc": "Number of times unrecoverable OOMs happened while processing operations",
     "section": "Memory Stats",
     "pos": 309,
     "visit": "fast"
   }
 ,
-  "mc-tcmalloc_allocated_bytes": {
-    "name": "tcmalloc_allocated_bytes",
-    "desc": "Engine's total memory usage reported from tcmalloc",
+  "mc-ep_tmp_oom_errors": {
+    "col": "ep_tmp_oom_errors",
+    "desc": "Number of times temporary OOMs happened while processing operations",
     "section": "Memory Stats",
     "pos": 310,
     "visit": "fast"
   }
 ,
-  "mc-tcmalloc_heap_size": {
-    "name": "tcmalloc_heap_size",
-    "desc": "Bytes of system memory reserved by tcmalloc",
+  "mc-tcmalloc_allocated_bytes": {
+    "col": "tcmalloc_allocated_bytes",
+    "desc": "Engine's total memory usage reported from tcmalloc",
     "section": "Memory Stats",
     "pos": 311,
     "visit": "fast"
   }
 ,
-  "mc-tcmalloc_free_bytes": {
-    "name": "tcmalloc_free_bytes",
-    "desc": "Number of bytes in free, mapped pages in page heap",
+  "mc-tcmalloc_heap_size": {
+    "col": "tcmalloc_heap_size",
+    "desc": "Bytes of system memory reserved by tcmalloc",
     "section": "Memory Stats",
     "pos": 312,
     "visit": "fast"
   }
 ,
-  "mc-tcmalloc_unmapped_bytes": {
-    "name": "tcmalloc_unmapped_bytes",
-    "desc": "Number of bytes in free, unmapped pages in page heap. These are bytes that have been released back to OS.",
+  "mc-tcmalloc_free_bytes": {
+    "col": "tcmalloc_free_bytes",
+    "desc": "Number of bytes in free, mapped pages in page heap",
     "section": "Memory Stats",
     "pos": 313,
     "visit": "fast"
   }
 ,
-  "mc-tcmalloc_max_thread_cache_bytes": {
-    "name": "tcmalloc_max_thread_cache_bytes",
-    "desc": "A limit to how much memory TCMalloc dedicates for small objects.",
+  "mc-tcmalloc_unmapped_bytes": {
+    "col": "tcmalloc_unmapped_bytes",
+    "desc": "Number of bytes in free, unmapped pages in page heap. These are bytes that have been released back to OS.",
     "section": "Memory Stats",
     "pos": 314,
     "visit": "fast"
   }
 ,
-  "mc-tcmalloc_current_thread_cache_bytes": {
-    "name": "tcmalloc_current_thread_cache_bytes",
-    "desc": "A measure of some of the memory TCMalloc is using for small objects.",
+  "mc-tcmalloc_max_thread_cache_bytes": {
+    "col": "tcmalloc_max_thread_cache_bytes",
+    "desc": "A limit to how much memory TCMalloc dedicates for small objects.",
     "section": "Memory Stats",
     "pos": 315,
     "visit": "fast"
   }
 ,
-  "mc-key_cas": {
-    "name": "key_cas",
-    "desc": "The keys current cas value",
-    "section": "Stats Key and Vkey",
+  "mc-tcmalloc_current_thread_cache_bytes": {
+    "col": "tcmalloc_current_thread_cache_bytes",
+    "desc": "A measure of some of the memory TCMalloc is using for small objects.",
+    "section": "Memory Stats",
     "pos": 316,
     "visit": "fast"
   }
 ,
-  "mc-key_data_age": {
-    "name": "key_data_age",
-    "desc": "How long the key has waited for its value to be persisted (0 if clean)",
+  "mc-key_cas": {
+    "col": "key_cas",
+    "desc": "The keys current cas value",
     "section": "Stats Key and Vkey",
     "pos": 317,
     "visit": "fast"
   }
 ,
-  "mc-key_exptime": {
-    "name": "key_exptime",
-    "desc": "Expiration time from the epoch",
+  "mc-key_data_age": {
+    "col": "key_data_age",
+    "desc": "How long the key has waited for its value to be persisted (0 if clean)",
     "section": "Stats Key and Vkey",
     "pos": 318,
     "visit": "fast"
   }
 ,
-  "mc-key_flags": {
-    "name": "key_flags",
-    "desc": "Flags for this key",
+  "mc-key_exptime": {
+    "col": "key_exptime",
+    "desc": "Expiration time from the epoch",
     "section": "Stats Key and Vkey",
     "pos": 319,
     "visit": "fast"
   }
 ,
-  "mc-key_is_dirty": {
-    "name": "key_is_dirty",
-    "desc": "If the value is not yet persisted",
+  "mc-key_flags": {
+    "col": "key_flags",
+    "desc": "Flags for this key",
     "section": "Stats Key and Vkey",
     "pos": 320,
     "visit": "fast"
   }
 ,
-  "mc-key_last_modified_time": {
-    "name": "key_last_modified_time",
-    "desc": "Last updated time",
+  "mc-key_is_dirty": {
+    "col": "key_is_dirty",
+    "desc": "If the value is not yet persisted",
     "section": "Stats Key and Vkey",
     "pos": 321,
     "visit": "fast"
   }
 ,
-  "mc-key_valid": {
-    "name": "key_valid",
-    "desc": "See description below",
+  "mc-key_last_modified_time": {
+    "col": "key_last_modified_time",
+    "desc": "Last updated time",
     "section": "Stats Key and Vkey",
     "pos": 322,
     "visit": "fast"
   }
 ,
-  "mc-key_vb_state": {
-    "name": "key_vb_state",
-    "desc": "The vbucket state of this key",
+  "mc-key_valid": {
+    "col": "key_valid",
+    "desc": "See description below",
     "section": "Stats Key and Vkey",
     "pos": 323,
     "visit": "fast"
   }
 ,
-  "mc-size": {
-    "name": "size",
-    "desc": "The size of the logfile.",
-    "section": "Key Log",
+  "mc-key_vb_state": {
+    "col": "key_vb_state",
+    "desc": "The vbucket state of this key",
+    "section": "Stats Key and Vkey",
     "pos": 324,
     "visit": "fast"
   }
 ,
-  "mc-count_new": {
-    "name": "count_new",
-    "desc": "Number of new key events in the log.",
+  "mc-size": {
+    "col": "size",
+    "desc": "The size of the logfile.",
     "section": "Key Log",
     "pos": 325,
     "visit": "fast"
   }
 ,
-  "mc-count_del": {
-    "name": "count_del",
-    "desc": "Number of deleted key events in the log.",
+  "mc-count_new": {
+    "col": "count_new",
+    "desc": "Number of new key events in the log.",
     "section": "Key Log",
     "pos": 326,
     "visit": "fast"
   }
 ,
-  "mc-count_del_all": {
-    "name": "count_del_all",
-    "desc": "Number of delete all events in the log.",
+  "mc-count_del": {
+    "col": "count_del",
+    "desc": "Number of deleted key events in the log.",
     "section": "Key Log",
     "pos": 327,
     "visit": "fast"
   }
 ,
-  "mc-count_commit1": {
-    "name": "count_commit1",
-    "desc": "Number of commit1 events in the log.",
+  "mc-count_del_all": {
+    "col": "count_del_all",
+    "desc": "Number of delete all events in the log.",
     "section": "Key Log",
     "pos": 328,
     "visit": "fast"
   }
 ,
-  "mc-count_commit2": {
-    "name": "count_commit2",
-    "desc": "Number of commit2 events in the log.",
+  "mc-count_commit1": {
+    "col": "count_commit1",
+    "desc": "Number of commit1 events in the log.",
     "section": "Key Log",
     "pos": 329,
     "visit": "fast"
   }
 ,
+  "mc-count_commit2": {
+    "col": "count_commit2",
+    "desc": "Number of commit2 events in the log.",
+    "section": "Key Log",
+    "pos": 330,
+    "visit": "fast"
+  }
+,
   "mc-ep_warmup": {
-    "name": "ep_warmup",
+    "col": "ep_warmup",
     "desc": "Shows if warmup is enabled / disabled",
     "section": "Warmup",
-    "pos": 330,
-    "visit": "slow"
+    "pos": 331,
+    "visit": "fast"
   }
 ,
   "mc-ep_warmup_estimated_key_count": {
-    "name": "ep_warmup_estimated_key_count",
+    "col": "ep_warmup_estimated_key_count",
     "desc": "Estimated number of keys in database",
     "section": "Warmup",
-    "pos": 331,
-    "visit": "slow"
+    "pos": 332,
+    "visit": "fast"
   }
 ,
   "mc-ep_warmup_estimated_value_count": {
-    "name": "ep_warmup_estimated_value_count",
+    "col": "ep_warmup_estimated_value_count",
     "desc": "Estimated number of values in database",
     "section": "Warmup",
-    "pos": 332,
-    "visit": "slow"
+    "pos": 333,
+    "visit": "fast"
   }
 ,
   "mc-ep_warmup_state": {
-    "name": "ep_warmup_state",
+    "col": "ep_warmup_state",
     "desc": "The current state of the warmup thread",
     "section": "Warmup",
-    "pos": 333,
-    "visit": "slow"
+    "pos": 334,
+    "visit": "fast"
   }
 ,
   "mc-ep_warmup_thread": {
-    "name": "ep_warmup_thread",
+    "col": "ep_warmup_thread",
     "desc": "Warmup thread status.",
     "section": "Warmup",
-    "pos": 334,
-    "visit": "slow"
+    "pos": 335,
+    "visit": "fast"
   }
 ,
   "mc-ep_warmup_key_count": {
-    "name": "ep_warmup_key_count",
+    "col": "ep_warmup_key_count",
     "desc": "Number of keys warmed up",
     "section": "Warmup",
-    "pos": 335,
-    "visit": "slow"
+    "pos": 336,
+    "visit": "fast"
   }
 ,
   "mc-ep_warmup_value_count": {
-    "name": "ep_warmup_value_count",
+    "col": "ep_warmup_value_count",
     "desc": "Number of values warmed up",
     "section": "Warmup",
-    "pos": 336,
-    "visit": "slow"
+    "pos": 337,
+    "visit": "fast"
   }
 ,
   "mc-ep_warmup_dups": {
-    "name": "ep_warmup_dups",
+    "col": "ep_warmup_dups",
     "desc": "Duplicates encountered during warmup.",
     "section": "Warmup",
-    "pos": 337,
-    "visit": "slow"
+    "pos": 338,
+    "visit": "fast"
   }
 ,
   "mc-ep_warmup_oom": {
-    "name": "ep_warmup_oom",
+    "col": "ep_warmup_oom",
     "desc": "OOMs encountered during warmup.",
     "section": "Warmup",
-    "pos": 338,
-    "visit": "slow"
+    "pos": 339,
+    "visit": "fast"
   }
 ,
   "mc-ep_warmup_time": {
-    "name": "ep_warmup_time",
+    "col": "ep_warmup_time",
     "desc": "Time (µs) spent by warming data.",
-    "section": "Warmup",
-    "pos": 339,
-    "visit": "slow"
-  }
-,
-  "mc-ep_warmup_keys_time": {
-    "name": "ep_warmup_keys_time",
-    "desc": "Time (µs) spent by warming keys.",
     "section": "Warmup",
     "pos": 340,
     "visit": "fast"
   }
 ,
-  "mc-ep_warmup_mutation_log": {
-    "name": "ep_warmup_mutation_log",
-    "desc": "Number of keys present in mutation log",
+  "mc-ep_warmup_keys_time": {
+    "col": "ep_warmup_keys_time",
+    "desc": "Time (µs) spent by warming keys.",
     "section": "Warmup",
     "pos": 341,
-    "visit": "slow"
+    "visit": "fast"
+  }
+,
+  "mc-ep_warmup_mutation_log": {
+    "col": "ep_warmup_mutation_log",
+    "desc": "Number of keys present in mutation log",
+    "section": "Warmup",
+    "pos": 342,
+    "visit": "fast"
   }
 ,
   "mc-ep_warmup_access_log": {
-    "name": "ep_warmup_access_log",
+    "col": "ep_warmup_access_log",
     "desc": "Number of keys present in access log",
     "section": "Warmup",
-    "pos": 342,
-    "visit": "slow"
-  }
-,
-  "mc-open": {
-    "name": "open",
-    "desc": "Number of database open operations",
-    "section": "KV Store Stats",
     "pos": 343,
     "visit": "fast"
   }
 ,
-  "mc-close": {
-    "name": "close",
-    "desc": "Number of database close operations",
+  "mc-open": {
+    "col": "open",
+    "desc": "Number of database open operations",
     "section": "KV Store Stats",
     "pos": 344,
     "visit": "fast"
   }
 ,
-  "mc-readTime": {
-    "name": "readTime",
-    "desc": "Time spent in read operations",
+  "mc-close": {
+    "col": "close",
+    "desc": "Number of database close operations",
     "section": "KV Store Stats",
     "pos": 345,
     "visit": "fast"
   }
 ,
-  "mc-readSize": {
-    "name": "readSize",
-    "desc": "Size of data in read operations",
+  "mc-readTime": {
+    "col": "readTime",
+    "desc": "Time spent in read operations",
     "section": "KV Store Stats",
     "pos": 346,
     "visit": "fast"
   }
 ,
-  "mc-writeTime": {
-    "name": "writeTime",
-    "desc": "Time spent in write operations",
+  "mc-readSize": {
+    "col": "readSize",
+    "desc": "Size of data in read operations",
     "section": "KV Store Stats",
     "pos": 347,
     "visit": "fast"
   }
 ,
-  "mc-writeSize": {
-    "name": "writeSize",
-    "desc": "Size of data in write operations",
+  "mc-writeTime": {
+    "col": "writeTime",
+    "desc": "Time spent in write operations",
     "section": "KV Store Stats",
     "pos": 348,
     "visit": "fast"
   }
 ,
-  "mc-delete": {
-    "name": "delete",
-    "desc": "Time spent  in delete() calls",
+  "mc-writeSize": {
+    "col": "writeSize",
+    "desc": "Size of data in write operations",
     "section": "KV Store Stats",
     "pos": 349,
     "visit": "fast"
   }
 ,
-  "mc-sector_size": {
-    "name": "sector_size",
-    "desc": "Disk sector size (bytes)",
+  "mc-delete": {
+    "col": "delete",
+    "desc": "Time spent  in delete() calls",
     "section": "KV Store Stats",
     "pos": 350,
     "visit": "fast"
   }
 ,
-  "mc-lock": {
-    "name": "lock",
-    "desc": "Number of database lock operations",
+  "mc-sector_size": {
+    "col": "sector_size",
+    "desc": "Disk sector size (bytes)",
     "section": "KV Store Stats",
     "pos": 351,
     "visit": "fast"
   }
 ,
-  "mc-truncate": {
-    "name": "truncate",
-    "desc": "Number of truncate operations",
+  "mc-lock": {
+    "col": "lock",
+    "desc": "Number of database lock operations",
     "section": "KV Store Stats",
     "pos": 352,
     "visit": "fast"
   }
 ,
-  "mc-sync": {
-    "name": "sync",
-    "desc": "Time spent in sync() calls",
+  "mc-truncate": {
+    "col": "truncate",
+    "desc": "Number of truncate operations",
     "section": "KV Store Stats",
     "pos": 353,
     "visit": "fast"
   }
 ,
-  "mc-readSeek": {
-    "name": "readSeek",
-    "desc": "Seek distance in read operations",
+  "mc-sync": {
+    "col": "sync",
+    "desc": "Time spent in sync() calls",
     "section": "KV Store Stats",
     "pos": 354,
     "visit": "fast"
   }
 ,
-  "mc-writeSeek": {
-    "name": "writeSeek",
-    "desc": "Seek distance in write operations",
+  "mc-readSeek": {
+    "col": "readSeek",
+    "desc": "Seek distance in read operations",
     "section": "KV Store Stats",
     "pos": 355,
     "visit": "fast"
   }
 ,
-  "mc-backend_type": {
-    "name": "backend_type",
-    "desc": "Type of backend database engine",
+  "mc-writeSeek": {
+    "col": "writeSeek",
+    "desc": "Seek distance in write operations",
     "section": "KV Store Stats",
     "pos": 356,
     "visit": "fast"
   }
 ,
-  "mc-commit": {
-    "name": "commit",
-    "desc": "Time spent in CouchStore commit operation",
+  "mc-backend_type": {
+    "col": "backend_type",
+    "desc": "Type of backend database engine",
     "section": "KV Store Stats",
     "pos": 357,
     "visit": "fast"
   }
 ,
-  "mc-commitRetry": {
-    "name": "commitRetry",
-    "desc": "Time spent in retry of commit operation",
+  "mc-commit": {
+    "col": "commit",
+    "desc": "Time spent in CouchStore commit operation",
     "section": "KV Store Stats",
     "pos": 358,
     "visit": "fast"
   }
 ,
-  "mc-numLoadedVb": {
-    "name": "numLoadedVb",
-    "desc": "Number of Vbuckets loaded into memory",
+  "mc-commitRetry": {
+    "col": "commitRetry",
+    "desc": "Time spent in retry of commit operation",
     "section": "KV Store Stats",
     "pos": 359,
     "visit": "fast"
   }
 ,
-  "mc-numCommitRetry": {
-    "name": "numCommitRetry",
-    "desc": "Number of commit retry",
+  "mc-numLoadedVb": {
+    "col": "numLoadedVb",
+    "desc": "Number of Vbuckets loaded into memory",
     "section": "KV Store Stats",
     "pos": 360,
     "visit": "fast"
   }
 ,
-  "mc-lastCommDocs": {
-    "name": "lastCommDocs",
-    "desc": "Number of docs in the last commit",
+  "mc-numCommitRetry": {
+    "col": "numCommitRetry",
+    "desc": "Number of commit retry",
     "section": "KV Store Stats",
     "pos": 361,
     "visit": "fast"
   }
 ,
-  "mc-failure_set": {
-    "name": "failure_set",
-    "desc": "Number of failed set operation",
+  "mc-lastCommDocs": {
+    "col": "lastCommDocs",
+    "desc": "Number of docs in the last commit",
     "section": "KV Store Stats",
     "pos": 362,
     "visit": "fast"
   }
 ,
-  "mc-failure_get": {
-    "name": "failure_get",
-    "desc": "Number of failed get operation",
+  "mc-failure_set": {
+    "col": "failure_set",
+    "desc": "Number of failed set operation",
     "section": "KV Store Stats",
     "pos": 363,
     "visit": "fast"
   }
 ,
-  "mc-failure_vbset": {
-    "name": "failure_vbset",
-    "desc": "Number of failed vbucket set operation",
+  "mc-failure_get": {
+    "col": "failure_get",
+    "desc": "Number of failed get operation",
     "section": "KV Store Stats",
     "pos": 364,
     "visit": "fast"
   }
 ,
-  "mc-save_documents": {
-    "name": "save_documents",
-    "desc": "Time spent in CouchStore save documents operation",
+  "mc-failure_vbset": {
+    "col": "failure_vbset",
+    "desc": "Number of failed vbucket set operation",
     "section": "KV Store Stats",
     "pos": 365,
+    "visit": "fast"
+  }
+,
+  "mc-save_documents": {
+    "col": "save_documents",
+    "desc": "Time spent in CouchStore save documents operation",
+    "section": "KV Store Stats",
+    "pos": 366,
     "visit": "fast"
   }
 }

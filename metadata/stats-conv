@@ -67,7 +67,7 @@ def clean(s):
 
 seen = {}
 
-i = 0
+i = 1
 print "{"
 for section, entries in sections:
     if len(entries) > 0:
@@ -79,7 +79,7 @@ for section, entries in sections:
                 print ","
 
             print '  "mc-%s": {' % clean(entry_name)
-            print '    "name": "%s",' % clean(entry_name)
+            print '    "col": "%s",' % clean(entry_name)
             print '    "desc": "%s",' % clean(entry_desc)
             print '    "section": "%s",' % clean(section)
             print '    "pos": %s,' % i
