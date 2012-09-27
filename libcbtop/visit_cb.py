@@ -39,11 +39,16 @@ SECTION_CONFIG = {"settings": {"id": 0,
                   "nodes": {"id": 3,
                             "show_row_hdrs": False,
                             "show_col_hdrs": True,
-                            "show_col_hdr_in_cell": False}}
+                            "show_col_hdr_in_cell": False},
+                  "Memory Stats": {"id": 4,
+                                     "show_row_hdrs": False,
+                                     "show_col_hdrs": True,
+                                     "show_col_hdr_in_cell": False}}
 
 tbl = Table("cbtop", sep=" ")
 cur_row = {}      # {sec_nam: row name}
 mc_jobs = multiprocessing.Queue(1)
+mc_stats = multiprocessing.Queue(20)
 store = None
 
 class SerieslyStore(object):
@@ -139,6 +144,17 @@ def _show_stats(key, val, meta_inf):
 
     return True
 
+def show_all_stats(stats, meta):
+    if not isinstance(stats, dict) or not isinstance(meta, dict):
+        logging.error("failed to show all stats : invalid data")
+        return False
+
+    for key, val in stats.iteritems():
+        if not key in meta:
+            continue
+
+        _show_stats(key, val, meta[key])
+
 def store_fast(root, parents, data, meta, coll,
                key, val, meta_val, meta_inf, level):
     """Store time-series data into fast-changing database"""
@@ -187,13 +203,19 @@ def collect_mc_stats(root, parents, data, meta, coll,
         return False
 
     try:
+        stats, meta = mc_stats.get(block=False)
+        show_all_stats(stats, meta)
+    except Queue.Empty:
+        pass
+
+    try:
         mc_jobs.put([root, parents, val], block=False)
         return True
     except Queue.Full:
         logging.debug("unable to collect mcstats : queue is full")
         return False
 
-def mc_worker(jobs, ctl, store, timeout=5):
+def mc_worker(jobs, stats, ctl, store, timeout=5):
     logging.error("mc_worker started")
 
     while ctl["run_ok"]:
@@ -231,6 +253,8 @@ def mc_worker(jobs, ctl, store, timeout=5):
             mc_coll = MemcachedCollector([mc_source], [j_handler, s_hanlder])
             mc_coll.collect()
             mc_coll.emit()
+            stats.put([mc_source.fast, mc_source.meta], block=True)
+            stats.put([mc_source.slow, mc_source.meta], block=True)
 
         delta = time.time() - start
         logging.debug("collected mc stats from %s, took %s seconds"

@@ -50,7 +50,8 @@ def main(ctl, server, itv, dbhost, dbslow, dbfast,
     mc_store = vc.SerieslyStore(dbhost, dbslow, dbfast)
 
     mc_proc = multiprocessing.Process(target=vc.mc_worker,
-                                      args=(vc.mc_jobs, ctl, mc_store, itv))
+                                      args=(vc.mc_jobs, vc.mc_stats,
+                                            ctl, mc_store, itv))
 
     mc_proc.daemon = True
     mc_proc.start()
