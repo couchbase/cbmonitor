@@ -2420,6 +2420,7 @@
     "col": "EP_BYTES_TOT",
     "desc": "Engine's total memory usage",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 302,
     "visit": "fast"
   }
@@ -2428,6 +2429,7 @@
     "col": "EP_KV",
     "desc": "Memory used to store item metadata, keys and values, no matter the vbucket's state. If an item's value is ejected, this stat will be decremented by the size of the item's value.",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 303,
     "visit": "fast"
   }
@@ -2436,6 +2438,7 @@
     "col": "EP_VAL",
     "desc": "Memory used to store values for resident keys.",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 304,
     "visit": "fast"
   }
@@ -2444,6 +2447,7 @@
     "col": "EP_OVERHEAD",
     "desc": "Extra memory used by transient data like persistence queue, replication queues, checkpoints, etc.",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 305,
     "visit": "fast"
   }
@@ -2452,6 +2456,7 @@
     "col": "EP_MAX_DATA",
     "desc": "Max amount of data allowed in memory",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 306,
     "visit": "slow"
   }
@@ -2460,6 +2465,7 @@
     "col": "EP_LOW_WAT",
     "desc": "Low water mark for auto-evictions",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 307,
     "visit": "slow"
   }
@@ -2468,6 +2474,7 @@
     "col": "EP_HIGH_WAT",
     "desc": "High water mark for auto-evictions",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 308,
     "visit": "fast"
   }
@@ -2476,6 +2483,7 @@
     "col": "#ERR_OOM",
     "desc": "Number of times unrecoverable OOMs happened while processing operations",
     "section": "Memory Stats",
+    "units": "items",
     "pos": 309,
     "visit": "fast"
   }
@@ -2484,6 +2492,7 @@
     "col": "#ERR_TMP_OOM",
     "desc": "Number of times temporary OOMs happened while processing operations",
     "section": "Memory Stats",
+    "units": "items",
     "pos": 310,
     "visit": "fast"
   }
@@ -2492,6 +2501,7 @@
     "col": "TCM_ALLOC",
     "desc": "Engine's total memory usage reported from tcmalloc",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 311,
     "visit": "fast"
   }
@@ -2500,6 +2510,7 @@
     "col": "TCM_HEAP_SIZE",
     "desc": "Bytes of system memory reserved by tcmalloc",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 312,
     "visit": "fast"
   }
@@ -2508,6 +2519,7 @@
     "col": "TCM_FREE",
     "desc": "Number of bytes in free, mapped pages in page heap",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 313,
     "visit": "fast"
   }
@@ -2516,6 +2528,7 @@
     "col": "TCM_UNMAPPED",
     "desc": "Number of bytes in free, unmapped pages in page heap. These are bytes that have been released back to OS.",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 314,
     "visit": "fast"
   }
@@ -2524,6 +2537,7 @@
     "col": "TCM_MAX_TCACHE",
     "desc": "A limit to how much memory TCMalloc dedicates for small objects.",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 315,
     "visit": "slow"
   }
@@ -2532,6 +2546,7 @@
     "col": "TCM_CUR_TCACHE",
     "desc": "A measure of some of the memory TCMalloc is using for small objects.",
     "section": "Memory Stats",
+    "units": "bytes",
     "pos": 316,
     "visit": "fast"
   }
