@@ -62,22 +62,23 @@ Simply point it to one of the servers:
 
     ./cbtop 10.2.1.65
 
-    DB Compaction: 30.00  View Compaction: 30.00  Min Items Threshold: 10  Min Memory Threshold: 10  Compact Running: False  Disk Format Ver: 0
+    DB Compaction:30.00  View Compaction:30.00  Min Items Threshold:10  Min Memory Threshold:10  Compact Running:False  Disk Format Ver:0
 
+    HDD Quota:2.75T  HDD Total:2.75T  HDD Used:267.59G  HDD Used By Data:119.97G  RAM Quota:97.66G  RAM Total:125.38G  RAM Used:124.77G  RAM Used By Data:71.10G
 
-    HDD Quota: 3.31T  HDD Total: 3.31T  HDD Used: 33.93G  HDD Used By Data: 933.66M  RAM Quota: 62.50G  RAM Total: 125.38G  RAM Used: 57.06G 
-    RAM Used By Data: 992.36M
+    BUCKET   PROXY  RAM     RAW_RAM  #REPL  DATA_USED  DISK_USED  #ITEMS  #MEM_USED  %MEM_USED  TYPE
+    default  0      97.66G  24.41G   1      90.57G     119.97G    19.16M  71.09G     72.80      membase
 
+    HOST            #ITEMS  #ITEMS_TOT  #REPL_ITEMS  MCD_MEM_ALLOC  MCD_MEM_RSVD  MEM_FREE  MEM_TOT  PORT   STATUS   %CPU   SWAP_TOT  SWAP_USED
+    10.2.1.65:8091  4.79M   9.58M       4.79M        25678.00       25678.00      158.47M   31.35G   11210  healthy  48.38  10.57G    156.00K
+    10.2.1.66:8091  4.79M   9.58M       4.79M        25678.00       25678.00      156.31M   31.35G   11210  healthy  78.39  9.95G     156.00K
+    10.2.1.67:8091  4.79M   9.58M       4.79M        25678.00       25678.00      157.81M   31.35G   11210  healthy  91.25  9.97G     156.00K
+    10.2.1.68:8091  4.79M   9.58M       4.79M        25678.00       25678.00      153.09M   31.35G   11210  healthy  99.25  9.95G     156.00K
 
-    BUCKET   PROXY  RAM     RAW_RAM   #REPL  DATA_USED  DISK_USED  #ITEMS   #MEM_USED  %MEM_USED  TYPE   
-    bucket1  0      7.81G   1.95G     1      187.00K    16.21M     0.00     59.98M     0.75       membase
-    bucket2  0      7.81G   1.95G     1      187.00K    16.21M     0.00     59.98M     0.30       membase
-    bucket3  0      19.53G  4.88G     1      731.03M    885.03M    147.43K  812.43M    20.31      membase
-    default  0      3.91G   1000.00M  1      187.00K    16.21M     0.00     59.97M     0.75       membase
+    HOST       #ERR_OOM  EP_OVERHEAD  TCM_MAX_TCACHE  EP_MAX_DATA  EP_LOW_WAT  EP_HIGH_WAT  EP_VAL  #ERR_TMP_OOM  TCM_UNMAPPED  EP_BYTES_TOT  TCM_CUR_TCACHE  EP_KV
+    10.2.1.65  0.00      51.79M       4.00M           24.41G       14.65G      18.31G       16.57G  0.00          28.95M        17.65G        2.53M           17.35G
+    10.2.1.66  0.00      51.62M       4.00M           24.41G       14.65G      18.31G       16.64G  0.00          33.59M        17.71G        2.17M           17.41G
+    10.2.1.67  0.00      51.64M       4.00M           24.41G       14.65G      18.31G       16.46G  0.00          26.48M        17.54G        2.05M           17.23G
+    10.2.1.68  0.00      52.12M       4.00M           24.41G       14.65G      18.31G       17.12G  0.00          21.84M        18.20G        2.71M           17.89G
 
-
-    HOST            #ITEMS  #ITEMS_TOT  #REPL_ITEMS  MCD_MEM_ALLOC  MCD_MEM_RSVD  MEM_FREE  MEM_TOT  PORT   STATUS   %CPU  SWAP_TOT  SWAP_USED
-    10.2.1.65:8091  0.00    49.24K      49.24K       25678.00       25678.00      17.02G    31.35G   11210  healthy  3.75  10.57G    148.00K  
-    10.2.1.66:8091  65.80K  82.04K      16.25K       25678.00       25678.00      17.04G    31.35G   11210  healthy  5.49  9.95G     148.00K  
-    10.2.1.67:8091  81.63K  98.10K      16.47K       25678.00       25678.00      16.93G    31.35G   11210  healthy  5.01  9.97G     148.00K  
-    10.2.1.68:8091  0.00    65.47K      65.47K       25678.00       25678.00      17.34G    31.35G   11210  healthy  7.25  9.95G     148.00K 
+    Last Update: 18:06:01
