@@ -121,7 +121,7 @@ def _show_stats(key, val, meta_inf):
                 config["show_col_hdrs"],
                 config["show_col_hdr_in_cell"])
         else:
-            section = Section(sec_nam)
+            return False
         tbl.add_section(section)
 
     if "col" in meta_inf:
