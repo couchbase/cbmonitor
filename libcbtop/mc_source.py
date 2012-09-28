@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import logging
+import os
 import json
 from source import Source
 from server import Server
@@ -9,7 +10,7 @@ from lib.memcached.helper.data_helper import MemcachedClientHelper
 
 class MemcachedSource(Source):
 
-    META_FILE = "./metadata/stats.json"
+    META_FILE = "%s/../metadata/stats.json" % os.path.dirname(__file__)
     MC_STATS = ["", "allocator", "checkpoint", "config", "dispatcher",
                 "hash", "kvstore", "kvtimings", "memory", "prev-vbucket",
                 "tap", "tapagg", "timings", "vbucket", "vbucket-details"]
