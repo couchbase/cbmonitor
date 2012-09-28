@@ -9,8 +9,10 @@ from metadata.visit import main as visit, VISIT_ENTRY_FUNCS, retrieve_meta
 import visit_cb as vc
 import paint as pt
 
-def main(ctl, server, itv, dbhost, dbslow, dbfast,
-         port=8091, path="/pools/default"):
+CTL = {"run_ok": True, "bg": True}
+
+def main(server, itv=5, ctl=CTL, port=8091, path="/pools/default",
+         dbhost="127.0.0.1", dbslow="slow", dbfast="fast"):
 
     vc.store = vc.SerieslyStore(dbhost, dbslow, dbfast)
     vc.tbl.set_ftr("Last Update: %time")

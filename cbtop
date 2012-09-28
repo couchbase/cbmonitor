@@ -68,4 +68,5 @@ if __name__ == "__main__":
 
 
     ctl = {"run_ok": True, "bg": options.bg}
-    main(ctl, _server, _itv, options.dbhost, options.dbslow, options.dbfast)
+    main(_server, itv=_itv, ctl=ctl, dbhost=options.dbhost,
+         dbslow=options.dbslow, dbfast=options.dbfast)
