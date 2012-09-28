@@ -30,9 +30,10 @@ def handle_signal(signum, frame):
     """
     logging.info("received signal %s, aborting" % signum)
 
-    pt.exit_fullscreen()
-
     global ctl
+    if not ctl["bg"]:
+        pt.exit_fullscreen()
+
     ctl["run_ok"] = False
 
 
@@ -45,7 +46,8 @@ def main(ctl, server, itv, dbhost, dbslow, dbfast,
 
     vc.store = vc.SerieslyStore(dbhost, dbslow, dbfast)
     vc.tbl.set_ftr("Last Update: %time")
-    pt.enter_fullscreen()
+    if not ctl["bg"]:
+        pt.enter_fullscreen()
 
     mc_store = vc.SerieslyStore(dbhost, dbslow, dbfast)
 
@@ -72,7 +74,8 @@ def main(ctl, server, itv, dbhost, dbslow, dbfast,
               entry_funcs=visit_entry_func, ctl=ctl)
         vc.store.persist()
 
-        pt.paint(vc.tbl)
+        if not ctl["bg"]:
+            pt.paint(vc.tbl)
         logging.info("sleep for %s seconds" % itv)
         time.sleep(itv)
 
@@ -91,6 +94,8 @@ if __name__ == "__main__":
                       help="seriesly database to store slow changing data")
     parser.add_option("-f", "--dbfast", dest="dbfast", default="fast",
                       help="seriesly database to store fast changing data")
+    parser.add_option("-b", "--background", dest="bg", default=False,
+                      action="store_true", help="run cbtop in background")
     options, args = parser.parse_args()
 
     if len(args) > 0:
@@ -105,5 +110,5 @@ if __name__ == "__main__":
         usage()
 
 
-    ctl = {"run_ok": True}
+    ctl = {"run_ok": True, "bg": options.bg}
     main(ctl, _server, _itv, options.dbhost, options.dbslow, options.dbfast)
