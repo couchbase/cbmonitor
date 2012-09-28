@@ -100,9 +100,8 @@ def _show_stats(key, val, meta_inf):
         return False
 
     if not meta_inf or not "section" in meta_inf:
-        logging.error(
-            "unable to show slow data: key %s, val %s, invalid meta info"
-            % (key, val))
+        logging.debug("unable to show data: key %s, val %s, invalid meta info"
+                      % (key, val))
         return False
 
     # ok, not deal with unicode for now
@@ -216,7 +215,7 @@ def collect_mc_stats(root, parents, data, meta, coll,
         return False
 
 def mc_worker(jobs, stats, ctl, store, timeout=5):
-    logging.error("mc_worker started")
+    logging.info("mc_worker started")
 
     while ctl["run_ok"]:
         try:
@@ -233,8 +232,8 @@ def mc_worker(jobs, stats, ctl, store, timeout=5):
             try:
                 ip, port = server.split(":")
             except (ValueError, AttributeError), e:
-                logging.error(
-                    "unable to collect mc stats from %s : %s" % (server, e))
+                logging.error("unable to collect mc stats from %s : %s"
+                              % (server, e))
                 continue
 
             mc_server = Server(ip)
@@ -264,4 +263,4 @@ def mc_worker(jobs, stats, ctl, store, timeout=5):
             logging.debug("mc_worker sleep for %s seconds" % (timeout -delta))
             time.sleep(timeout - delta)
 
-    logging.error("mc_worker stopped")
+    logging.info("mc_worker stopped")
