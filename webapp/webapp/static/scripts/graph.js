@@ -28,7 +28,7 @@ GRAPH.Graph.prototype.defineBindings = function() {
     placeholder.bind("plotselected", function (event, ranges) {
         var from = Math.ceil(ranges.xaxis.from),
             to = Math.floor(ranges.xaxis.to),
-            group = Math.round((to - from) / 50);
+            group = Math.round((to - from) / 100);
         that.redraw_overview = false;
         that.seriesly.query(group.toString(), that.labels, from, to, that);
         that.overview.setSelection(ranges, true);

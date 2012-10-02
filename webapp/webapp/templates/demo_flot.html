@@ -25,10 +25,10 @@
             metrics;
         metrics = ["bytes_written", "vb_avg_active_queue_age",
             "ep_tap_total_qlen", "ep_queue_size", "vb_replica_queue_size"];
-        chart.addMetric("10000", metrics[0]);
+        chart.addMetric("60000", metrics[0]);
 
         $("#add").click(function () {
-            chart.addMetric("10000", metrics[chart.labels.length]);
+            chart.addMetric("60000", metrics[chart.labels.length]);
         });
     });
 </script>

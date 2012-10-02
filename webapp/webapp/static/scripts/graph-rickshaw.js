@@ -140,8 +140,9 @@ GRAPH.RangeSlider = function(args) {
                 graph.dataDomain()[1]
             ],
             stop: function(event, ui) {
+                var group = Math.round((ui.values[1] - ui.values[0]) / 100);
                 var url = seriesly.biuldURL(
-                    "1000", metrics, ui.values[0] * 1000, ui.values[1] * 1000
+                    group, metrics, ui.values[0] * 1000, ui.values[1] * 1000
                 );
                 $.ajax({url: url, dataType: "json", success: function(data){
                     var dataHandler = new GRAPH.DataHandler(data);
