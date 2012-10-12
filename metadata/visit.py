@@ -173,7 +173,7 @@ def visit_entry_collect_mc_stats(root, parents, data, meta, coll,
                                  key, val, meta_val, meta_inf, level=0):
     """A different implementation could collects memcached stats from the
        val, which should be an array of "HOST:PORT", like
-       ["couchbase-01:11210, couchbase-02:11211"].  The root and
+       ["couchbase-01:11210", "couchbase-02:11211"].  The root and
        parents path should have bucket and SASL auth info.
        Use the main(entry_funcs) parameter to specify your own implementation."""
     debug("  " * level, "MC-STATS", val)
