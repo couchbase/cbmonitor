@@ -41,9 +41,9 @@ SECTION_CONFIG = {"settings": {"id": 0,
                             "show_col_hdrs": True,
                             "show_col_hdr_in_cell": False},
                   "Memory Stats": {"id": 4,
-                                     "show_row_hdrs": False,
-                                     "show_col_hdrs": True,
-                                     "show_col_hdr_in_cell": False}}
+                                   "show_row_hdrs": False,
+                                   "show_col_hdrs": True,
+                                   "show_col_hdr_in_cell": False}}
 
 tbl = Table("cbtop", sep=" ")
 cur_row = {}      # {sec_nam: row name}
