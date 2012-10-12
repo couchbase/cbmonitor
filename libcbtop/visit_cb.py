@@ -260,7 +260,7 @@ def mc_worker(jobs, stats, ctl, store, timeout=5):
                       % (val, delta))
 
         if delta < timeout:
-            logging.debug("mc_worker sleep for %s seconds" % (timeout -delta))
+            logging.debug("mc_worker sleep for %s seconds" % (timeout - delta))
             time.sleep(timeout - delta)
 
     logging.info("mc_worker stopped")
