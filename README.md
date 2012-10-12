@@ -23,6 +23,10 @@ Dependencies
 
     pip install httplib2
 
+    pip install pyjade
+
+    pip install couchbase
+
 Web application setup
 ---------------------
 

@@ -60,9 +60,11 @@ SECRET_KEY = 'c9j1v$z(t#-(_%i38wu@(n+&amp;^w6ki@$c!k0b80ts8=(@hb+*ln'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
+    ('pyjade.ext.django.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+        'django.template.loaders.eggs.Loader',
+    )),
 )
 
 MIDDLEWARE_CLASSES = (
@@ -94,8 +96,14 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'lettuce.django',
     'httpproxy',
+    'pyjade',
 )
 
 # Proxy settings
 PROXY_DOMAIN = 'localhost'
 PROXY_PORT = 3133
+
+# Couchbase settings
+CB_HOST = '10.3.121.220'
+CB_PORT = 8091
+CB_BUCKET = 'default'

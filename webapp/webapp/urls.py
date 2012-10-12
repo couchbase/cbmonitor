@@ -10,4 +10,6 @@ urlpatterns = patterns(
     url(r'^seriesly/(?P<url>.*)$', 'httpproxy.views.proxy'),
     url(r'^demo-flot/$', 'webapp.views.demo_flot', name='demo_flot'),
     url(r'^demo-rickshaw/$', 'webapp.views.demo_rickshaw', name='demo_rickshaw'),
+    url(r'^cbdata$', 'webapp.views.cbdata', name='cbdata'),
+    url(r'^.*$', 'webapp.views.litmus', name='litmus'),
 )

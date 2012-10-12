@@ -1,0 +1,44 @@
+extends dashboard/layout
+
+block include
+    link(rel='stylesheet', href='/static/styles/jquery.dataTables.css')
+    script(src='/static/scripts/jquery.dataTables.min.js')
+    script(charset='utf-8')
+
+        function convertTime(time) {
+            // move to server side if slow
+            var date = new Date(time*1000);
+            return date.getHours() + ':' + date.getMinutes() + ':' +
+                   date.getSeconds() + '_' + date.getMonth() + '-' +
+                   date.getDate() + '-' + date.getFullYear() ;
+        }
+
+        function addRow(build, time, dur, cons) {
+            $('#litmus').dataTable().fnAddData([build, convertTime(time),
+                                                dur, cons]);
+        }
+
+        $(document).ready(function(){
+            $('#litmus').dataTable();
+            $.get("/cbdata", { ddoc: "litmus", view: "reb" },
+               function(data) {
+                   $('#litmus tbody').empty();
+                   $.each(data, function(index, result) {
+                        addRow(result.key, result.value[0],
+                               result.value[1], result.value[2]);
+                   });
+            }, 'json');
+        });
+
+block main
+    table(id='litmus')
+        thead
+            tr
+                th(rowspan='2') Build
+                th(colspan='3') Rebalance
+            tr
+                th Time
+                th Duration (sec)
+                th Cons View
+        tbody
+
