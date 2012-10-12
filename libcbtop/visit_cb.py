@@ -246,10 +246,10 @@ def mc_worker(jobs, stats, ctl, store, timeout=5):
 
             # initialize handlers to dump data json doc
             j_handler = JsonHandler()
-            s_hanlder = SerieslyHandler(store)
+            s_handler = SerieslyHandler(store)
 
             # collect data from source and emit to handlers
-            mc_coll = MemcachedCollector([mc_source], [j_handler, s_hanlder])
+            mc_coll = MemcachedCollector([mc_source], [j_handler, s_handler])
             mc_coll.collect()
             mc_coll.emit()
             stats.put([mc_source.fast, mc_source.meta], block=True)
