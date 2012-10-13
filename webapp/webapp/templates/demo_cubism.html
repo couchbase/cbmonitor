@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Cubism demo</title>
+    <script type='text/javascript' src='/static/scripts/jquery-1.7.min.js'></script>
+    <script type='text/javascript' src='/static/scripts/seriesly.js'></script>
+    <script type='text/javascript' src='/static/scripts/d3.v2.js'></script>
+    <script type='text/javascript' src='/static/scripts/cubism.v1.js'></script>
+</head>
+
+<body>
+
+<div id='chart'></div>
+
+<script type='text/javascript'>
+    var seriesly = new SERIESLY.Seriesly("ns_db");
+
+
+
+    var metrics = [
+        "bytes_written",
+        "vb_avg_active_queue_age",
+        "ep_tap_total_qlen",
+        "ep_queue_size",
+        "vb_replica_queue_size"
+    ];
+
+    var url = seriesly.biuldURL("60000", metrics);
+
+    $.ajax({url: url, dataType: "json", success: function(data){
+        var context = cubism.context()
+                .serverDelay(0)
+                .clientDelay(0)
+                .step(1e3)
+                .size(960);
+
+        var foo = random("foo"),
+                bar = random("bar");
+
+        function random(name) {
+            var value = 0,
+                    values = [],
+                    i = 0,
+                    last;
+            return context.metric(function(start, stop, step, callback) {
+                start = +start, stop = +stop;
+                if (isNaN(last)) last = start;
+                while (last < stop) {
+                    last += step;
+                    value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += .2)));
+                    values.push(value);
+                }
+                callback(null, values = values.slice((start - stop) / step));
+            }, name);
+        }
+
+        d3.select("#chart").call(function(div) {
+
+            div.append("div")
+                    .attr("class", "axis")
+                    .call(context.axis().orient("top"));
+
+            div.selectAll(".horizon")
+                    .data([foo, bar, foo.add(bar), foo.subtract(bar)])
+                    .enter().append("div")
+                    .attr("class", "horizon")
+                    .call(context.horizon().extent([-20, 20]));
+
+            div.append("div")
+                    .attr("class", "rule")
+                    .call(context.rule());
+
+        });
+    }});
+
+
+</script>
+
+</body>
+</html>

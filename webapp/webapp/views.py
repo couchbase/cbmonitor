@@ -33,5 +33,10 @@ def cbdata(request):
 
     return HttpResponse(results, mimetype="application/json")
 
+
 def demo_nvd3(request):
     return render_to_response('demo_nvd3.html')
+
+
+def demo_cubism(request):
+    return render_to_response('demo_cubism.html')

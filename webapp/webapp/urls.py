@@ -13,4 +13,5 @@ urlpatterns = patterns(
     url(r'^cbdata$', 'webapp.views.cbdata', name='cbdata'),
     url(r'^.*$', 'webapp.views.litmus', name='litmus'),
     url(r'^demo-nvd3/$', 'webapp.views.demo_nvd3', name='demo_nvd3'),
+    url(r'^demo-cubism/$', 'webapp.views.demo_cubism', name='demo_cubism'),
 )
