@@ -8,9 +8,9 @@ block include
         function convertTime(time) {
             // move to server side if slow
             var date = new Date(time*1000);
-            return date.getHours() + ':' + date.getMinutes() + ':' +
-                   date.getSeconds() + '_' + date.getMonth() + '-' +
-                   date.getDate() + '-' + date.getFullYear() ;
+            return date.getFullYear() + '-' + (date.getMonth()+1) + '-' +
+                   date.getDate() + '_'  + date.getHours() + ':' +
+                   date.getMinutes() + ':' + date.getSeconds();
         }
 
         function addRow(build, time, dur, cons) {
