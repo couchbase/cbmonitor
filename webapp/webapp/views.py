@@ -32,3 +32,6 @@ def cbdata(request):
     print "[cbdata] request: %s, results: %s" % (request.GET, results)
 
     return HttpResponse(results, mimetype="application/json")
+
+def demo_nvd3(request):
+    return render_to_response('demo_nvd3.html')
