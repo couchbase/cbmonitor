@@ -8,7 +8,7 @@ from couchbase.client import Couchbase
 
 
 def litmus(request):
-    return render_to_response('dashboard/litmus.jade')
+    return render_to_response('litmus/litmus.jade')
 
 
 def cbdata(request):
