@@ -6,10 +6,6 @@ from django.conf import settings
 
 from couchbase.client import Couchbase
 
-BUCKET_NAME = settings.CB_BUCKET
-CB = Couchbase("%s:%s" % (settings.CB_HOST, settings.CB_PORT),
-               BUCKET_NAME, "")
-BUCKET = CB[BUCKET_NAME]
 
 def demo_flot(request):
     return render_to_response('demo_flot.html')
@@ -24,12 +20,15 @@ def litmus(request):
 
 
 def cbdata(request):
+    cb = Couchbase(settings.COUCHBASE['HOST'],
+                   settings.COUCHBASE['USERNAME'],
+                   settings.COUCHBASE['PASSWORD'])
 
-    view = BUCKET.view("_design/%s/_view/%s"\
-                       % (request.GET["ddoc"], request.GET["view"]))
+    bucket = cb[settings.COUCHBASE['BUCKET']]
+
+    view = bucket.view("_design/{0}/_view/{1}".format(request.GET["ddoc"],
+                                                      request.GET["view"]))
     results = json.dumps(view)
-
-    print "[cbdata] request: %s, results: %s" % (request.GET, results)
 
     return HttpResponse(results, mimetype="application/json")
 

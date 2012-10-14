@@ -104,6 +104,10 @@ PROXY_DOMAIN = 'localhost'
 PROXY_PORT = 3133
 
 # Couchbase settings
-CB_HOST = '10.3.121.220'
-CB_PORT = 8091
-CB_BUCKET = 'default'
+COUCHBASE = {
+    'HOST': '10.3.121.220',
+    'PORT': '8091',
+    'USERNAME': 'Administrator',
+    'PASSWORD': 'password',
+    'BUCKET': 'default'
+}
