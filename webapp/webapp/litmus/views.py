@@ -68,7 +68,8 @@ def get(request):
     """
     bucket = get_bucket_handler()
 
-    builds = bucket.view('_design/{0}/_view/{1}'.format('litmus', 'dashboard'))
+    builds = bucket.view('_design/{0}/_view/{1}'.format('litmus', 'dashboard'),
+                         stale='false', limit=1000)
 
     header = set(key for build in builds for key in build['value'].keys()) - \
         set(('Timestamp', ))
