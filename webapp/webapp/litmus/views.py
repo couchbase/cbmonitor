@@ -24,15 +24,18 @@ def post(request):
     metric -- metric name (e.g., 'Rebalance time, sec')
     value -- metric value (e.g., 610)
 
+    It supports multivalued query parameters.
+
     Sample request:
-        curl \
-            -X POST \
-            -d "build=2.0.0-1723-rel-enterprise&metric=Latency, ms&value=555" \
-            http://localhost:8000/litmus/post/
+        curl -d "build=2.0.0-1723-rel-enterprise\
+                 &metric=Latency, ms&value=555\
+                 &metric=Query throughput&value=1746" \
+            -X POST http://localhost:8000/litmus/post/
     """
     try:
-        build, metric, value = \
-            request.POST['build'], request.POST['metric'], request.POST['value']
+        build = request.POST['build']
+        metrics = request.POST.getlist('metric')
+        values = request.POST.getlist('value')
     except KeyError as e:
         return HttpResponse(e, status=400)
 
@@ -45,7 +48,8 @@ def post(request):
 
     build_data['Timestamp'] = time.strftime('%Y-%m-%d %H:%M:%S',
                                             time.localtime())
-    build_data[metric] = value
+    for metric, value in zip(metrics, values):
+        build_data[metric] = value
     bucket_handler.set(build, 0, 0, build_data)
     return HttpResponse(content='Success')
 
