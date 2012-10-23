@@ -3,6 +3,7 @@ extends litmus/layout
 block include
     link(rel='stylesheet', href='/static/styles/jquery.dataTables.css')
     script(src='/static/scripts/jquery.dataTables.min.js')
+    script(src='/static/scripts/jquery.cookie.js')
     script(src='/static/scripts/litmus.js')
     script(charset='utf-8')
         $(document).ready(function(){
@@ -11,7 +12,7 @@ block include
                 $('#settings table').toggle('blind');
             });
             $('#settings table').change(function() {
-                getSettings();
+                saveSettings();
                 applyErrorRanges();
             });
             $.get('/litmus/get/', { },

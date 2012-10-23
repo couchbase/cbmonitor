@@ -3,8 +3,8 @@
 var oTable;
 var hdrs = [];
 var allBuilds = [];
-var baselines = [];              // TODO: persist
-var ERROR_RANGE = 0.1;                   // TODO: user define
+var baselines = [];
+var ERROR_RANGE = 0.1;           // TODO: user define
 
 function createSettings() {
     /*
@@ -29,12 +29,37 @@ function createSettings() {
     return content;
 }
 
-function getSettings() {
+function saveSettings() {
     /*
-     * Get user defined settings.
+     * Save user defined settings to cookie
      */
     $('#settings table tbody tr').each(function(i) {
+        var col = $(this).find('td').eq(0).text();
         var build = $(this).find("select option:selected").text();
+        $.cookie(col, build, { expires: 14 });
+        oTable.$('tr').each(function() {
+            var row = oTable.fnGetData(this);
+            if (row[0] === build) {
+                baselines[i] = parseInt(row[2+i]);
+            }
+        });
+    });
+}
+
+function getSettings() {
+    /*
+     * Get user defined settings
+     */
+    $('#settings table tbody tr').each(function(i) {
+        var col = $(this).find('td').eq(0).text();
+        var build = $.cookie(col);
+        if (build !== null) {
+            $(this).find('select option').filter(function() {
+                return $(this).text() === build;
+            }).attr('selected', true);
+        } else {
+            build = $(this).find("select option:selected").text();
+        }
         oTable.$('tr').each(function() {
             var row = oTable.fnGetData(this);
             if (row[0] === build) {
@@ -46,10 +71,10 @@ function getSettings() {
 
 function applyErrorRanges() {
     /*
-     * Apply error range check for each cell.
+     * Apply error range check for each cell
      *
-     * If data falls out of the range, turns cell to red.
-     * Accept negative ranges.
+     * If data falls out of the range, turns cell to red
+     * Accept negative ranges
      */
     oTable.$('tr').each(function() {
         var row = $(this);
@@ -97,6 +122,7 @@ function renderTable(data) {
         'aaData': data.slice(1),
         'aoColumns': hdrs,
         'aaSorting': [[0, 'desc']],
+        'bStateSave': true,
         'fnDrawCallback': function() {
             $('#loading').remove();
         }
