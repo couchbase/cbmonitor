@@ -12,7 +12,7 @@ from couchbase.exception import MemcachedError
 
 def dashboard(request):
     """Main litmus dashboard"""
-    return render_to_response('litmus/litmus.jade')
+    return render_to_response('litmus.jade')
 
 
 @csrf_exempt
