@@ -31,12 +31,6 @@ Couchbase:
 
     pip install couchbase
 
-Testing:
-
-    pip install lettuce
-
-    pip install nose
-
 Web application setup
 ---------------------
 
@@ -47,7 +41,7 @@ Web application setup
 Testing
 -------
 
-    python webapp/manage.py harvest -d webapp
+    python webapp/manage.py test
 
 virtualenv tips
 ---------------
