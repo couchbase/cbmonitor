@@ -23,6 +23,9 @@ block include
                     getSettings();
                     applyErrorRanges();
             }, 'json');
+            setInterval(function() {
+                location.reload()
+            }, 300000);
         });
 
 block main
