@@ -25,12 +25,6 @@ cbtop:
 
     pip install tabula
 
-Couchbase:
-
-    pip install requests==0.14.0
-
-    pip install couchbase
-
 Web application setup
 ---------------------
 

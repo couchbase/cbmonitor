@@ -1,13 +1,13 @@
 import json
 import time
+from collections import defaultdict
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
-from django.conf import settings
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
-from couchbase.client import Couchbase
-from couchbase.exception import MemcachedError
+
+from models import TestResults
 
 
 def dashboard(request):
@@ -39,18 +39,10 @@ def post(request):
     except KeyError as e:
         return HttpResponse(e, status=400)
 
-    bucket_handler = get_bucket_handler()
-    try:
-        r = bucket_handler.get(build)
-        build_data = eval(r[-1])
-    except MemcachedError:
-        build_data = dict()
-
-    build_data['Timestamp'] = time.strftime('%Y-%m-%d %H:%M:%S',
-                                            time.localtime())
+    timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
     for metric, value in zip(metrics, values):
-        build_data[metric] = value
-    bucket_handler.set(build, 0, 0, build_data)
+        TestResults.objects.create(build=build, metric=metric, value=value,
+                                   timestamp=timestamp)
     return HttpResponse(content='Success')
 
 
@@ -66,32 +58,21 @@ def get(request):
          ["2.0.0-1723-rel-enterprise", "2012-10-16 11:10:30", "1024", "610"], \
          ["2.0.0-1724-rel-enterprise", "2012-10-16 11:16:31", "777", ""]]
     """
-    bucket = get_bucket_handler()
+    metrics = TestResults.objects.values('metric').distinct()
+    all_stats = TestResults.objects.values().distinct()
+    agg_stats = defaultdict(dict)
+    for stat in all_stats:
+        agg_stats[stat['build']][stat['metric']] = stat['value']
+        agg_stats[stat['build']]['Timestamp'] = stat['timestamp']
 
-    builds = bucket.view('_design/{0}/_view/{1}'.format('litmus', 'dashboard'),
-                         stale='false', limit=1000)
-
-    header = set(key for build in builds for key in build['value'].keys()) - \
-        set(('Timestamp', ))
-
-    response = [['Build', 'Timestamp'] + list(header), ]
-
-    for build in builds:
-        row = [build['key']]
-        for column in response[0][1:]:
+    response = [['Build', 'Timestamp'] + [row['metric'] for row in metrics], ]
+    for build, metrics in agg_stats.iteritems():
+        row = [build, ]
+        for metric in response[0][1:]:
             try:
-                row.append(build['value'][column])
+                row.append(metrics[metric])
             except KeyError:
                 row.append('')
         response.append(row)
 
     return HttpResponse(json.dumps(response), mimetype='application/json')
-
-
-def get_bucket_handler():
-    """Return instance of Couchbase client"""
-    cb = Couchbase(settings.COUCHBASE['HOST'],
-                   settings.COUCHBASE['USERNAME'],
-                   settings.COUCHBASE['PASSWORD'])
-
-    return cb[settings.COUCHBASE['BUCKET']]

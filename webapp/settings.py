@@ -7,7 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'infra.db'
+        'NAME': 'cbmonitor.db'
     }
 }
 
@@ -99,12 +99,3 @@ INSTALLED_APPS = (
 # Proxy settings
 PROXY_DOMAIN = 'localhost'
 PROXY_PORT = 3133
-
-# Couchbase settings
-COUCHBASE = {
-    'HOST': '10.3.121.220',
-    'PORT': '8091',
-    'USERNAME': 'Administrator',
-    'PASSWORD': 'password',
-    'BUCKET': 'default'
-}
