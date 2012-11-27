@@ -4,7 +4,8 @@ var oTable;
 var hdrs = [];
 var allBuilds = [];
 var baselines = [];
-var ERROR_RANGE = 0.1;           // TODO: user define
+var WARNING_RANGE = 0.1;
+var ERROR_RANGE = 0.3;           // TODO: user define
 
 function createSettings() {
     /*
@@ -81,12 +82,19 @@ function applyErrorRanges() {
         var vals = oTable.fnGetData(this);
         $.each(vals.slice(2), function(j, v) {
             v = parseInt(v);
-            $(row).find('td').eq(j+2).removeClass();
+            $(row).find('td').eq(j+2).removeAttr("style");
             if (!isNaN(baselines[j]) && !isNaN(v)) {
                 var delta = (v - baselines[j]) / baselines[j];
+                if (Math.abs(ERROR_RANGE) < Math.abs(WARNING_RANGE)) {
+                    console.log("invalid error/warning ranges");
+                    return;
+                }
                 if ((delta > ERROR_RANGE && ERROR_RANGE > 0) ||
                     (delta < ERROR_RANGE && ERROR_RANGE < 0)) {
-                    $(row).find('td').eq(j+2).addClass('red');
+                    $(row).find('td').eq(j+2).css("background-color","red");
+                } else if ((delta > WARNING_RANGE && delta < ERROR_RANGE) ||
+                           (delta < WARNING_RANGE && delta > ERROR_RANGE)) {
+                    $(row).find('td').eq(j+2).css("background-color","yellow");
                 }
             }
         });
