@@ -1,8 +1,8 @@
 "use strict";
 
 var oTable;
-var hdrs = [];
-var allBuilds = [];
+var colHdrs = [];       // e.g: ['sTitle': 'Metric', 'sTitle': 'Timestamp', ... ]
+var rowHdrs = [];       // e.g: ['Latency Set', 'Latency Get', ...]
 var baselines = [];
 var WARNING_RANGE = 0.1;
 var ERROR_RANGE = 0.3;           // TODO: user define
@@ -17,13 +17,13 @@ function createSettings() {
     var buildList = '';
     var content = '';
 
-    $.each(allBuilds, function(j, build) {
-        buildList += '<option value="' + build + '">';
-        buildList +=  build + '</option>';
+    $.each(colHdrs.slice(2), function(j, build) {
+        buildList += '<option value="' + build.sTitle + '">';
+        buildList +=  build.sTitle + '</option>';
     });
 
-    $.each(hdrs.slice(2), function(i, hdr) {
-        content += '<tr><td>' + hdr.sTitle + '</td>';
+    $.each(rowHdrs, function(i, metric) {
+        content += '<tr><td>' + metric + '</td>';
         content += '<td><select>' + buildList + '</select></td></tr>';
     });
 
@@ -107,11 +107,11 @@ function processData(data) {
      * Current implementation retrieves info only
      */
     $.each(data[0], function(i, v) {
-        hdrs[i] = {'sTitle': v};
+        colHdrs[i] = {'sTitle': v};
     });
 
     $.each(data.slice(1), function(i, v) {
-        allBuilds[i] = v[0];
+        rowHdrs[i] = v[0];
     });
 
     return data;
@@ -128,7 +128,7 @@ function renderTable(data) {
         'bPaginate': true,
         'sPaginationType': 'full_numbers',
         'aaData': data.slice(1),
-        'aoColumns': hdrs,
+        'aoColumns': colHdrs,
         'aaSorting': [[0, 'desc']],
         'bStateSave': true,
         'fnDrawCallback': function() {

@@ -54,23 +54,23 @@ def get(request):
         curl http://localhost:8000/litmus/get/
 
     JSON response:
-        [["Build", "Timestamp", "Query throughput", "Rebalance time, sec"], \
-         ["2.0.0-1723-rel-enterprise", "2012-10-16 11:10:30", "1024", "610"], \
-         ["2.0.0-1724-rel-enterprise", "2012-10-16 11:16:31", "777", ""]]
+        [["Metric", "Timestamp", "2.0.0-1723-rel-enterprise", "2.0.0-1724-rel-enterprise"], \
+         ["Query throughput", "2012-10-16 11:10:30", "1024", "610"], \
+         ["Latency, ms", "2012-10-16 11:16:31", "777", ""]]
     """
-    metrics = TestResults.objects.values('metric').distinct()
+    builds = TestResults.objects.values('build').distinct()
     all_stats = TestResults.objects.values().distinct()
     agg_stats = defaultdict(dict)
     for stat in all_stats:
-        agg_stats[stat['build']][stat['metric']] = stat['value']
-        agg_stats[stat['build']]['Timestamp'] = stat['timestamp']
+        agg_stats[stat['metric']][stat['build']] = stat['value']
+        agg_stats[stat['metric']]['Timestamp'] = stat['timestamp']
 
-    response = [['Build', 'Timestamp'] + [row['metric'] for row in metrics], ]
-    for build, metrics in agg_stats.iteritems():
-        row = [build, ]
-        for metric in response[0][1:]:
+    response = [['Metric', 'Timestamp'] + [row['build'] for row in builds], ]
+    for metric, builds in agg_stats.iteritems():
+        row = [metric, ]
+        for build in response[0][1:]:
             try:
-                row.append(metrics[metric])
+                row.append(builds[build])
             except KeyError:
                 row.append('')
         response.append(row)
