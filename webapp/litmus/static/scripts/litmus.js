@@ -1,8 +1,8 @@
 "use strict";
 
 var oTable;
-var colHdrs = [];       // e.g: ['sTitle': 'Metric', 'sTitle': 'Timestamp', ... ]
-var rowHdrs = [];       // e.g: ['Latency Set', 'Latency Get', ...]
+var colHdrs = [];       // e.g: ['sTitle': 'Testcase', 'sTitle': 'Env', ... ]
+var rowHdrs = [];       // e.g: ['mixed-2suv', 'lucky6', ...]
 var baselines = [];
 var WARNING_RANGE = 0.1;
 var ERROR_RANGE = 0.3;           // TODO: user define

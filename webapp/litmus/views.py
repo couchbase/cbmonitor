@@ -21,6 +21,8 @@ def post(request):
     """REST API for posting litmus results.
 
     build -- build version (e.g., '2.0.0-1723-rel-enterprise')
+    testcase -- testcase (e.g: 'lucky6')
+    env -- test enviornment (e.g, 'terra')
     metric -- metric name (e.g., 'Rebalance time, sec')
     value -- metric value (e.g., 610)
 
@@ -28,12 +30,15 @@ def post(request):
 
     Sample request:
         curl -d "build=2.0.0-1723-rel-enterprise\
+                 &testcase=lucky6&env=terra\
                  &metric=Latency, ms&value=555\
                  &metric=Query throughput&value=1746" \
             -X POST http://localhost:8000/litmus/post/
     """
     try:
         build = request.POST['build']
+        testcase = request.POST['testcase']
+        env = request.POST['env']
         metrics = request.POST.getlist('metric')
         values = request.POST.getlist('value')
     except KeyError as e:
@@ -41,8 +46,8 @@ def post(request):
 
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
     for metric, value in zip(metrics, values):
-        TestResults.objects.create(build=build, metric=metric, value=value,
-                                   timestamp=timestamp)
+        TestResults.objects.create(build=build, testcase=testcase, env=env,
+                                   metric=metric, value=value, timestamp=timestamp)
     return HttpResponse(content='Success')
 
 
@@ -54,23 +59,31 @@ def get(request):
         curl http://localhost:8000/litmus/get/
 
     JSON response:
-        [["Metric", "Timestamp", "2.0.0-1723-rel-enterprise", "2.0.0-1724-rel-enterprise"], \
-         ["Query throughput", "2012-10-16 11:10:30", "1024", "610"], \
-         ["Latency, ms", "2012-10-16 11:16:31", "777", ""]]
+        [["Testcase", "Env", "Metric", "Timestamp",
+         "2.0.0-1723-rel-enterprise", "2.0.0-1724-rel-enterprise"], \
+         ["lucky6", "terra", "Query throughput", "2012-10-16 11:10:30",
+          "1024", "610"], \
+         ["mixed-2suv", "vesta", "Latency, ms", "2012-10-16 11:16:31",
+         "777", ""]]
     """
     builds = TestResults.objects.values('build').order_by('build').reverse().distinct()
     all_stats = TestResults.objects.values().distinct()
     agg_stats = defaultdict(dict)
     for stat in all_stats:
-        agg_stats[stat['metric']][stat['build']] = stat['value']
-        agg_stats[stat['metric']]['Timestamp'] = stat['timestamp']
+        key = "%s-%s-%s" % (stat['testcase'], stat['env'], stat['metric'])
+        agg_stats[key]['testcase'] = stat['testcase']
+        agg_stats[key]['env'] = stat['env']
+        agg_stats[key]['metric'] = stat['metric']
+        agg_stats[key]['timestamp'] = stat['timestamp']
+        agg_stats[key][stat['build']] = stat['value']
 
-    response = [['Metric', 'Timestamp'] + [row['build'] for row in builds], ]
-    for metric, builds in agg_stats.iteritems():
-        row = [metric, ]
-        for build in response[0][1:]:
+    response = [['Testcase', 'Env', 'Metric', 'Timestamp']
+                + [row['build'] for row in builds], ]
+    for key, val in agg_stats.iteritems():
+        row = [val['testcase'], val['env'], val['metric'], val['timestamp'], ]
+        for build in response[0][4:]:
             try:
-                row.append(builds[build])
+                row.append(val[build])
             except KeyError:
                 row.append('')
         response.append(row)
