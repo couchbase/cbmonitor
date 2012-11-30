@@ -36,9 +36,9 @@ def post(request):
             -X POST http://localhost:8000/litmus/post/
     """
     try:
-        build = request.POST['build']
-        testcase = request.POST['testcase']
-        env = request.POST['env']
+        build = request.POST['build'].strip()
+        testcase = request.POST['testcase'].strip()
+        env = request.POST['env'].strip()
         metrics = request.POST.getlist('metric')
         values = request.POST.getlist('value')
     except KeyError as e:
