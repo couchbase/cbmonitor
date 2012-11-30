@@ -58,7 +58,7 @@ def get(request):
          ["Query throughput", "2012-10-16 11:10:30", "1024", "610"], \
          ["Latency, ms", "2012-10-16 11:16:31", "777", ""]]
     """
-    builds = TestResults.objects.values('build').distinct()
+    builds = TestResults.objects.values('build').order_by('build').reverse().distinct()
     all_stats = TestResults.objects.values().distinct()
     agg_stats = defaultdict(dict)
     for stat in all_stats:
