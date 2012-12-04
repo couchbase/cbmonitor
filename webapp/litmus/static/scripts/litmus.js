@@ -137,4 +137,39 @@ function renderTable(data) {
     }).bind('sort', function () {
         applyErrorRanges();
     });
+
+    oTable.$('td').each(function() {
+        var pos = oTable.fnGetPosition(this);
+        if (pos[1] < 4) {
+            return;     // support test results for now
+        }
+        var testcase= data[pos[0] + 1][0];
+        var env = data[pos[0] + 1][1];
+        var metric = data[pos[0] + 1][2];
+        var build = colHdrs[pos[1]]['sTitle'];
+        $(this).qtip({
+            content: {
+                text: 'Loading...',
+                ajax: {
+                    url: '../get/comment',
+                    type: 'GET',
+                    loading: false,
+                    data: {'testcase': testcase,
+                           'env': env,
+                           'build': build,
+                           'metric': metric},
+                    success: function(data, status) {
+                        this.set('content.text', data);
+                    }
+                }
+            },
+            position: {
+                at: 'bottom left',
+                my: 'top left'
+            },
+            style: {
+                classes: 'qtip-shadow'
+            }
+        });
+    });
 }
