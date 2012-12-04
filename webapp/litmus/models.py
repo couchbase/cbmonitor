@@ -9,6 +9,7 @@ class TestResults(models.Model):
     testcase = models.CharField(max_length=128)
     metric = models.CharField(max_length=128)
     value = models.FloatField()
+    comment = models.CharField(max_length=1024)
 
     class Admin:
         pass
