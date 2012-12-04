@@ -159,16 +159,41 @@ function renderTable(data) {
                            'build': build,
                            'metric': metric},
                     success: function(data, status) {
-                        this.set('content.text', data);
+                        if ($.trim(data).length === 0) {
+                            this.set('content.text', 'Click to edit comment');
+                        } else {
+                            this.set('content.text', data);
+                        }
                     }
                 }
             },
             position: {
-                at: 'bottom left',
+                at: 'bottom center',
                 my: 'top left'
             },
+            show: {
+                solo: true
+            },
+            hide: 'unfocus',
             style: {
                 classes: 'qtip-shadow'
+            },
+            events: {
+                focus: function(event, api) {
+                    $(this).find('.qtip-content').editable( '../post/comment/', {
+                        submitdata: function (value, settings) {
+                            return {
+                                "testcase": testcase,
+                                "env": env,
+                                "metric": metric,
+                                "build": build,
+                                "comment": $('input[name=value]').val()
+                            };
+                        },
+                        height: '14px',
+                        width: '100%'
+                    });
+                }
             }
         });
     });
