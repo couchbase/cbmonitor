@@ -164,6 +164,10 @@ function renderTable(data) {
                         } else {
                             this.set('content.text', data);
                         }
+                    },
+                    error: function(response) {
+                        console.error(response.responseText);
+                        this.set('content.text', 'Click to edit comment');
                     }
                 }
             },
