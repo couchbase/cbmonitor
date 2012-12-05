@@ -8,7 +8,7 @@ class TestResults(models.Model):
     env = models.CharField(max_length=128)
     testcase = models.CharField(max_length=128)
     metric = models.CharField(max_length=128)
-    value = models.FloatField()
+    value = models.FloatField(null=True, blank=True)
     comment = models.CharField(max_length=1024)
 
     class Admin:

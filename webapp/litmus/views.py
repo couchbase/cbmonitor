@@ -120,11 +120,14 @@ def post_comment(request):
 
     objs = TestResults.objects.filter(testcase=testcase, env=env,
                                       build=build, metric=metric)
-    if not objs:
-        return HttpResponse("empty result set", status=404)
 
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-    objs.update(comment=comment, timestamp=timestamp)
+    if not objs:
+        TestResults.objects.create(build=build, testcase=testcase,
+                                   env=env, metric=metric,
+                                   timestamp=timestamp, comment=comment)
+    else:
+        objs.update(comment=comment, timestamp=timestamp)
 
     return HttpResponse(content=comment)
 
