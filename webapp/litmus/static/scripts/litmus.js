@@ -197,4 +197,6 @@ function renderTable(data) {
             }
         });
     });
+
+    new FixedHeader(oTable);
 }

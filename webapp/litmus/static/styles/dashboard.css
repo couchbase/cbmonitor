@@ -22,3 +22,7 @@ footer {
 .red {
     background-color: #a52a2a;
 }
+
+.FixedHeader_Cloned th {
+    background-color: #ffffff;
+}
