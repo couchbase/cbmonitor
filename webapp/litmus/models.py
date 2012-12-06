@@ -26,6 +26,9 @@ class TestResults(models.Model):
     comment = models.CharField(max_length=1024)
     settings = models.ForeignKey(Settings)
 
+    class Meta:
+        unique_together = ("testcase", "env", "metric", "build")
+
     class Admin:
         pass
 

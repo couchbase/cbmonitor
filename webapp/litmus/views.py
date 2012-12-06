@@ -15,6 +15,28 @@ def dashboard(request):
     return render_to_response('litmus.jade')
 
 
+def update_or_create(testcase, env, build, metric, value=None, comment=None):
+    """Update testresults/settings if exist, otherwise create new ones.
+
+    :return created     True if created new results, otherwise False
+    """
+
+    settings = Settings.objects.get_or_create(testcase=testcase,
+                                              metric=metric)[0]
+
+    testresults, created = TestResults.objects.get_or_create(build=build,
+                                                             testcase=testcase, env=env,
+                                                             metric=metric, settings=settings)
+    testresults.timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    if value:
+        testresults.value = value
+    if comment:
+        testresults.comment = comment
+    testresults.save()
+
+    return created
+
+
 @csrf_exempt
 @require_POST
 def post(request):
@@ -44,14 +66,9 @@ def post(request):
     except KeyError, e:
         return HttpResponse(e, status=400)
 
-    timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
     for metric, value in zip(metrics, values):
-        settings = Settings.objects.get_or_create(testcase=testcase,
-                                                  metric=metric)[0]
-        settings.testresults_set.create(build=build, testcase=testcase,
-                                        env=env, metric=metric,
-                                        value=value, timestamp=timestamp)
-    return HttpResponse(content='Success')
+        created = update_or_create(testcase, env, build, metric, value)
+    return HttpResponse(content='Created' if created else 'Updated')
 
 
 @require_GET
@@ -70,7 +87,7 @@ def get(request):
          "777", ""]]
     """
     builds = TestResults.objects.values('build').order_by('build').reverse().distinct()
-    all_stats = TestResults.objects.values().distinct()
+    all_stats = TestResults.objects.values()
     agg_stats = defaultdict(dict)
     for stat in all_stats:
         key = "%s-%s-%s" % (stat['testcase'], stat['env'], stat['metric'])
@@ -121,16 +138,7 @@ def post_comment(request):
     except KeyError, e:
         return HttpResponse(e, status=400)
 
-    objs = TestResults.objects.filter(testcase=testcase, env=env,
-                                      build=build, metric=metric)
-
-    timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-    if not objs:
-        TestResults.objects.create(build=build, testcase=testcase,
-                                   env=env, metric=metric,
-                                   timestamp=timestamp, comment=comment)
-    else:
-        objs.update(comment=comment, timestamp=timestamp)
+    update_or_create(testcase, env, build, metric, comment=comment)
 
     return HttpResponse(content=comment)
 
