@@ -104,3 +104,8 @@ PROXY_PORT = 3133
 
 # Couchbase Single Server
 COUCHDB_URI = "http://perf-cabinet.hq.couchbase.com:5984/"
+
+# Default settings for litmus dashboard
+LITMUS_BASELINE = "1.8.1-938-rel-enterprise"
+LITMUS_WARNING = 0.1
+LITMUS_ERROR = 0.3

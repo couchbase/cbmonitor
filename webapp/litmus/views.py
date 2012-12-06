@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
 
-from models import TestResults
+from models import Settings, TestResults
 
 
 def dashboard(request):
@@ -46,8 +46,11 @@ def post(request):
 
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
     for metric, value in zip(metrics, values):
-        TestResults.objects.create(build=build, testcase=testcase, env=env,
-                                   metric=metric, value=value, timestamp=timestamp)
+        settings = Settings.objects.get_or_create(testcase=testcase,
+                                                  metric=metric)[0]
+        settings.testresults_set.create(build=build, testcase=testcase,
+                                        env=env, metric=metric,
+                                        value=value, timestamp=timestamp)
     return HttpResponse(content='Success')
 
 
