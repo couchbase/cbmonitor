@@ -10,4 +10,5 @@ urlpatterns = patterns(
     url(r'^seriesly/(?P<url>.*)$', 'httpproxy.views.proxy'),
     url(r'^demos/(?P<demo>.*)/$', 'demos.views.main'),
     url(r'^litmus/', include('litmus.urls')),
+    url(r'^reports', include('reports.urls')),
 )

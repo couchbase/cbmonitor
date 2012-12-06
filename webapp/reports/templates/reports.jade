@@ -1,0 +1,27 @@
+!!! 5
+
+html(lang="en")
+head
+    title PDF Finder
+
+    link(rel="stylesheet", href="/static/styles/reports.css")
+    script(src="/static/scripts/jquery-1.7.min.js")
+    script(src="/static/scripts/spin.min.js")
+    script(src="/static/scripts/reports.js")
+
+body
+    div#main.myform
+        form#search
+            label(for="testcase") Test case
+                span.small e.g., lucky6 or reb-litmus
+            input#testcase(type="text", name="testcase")
+
+            label(for="build") Build
+                span.small e.g., 1723 or 1974
+            input#build(type="text", name="build")
+
+            button(type="submit") Search
+            div.spacer
+
+    div#results
+    div#spinner
