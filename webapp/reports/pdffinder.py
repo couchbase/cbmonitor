@@ -5,13 +5,13 @@ from django.conf import settings
 class PDFFinder():
 
     def __init__(self):
-        self.URI = settings.URI
+        self.uri = settings.COUCHDB_URI
 
     def url_gen(self, db_name, id, filename):
         """Generate attachment URL"""
 
         url = "{uri}{db_name}/{id}/{filename}"\
-              .format(uri=self.URI, db_name=db_name, id=id, filename=filename)
+              .format(uri=self.uri, db_name=db_name, id=id, filename=filename)
         return url
 
     def all_dbs(self):
@@ -19,7 +19,7 @@ class PDFFinder():
         databases = ("evperf2", "lucky6", "lucky8", "mixed", "read", "vperf",
                      "vperf4", "write", "xperf", "reb")
 
-        server = Server()
+        server = Server(self.uri)
         for db_name in databases:
             yield db_name, server[db_name]
 

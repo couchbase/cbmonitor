@@ -102,4 +102,4 @@ PROXY_DOMAIN = 'localhost'
 PROXY_PORT = 3133
 
 # Couchbase Single Server
-URI = "http://perf-cabinet.hq.couchbase.com:5984/"
+COUCHDB_URI = "http://perf-cabinet.hq.couchbase.com:5984/"
