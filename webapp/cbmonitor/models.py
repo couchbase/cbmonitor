@@ -32,5 +32,22 @@ class Server(models.Model):
         pass
 
 
+class Bucket(models.Model):
+
+    TYPES = (("Couchbase", "Couchbase"), ("Memcached", "Memcached"))
+
+    server = models.ForeignKey('Server')
+    name = models.CharField(max_length=25, default="default")
+    type = models.CharField(max_length=9, choices=TYPES, default="Couchbase")
+    port = models.IntegerField(default=11211)
+    password = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Admin:
+        pass
+
 admin.site.register(Cluster)
 admin.site.register(Server)
+admin.site.register(Bucket)
