@@ -6,6 +6,8 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
+from django.core import serializers
 
 from models import Settings, TestResults
 
@@ -170,3 +172,39 @@ def get_comment(request):
         return HttpResponse("empty result set", status=404)
 
     return HttpResponse(content=objs[0].comment)
+
+@require_GET
+def get_settings(request):
+    """REST API to get settings for litmus results.
+
+    testcase -- testcase (e.g: 'lucky6')
+    metric -- metric name (e.g., 'Latency, ms')
+
+    Sample request to get all settings:
+        curl http://localhost:8000/litmus/get/settings?all
+        curl http://localhost:8000/litmus/get/settings
+
+    Sample request to get a specific setting:
+        curl -G http://localhost:8000/litmus/get/settings \
+            -d "testcase=lucky6&metric=Latency,%20ms"
+    """
+    if not request.GET or 'all' in request.GET:
+        response = map(lambda d: d["fields"],
+                       serializers.serialize("python", Settings.objects.all()))
+        return HttpResponse(content=json.dumps(response))
+
+    try:
+        testcase = request.GET['testcase'].strip()
+        metric = request.GET['metric'].strip()
+    except KeyError, e:
+        return HttpResponse(e, status=400)
+
+    try:
+        obj = Settings.objects.get(testcase=testcase, metric=metric)
+    except ObjectDoesNotExist:
+        return HttpResponse("empty result set", status=404)
+
+    response = map(lambda d: d["fields"],
+                   serializers.serialize("python", [ obj, ]))
+
+    return HttpResponse(content=json.dumps(response))
