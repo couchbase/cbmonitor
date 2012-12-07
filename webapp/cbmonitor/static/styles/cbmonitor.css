@@ -1,0 +1,116 @@
+body {
+    font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+    font-size: 77%;
+}
+/* --Main container-- */
+.main {
+    position: absolute;
+    width: 90%;
+    height: 80%;
+    margin: 0 5%;
+    top: 10%
+}
+/* --Left board-- */
+.sources {
+    width: 33%;
+    height: 100%;
+    position: absolute;
+}
+.source {
+    width: 100%;
+    height: 31.6%;
+    position: absolute;
+}
+#clusters {
+    top: 5%;
+    background-color: #cecece;
+}
+#metrics {
+    top: 36.6%;
+    background-color: #b6b6b6;
+}
+#events {
+    top: 68.2%;
+    background-color: #8a8a8a;
+}
+/* --Right board-- */
+.charts {
+    position: absolute;
+    width: 67%;
+    height: 100%;
+    left: 33%;
+}
+.charts_panel {
+    position: relative;
+    width: 99%;
+    height: 4%;
+    padding: 0.5%;
+    background-color: #ffa935;
+}
+.cpanel_left {
+    top: 20%;
+    position: absolute;
+    width: 30%;
+}
+.cpanel_right {
+    position: absolute;
+    width: 70%;
+    left: 29.5%;
+    top: 20%;
+    text-align: right;
+}
+.chart_view_single {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.chart_view_double {
+    width: 100%;
+    height: 47.5%;
+    position: relative;
+}
+.chart_view_quadruple {
+    width: 50%;
+    height: 47.5%;
+    position: absolute;
+}
+#first_view {
+    top: 5%;
+    left: 0;
+    background-color: #92dd96;
+}
+#second_view {
+    top: 5%;
+    left: 50%;
+    background-color: #82bdde;
+}
+#third_view {
+    top: 52.5%;
+    left: 0;
+    background-color: #ffec8c;
+}
+#fourth_view {
+    top: 52.5%;
+    left: 50%;
+    background-color: #ff7b62;
+}
+/* --Footer & Header-- */
+.header {
+    position: absolute;
+    font-size: 161.6%;
+    width: 88%;
+    height: 5%;
+    margin: 0 5%;
+    padding: 1%;
+    background-color: #d1abff;
+}
+.footer {
+    position: absolute;
+    width: 88%;
+    top: 90%;
+    margin: 0 5%;
+    height: 5%;
+    text-align: right;
+    padding: 1%;
+    background-color: #d1abff;
+}

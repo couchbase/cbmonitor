@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'litmus',
     'demos',
     'reports',
+    'cbmonitor',
 )
 
 # Proxy settings
