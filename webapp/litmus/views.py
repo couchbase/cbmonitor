@@ -77,8 +77,13 @@ def post(request):
 def get(request):
     """REST API for getting litmus results.
 
-    Sample request:
-        curl http://localhost:8000/litmus/get/
+    Sample request to get all test results:
+        curl http://localhost:8000/litmus/get?all
+        curl http://localhost:8000/litmus/get
+
+    Sample request to get specific results:
+        curl -G http://localhost:8000/litmus/get \
+            -d "testcase=lucky6&metric=Latency,%20ms"
 
     JSON response:
         [["Testcase", "Env", "Metric", "Timestamp",
@@ -88,8 +93,14 @@ def get(request):
          ["mixed-2suv", "vesta", "Latency, ms", "2012-10-16 11:16:31",
          "777", ""]]
     """
-    builds = TestResults.objects.values('build').order_by('build').reverse().distinct()
-    all_stats = TestResults.objects.values()
+    if not request.GET or 'all' in request.GET:
+        objs = TestResults.objects.all()
+    else:
+        criteria = dict((key, request.GET[key]) for key in request.GET.iterkeys())
+        objs = TestResults.objects.filter(**criteria)
+
+    builds = objs.values('build').order_by('build').reverse().distinct()
+    all_stats = objs.values()
     agg_stats = defaultdict(dict)
     for stat in all_stats:
         key = "%s-%s-%s" % (stat['testcase'], stat['env'], stat['metric'])
