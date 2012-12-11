@@ -4,14 +4,33 @@ html(lang="en")
 head
     title cbmonitor
     link(rel="stylesheet", href="/static/styles/cbmonitor.css")
+    link(rel="stylesheet", href="/static/styles/jquery-ui.css")
+    script(src="/static/scripts/jquery-1.8.3.min.js")
+    script(src="/static/scripts/jquery-ui.min.js")
+    script(src="/static/scripts/cbmonitor.js")
 
 body
     div.header CBMONITOR
     div.main
         div.sources
-            div.source#clusters Clusters
-            div.source#metrics  Metrics
-            div.source#events   Events
+            div#accordion
+                h3 Clusters
+                div
+                    button#addc Add cluster
+                    button#adds(disabled) Add server
+                    button#addb(disabled) Add bucket
+                    br
+                    button#remc(disabled) Remove cluster
+                    button#rems(disabled) Remove server
+                    button#remb(disabled) Remove bucket
+                h3  Metrics
+                div
+                    button#plotm(disabled) Plot metric
+                    input#filterm(type="text")
+                h3  Events
+                div
+                    button#plote(disabled) Plot event
+                    input#filtere(type="text")
         div.charts
             div.charts_panel
                 div.cpanel_left [refresh] [share] [pdf]
