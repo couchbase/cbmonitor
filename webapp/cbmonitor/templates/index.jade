@@ -3,40 +3,18 @@
 html(lang="en")
 head
     title cbmonitor
-    link(rel="stylesheet", href="/static/styles/cbmonitor.css")
-    link(rel="stylesheet", href="/static/styles/smoothness/jquery-ui-1.9.2.custom.min.css")
-    script(src="/static/scripts/jquery-1.8.3.min.js")
-    script(src="/static/scripts/jquery-ui-1.9.2.custom.min.js")
-    script(src="/static/scripts/jquery.jstree.js")
-    script(src="/static/scripts/cbmonitor.js")
+    include static
 
 body
     div.header CBMONITOR
     div.main
         div.sources
             div#accordion
-                h3 Clusters
-                div#mmenu
-                    input#addc(type="button", value="Add cluster")
-                    input#renc(type="button", value="Edit")
-                    input#delc(type="button", value="Delete")
-                    input#adds(type="button", value="Add server")
-                    div#tree
-                h3  Metrics
-                div
-                    input#plotm(type="button", value="Plot metric", disabled)
-                    input#filterm(type="text")
-                h3  Events
-                div
-                    input#plote(type="button", value="Plot event", disabled)
-                    input#filtere(type="text")
+                include sources/clusters
+                include sources/metrics
+                include sources/events
         div.charts
-            div.charts_panel
-                div.cpanel_left [refresh] [share] [pdf]
-                div.cpanel_right [pause] [minute] [hour] [day] [week] [month] [all]
-            div.chart_view_quadruple#first_view  Chart #1
-            div.chart_view_quadruple#second_view Chart #2
-            div.chart_view_quadruple#third_view  Chart #3
-            div.chart_view_quadruple#fourth_view Chart #4
+            include charts/panel
+            include charts/views
 
     div.footer COPYRIGHT COUCHBASE 2012
