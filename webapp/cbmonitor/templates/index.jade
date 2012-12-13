@@ -4,9 +4,10 @@ html(lang="en")
 head
     title cbmonitor
     link(rel="stylesheet", href="/static/styles/cbmonitor.css")
-    link(rel="stylesheet", href="/static/styles/jquery-ui.css")
+    link(rel="stylesheet", href="/static/styles/smoothness/jquery-ui-1.9.2.custom.min.css")
     script(src="/static/scripts/jquery-1.8.3.min.js")
-    script(src="/static/scripts/jquery-ui.min.js")
+    script(src="/static/scripts/jquery-ui-1.9.2.custom.min.js")
+    script(src="/static/scripts/jquery.jstree.js")
     script(src="/static/scripts/cbmonitor.js")
 
 body
@@ -15,21 +16,19 @@ body
         div.sources
             div#accordion
                 h3 Clusters
-                div
-                    button#addc Add cluster
-                    button#adds(disabled) Add server
-                    button#addb(disabled) Add bucket
-                    br
-                    button#remc(disabled) Remove cluster
-                    button#rems(disabled) Remove server
-                    button#remb(disabled) Remove bucket
+                div#mmenu
+                    input#addc(type="button", value="Add cluster")
+                    input#renc(type="button", value="Edit")
+                    input#delc(type="button", value="Delete")
+                    input#adds(type="button", value="Add server")
+                    div#tree
                 h3  Metrics
                 div
-                    button#plotm(disabled) Plot metric
+                    input#plotm(type="button", value="Plot metric", disabled)
                     input#filterm(type="text")
                 h3  Events
                 div
-                    button#plote(disabled) Plot event
+                    input#plote(type="button", value="Plot event", disabled)
                     input#filtere(type="text")
         div.charts
             div.charts_panel
