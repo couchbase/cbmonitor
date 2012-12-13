@@ -20,11 +20,6 @@ CBMONITOR.configureAccordion = function() {
 CBMONITOR.configureCPanel = function() {
     "use strict";
 
-    var jstree = $("#tree"),
-        renc = $("#renc"),
-        delc = $("#delc"),
-        adds = $("#adds");
-
     $("input:button")
         .button()
         .css({
@@ -32,30 +27,22 @@ CBMONITOR.configureCPanel = function() {
             width: "23%"
         })
         .click(function() {
-            var selected = jstree.jstree("get_selected"),
-                selected_id = selected.attr("id");
             switch(this.value) {
                 case "Add cluster":
-                    jstree.jstree("create", -1, "last", {"attr": {"class": "cluster"}});
+                    $("#dialog_new_cluster").dialog("open");
                     break;
                 case "Add server":
-                    jstree.jstree("create", null, "last", {"attr": {"class": "server"}});
+                    $("#dialog_new_server").dialog("open");
                     break;
                 case "Add bucket":
-                    jstree.jstree("create", null, "last", {"attr": {"class": "bucket"}});
+                    $("#dialog_new_bucket").dialog("open");
                     break;
                 case "Edit":
-                    jstree.jstree("rename", selected_id);
+                    //var selected_id = jstree.jstree("get_selected").attr("id");
+                    //jstree.jstree("rename", selected_id);
                     break;
                 case "Delete":
-                    var prnt = $.jstree._reference(selected)._get_parent(selected),
-                        prev = $.jstree._reference(selected)._get_prev(selected);
-                    if (prnt === -1 && prev === false) {
-                        renc.addClass("ui-state-disabled");
-                        delc.addClass("ui-state-disabled");
-                        adds.addClass("ui-state-disabled");
-                    }
-                    jstree.jstree("remove", selected_id);
+                    $("#dialog_delete").dialog("open");
                     break;
                 default:
                     break;
@@ -126,19 +113,19 @@ CBMONITOR.configureCTree = function() {
         var cls = data.rslt.obj.attr("class").split(" ")[0];
         switch(cls) {
             case "cluster":
-                renc.removeClass("ui-state-disabled");
+                //renc.removeClass("ui-state-disabled");
                 delc.removeClass("ui-state-disabled");
                 adds.removeClass("ui-state-disabled");
                 adds.prop("value", "Add server");
                 break;
             case "server":
-                renc.removeClass("ui-state-disabled");
+                //renc.removeClass("ui-state-disabled");
                 delc.removeClass("ui-state-disabled");
                 adds.removeClass("ui-state-disabled");
                 adds.prop("value", "Add bucket");
                 break;
             case "bucket":
-                renc.removeClass("ui-state-disabled");
+                //renc.removeClass("ui-state-disabled");
                 delc.removeClass("ui-state-disabled");
                 adds.addClass("ui-state-disabled");
                 break;
@@ -154,4 +141,8 @@ $(document).ready(function(){
     CBMONITOR.configureAccordion();
     CBMONITOR.configureCPanel();
     CBMONITOR.configureCTree();
+    CBMONITOR.addNewCluster();
+    CBMONITOR.addNewServer();
+    CBMONITOR.addNewBucket();
+    CBMONITOR.deleteItem();
 });
