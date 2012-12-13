@@ -20,7 +20,7 @@ body {
     padding: 2%;
 }
 #accordion .ui-accordion-header{
-    padding: 2%;
+    padding: 2% 7%;
 }
 /* --Right board-- */
 .charts {
