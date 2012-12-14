@@ -12,4 +12,5 @@ urlpatterns = patterns(
     url(r'^demos/(?P<demo>.*)/$', 'demos.views.main'),
     url(r'^litmus/', include('litmus.urls')),
     url(r'^reports', include('reports.urls')),
+    url(r'^cbmonitor', include('cbmonitor.urls')),
 )
