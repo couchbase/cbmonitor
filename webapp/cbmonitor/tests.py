@@ -4,6 +4,7 @@ from random import randint, choice
 
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.core.exceptions import ObjectDoesNotExist
 
 import views
 import rest_api
@@ -34,6 +35,12 @@ class ApiTest(TestCase):
         """Add new cluster/server/bucket"""
         request = self.factory.post("/add_" + item, params)
         response = rest_api.dispatcher(request, path="add_" + item)
+        return response
+
+    def delete_item(self, item, params):
+        """Add new cluster/server/bucket"""
+        request = self.factory.post("/delete_" + item, params)
+        response = rest_api.dispatcher(request, path="delete_" + item)
         return response
 
     def verify_valid_response(self, response):
@@ -228,6 +235,71 @@ class ApiTest(TestCase):
 
         # Verify response
         self.verify_bad_parent(response)
+
+    def test_remove_cluster(self):
+        """Removing existing cluster"""
+        cluster = uhex()
+        self.add_item("cluster", {"name": cluster})
+
+        response = self.delete_item("cluster", {"name": cluster})
+
+        # Verify response
+        self.verify_valid_response(response)
+
+        # Verify persistence
+        self.assertRaises(ObjectDoesNotExist, Cluster.objects.get,
+                          name=cluster)
+
+    def test_remove_server(self):
+        """Removing existing cluster"""
+        cluster = uhex()
+        self.add_item("cluster", {"name": cluster})
+        params = {
+            "cluster": cluster, "address": uhex(),
+            "rest_username": uhex(), "rest_password": uhex(),
+            "ssh_username": uhex(), "ssh_password": uhex(), "ssh_key": uhex(),
+            "description": uhex()
+        }
+        self.add_item("server", params)
+
+        response = self.delete_item("server", {"address": params["address"]})
+
+        # Verify response
+        self.verify_valid_response(response)
+
+        # Verify persistence
+        self.assertRaises(ObjectDoesNotExist, Server.objects.get,
+                          address=params["address"])
+
+    def test_remove_bucket(self):
+        """Removing existing cluster"""
+        cluster = uhex()
+        self.add_item("cluster", {"name": cluster})
+        server = uhex()
+        params = {
+            "cluster": cluster, "address": server,
+            "rest_username": uhex(), "rest_password": uhex(),
+            "ssh_username": uhex(), "ssh_password": uhex(), "ssh_key": uhex(),
+            "description": uhex()
+        }
+        self.add_item("server", params)
+
+        params = {
+            "server": params["address"],
+            "name": uhex(), "type": choice(("Couchbase", "Memcached")),
+            "port": randint(1, 65535), "password": uhex()
+        }
+        self.add_item("bucket", params)
+
+        response = self.delete_item("bucket",
+                                    {"name": params["name"], "server": server})
+
+        # Verify response
+        self.verify_valid_response(response)
+
+        # Verify persistence
+        self.assertRaises(ObjectDoesNotExist, Bucket.objects.get,
+                          name=params["name"], server=server)
 
     def test_get_tree_data(self):
         request = self.factory.get("/get_tree_data")

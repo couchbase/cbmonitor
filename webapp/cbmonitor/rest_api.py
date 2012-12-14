@@ -17,6 +17,12 @@ def dispatcher(request, path):
         return add_server(request)
     if path == "add_bucket":
         return add_bucket(request)
+    if path == "delete_cluster":
+        return delete_cluster(request)
+    if path == "delete_server":
+        return delete_server(request)
+    if path == "delete_bucket":
+        return delete_bucket(request)
     if path == "get_tree_data":
         return get_tree_data(request)
     else:
@@ -80,6 +86,23 @@ def add_bucket(request):
         port=request.POST["port"],
         password=request.POST.get("password", None)
     )
+
+
+@exception_less
+def delete_cluster(request):
+    Cluster.objects.filter(name=request.POST["name"]).delete()
+
+
+@exception_less
+def delete_server(request):
+    Server.objects.filter(address=request.POST["address"]).delete()
+
+
+@exception_less
+def delete_bucket(request):
+    server = Server.objects.get(address=request.POST["server"])
+    buckets = Bucket.objects.filter(name=request.POST["name"], server=server)
+    buckets.delete()
 
 
 def get_tree_data(request):
