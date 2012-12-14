@@ -4,7 +4,7 @@ from django.contrib import admin
 
 class Cluster(models.Model):
 
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, primary_key=True)
     description = models.CharField(max_length=1024, null=True, blank=True)
 
     def __str__(self):
@@ -17,7 +17,7 @@ class Cluster(models.Model):
 class Server(models.Model):
 
     cluster = models.ForeignKey('Cluster')
-    address = models.CharField(max_length=80)
+    address = models.CharField(max_length=80, primary_key=True)
     rest_username = models.CharField(max_length=25)
     rest_password = models.CharField(max_length=50)
     ssh_username = models.CharField(max_length=25)
@@ -33,6 +33,10 @@ class Server(models.Model):
 
 
 class Bucket(models.Model):
+
+    class Meta:
+
+        unique_together = ["name", "server"]
 
     TYPES = (("Couchbase", "Couchbase"), ("Memcached", "Memcached"))
 
