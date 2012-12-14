@@ -100,7 +100,11 @@ CBMONITOR.configureCTree = function() {
             "drag_target": false
         },
         "plugins": ["themes", "json_data", "dnd", "ui", "crrm"],
-        "json_data": {"data": []}
+        "json_data": {
+            "ajax" : {
+                "url" : "/cbmonitor/get_tree_data/"
+            }
+        }
     });
 
     // Expand all nodes

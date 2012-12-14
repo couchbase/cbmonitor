@@ -112,19 +112,19 @@ def get_tree_data(request):
     for cluster in Cluster.objects.all():
         cluster_obj = {
             "data": cluster.name,
-            "attr": {"class": "cluster"},
+            "attr": {"class": "cluster", "id": cluster.name},
             "children": []
         }
         for server in Server.objects.filter(cluster=cluster):
             server_obj = {
                 "data": server.address,
-                "attr": {"class": "server"},
+                "attr": {"class": "server", "id": server.address},
                 "children": []
             }
             for bucket in Bucket.objects.filter(server=server):
                 bucket_obj = {
                     "data": bucket.name,
-                    "attr": {"class": "bucket"},
+                    "attr": {"class": "bucket", "id": bucket.name},
                 }
                 server_obj["children"].append(bucket_obj)
             cluster_obj["children"].append(server_obj)
