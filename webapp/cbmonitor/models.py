@@ -32,17 +32,26 @@ class Server(models.Model):
         pass
 
 
+class BucketType(models.Model):
+
+    type = models.CharField(max_length=9)
+
+    def __str__(self):
+        return self.type
+
+    class Admin:
+        pass
+
+
 class Bucket(models.Model):
 
     class Meta:
 
         unique_together = ["name", "server"]
 
-    TYPES = (("Couchbase", "Couchbase"), ("Memcached", "Memcached"))
-
     server = models.ForeignKey('Server')
     name = models.CharField(max_length=25, default="default")
-    type = models.CharField(max_length=9, choices=TYPES, default="Couchbase")
+    type = models.ForeignKey("BucketType")
     port = models.IntegerField(default=11211)
     password = models.CharField(max_length=50, null=True, blank=True)
 
