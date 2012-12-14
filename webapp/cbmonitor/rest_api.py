@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.datastructures import MultiValueDictKeyError
@@ -15,6 +17,8 @@ def dispatcher(request, path):
         return add_server(request)
     if path == "add_bucket":
         return add_bucket(request)
+    if path == "get_tree_data":
+        return get_tree_data(request)
     else:
         return HttpResponse(content='Wrong path', status=404)
 
@@ -76,3 +80,31 @@ def add_bucket(request):
         port=request.POST["port"],
         password=request.POST.get("password", None)
     )
+
+
+def get_tree_data(request):
+    """"Generate json data for jstree"""
+    response = []
+
+    for cluster in Cluster.objects.all():
+        cluster_obj = {
+            "data": cluster.name,
+            "attr": {"class": "cluster"},
+            "children": []
+        }
+        for server in Server.objects.filter(cluster=cluster):
+            server_obj = {
+                "data": server.address,
+                "attr": {"class": "server"},
+                "children": []
+            }
+            for bucket in Bucket.objects.filter(server=server):
+                bucket_obj = {
+                    "data": bucket.name,
+                    "attr": {"class": "bucket"},
+                }
+                server_obj["children"].append(bucket_obj)
+            cluster_obj["children"].append(server_obj)
+        response.append(cluster_obj)
+
+    return HttpResponse(content=json.dumps(response))

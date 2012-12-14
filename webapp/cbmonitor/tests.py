@@ -1,3 +1,4 @@
+import json
 from uuid import uuid4
 from random import randint, choice
 
@@ -24,7 +25,7 @@ class BasicTest(TestCase):
 
 class ApiTest(TestCase):
 
-    fixtures = ["bucket_type.json"]
+    fixtures = ["bucket_type.json", "testdata.json"]
 
     def setUp(self):
         self.factory = RequestFactory()
@@ -54,6 +55,10 @@ class ApiTest(TestCase):
     def verify_bad_parameter(self, response):
         self.assertEqual(response.content, "Bad Parameter")
         self.assertEqual(response.status_code, 400)
+
+    def verify_valid_json(self, response):
+        json.loads(response.content)
+        self.assertEqual(response.status_code, 200)
 
     def test_add_cluster(self):
         """Adding new cluster with full set of params"""
@@ -223,3 +228,9 @@ class ApiTest(TestCase):
 
         # Verify response
         self.verify_bad_parent(response)
+
+    def test_get_tree_data(self):
+        request = self.factory.get("/get_tree_data")
+        response = rest_api.dispatcher(request, path="get_tree_data")
+
+        self.verify_valid_json(response)

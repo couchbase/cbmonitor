@@ -1,0 +1,33 @@
+[
+    {
+        "model": "cbmonitor.cluster",
+        "pk": "East",
+        "fields": {
+            "description": "Virginia"
+        }
+    },
+    {
+        "model": "cbmonitor.server",
+        "pk": "ec2-54-242-160-13.compute-1.amazonaws.com",
+        "fields": {
+            "cluster": "East",
+            "description": "",
+            "rest_password": "password",
+            "rest_username": "Administrator",
+            "ssh_username": "root",
+            "ssh_password": "couchbase",
+            "ssh_key": ""
+        }
+    },
+    {
+        "model": "cbmonitor.bucket",
+        "pk": 1,
+        "fields": {
+            "name": "default",
+            "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+            "password": "",
+            "port": 11211,
+            "type": 1
+        }
+    }
+]
