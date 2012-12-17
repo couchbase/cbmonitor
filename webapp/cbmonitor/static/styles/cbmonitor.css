@@ -141,16 +141,16 @@ body {
 #accordion .ui-accordion-header{
     padding: 2% 7%;
 }
-
 .selectors {
     margin-top: 5px;
     font-size: 77%;
+    width: 385px;
 }
 .selectors label {
     line-height: 2.0;
 }
 .selectors select {
-    width: 95%;
+    width: 385px;
 }
 .ui-menu .ui-menu-item a {
     font-size: 77%;

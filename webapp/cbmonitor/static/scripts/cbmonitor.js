@@ -191,18 +191,72 @@ CBMONITOR.configureChartPanel = function() {
     $("#rpanel").buttonset();
 };
 
-/*
- * Panel with metric and event selector
- */
 CBMONITOR.configureMEPanel = function() {
     "use strict";
 
-    $("#met_cluster").selectmenu();
-    $("#met_server").selectmenu();
-    $("#met_bucket").selectmenu();
-    $("#evnt_cluster").selectmenu();
-    $("#evnt_server").selectmenu();
-    $("#evnt_bucket").selectmenu();
+    CBMONITOR.configureClusters($("#met_cluster"), $("#met_server"), $("#met_bucket"));
+    CBMONITOR.configureClusters($("#evnt_cluster"), $("#evnt_server"), $("#evnt_bucket"));
+};
+
+CBMONITOR.configureClusters = function(c_sel, s_sel, b_sel) {
+    "use strict";
+
+    $.ajax({url: "/cbmonitor/get_clusters", dataType: "json",
+        success: function(clusters){
+            c_sel.empty();
+            clusters.forEach(function(cluster) {
+                var o = new Option(cluster, cluster);
+                c_sel.append(o);
+            });
+            c_sel.selectmenu({
+                select: function(event, option) {
+                    CBMONITOR.configureMEServers(option.value, s_sel, b_sel);
+                }
+            });
+            CBMONITOR.configureMEServers(clusters[0], s_sel, b_sel);
+        }
+    });
+};
+
+CBMONITOR.configureMEServers = function(cluster, s_sel, b_sel) {
+    "use strict";
+
+    $.ajax({url: "/cbmonitor/get_servers", dataType: "json",
+        data: {"cluster": cluster},
+        success: function(servers) {
+            s_sel.empty();
+            var o = new Option("None", null);
+            s_sel.append(o);
+            servers.forEach(function(server) {
+                var o = new Option(server, server);
+                s_sel.append(o);
+            });
+            s_sel.selectmenu({
+                select: function(event, option) {
+                    CBMONITOR.configureMEBuckets(option.value, b_sel);
+                }
+            });
+            CBMONITOR.configureMEBuckets(servers[0], b_sel);
+        }
+    });
+};
+
+CBMONITOR.configureMEBuckets = function(server, b_sel) {
+    "use strict";
+
+    $.ajax({url: "/cbmonitor/get_buckets", dataType: "json",
+        data: {"server": server},
+        success: function(buckets){
+            b_sel.empty();
+            var o = new Option("None", null);
+            b_sel.append(o);
+            buckets.forEach(function(bucket) {
+                var o = new Option(bucket, bucket);
+                b_sel.append(o);
+            });
+            b_sel.selectmenu();
+        }
+    });
 };
 
 $(document).ready(function(){
