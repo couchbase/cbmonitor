@@ -42,60 +42,61 @@ body {
 .charts_panel {
     position: relative;
     width: 100%;
-    height: 4%;
+    height: 6%;
 }
 .cpanel_left {
+    left: 1%;
     top: 20%;
     position: absolute;
 }
 .cpanel_right {
     position: absolute;
     width: 70%;
-    left: 30.5%;
+    left: 30%;
     top: 20%;
     text-align: right;
 }
 .chart_view_single {
-    width: 99.5%;
-    height: 94%;
+    width: 100%;
+    height: 93%;
     position: absolute;
 }
 .chart_view_double {
-    width: 99.5%;
+    width: 100%;
     height: 46.5%;
     position: absolute;
 }
 .chart_view_quadruple {
-    width: 49.5%;
+    width: 50%;
     height: 46.5%;
     position: absolute;
 }
 #first_view {
-    top: 5.25%;
+    top: 6.75%;
     left: 0;
     border: solid 1px #808080;
     border-radius: 5px;
 }
 #second_view {
-    top: 5.25%;
+    top: 6.75%;
     left: 50%;
     border: solid 1px #808080;
     border-radius: 5px;
 }
 #second_view_double {
-    top: 52.75%;
+    top: 53.25%;
     left: 0;
     border: solid 1px #808080;
     border-radius: 5px;
 }
 #third_view {
-    top: 52.75%;
+    top: 53.25%;
     left: 0;
     border: solid 1px #808080;
     border-radius: 5px;
 }
 #fourth_view {
-    top: 52.75%;
+    top: 53.25%;
     left: 50%;
     border: solid 1px #808080;
     border-radius: 5px;
@@ -117,6 +118,11 @@ body {
     height: 3%;
     text-align: right;
     font-size: 85%;
+}
+.charts_panel {
+    border: solid 1px #808080;
+    border-radius: 5px;
+    margin-top: 0.25%;
 }
 /* jQuery UI*/
 .ui-dialog .ui-state-error {
