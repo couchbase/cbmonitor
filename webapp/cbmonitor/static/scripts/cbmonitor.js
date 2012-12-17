@@ -191,9 +191,24 @@ CBMONITOR.configureChartPanel = function() {
     $("#rpanel").buttonset();
 };
 
+/*
+ * Panel with metric and event selector
+ */
+CBMONITOR.configureMEPanel = function() {
+    "use strict";
+
+    $("#met_cluster").selectmenu();
+    $("#met_server").selectmenu();
+    $("#met_bucket").selectmenu();
+    $("#evnt_cluster").selectmenu();
+    $("#evnt_server").selectmenu();
+    $("#evnt_bucket").selectmenu();
+};
+
 $(document).ready(function(){
     "use strict";
 
+    CBMONITOR.configureMEPanel();
     CBMONITOR.configureAccordion();
     CBMONITOR.configureCPanel();
     CBMONITOR.configureCTree();

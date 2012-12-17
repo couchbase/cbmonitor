@@ -1,4 +1,12 @@
 h3  Metrics
 div
-    input#plotm(type="button", value="Plot metric", disabled)
-    input#filterm(type="text")
+    div.selectors
+        label(for="met_cluster") Select cluster
+        select#met_cluster(name="met_cluster")
+            option(value="none", selected) None
+        label(for="met_server") Select server
+        select#met_server(name="met_server")
+            option(value="none", selected) None
+        label(for="met_bucket") Select bucket
+        select#met_bucket(name="met_bucket")
+            option(value="none", selected) None
