@@ -139,6 +139,58 @@ CBMONITOR.configureCTree = function() {
     });
 };
 
+/*
+ * Panel with radio buttons related to chart views
+ */
+CBMONITOR.configureChartPanel = function() {
+    "use strict";
+
+    $("#vpanel").buttonset();
+    $(".vradio").click(function() {
+        var views = $("#views");
+        views.empty();
+        switch(this.id) {
+            case "view1":
+                $("<div/>", {
+                    "id": "first_view",
+                    "class": "chart_view_single"
+                }).appendTo(views);
+                break;
+            case "view2":
+                $("<div/>", {
+                    "id": "first_view",
+                    "class": "chart_view_double"
+                }).appendTo(views);
+                $("<div/>", {
+                    "id": "second_view_double",
+                    "class": "chart_view_double"
+                }).appendTo(views);
+                break;
+            case "view4":
+                $("<div/>", {
+                    "id": "first_view",
+                    "class": "chart_view_quadruple"
+                }).appendTo(views);
+                $("<div/>", {
+                    "id": "second_view",
+                    "class": "chart_view_quadruple"
+                }).appendTo(views);
+                $("<div/>", {
+                    "id": "third_view",
+                    "class": "chart_view_quadruple"
+                }).appendTo(views);
+                $("<div/>", {
+                    "id": "fourth_view",
+                    "class": "chart_view_quadruple"
+                }).appendTo(views);
+                break;
+            default:
+                break;
+        }
+    });
+    $("#rpanel").buttonset();
+};
+
 $(document).ready(function(){
     "use strict";
 
@@ -149,4 +201,5 @@ $(document).ready(function(){
     CBMONITOR.addNewServer();
     CBMONITOR.addNewBucket();
     CBMONITOR.deleteItem();
+    CBMONITOR.configureChartPanel();
 });

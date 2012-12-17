@@ -1,3 +1,24 @@
 div.charts_panel
-    div.cpanel_left [refresh] [share] [pdf]
-    div.cpanel_right [pause] [minute] [hour] [day] [week] [month] [all]
+    div.cpanel_left
+        form
+            div#vpanel
+                input#view1.vradio(type="radio", name="views", checked)
+                label(for="view1") 1 view
+                input#view2.vradio(type="radio", name="views")
+                label(for="view2") 2 views
+                input#view4.vradio(type="radio", name="views")
+                label(for="view4") 4 views
+    div.cpanel_right
+        div#rpanel
+            input#minute(type="radio", name="ranges")
+            label(for="minute") minute
+            input#hour(type="radio", name="ranges")
+            label(for="hour") hour
+            input#day(type="radio", name="ranges")
+            label(for="day") day
+            input#week(type="radio", name="ranges")
+            label(for="week") week
+            input#month(type="radio", name="ranges")
+            label(for="month") month
+            input#all(type="radio", name="ranges", checked)
+            label(for="all") all

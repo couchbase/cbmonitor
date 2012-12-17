@@ -16,11 +16,21 @@ body {
     width: 32.8%;
     height: 99.8%;
 }
-#accordion .ui-accordion-content {
-    padding: 2%;
+.new_item label, .new_item input {
+    display: block;
 }
-#accordion .ui-accordion-header{
-    padding: 2% 7%;
+.new_item input.text, .new_item textarea {
+    margin-bottom: 12px;
+    width:95%;
+    padding: .4em;
+}
+.new_item fieldset {
+    padding:0;
+    border:0;
+    margin-top:25px;
+}
+.new_item p {
+    border: 1px solid transparent; padding: 0.3em;
 }
 /* --Right board-- */
 .charts {
@@ -31,57 +41,64 @@ body {
 }
 .charts_panel {
     position: relative;
-    width: 99%;
+    width: 100%;
     height: 4%;
-    padding: 0.5%;
-    background-color: #ffa935;
 }
 .cpanel_left {
     top: 20%;
     position: absolute;
-    width: 30%;
 }
 .cpanel_right {
     position: absolute;
     width: 70%;
-    left: 29.5%;
+    left: 30.5%;
     top: 20%;
     text-align: right;
 }
 .chart_view_single {
-    width: 100%;
-    height: 100%;
+    width: 99.5%;
+    height: 94%;
     position: absolute;
 }
 .chart_view_double {
-    width: 100%;
-    height: 47.5%;
-    position: relative;
+    width: 99.5%;
+    height: 46.5%;
+    position: absolute;
 }
 .chart_view_quadruple {
-    width: 50%;
-    height: 47.5%;
+    width: 49.5%;
+    height: 46.5%;
     position: absolute;
 }
 #first_view {
-    top: 5%;
+    top: 5.25%;
     left: 0;
-    background-color: #92dd96;
+    border: solid 1px #808080;
+    border-radius: 5px;
 }
 #second_view {
-    top: 5%;
+    top: 5.25%;
     left: 50%;
-    background-color: #82bdde;
+    border: solid 1px #808080;
+    border-radius: 5px;
+}
+#second_view_double {
+    top: 52.75%;
+    left: 0;
+    border: solid 1px #808080;
+    border-radius: 5px;
 }
 #third_view {
-    top: 52.5%;
+    top: 52.75%;
     left: 0;
-    background-color: #ffec8c;
+    border: solid 1px #808080;
+    border-radius: 5px;
 }
 #fourth_view {
-    top: 52.5%;
+    top: 52.75%;
     left: 50%;
-    background-color: #ff7b62;
+    border: solid 1px #808080;
+    border-radius: 5px;
 }
 /* --Footer & Header-- */
 .header {
@@ -103,26 +120,20 @@ body {
     padding: 1%;
     background-color: #d1abff;
 }
-.new_item label, input {
-    display: block;
-}
-.new_item input.text, textarea {
-    margin-bottom: 12px;
-    width:95%;
-    padding: .4em;
-}
-.new_item fieldset {
-    padding:0;
-    border:0;
-    margin-top:25px;
-}
-.new_item p {
-    border: 1px solid transparent; padding: 0.3em;
-}
+/* jQuery UI*/
 .ui-dialog .ui-state-error {
     padding: .3em;
 }
 .confirm {
     float: left;
     margin: 0 7px 0 0;
+}
+.ui-button{
+    font-size: 77%;
+}
+#accordion .ui-accordion-content {
+    padding: 2%;
+}
+#accordion .ui-accordion-header{
+    padding: 2% 7%;
 }
