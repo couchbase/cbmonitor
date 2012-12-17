@@ -306,3 +306,52 @@ class ApiTest(TestCase):
         response = rest_api.dispatcher(request, path="get_tree_data")
 
         self.verify_valid_json(response)
+
+    def test_get_clusters(self):
+        request = self.factory.get("/get_clusters")
+        response = rest_api.dispatcher(request, path="get_clusters")
+
+        # Verify response
+        self.verify_valid_json(response)
+
+        # Verify content
+        self.assertEquals(response.content, json.dumps(["East"]))
+
+    def test_get_servers(self):
+        params = {"cluster": "East"}
+        request = self.factory.get("/get_servers", params)
+        response = rest_api.dispatcher(request, path="get_servers")
+
+        # Verify response
+        self.verify_valid_json(response)
+
+        # Verify content
+        expected = json.dumps(["ec2-54-242-160-13.compute-1.amazonaws.com"])
+        self.assertEquals(response.content, expected)
+
+    def test_get_servers_with_missing_param(self):
+        request = self.factory.get("/get_servers")
+        response = rest_api.dispatcher(request, path="get_servers")
+
+        # Verify response
+        self.verify_missing_parameter(response)
+
+    def test_get_servers_wrong_param(self):
+        params = {"cluster": "West"}
+        request = self.factory.get("/get_servers", params)
+        response = rest_api.dispatcher(request, path="get_servers")
+
+        # Verify response
+        self.verify_bad_parent(response)
+
+    def test_get_buckets(self):
+        params = {"server": "ec2-54-242-160-13.compute-1.amazonaws.com"}
+        request = self.factory.get("/get_buckets", params)
+        response = rest_api.dispatcher(request, path="get_buckets")
+
+        # Verify response
+        self.verify_valid_json(response)
+
+        # Verify content
+        expected = json.dumps(["default"])
+        self.assertEquals(response.content, expected)

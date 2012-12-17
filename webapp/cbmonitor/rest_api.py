@@ -25,6 +25,12 @@ def dispatcher(request, path):
         return delete_bucket(request)
     if path == "get_tree_data":
         return get_tree_data(request)
+    if path == "get_clusters":
+        return get_clusters(request)
+    if path == "get_servers":
+        return get_servers(request)
+    if path == "get_buckets":
+        return get_buckets(request)
     else:
         return HttpResponse(content='Wrong path', status=404)
 
@@ -32,7 +38,7 @@ def dispatcher(request, path):
 def exception_less(method):
     def wrapper(*args, **kargs):
         try:
-            method(*args, **kargs)
+            response = method(*args, **kargs)
         except MultiValueDictKeyError:
             return HttpResponse(content="Missing Parameter", status=400)
         except IntegrityError:
@@ -42,7 +48,7 @@ def exception_less(method):
         except ValueError:
             return HttpResponse(content="Bad Parameter", status=400)
         else:
-            return HttpResponse(content="Success")
+            return response or HttpResponse(content="Success")
     return wrapper
 
 
@@ -131,3 +137,26 @@ def get_tree_data(request):
         response.append(cluster_obj)
 
     return HttpResponse(content=json.dumps(response))
+
+
+@exception_less
+def get_clusters(request):
+    """Get list of active clusters"""
+    clusters = [c.name for c in Cluster.objects.all()]
+    return HttpResponse(content=json.dumps(clusters))
+
+
+@exception_less
+def get_servers(request):
+    """Get list of active servers for given cluster"""
+    cluster = Cluster.objects.get(name=request.GET["cluster"])
+    servers = [s.address for s in Server.objects.filter(cluster=cluster)]
+    return HttpResponse(content=json.dumps(servers))
+
+
+@exception_less
+def get_buckets(request):
+    """Get list of active servers for given cluster"""
+    server = Server.objects.get(address=request.GET["server"])
+    buckets = [b.name for b in Bucket.objects.filter(server=server)]
+    return HttpResponse(content=json.dumps(buckets))
