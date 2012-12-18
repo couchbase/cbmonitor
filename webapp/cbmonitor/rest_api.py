@@ -158,7 +158,7 @@ def get_servers(request):
 
 @exception_less
 def get_buckets(request):
-    """Get list of active servers for given cluster"""
+    """Get list of active buckets for given server"""
     server = Server.objects.get(address=request.GET["server"])
     buckets = [b.name for b in Bucket.objects.filter(server=server)]
     return HttpResponse(content=json.dumps(buckets))
