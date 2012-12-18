@@ -1,4 +1,6 @@
 import json
+import logging
+import logging.config
 
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -7,6 +9,9 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
 import models
+
+logging.config.fileConfig("logging.conf")
+logger = logging.getLogger()
 
 
 @csrf_exempt
@@ -41,13 +46,17 @@ def exception_less(method):
     def wrapper(*args, **kargs):
         try:
             response = method(*args, **kargs)
-        except MultiValueDictKeyError:
+        except MultiValueDictKeyError, error:
+            logger.warn(error)
             return HttpResponse(content="Missing Parameter", status=400)
-        except IntegrityError:
+        except IntegrityError, error:
+            logger.warn(error)
             return HttpResponse(content="Duplicate", status=400)
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist, error:
+            logger.warn(error)
             return HttpResponse(content="Bad Parent", status=400)
-        except ValueError:
+        except ValueError, error:
+            logger.warn(error)
             return HttpResponse(content="Bad Parameter", status=400)
         else:
             return response or HttpResponse(content="Success")
