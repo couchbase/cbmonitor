@@ -355,3 +355,47 @@ class ApiTest(TestCase):
         # Verify content
         expected = json.dumps(["default"])
         self.assertEquals(response.content, expected)
+
+    def test_get_metrics(self):
+        params = {"type": "metric",
+                  "cluster": "East",
+                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+                  "bucket": 1}
+        request = self.factory.get("/get_metrics_and_events", params)
+        response = rest_api.dispatcher(request, path="get_metrics_and_events")
+
+        # Verify response
+        self.verify_valid_json(response)
+
+        # Verify content
+        expected = json.dumps(["cache_miss"])
+        self.assertEquals(response.content, expected)
+
+    def test_get_metrics_no_server(self):
+        params = {"type": "metric",
+                  "cluster": "East",
+                  "bucket": 1}
+        request = self.factory.get("/get_metrics_and_events", params)
+        response = rest_api.dispatcher(request, path="get_metrics_and_events")
+
+        # Verify response
+        self.verify_valid_json(response)
+
+        # Verify content
+        expected = json.dumps(["disk_queue"])
+        self.assertEquals(response.content, expected)
+
+    def test_get_events(self):
+        params = {"type": "event",
+                  "cluster": "East",
+                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+                  "bucket": 1}
+        request = self.factory.get("/get_metrics_and_events", params)
+        response = rest_api.dispatcher(request, path="get_metrics_and_events")
+
+        # Verify response
+        self.verify_valid_json(response)
+
+        # Verify content
+        expected = json.dumps(["Rebalance start"])
+        self.assertEquals(response.content, expected)

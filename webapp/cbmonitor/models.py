@@ -80,9 +80,22 @@ class Metric(models.Model):
         pass
 
 
-class Event(Metric):
+class Event(models.Model):
 
-    pass
+    class Meta:
+
+        unique_together = ["name", "cluster", "server", "bucket"]
+
+    cluster = models.ForeignKey("Cluster", null=True, blank=True)
+    server = models.ForeignKey("Server", null=True, blank=True)
+    bucket = models.ForeignKey("Bucket", null=True, blank=True)
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+    class Admin:
+        pass
 
 admin.site.register(Cluster)
 admin.site.register(Server)

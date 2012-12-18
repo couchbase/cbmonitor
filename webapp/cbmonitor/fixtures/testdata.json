@@ -29,5 +29,35 @@
             "port": 11211,
             "type": 1
         }
+    },
+    {
+        "model": "cbmonitor.metric",
+        "pk": null,
+        "fields": {
+            "name": "cache_miss",
+            "cluster": "East",
+            "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+            "bucket": 1
+        }
+    },
+    {
+        "model": "cbmonitor.metric",
+        "pk": null,
+        "fields": {
+            "name": "disk_queue",
+            "cluster": "East",
+            "server": null,
+            "bucket": 1
+        }
+    },
+    {
+        "model": "cbmonitor.event",
+        "pk": null,
+        "fields": {
+            "name": "Rebalance start",
+            "cluster": "East",
+            "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+            "bucket": 1
+        }
     }
 ]

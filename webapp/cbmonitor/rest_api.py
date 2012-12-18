@@ -6,7 +6,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
-from models import Cluster, Server, Bucket, BucketType
+from models import Cluster, Server, Bucket, BucketType, Metric, Event
 
 
 @csrf_exempt
@@ -31,6 +31,8 @@ def dispatcher(request, path):
         return get_servers(request)
     if path == "get_buckets":
         return get_buckets(request)
+    if path == "get_metrics_and_events":
+        return get_metrics_and_events(request)
     else:
         return HttpResponse(content='Wrong path', status=404)
 
@@ -160,3 +162,27 @@ def get_buckets(request):
     server = Server.objects.get(address=request.GET["server"])
     buckets = [b.name for b in Bucket.objects.filter(server=server)]
     return HttpResponse(content=json.dumps(buckets))
+
+
+def get_metrics_and_events(request):
+    """Get list of metrics or events for given cluster, server and bucket"""
+    params = {"cluster": request.GET["cluster"]}
+
+    server = request.GET.get("server", None)
+    if server:
+        params.update({"server": server})
+    else:
+        params.update({"server__isnull": True})
+
+    bucket = request.GET.get("bucket", None)
+    if bucket:
+        params.update({"bucket": bucket})
+    else:
+        params.update({"bucket__isnull": True})
+
+    if request.GET["type"] == "metric":
+        data = [metric.name for metric in Metric.objects.filter(**params)]
+    else:
+        data = [event.name for event in Event.objects.filter(**params)]
+
+    return HttpResponse(content=json.dumps(data))
