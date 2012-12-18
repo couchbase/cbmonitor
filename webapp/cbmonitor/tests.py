@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 import views
 import rest_api
-from models import Cluster, Server, Bucket
+import models
 
 uhex = lambda: uuid4().hex
 
@@ -76,7 +76,7 @@ class ApiTest(TestCase):
         self.verify_valid_response(response)
 
         # Verify persistence
-        cluster = Cluster.objects.get(name=params["name"])
+        cluster = models.Cluster.objects.get(name=params["name"])
         self.assertEqual(cluster.description, params["description"])
 
     def test_add_cluster_wo_description(self):
@@ -88,7 +88,7 @@ class ApiTest(TestCase):
         self.verify_valid_response(response)
 
         # Verify persistence
-        cluster = Cluster.objects.get(name=params["name"])
+        cluster = models.Cluster.objects.get(name=params["name"])
         self.assertEqual(cluster.description, "")
 
     def test_add_cluster_duplicate(self):
@@ -128,7 +128,7 @@ class ApiTest(TestCase):
         self.verify_valid_response(response)
 
         # Verify persistence
-        server = Server.objects.get(address=params["address"])
+        server = models.Server.objects.get(address=params["address"])
         self.assertEqual(server.cluster.name, cluster)
 
     def test_add_server_to_wrong_cluster(self):
@@ -187,7 +187,7 @@ class ApiTest(TestCase):
         self.verify_valid_response(response)
 
         # Verify persistence
-        bucket = Bucket.objects.get(name=params["name"])
+        bucket = models.Bucket.objects.get(name=params["name"])
         self.assertEqual(bucket.server.cluster.name, cluster)
 
     def test_add_bucket_with_wrong_port(self):
@@ -247,7 +247,7 @@ class ApiTest(TestCase):
         self.verify_valid_response(response)
 
         # Verify persistence
-        self.assertRaises(ObjectDoesNotExist, Cluster.objects.get,
+        self.assertRaises(ObjectDoesNotExist, models.Cluster.objects.get,
                           name=cluster)
 
     def test_remove_server(self):
@@ -268,7 +268,7 @@ class ApiTest(TestCase):
         self.verify_valid_response(response)
 
         # Verify persistence
-        self.assertRaises(ObjectDoesNotExist, Server.objects.get,
+        self.assertRaises(ObjectDoesNotExist, models.Server.objects.get,
                           address=params["address"])
 
     def test_remove_bucket(self):
@@ -298,7 +298,7 @@ class ApiTest(TestCase):
         self.verify_valid_response(response)
 
         # Verify persistence
-        self.assertRaises(ObjectDoesNotExist, Bucket.objects.get,
+        self.assertRaises(ObjectDoesNotExist, models.Bucket.objects.get,
                           name=params["name"], server=server)
 
     def test_get_tree_data(self):

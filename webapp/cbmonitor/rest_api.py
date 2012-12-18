@@ -6,7 +6,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
-from models import Cluster, Server, Bucket, BucketType, Metric, Event
+import models
 
 
 @csrf_exempt
@@ -56,7 +56,7 @@ def exception_less(method):
 
 @exception_less
 def add_cluster(request):
-    Cluster.objects.create(
+    models.Cluster.objects.create(
         name=request.POST["name"],
         description=request.POST.get("description", "")
     )
@@ -64,13 +64,13 @@ def add_cluster(request):
 
 @exception_less
 def add_server(request):
-    cluster = Cluster.objects.get(name=request.POST["cluster"])
+    cluster = models.Cluster.objects.get(name=request.POST["cluster"])
 
     if not request.POST.get("ssh_password", "") and \
             not request.POST.get("ssh_key", ""):
         raise MultiValueDictKeyError
 
-    Server.objects.create(
+    models.Server.objects.create(
         cluster=cluster,
         address=request.POST["address"],
         rest_username=request.POST["rest_username"],
@@ -84,10 +84,10 @@ def add_server(request):
 
 @exception_less
 def add_bucket(request):
-    server = Server.objects.get(address=request.POST["server"])
-    bucket_type = BucketType.objects.get(type=request.POST["type"])
+    server = models.Server.objects.get(address=request.POST["server"])
+    bucket_type = models.BucketType.objects.get(type=request.POST["type"])
 
-    Bucket.objects.create(
+    models.Bucket.objects.create(
         server=server,
         name=request.POST["name"],
         type=bucket_type,
@@ -98,18 +98,19 @@ def add_bucket(request):
 
 @exception_less
 def delete_cluster(request):
-    Cluster.objects.filter(name=request.POST["name"]).delete()
+    models.Cluster.objects.filter(name=request.POST["name"]).delete()
 
 
 @exception_less
 def delete_server(request):
-    Server.objects.filter(address=request.POST["address"]).delete()
+    models.Server.objects.filter(address=request.POST["address"]).delete()
 
 
 @exception_less
 def delete_bucket(request):
-    server = Server.objects.get(address=request.POST["server"])
-    buckets = Bucket.objects.filter(name=request.POST["name"], server=server)
+    server = models.Server.objects.get(address=request.POST["server"])
+    buckets = models.Bucket.objects.filter(name=request.POST["name"],
+                                           server=server)
     buckets.delete()
 
 
@@ -117,19 +118,19 @@ def get_tree_data(request):
     """"Generate json data for jstree"""
     response = []
 
-    for cluster in Cluster.objects.all():
+    for cluster in models.Cluster.objects.all():
         cluster_obj = {
             "data": cluster.name,
             "attr": {"class": "cluster", "id": cluster.name},
             "children": []
         }
-        for server in Server.objects.filter(cluster=cluster):
+        for server in models.Server.objects.filter(cluster=cluster):
             server_obj = {
                 "data": server.address,
                 "attr": {"class": "server", "id": server.address},
                 "children": []
             }
-            for bucket in Bucket.objects.filter(server=server):
+            for bucket in models.Bucket.objects.filter(server=server):
                 bucket_obj = {
                     "data": bucket.name,
                     "attr": {"class": "bucket", "id": bucket.name},
@@ -144,23 +145,23 @@ def get_tree_data(request):
 @exception_less
 def get_clusters(request):
     """Get list of active clusters"""
-    clusters = [c.name for c in Cluster.objects.all()]
+    clusters = [c.name for c in models.Cluster.objects.all()]
     return HttpResponse(content=json.dumps(clusters))
 
 
 @exception_less
 def get_servers(request):
     """Get list of active servers for given cluster"""
-    cluster = Cluster.objects.get(name=request.GET["cluster"])
-    servers = [s.address for s in Server.objects.filter(cluster=cluster)]
+    cluster = models.Cluster.objects.get(name=request.GET["cluster"])
+    servers = [s.address for s in models.Server.objects.filter(cluster=cluster)]
     return HttpResponse(content=json.dumps(servers))
 
 
 @exception_less
 def get_buckets(request):
     """Get list of active buckets for given server"""
-    server = Server.objects.get(address=request.GET["server"])
-    buckets = [b.name for b in Bucket.objects.filter(server=server)]
+    server = models.Server.objects.get(address=request.GET["server"])
+    buckets = [b.name for b in models.Bucket.objects.filter(server=server)]
     return HttpResponse(content=json.dumps(buckets))
 
 
@@ -181,8 +182,8 @@ def get_metrics_and_events(request):
         params.update({"bucket__isnull": True})
 
     if request.GET["type"] == "metric":
-        data = [metric.name for metric in Metric.objects.filter(**params)]
+        data = [m.name for m in models.Metric.objects.filter(**params)]
     else:
-        data = [event.name for event in Event.objects.filter(**params)]
+        data = [e.name for e in models.Event.objects.filter(**params)]
 
     return HttpResponse(content=json.dumps(data))
