@@ -9,15 +9,7 @@ Dependencies
 
 Django:
 
-    pip install django==1.4.1
-
-    pip install django-http-proxy
-
-    pip install httplib2
-
-    pip install pyjade
-
-    pip install docutils
+    pip install zc.buildbot
 
 cbtop:
 
@@ -28,14 +20,18 @@ cbtop:
 Web application setup
 ---------------------
 
-    python webapp/manage.py syncdb
+    buildout bootstrap
 
-    python webapp/manage.py runserver 0.0.0.0:8000
+    ./bin/buildout
+
+    ./bin/django syncdb
+
+    ./bin/django runserver
 
 Testing
 -------
 
-    python webapp/manage.py test
+    ./bin/test_webapp
 
 virtualenv tips
 ---------------

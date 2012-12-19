@@ -4,3 +4,7 @@
 *.log.*
 *.pyc
 MemcachedSource-*.json
+.installed.cfg
+bin
+develop-eggs
+eggs
