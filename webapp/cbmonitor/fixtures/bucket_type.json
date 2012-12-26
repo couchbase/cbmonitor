@@ -1,14 +1,14 @@
 [
     {
         "model": "cbmonitor.BucketType",
-        "pk": 1,
+        "pk": "Couchbase",
         "fields": {
             "type": "Couchbase"
         }
     },
     {
         "model": "cbmonitor.BucketType",
-        "pk": 2,
+        "pk": "Memcached",
         "fields": {
             "type": "Memcached"
         }

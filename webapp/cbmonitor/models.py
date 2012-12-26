@@ -4,7 +4,7 @@ from django.contrib import admin
 
 class Cluster(models.Model):
 
-    name = models.CharField(max_length=50, primary_key=True)
+    name = models.CharField(max_length=64, primary_key=True, blank=False)
     description = models.CharField(max_length=1024, null=True, blank=True)
 
     def __str__(self):
@@ -17,13 +17,13 @@ class Cluster(models.Model):
 class Server(models.Model):
 
     cluster = models.ForeignKey('Cluster')
-    address = models.CharField(max_length=80, primary_key=True)
-    rest_username = models.CharField(max_length=25)
-    rest_password = models.CharField(max_length=50)
-    ssh_username = models.CharField(max_length=25)
-    ssh_password = models.CharField(max_length=50, null=True, blank=True)
-    ssh_key = models.CharField(max_length=4096, null=True, blank=True)
-    description = models.CharField(max_length=1024, null=True, blank=True)
+    address = models.CharField(max_length=80, primary_key=True, blank=False)
+    rest_username = models.CharField(max_length=32, blank=False)
+    rest_password = models.CharField(max_length=64, blank=False)
+    ssh_username = models.CharField(max_length=32, blank=False)
+    ssh_password = models.CharField(max_length=64, blank=True)
+    ssh_key = models.CharField(max_length=4096, blank=True)
+    description = models.CharField(max_length=1024, blank=True)
 
     def __str__(self):
         return self.address
@@ -34,7 +34,7 @@ class Server(models.Model):
 
 class BucketType(models.Model):
 
-    type = models.CharField(max_length=9)
+    type = models.CharField(max_length=9, primary_key=True)
 
     def __str__(self):
         return self.type
@@ -49,11 +49,11 @@ class Bucket(models.Model):
 
         unique_together = ["name", "server"]
 
-    server = models.ForeignKey('Server')
-    name = models.CharField(max_length=25, default="default")
+    name = models.CharField(max_length=32, default="default")
+    server = models.ForeignKey("Server")
     type = models.ForeignKey("BucketType")
-    port = models.IntegerField(default=11211)
-    password = models.CharField(max_length=50, null=True, blank=True)
+    port = models.IntegerField(default=11211, blank=True)
+    password = models.CharField(max_length=64, blank=True)
 
     def __str__(self):
         return self.name
@@ -71,7 +71,7 @@ class Metric(models.Model):
     cluster = models.ForeignKey("Cluster", null=True, blank=True)
     server = models.ForeignKey("Server", null=True, blank=True)
     bucket = models.ForeignKey("Bucket", null=True, blank=True)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=64)
 
     def __str__(self):
         return self.name
@@ -89,7 +89,7 @@ class Event(models.Model):
     cluster = models.ForeignKey("Cluster", null=True, blank=True)
     server = models.ForeignKey("Server", null=True, blank=True)
     bucket = models.ForeignKey("Bucket", null=True, blank=True)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=64)
 
     def __str__(self):
         return self.name

@@ -2,13 +2,12 @@ import json
 import logging
 import logging.config
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.datastructures import MultiValueDictKeyError
-from django.db import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist
 
 import models
+import forms
 
 logging.config.fileConfig("webapp/logging.conf")
 logger = logging.getLogger()
@@ -42,85 +41,90 @@ def dispatcher(request, path):
         return HttpResponse(content='Wrong path', status=404)
 
 
-def exception_less(method):
+class ValidationError(Exception):
+
+    def __init__(self, form):
+        self.error = dict((item[0], item[1][0]) for item in form.errors.items())
+
+    def __str__(self):
+        return str(self.error)
+
+
+def form_validation(method):
     def wrapper(*args, **kargs):
         try:
             response = method(*args, **kargs)
-        except MultiValueDictKeyError, error:
+        except Http404, error:
             logger.warn(error)
-            return HttpResponse(content="Missing Parameter", status=400)
-        except IntegrityError, error:
+            return HttpResponse(content=error, status=404)
+        except ValidationError, error:
             logger.warn(error)
-            return HttpResponse(content="Duplicate", status=400)
-        except ObjectDoesNotExist, error:
-            logger.warn(error)
-            return HttpResponse(content="Bad Parent", status=400)
-        except ValueError, error:
-            logger.warn(error)
-            return HttpResponse(content="Bad Parameter", status=400)
+            return HttpResponse(content=error, status=400)
         else:
             return response or HttpResponse(content="Success")
     return wrapper
 
 
-@exception_less
+@form_validation
 def add_cluster(request):
-    models.Cluster.objects.create(
-        name=request.POST["name"],
-        description=request.POST.get("description", "")
-    )
+    form = forms.AddClusterForm(request.POST)
+    if form.is_valid():
+        form.save()
+    else:
+        raise ValidationError(form)
 
 
-@exception_less
+@form_validation
 def add_server(request):
-    cluster = models.Cluster.objects.get(name=request.POST["cluster"])
-
-    if not request.POST.get("ssh_password", "") and \
-            not request.POST.get("ssh_key", ""):
-        raise MultiValueDictKeyError
-
-    models.Server.objects.create(
-        cluster=cluster,
-        address=request.POST["address"],
-        rest_username=request.POST["rest_username"],
-        rest_password=request.POST["rest_password"],
-        ssh_username=request.POST["ssh_username"],
-        ssh_password=request.POST.get("ssh_password", ""),
-        ssh_key=request.POST.get("ssh_key", ""),
-        description=request.POST.get("description", "")
-    )
+    form = forms.AddServerForm(request.POST)
+    if form.is_valid():
+        form.save()
+    else:
+        raise ValidationError(form)
 
 
-@exception_less
+@form_validation
 def add_bucket(request):
-    server = models.Server.objects.get(address=request.POST["server"])
-    bucket_type = models.BucketType.objects.get(type=request.POST["type"])
-
-    models.Bucket.objects.create(
-        server=server,
-        name=request.POST["name"],
-        type=bucket_type,
-        port=request.POST["port"],
-        password=request.POST.get("password", None)
-    )
+    form = forms.AddBucketForm(request.POST)
+    if form.is_valid():
+        form.save()
+    else:
+        raise ValidationError(form)
 
 
-@exception_less
+@form_validation
 def delete_cluster(request):
-    models.Cluster.objects.filter(name=request.POST["name"]).delete()
+    cluster = get_object_or_404(models.Cluster, name=request.POST["name"])
+
+    form = forms.DeleteClusterForm(request.POST, instance=cluster)
+    if form.is_valid():
+        cluster.delete()
+    else:
+        raise ValidationError(form)
 
 
-@exception_less
+@form_validation
 def delete_server(request):
-    models.Server.objects.filter(address=request.POST["address"]).delete()
+    server = get_object_or_404(models.Server, address=request.POST["address"])
+
+    form = forms.DeleteServerForm(request.POST, instance=server)
+    if form.is_valid():
+        server.delete()
+    else:
+        raise ValidationError(form)
 
 
-@exception_less
+@form_validation
 def delete_bucket(request):
-    server = models.Server.objects.get(address=request.POST["server"])
-    buckets = models.Bucket.objects.filter(name=request.POST["name"],
-                                           server=server)
-    buckets.delete()
+    server = get_object_or_404(models.Server, address=request.POST["server"])
+    bucket = get_object_or_404(models.Bucket, name=request.POST["name"],
+                               server=server)
+
+    form = forms.DeleteBucketForm(request.POST, instance=bucket)
+    if form.is_valid():
+        bucket.delete()
+    else:
+        raise ValidationError(form)
 
 
 def get_tree_data(request):
@@ -151,27 +155,38 @@ def get_tree_data(request):
     return HttpResponse(content=json.dumps(response))
 
 
-@exception_less
+@form_validation
 def get_clusters(request):
     """Get list of active clusters"""
-    clusters = [c.name for c in models.Cluster.objects.all()]
-    return HttpResponse(content=json.dumps(clusters))
+    clusters = models.Cluster.objects.values("name").get()
+    content = json.dumps(clusters.values())
+    return HttpResponse(content)
 
 
-@exception_less
+@form_validation
 def get_servers(request):
     """Get list of active servers for given cluster"""
-    cluster = models.Cluster.objects.get(name=request.GET["cluster"])
-    servers = [s.address for s in models.Server.objects.filter(cluster=cluster)]
-    return HttpResponse(content=json.dumps(servers))
+    form = forms.GetServersForm(request.GET)
+    if form.is_valid():
+        cluster = get_object_or_404(models.Cluster, name=request.GET["cluster"])
+        servers = models.Server.objects.values("address").get(cluster=cluster)
+        content = json.dumps(servers.values())
+        return HttpResponse(content)
+    else:
+        raise ValidationError(form)
 
 
-@exception_less
+@form_validation
 def get_buckets(request):
     """Get list of active buckets for given server"""
-    server = models.Server.objects.get(address=request.GET["server"])
-    buckets = [b.name for b in models.Bucket.objects.filter(server=server)]
-    return HttpResponse(content=json.dumps(buckets))
+    form = forms.GetBucketsForm(request.GET)
+    if form.is_valid():
+        server = get_object_or_404(models.Server, address=request.GET["server"])
+        buckets = models.Bucket.objects.values("name").get(server=server)
+        content = json.dumps(buckets.values())
+        return HttpResponse(content)
+    else:
+        raise ValidationError(form)
 
 
 def get_metrics_and_events(request):
@@ -191,8 +206,9 @@ def get_metrics_and_events(request):
         params.update({"bucket__isnull": True})
 
     if request.GET["type"] == "metric":
-        data = [m.name for m in models.Metric.objects.filter(**params)]
+        data = models.Metric.objects.values("name").get(**params)
     else:
-        data = [e.name for e in models.Event.objects.filter(**params)]
+        data = models.Event.objects.values("name").get(**params)
+    content = json.dumps(data.values())
 
-    return HttpResponse(content=json.dumps(data))
+    return HttpResponse(content)

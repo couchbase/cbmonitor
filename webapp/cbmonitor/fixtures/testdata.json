@@ -25,9 +25,9 @@
         "fields": {
             "name": "default",
             "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+            "type": "Couchbase",
             "password": "",
-            "port": 11211,
-            "type": 1
+            "port": 11211
         }
     },
     {

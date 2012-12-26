@@ -48,19 +48,26 @@ class ApiTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def verify_missing_parameter(self, response):
-        self.assertEqual(response.content, "Missing Parameter")
+        self.assertTrue("field is required" in response.content)
         self.assertEqual(response.status_code, 400)
 
     def verify_duplicate(self, response):
-        self.assertEqual(response.content, "Duplicate")
+        self.assertTrue("already exists" in response.content)
         self.assertEqual(response.status_code, 400)
 
     def verify_bad_parent(self, response):
-        self.assertEqual(response.content, "Bad Parent")
+        self.assertTrue(
+            "does not exist" in response.content or
+            "Select a valid choice" in response.content
+        )
         self.assertEqual(response.status_code, 400)
 
+    def verify_not_existing(self, response):
+        self.assertTrue("matches the given query" in response.content)
+        self.assertEqual(response.status_code, 404)
+
     def verify_bad_parameter(self, response):
-        self.assertEqual(response.content, "Bad Parameter")
+        self.assertTrue("Enter a whole number" in response.content)
         self.assertEqual(response.status_code, 400)
 
     def verify_valid_json(self, response):
@@ -105,6 +112,14 @@ class ApiTest(TestCase):
     def test_add_cluster_wo_name(self):
         """Adding new cluster with missing mandatory params"""
         params = {"description": uhex()}
+        response = self.add_item("cluster", params)
+
+        # Verify response
+        self.verify_missing_parameter(response)
+
+    def test_add_cluster_with_empty_name(self):
+        """Adding new cluster with empty mandatory params"""
+        params = {"name": ""}
         response = self.add_item("cluster", params)
 
         # Verify response
@@ -249,6 +264,13 @@ class ApiTest(TestCase):
         # Verify persistence
         self.assertRaises(ObjectDoesNotExist, models.Cluster.objects.get,
                           name=cluster)
+
+    def test_remove_cluster_not_existing(self):
+        """Removing not existing cluster"""
+        response = self.delete_item("cluster", {"name": uhex()})
+
+        # Verify response
+        self.verify_not_existing(response)
 
     def test_remove_server(self):
         """Removing existing cluster"""
