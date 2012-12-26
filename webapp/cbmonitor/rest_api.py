@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 import models
 
-logging.config.fileConfig("logging.conf")
+logging.config.fileConfig("webapp/logging.conf")
 logger = logging.getLogger()
 
 
