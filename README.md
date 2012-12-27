@@ -11,6 +11,8 @@ Django:
 
     pip install zc.buildbot
 
+    pip install couchdbkit
+
 cbtop:
 
     pip install blessings
