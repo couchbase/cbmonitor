@@ -3,73 +3,60 @@
 var oTable;
 var colHdrs = [];       // e.g: ['sTitle': 'Testcase', 'sTitle': 'Env', ... ]
 var rowHdrs = [];       // e.g: ['mixed-2suv', 'lucky6', ...]
-var baselines = [];
-var WARNING_RANGE = 0.1;
-var ERROR_RANGE = 0.3;           // TODO: user define
+var BASELINE = "1.8.1-938-rel-enterprise";
+var WARNING = 0.1;
+var ERROR = 0.3;
 
-function createSettings() {
-    /*
-     * Create user setting table
-     *
-     * The first two columns are reserved for build infos and timestamps
-     * Actual settings starts from column 3
-     */
-    var buildList = '';
-    var content = '';
-
-    $.each(colHdrs.slice(2), function(j, build) {
-        buildList += '<option value="' + build.sTitle + '">';
-        buildList +=  build.sTitle + '</option>';
-    });
-
-    $.each(rowHdrs, function(i, metric) {
-        content += '<tr><td>' + metric + '</td>';
-        content += '<td><select>' + buildList + '</select></td></tr>';
-    });
-
-    return content;
+function Settings(testcase, metric) {
+    this.testcase = testcase;
+    this.metric = metric;
+    this.baseline = BASELINE;
+    this.error = ERROR;
+    this.warning = WARNING;
 }
 
-function saveSettings() {
-    /*
-     * Save user defined settings to cookie
-     */
-    $('#settings table tbody tr').each(function(i) {
-        var col = $(this).find('td').eq(0).text();
-        var build = $(this).find("select option:selected").text();
-        $.cookie(col, build, { expires: 14 });
-        oTable.$('tr').each(function() {
-            var row = oTable.fnGetData(this);
-            if (row[0] === build) {
-                baselines[i] = parseInt(row[2+i]);
-            }
-        });
-    });
-}
-
-function getSettings() {
+function getSettings(settings) {
     /*
      * Get user defined settings
      */
-    $('#settings table tbody tr').each(function(i) {
-        var col = $(this).find('td').eq(0).text();
-        var build = $.cookie(col);
-        if (build !== null) {
-            $(this).find('select option').filter(function() {
-                return $(this).text() === build;
-            }).attr('selected', true);
-        } else {
-            build = $(this).find("select option:selected").text();
-        }
-        oTable.$('tr').each(function() {
-            var row = oTable.fnGetData(this);
-            if (row[0] === build) {
-                baselines[i] = parseInt(row[2+i]);
-            }
-        });
-    });
+    $.get('/litmus/get/settings',
+        {'testcase': settings.testcase, 'metric': settings.metric},
+        function(data) {
+            settings.error = data.error;
+            settings.warning = data.warning;
+            settings.baseline = data.baseline;
+        }, 'json');
 }
 
+function changeColors(row, vals, error, warning) {
+    /**
+     * Change cell colors based on the baseline values
+     */
+    return function(data) {
+        if (data.length === 1) {
+            return;
+        }
+        var baseval = data[1][4];
+        $.each(vals.slice(4), function(j, v) {
+            v = parseInt(v);
+            $(row).find('td').eq(j+4).removeAttr("style");
+            if (!isNaN(baseval) && !isNaN(v)) {
+                var delta = (v - baseval) / baseval;
+                if (Math.abs(error) < Math.abs(warning)) {
+                    console.error("invalid error/warning ranges");
+                    return;
+                }
+                if ((delta > error && error > 0) ||
+                    (delta < error && error < 0)) {
+                    $(row).find('td').eq(j+4).css("background-color","red");
+                } else if ((delta > warning && delta < error) ||
+                    (delta < warning && delta > error)) {
+                    $(row).find('td').eq(j+4).css("background-color","yellow");
+                }
+            }
+        });
+    };
+}
 function applyErrorRanges() {
     /*
      * Apply error range check for each cell
@@ -78,26 +65,18 @@ function applyErrorRanges() {
      * Accept negative ranges
      */
     oTable.$('tr').each(function() {
-        var row = $(this);
+        var row = this;
         var vals = oTable.fnGetData(this);
-        $.each(vals.slice(2), function(j, v) {
-            v = parseInt(v);
-            $(row).find('td').eq(j+2).removeAttr("style");
-            if (!isNaN(baselines[j]) && !isNaN(v)) {
-                var delta = (v - baselines[j]) / baselines[j];
-                if (Math.abs(ERROR_RANGE) < Math.abs(WARNING_RANGE)) {
-                    console.log("invalid error/warning ranges");
-                    return;
-                }
-                if ((delta > ERROR_RANGE && ERROR_RANGE > 0) ||
-                    (delta < ERROR_RANGE && ERROR_RANGE < 0)) {
-                    $(row).find('td').eq(j+2).css("background-color","red");
-                } else if ((delta > WARNING_RANGE && delta < ERROR_RANGE) ||
-                           (delta < WARNING_RANGE && delta > ERROR_RANGE)) {
-                    $(row).find('td').eq(j+2).css("background-color","yellow");
-                }
-            }
-        });
+        var settings = new Settings(vals[0], vals[2]);
+        getSettings(settings);
+        var uri = '/litmus/get';
+        var criteria = {'testcase': settings.testcase,
+                        'metric': settings.metric,
+                        'build': settings.baseline,
+                        'env': vals[1]};
+        $.get(uri, criteria,
+              changeColors(row, vals, settings.error, settings.warning),
+              'json');
     });
 }
 

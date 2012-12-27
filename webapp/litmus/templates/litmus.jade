@@ -11,20 +11,10 @@ block include
     script(src='/static/scripts/litmus.js')
     script(charset='utf-8')
         $(document).ready(function(){
-            $('#settings table').toggle();
-            $('#settingsToggle').button().click(function() {
-                $('#settings table').toggle('blind');
-            });
-            $('#settings table').change(function() {
-                saveSettings();
-                applyErrorRanges();
-            });
-            $.get('/litmus/get/', { },
+            $.get('/litmus/get?all', { },
                 function(data) {
                     processData(data);
-                    $('#settings table tbody').html(createSettings);
                     renderTable(data);
-                    getSettings();
                     applyErrorRanges();
             }, 'json');
             setInterval(function() {
@@ -33,15 +23,6 @@ block include
         });
 
 block main
-    #settings
-        input(type='checkbox', id='settingsToggle')
-        label(for="settingsToggle") Settings
-        table
-            thead
-                th Metric
-                th Baseline Build
-            tbody
-
     #litmus
         table
             p(style='text-align: center', id='loading') Loading
