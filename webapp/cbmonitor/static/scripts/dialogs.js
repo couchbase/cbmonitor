@@ -3,12 +3,33 @@
  */
 var CBMONITOR = CBMONITOR || {};
 
+CBMONITOR.highlightErrors = function(jqXHR, prefix) {
+    "use strict";
+
+    var response = JSON.parse(jqXHR.responseText),
+        $key;
+    for(var key in response) {
+
+        if (key === "name") {
+            $key = $("#" + prefix + key);
+        } else if (key === "__all__") {
+            $key = $("#ssh_password");
+            $key.addClass("ui-state-error");
+            $key = $("#ssh_key");
+        } else {
+            $key = $("#" + key);
+        }
+        $key.addClass("ui-state-error");
+    }
+};
+
 CBMONITOR.addNewCluster = function() {
     "use strict";
 
     var jstree = $("#tree"),
-        name = $("#name"),
-        description = $("#description");
+        name = $("#cname"),
+        description = $("#description"),
+        fields = $([]).add(name).add(description);
 
     $("#dialog_new_cluster").dialog({
         autoOpen: false,
@@ -18,6 +39,7 @@ CBMONITOR.addNewCluster = function() {
         resizable: false,
         buttons: {
             "Add new cluster": function() {
+                fields.removeClass("ui-state-error");
                 $.ajax({
                     type: "POST", url: "/cbmonitor/add_cluster/",
                     data: {
@@ -32,12 +54,16 @@ CBMONITOR.addNewCluster = function() {
                             },
                             false, true
                         );
+                        $("#dialog_new_cluster").dialog("close");
+                    },
+                    error: function(jqXHR) {
+                        CBMONITOR.highlightErrors(jqXHR, "c");
                     }
                 });
-                $(this).dialog("close");
             },
             Cancel: function() {
-                $(this).dialog("close");
+                fields.val("").removeClass("ui-state-error");
+                $("#dialog_new_cluster").dialog("close");
             }
         }
     });
@@ -53,7 +79,9 @@ CBMONITOR.addNewServer = function() {
         ssh_username = $("#ssh_username"),
         ssh_password = $("#ssh_password"),
         ssh_key = $("#ssh_key"),
-        description = $("#description");
+        description = $("#description"),
+        fields = $([]).add(address).add(rest_username).add(rest_password)
+            .add(ssh_username).add(ssh_password).add(ssh_key).add(description);
 
     $("#dialog_new_server").dialog({
         autoOpen: false,
@@ -63,6 +91,7 @@ CBMONITOR.addNewServer = function() {
         modal: true,
         buttons: {
             "Add new server": function() {
+                fields.removeClass("ui-state-error");
                 $.ajax({
                     type: "POST", url: "/cbmonitor/add_server/",
                     data: {
@@ -83,12 +112,17 @@ CBMONITOR.addNewServer = function() {
                             },
                             false, true
                         );
+                        $("#dialog_new_server").dialog("close");
+                    },
+                    error: function(jqXHR) {
+                        CBMONITOR.highlightErrors(jqXHR, "");
                     }
                 });
-                $(this).dialog("close");
+
             },
             Cancel: function() {
-                $(this).dialog("close");
+                fields.val("").removeClass("ui-state-error");
+                $("#dialog_new_server").dialog("close");
             }
         }
     });
@@ -98,10 +132,11 @@ CBMONITOR.addNewBucket = function() {
     "use strict";
 
     var jstree = $("#tree"),
-        name = $("#name"),
+        name = $("#bname"),
         type = $("#type"),
         port = $("#port"),
-        password = $("#password");
+        password = $("#password"),
+        fields = $([]).add(name).add(type).add(port).add(password);
 
     $("#dialog_new_bucket").dialog({
         autoOpen: false,
@@ -111,6 +146,7 @@ CBMONITOR.addNewBucket = function() {
         modal: true,
         buttons: {
             "Add new bucket": function() {
+                fields.removeClass("ui-state-error");
                 $.ajax({
                     type: "POST", url: "/cbmonitor/add_bucket/",
                     data: {
@@ -128,12 +164,16 @@ CBMONITOR.addNewBucket = function() {
                             },
                             false, true
                         );
+                        $("#dialog_new_bucket").dialog("close");
+                    },
+                    error: function(jqXHR) {
+                        CBMONITOR.highlightErrors(jqXHR, "b");
                     }
                 });
-                $(this).dialog("close");
             },
             Cancel: function() {
-                $(this).dialog("close");
+                fields.val("").removeClass("ui-state-error");
+                $("#dialog_new_bucket").dialog("close");
             }
         }
     });

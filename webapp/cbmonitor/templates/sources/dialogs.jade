@@ -1,8 +1,8 @@
 div#dialog_new_cluster.new_item(title="Add new cluster")
     form
     fieldset
-        label.mandatory(for="name") * Name
-        input#name.text.ui-widget-content.ui-corner-all(type="text", name="name")
+        label.mandatory(for="cname") * Name
+        input#cname.text.ui-widget-content.ui-corner-all(type="text", name="name")
         label(for="description") Description
         textarea#description.text.ui-widget-content.ui-corner-all
         p * Required field
@@ -29,11 +29,11 @@ div#dialog_new_server.new_item(title="Add new server")
 div#dialog_new_bucket.new_item(title="Add new bucket")
     form
     fieldset
-        label(for="name") * Name
-        input#name.text.ui-widget-content.ui-corner-all(type="text", name="name")
+        label(for="bname") * Name
+        input#bname.text.ui-widget-content.ui-corner-all(type="text", name="name")
         label(for="type") * Type
         input#type.text.ui-widget-content.ui-corner-all(type="text", name="type")
-        label(for="port") * Port
+        label(for="port") Port
         input#port.text.ui-widget-content.ui-corner-all(type="text", name="port")
         label(for="password") Password
         input#password.text.ui-widget-content.ui-corner-all(type="text", name="password")

@@ -47,7 +47,7 @@ class ValidationError(Exception):
         self.error = dict((item[0], item[1][0]) for item in form.errors.items())
 
     def __str__(self):
-        return str(self.error)
+        return json.dumps(self.error)
 
 
 def form_validation(method):
