@@ -8,18 +8,19 @@ CBMONITOR.highlightErrors = function(jqXHR, prefix) {
 
     var response = JSON.parse(jqXHR.responseText),
         $key;
-    for(var key in response) {
-
-        if (key === "name") {
-            $key = $("#" + prefix + key);
-        } else if (key === "__all__") {
-            $key = $("#ssh_password");
+    for (var key in response) {
+        if (response.hasOwnProperty(key)) {
+            if (key === "name") {
+                $key = $("#" + prefix + key);
+            } else if (key === "__all__") {
+                $key = $("#ssh_password");
+                $key.addClass("ui-state-error");
+                $key = $("#ssh_key");
+            } else {
+                $key = $("#" + key);
+            }
             $key.addClass("ui-state-error");
-            $key = $("#ssh_key");
-        } else {
-            $key = $("#" + key);
         }
-        $key.addClass("ui-state-error");
     }
 };
 
