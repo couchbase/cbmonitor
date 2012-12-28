@@ -22,7 +22,6 @@ class TestResults(models.Model):
     env = models.CharField(max_length=128)
     testcase = models.CharField(max_length=128)
     metric = models.CharField(max_length=128)
-    value = models.FloatField(null=True, blank=True)
     comment = models.CharField(max_length=1024)
     settings = models.ForeignKey(Settings)
 
@@ -32,5 +31,10 @@ class TestResults(models.Model):
     class Admin:
         pass
 
+class Value(models.Model):
+    value = models.FloatField(null=True, blank=True)
+    test_results = models.ForeignKey(TestResults)
+
 admin.site.register(Settings)
+admin.site.register(Value)
 admin.site.register(TestResults)

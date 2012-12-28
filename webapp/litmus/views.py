@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 
-from models import Settings, TestResults
+from models import Settings, Value, TestResults
 
 
 def dashboard(request):
@@ -31,7 +31,8 @@ def update_or_create(testcase, env, build, metric, value=None, comment=None):
                                                              metric=metric, settings=settings)
     testresults.timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
     if value:
-        testresults.value = value
+        v = Value(value=value)
+        testresults.value_set.add(v)
     if comment:
         testresults.comment = comment
     testresults.save()
