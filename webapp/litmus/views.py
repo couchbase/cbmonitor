@@ -101,15 +101,15 @@ def get(request):
         objs = TestResults.objects.filter(**criteria)
 
     builds = objs.values('build').order_by('build').reverse().distinct()
-    all_stats = objs.values()
     agg_stats = defaultdict(dict)
-    for stat in all_stats:
-        key = "%s-%s-%s" % (stat['testcase'], stat['env'], stat['metric'])
-        agg_stats[key]['testcase'] = stat['testcase']
-        agg_stats[key]['env'] = stat['env']
-        agg_stats[key]['metric'] = stat['metric']
-        agg_stats[key]['timestamp'] = stat['timestamp']
-        agg_stats[key][stat['build']] = stat['value']
+    for obj in objs:
+        key = "%s-%s-%s" % (obj.testcase, obj.env, obj.metric)
+        agg_stats[key]['testcase'] = obj.testcase
+        agg_stats[key]['env'] = obj.env
+        agg_stats[key]['metric'] = obj.metric
+        agg_stats[key]['timestamp'] = obj.timestamp
+        agg_stats[key][obj.build] = " / ".join(map(lambda v: str(v.value),
+                                               obj.value_set.all()))
 
     response = [['Testcase', 'Env', 'Metric', 'Timestamp']
                 + [row['build'] for row in builds], ]
