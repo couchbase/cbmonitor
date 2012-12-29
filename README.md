@@ -22,9 +22,7 @@ cbtop:
 Web application setup
 ---------------------
 
-    buildout bootstrap
-
-    ./bin/buildout
+    buildout
 
     ./bin/django syncdb
 
