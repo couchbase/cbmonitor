@@ -2,6 +2,7 @@ import json
 import time
 from collections import defaultdict
 
+from django.conf import settings as DjangoSettings
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST, require_GET
@@ -108,8 +109,11 @@ def get(request):
         agg_stats[key]['env'] = obj.env
         agg_stats[key]['metric'] = obj.metric
         agg_stats[key]['timestamp'] = obj.timestamp
-        agg_stats[key][obj.build] = " / ".join(map(lambda v: str(v.value),
-                                               obj.value_set.all()))
+        values = obj.value_set.all()
+        if DjangoSettings.LITMUS_AVG_RESULTS:
+            agg_stats[key][obj.build] = reduce(lambda x, y: x.value + y.value, values) / len(values)
+        else:
+            agg_stats[key][obj.build] = " / ".join(map(lambda v: str(v.value), values))
 
     response = [['Testcase', 'Env', 'Metric', 'Timestamp']
                 + [row['build'] for row in builds], ]
