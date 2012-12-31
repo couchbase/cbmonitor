@@ -15,28 +15,21 @@ logger = logging.getLogger()
 
 @csrf_exempt
 def dispatcher(request, path):
-    if path == "add_cluster":
-        return add_cluster(request)
-    if path == "add_server":
-        return add_server(request)
-    if path == "add_bucket":
-        return add_bucket(request)
-    if path == "delete_cluster":
-        return delete_cluster(request)
-    if path == "delete_server":
-        return delete_server(request)
-    if path == "delete_bucket":
-        return delete_bucket(request)
-    if path == "get_tree_data":
-        return get_tree_data(request)
-    if path == "get_clusters":
-        return get_clusters(request)
-    if path == "get_servers":
-        return get_servers(request)
-    if path == "get_buckets":
-        return get_buckets(request)
-    if path == "get_metrics_and_events":
-        return get_metrics_and_events(request)
+    handler = {
+        "add_cluster": add_cluster,
+        "add_server": add_server,
+        "add_bucket": add_bucket,
+        "delete_cluster": delete_cluster,
+        "delete_server": delete_server,
+        "delete_bucket": delete_bucket,
+        "get_tree_data": get_tree_data,
+        "get_clusters": get_clusters,
+        "get_servers": get_servers,
+        "get_buckets": get_buckets,
+        "get_metrics_and_events": get_metrics_and_events
+    }.get(path)
+    if handler:
+        return handler(request)
     else:
         return HttpResponse(content='Wrong path', status=404)
 
