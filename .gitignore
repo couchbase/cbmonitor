@@ -8,3 +8,4 @@ MemcachedSource-*.json
 bin
 develop-eggs
 eggs
+parts
