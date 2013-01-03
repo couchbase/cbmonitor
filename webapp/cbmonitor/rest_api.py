@@ -5,6 +5,7 @@ import logging.config
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
 
 import models
 import forms
@@ -151,8 +152,8 @@ def get_tree_data(request):
 @form_validation
 def get_clusters(request):
     """Get list of active clusters"""
-    clusters = models.Cluster.objects.values("name").get()
-    content = json.dumps(clusters.values())
+    clusters = [c.name for c in models.Cluster.objects.all()]
+    content = json.dumps(clusters)
     return HttpResponse(content)
 
 
@@ -161,9 +162,13 @@ def get_servers(request):
     """Get list of active servers for given cluster"""
     form = forms.GetServersForm(request.GET)
     if form.is_valid():
-        cluster = get_object_or_404(models.Cluster, name=request.GET["cluster"])
-        servers = models.Server.objects.values("address").get(cluster=cluster)
-        content = json.dumps(servers.values())
+        try:
+            cluster = models.Cluster.objects.get(name=request.GET["cluster"])
+            servers = models.Server.objects.\
+                values("address").get(cluster=cluster).values()
+        except DoesNotExist:
+            servers = []
+        content = json.dumps(servers)
         return HttpResponse(content)
     else:
         raise ValidationError(form)
@@ -174,9 +179,13 @@ def get_buckets(request):
     """Get list of active buckets for given server"""
     form = forms.GetBucketsForm(request.GET)
     if form.is_valid():
-        server = get_object_or_404(models.Server, address=request.GET["server"])
-        buckets = models.Bucket.objects.values("name").get(server=server)
-        content = json.dumps(buckets.values())
+        try:
+            server = models.Server.objects.get(address=request.GET["server"])
+            buckets = models.Bucket.objects.\
+                values("name").get(server=server).values()
+        except DoesNotExist:
+            buckets = []
+        content = json.dumps(buckets)
         return HttpResponse(content)
     else:
         raise ValidationError(form)
