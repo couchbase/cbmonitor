@@ -10,7 +10,7 @@ def index(request):
     except IndexError:
         servers = []
     try:
-        buckets = [b for b in models.Bucket.objects.filter(server=servers[0])]
+        buckets = [b for b in models.Bucket.objects.filter(cluster=clusters[0])]
     except IndexError:
         buckets = []
 

@@ -46,7 +46,7 @@ class DeleteBucketForm(ModelForm):
 
     class Meta:
         model = models.Bucket
-        fields = ("server", "name")
+        fields = ("cluster", "name")
 
 
 class GetServersForm(ModelForm):
@@ -60,4 +60,4 @@ class GetBucketsForm(ModelForm):
 
     class Meta:
         model = models.Bucket
-        fields = ("server", )
+        fields = ("cluster", )

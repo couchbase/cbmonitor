@@ -93,11 +93,13 @@ CBMONITOR.addNewServer = function() {
         buttons: {
             "Add new server": function() {
                 fields.removeClass("ui-state-error");
+                var servers = jstree.jstree("get_selected"),
+                    cluster = $.jstree._reference(servers)._get_parent(servers);
                 $.ajax({
                     type: "POST", url: "/cbmonitor/add_server/",
                     data: {
                         "address": address.val(),
-                        "cluster": jstree.jstree("get_selected").attr("id"),
+                        "cluster": cluster.attr("id"),
                         "rest_username": rest_username.val(),
                         "rest_password": rest_password.val(),
                         "ssh_username": ssh_username.val(),
@@ -119,7 +121,6 @@ CBMONITOR.addNewServer = function() {
                         CBMONITOR.highlightErrors(jqXHR, "");
                     }
                 });
-
             },
             Cancel: function() {
                 fields.val("").removeClass("ui-state-error");
@@ -148,11 +149,13 @@ CBMONITOR.addNewBucket = function() {
         buttons: {
             "Add new bucket": function() {
                 fields.removeClass("ui-state-error");
+                var buckets = jstree.jstree("get_selected"),
+                    cluster = $.jstree._reference(buckets)._get_parent(buckets);
                 $.ajax({
                     type: "POST", url: "/cbmonitor/add_bucket/",
                     data: {
                         "name": name.val(),
-                        "server": jstree.jstree("get_selected").attr("id"),
+                        "cluster": cluster.attr("id"),
                         "type": type.val(),
                         "port": port.val(),
                         "password": password.val()
@@ -197,11 +200,14 @@ CBMONITOR.deleteItem = function() {
                     renc = $("#renc"),
                     delc = $("#delc"),
                     adds = $("#adds"),
-                    prnt = $.jstree._reference(selected)._get_parent(selected),
-                    prev = $.jstree._reference(selected)._get_prev(selected),
+                    prnt_cont = $.jstree._reference(selected)._get_parent(selected),
+                    prev_cont = $.jstree._reference(selected)._get_parent(selected),
                     data,
-                    url;
-
+                    url,
+                    prnt;
+                if (prnt_cont !== -1 && prev_cont !== -1) {
+                    prnt = $.jstree._reference(prnt_cont)._get_parent(prnt_cont);
+                }
                 switch(selected_class) {
                     case "cluster":
                         data = {"name": selected_id};
@@ -212,7 +218,10 @@ CBMONITOR.deleteItem = function() {
                         url = "/cbmonitor/delete_server/";
                         break;
                     case "bucket":
-                        data = {"name": selected_id, "server": prnt.attr("id")};
+                        data = {
+                            "name": selected_id,
+                            "cluster": prnt.attr("id")
+                        };
                         url = "/cbmonitor/delete_bucket/";
                         break;
                     default:
@@ -221,7 +230,7 @@ CBMONITOR.deleteItem = function() {
                 $.ajax({
                     type: "POST", url: url, data: data,
                     success: function(){
-                        if (prnt === -1 && prev === false) {
+                        if (prnt_cont === -1 && prev_cont === -1) {
                             renc.addClass("ui-state-disabled");
                             delc.addClass("ui-state-disabled");
                             adds.addClass("ui-state-disabled");

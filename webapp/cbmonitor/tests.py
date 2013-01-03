@@ -192,7 +192,7 @@ class ApiTest(TestCase):
         self.add_item("server", params)
 
         params = {
-            "server": server,
+            "cluster": cluster,
             "name": uhex(), "type": choice(("Couchbase", "Memcached")),
             "port": randint(1, 65535), "password": uhex()
         }
@@ -203,7 +203,7 @@ class ApiTest(TestCase):
 
         # Verify persistence
         bucket = models.Bucket.objects.get(name=params["name"])
-        self.assertEqual(bucket.server.cluster.name, cluster)
+        self.assertEqual(bucket.cluster.name, cluster)
 
     def test_add_bucket_with_wrong_port(self):
         """Adding new bucket with wrong type of port parameter"""
@@ -307,21 +307,22 @@ class ApiTest(TestCase):
         self.add_item("server", params)
 
         params = {
-            "server": params["address"],
-            "name": uhex(), "type": choice(("Couchbase", "Memcached")),
+            "name": uhex(), "cluster": cluster,
+            "type": choice(("Couchbase", "Memcached")),
             "port": randint(1, 65535), "password": uhex()
         }
         self.add_item("bucket", params)
 
         response = self.delete_item("bucket",
-                                    {"name": params["name"], "server": server})
+                                    {"name": params["name"],
+                                     "cluster": cluster})
 
         # Verify response
         self.verify_valid_response(response)
 
         # Verify persistence
         self.assertRaises(ObjectDoesNotExist, models.Bucket.objects.get,
-                          name=params["name"], server=server)
+                          name=params["name"], cluster=cluster)
 
     def test_get_tree_data(self):
         request = self.factory.get("/get_tree_data")
@@ -367,7 +368,7 @@ class ApiTest(TestCase):
         self.verify_bad_parent(response)
 
     def test_get_buckets(self):
-        params = {"server": "ec2-54-242-160-13.compute-1.amazonaws.com"}
+        params = {"cluster": "East"}
         request = self.factory.get("/get_buckets", params)
         response = rest_api.dispatcher(request, path="get_buckets")
 

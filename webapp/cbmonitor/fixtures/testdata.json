@@ -24,7 +24,7 @@
         "pk": 1,
         "fields": {
             "name": "default",
-            "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+            "cluster": "East",
             "type": "Couchbase",
             "password": "",
             "port": 11211

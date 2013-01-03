@@ -47,10 +47,10 @@ class Bucket(models.Model):
 
     class Meta:
 
-        unique_together = ["name", "server"]
+        unique_together = ["name", "cluster"]
 
     name = models.CharField(max_length=32, default="default")
-    server = models.ForeignKey("Server")
+    cluster = models.ForeignKey("Cluster")
     type = models.ForeignKey("BucketType")
     port = models.IntegerField(default=11211, null=True)
     password = models.CharField(max_length=64, blank=True)

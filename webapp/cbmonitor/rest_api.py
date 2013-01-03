@@ -110,9 +110,9 @@ def delete_server(request):
 
 @form_validation
 def delete_bucket(request):
-    server = get_object_or_404(models.Server, address=request.POST["server"])
+    cluster = get_object_or_404(models.Cluster, name=request.POST["cluster"])
     bucket = get_object_or_404(models.Bucket, name=request.POST["name"],
-                               server=server)
+                               cluster=cluster)
 
     form = forms.DeleteBucketForm(request.POST, instance=bucket)
     if form.is_valid():
@@ -129,21 +129,27 @@ def get_tree_data(request):
         cluster_obj = {
             "data": cluster.name,
             "attr": {"class": "cluster", "id": cluster.name},
-            "children": []
+            "children": [
+                {"data": "Servers",
+                 "attr": {"class": "servers"},
+                 "children": []},
+                {"data": "Buckets",
+                 "attr": {"class": "buckets"},
+                 "children": []}]
         }
         for server in models.Server.objects.filter(cluster=cluster):
             server_obj = {
                 "data": server.address,
-                "attr": {"class": "server", "id": server.address},
-                "children": []
+                "attr": {"class": "server", "id": server.address}
             }
-            for bucket in models.Bucket.objects.filter(server=server):
-                bucket_obj = {
-                    "data": bucket.name,
-                    "attr": {"class": "bucket", "id": bucket.name},
-                }
-                server_obj["children"].append(bucket_obj)
-            cluster_obj["children"].append(server_obj)
+            cluster_obj["children"][0]["children"].append(server_obj)
+        for bucket in models.Bucket.objects.filter(cluster=cluster):
+            bucket_obj = {
+                "data": bucket.name,
+                "attr": {"class": "bucket", "id": bucket.name},
+            }
+            cluster_obj["children"][1]["children"].append(bucket_obj)
+
         response.append(cluster_obj)
 
     return HttpResponse(content=json.dumps(response))
@@ -180,9 +186,9 @@ def get_buckets(request):
     form = forms.GetBucketsForm(request.GET)
     if form.is_valid():
         try:
-            server = models.Server.objects.get(address=request.GET["server"])
+            cluster = models.Cluster.objects.get(name=request.GET["cluster"])
             buckets = models.Bucket.objects.\
-                values("name").get(server=server).values()
+                values("name").get(cluster=cluster).values()
         except DoesNotExist:
             buckets = []
         content = json.dumps(buckets)

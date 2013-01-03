@@ -117,19 +117,22 @@ CBMONITOR.configureCTree = function() {
         var cls = data.rslt.obj.attr("class").split(" ")[0];
         switch(cls) {
             case "cluster":
-                //renc.removeClass("ui-state-disabled");
                 delc.removeClass("ui-state-disabled");
+                adds.addClass("ui-state-disabled");
+                break;
+            case "servers":
                 adds.removeClass("ui-state-disabled");
                 adds.prop("value", "Add server");
                 break;
             case "server":
-                //renc.removeClass("ui-state-disabled");
                 delc.removeClass("ui-state-disabled");
+                adds.addClass("ui-state-disabled");
+                break;
+            case "buckets":
                 adds.removeClass("ui-state-disabled");
                 adds.prop("value", "Add bucket");
                 break;
             case "bucket":
-                //renc.removeClass("ui-state-disabled");
                 delc.removeClass("ui-state-disabled");
                 adds.addClass("ui-state-disabled");
                 break;
@@ -210,15 +213,17 @@ CBMONITOR.configureClusters = function(c_sel, s_sel, b_sel) {
             });
             c_sel.selectmenu({
                 select: function(event, option) {
-                    CBMONITOR.configureMEServers(option.value, s_sel, b_sel);
+                    CBMONITOR.configureMEServers(option.value, s_sel);
+                    CBMONITOR.configureMEBuckets(option.value, b_sel);
                 }
             });
-            CBMONITOR.configureMEServers(clusters[0], s_sel, b_sel);
+            CBMONITOR.configureMEServers(clusters[0], s_sel);
+            CBMONITOR.configureMEBuckets(clusters[0], b_sel);
         }
     });
 };
 
-CBMONITOR.configureMEServers = function(cluster, s_sel, b_sel) {
+CBMONITOR.configureMEServers = function(cluster, s_sel) {
     "use strict";
 
     $.ajax({url: "/cbmonitor/get_servers/", dataType: "json",
@@ -231,22 +236,17 @@ CBMONITOR.configureMEServers = function(cluster, s_sel, b_sel) {
                 var o = new Option(server, server);
                 s_sel.append(o);
             });
-            s_sel.selectmenu({
-                select: function(event, option) {
-                    CBMONITOR.configureMEBuckets(option.value, b_sel);
-                }
-            });
-            CBMONITOR.configureMEBuckets(servers[0], b_sel);
+            s_sel.selectmenu();
         }
     });
 };
 
-CBMONITOR.configureMEBuckets = function(server, b_sel) {
+CBMONITOR.configureMEBuckets = function(cluster, b_sel) {
     "use strict";
 
     $.ajax({url: "/cbmonitor/get_buckets/", dataType: "json",
-        data: {"server": server},
-        success: function(buckets){
+        data: {"cluster": cluster},
+        success: function(buckets) {
             b_sel.empty();
             var o = new Option("None", null);
             b_sel.append(o);
