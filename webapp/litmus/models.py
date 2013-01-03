@@ -26,6 +26,7 @@ class TestResults(models.Model):
     testcase = models.CharField(max_length=128)
     metric = models.CharField(max_length=128)
     comment = models.CharField(max_length=1024)
+    tag = models.CharField(max_length=1024)
     settings = models.ForeignKey(Settings)
 
     class Meta:

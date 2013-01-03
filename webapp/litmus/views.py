@@ -10,13 +10,19 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 
-from models import Settings, Value, TestResults
+from models import Settings, TestResults, Value
 
 
 def dashboard(request):
     """Main litmus dashboard"""
     return render_to_response('litmus.jade')
 
+def gen_tag(build):
+    """Generate tag, e.g: 2.0.0, 2.0.1 in current impl.
+    """
+    if build and len(build) > 4:
+        return build[:5]
+    return "unknown"
 
 def update_or_create(testcase, env, build, metric, value=None, comment=None):
     """Update testresults/settings if exist, otherwise create new ones.
@@ -28,8 +34,10 @@ def update_or_create(testcase, env, build, metric, value=None, comment=None):
                                               metric=metric)[0]
 
     testresults, created = TestResults.objects.get_or_create(build=build,
-                                                             testcase=testcase, env=env,
-                                                             metric=metric, settings=settings)
+                                                             testcase=testcase,
+                                                             env=env, metric=metric,
+                                                             tag=gen_tag(build),
+                                                             settings=settings)
     testresults.timestamp = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
     if value:
         v = Value(value=value)
@@ -55,10 +63,10 @@ def post(request):
     It supports multivalued query parameters.
 
     Sample request:
-        curl -d "build=2.0.0-1723-rel-enterprise\
+        curl -d "build=2.0.1-118-rel-enterprise\
                  &testcase=lucky6&env=terra\
-                 &metric=Latency, ms&value=555\
-                 &metric=Query throughput&value=1746" \
+                 &metric=Get Delay, ms&value=222\
+                 &metric=Throughput&value=8793" \
             -X POST http://localhost:8000/litmus/post/
     """
     try:
@@ -85,7 +93,7 @@ def get(request):
 
     Sample request to get specific results:
         curl -G http://localhost:8000/litmus/get \
-            -d "testcase=lucky6&metric=Latency,%20ms"
+            -d "testcase=lucky6&metric=Latency,%20ms&tag=2.0.0"
 
     JSON response:
         [["Testcase", "Env", "Metric", "Timestamp",
