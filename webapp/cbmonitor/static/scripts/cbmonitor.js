@@ -244,9 +244,6 @@ CBMONITOR.configureMEServers = function(cluster, s_sel, b_sel) {
 CBMONITOR.configureMEBuckets = function(server, b_sel) {
     "use strict";
 
-    console.log(server);
-
-
     $.ajax({url: "/cbmonitor/get_buckets/", dataType: "json",
         data: {"server": server},
         success: function(buckets){
