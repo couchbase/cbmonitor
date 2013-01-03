@@ -201,7 +201,7 @@ CBMONITOR.configureMEPanel = function() {
 CBMONITOR.configureClusters = function(c_sel, s_sel, b_sel) {
     "use strict";
 
-    $.ajax({url: "/cbmonitor/get_clusters", dataType: "json",
+    $.ajax({url: "/cbmonitor/get_clusters/", dataType: "json",
         success: function(clusters){
             c_sel.empty();
             clusters.forEach(function(cluster) {
@@ -221,7 +221,7 @@ CBMONITOR.configureClusters = function(c_sel, s_sel, b_sel) {
 CBMONITOR.configureMEServers = function(cluster, s_sel, b_sel) {
     "use strict";
 
-    $.ajax({url: "/cbmonitor/get_servers", dataType: "json",
+    $.ajax({url: "/cbmonitor/get_servers/", dataType: "json",
         data: {"cluster": cluster},
         success: function(servers) {
             s_sel.empty();
@@ -244,7 +244,10 @@ CBMONITOR.configureMEServers = function(cluster, s_sel, b_sel) {
 CBMONITOR.configureMEBuckets = function(server, b_sel) {
     "use strict";
 
-    $.ajax({url: "/cbmonitor/get_buckets", dataType: "json",
+    console.log(server);
+
+
+    $.ajax({url: "/cbmonitor/get_buckets/", dataType: "json",
         data: {"server": server},
         success: function(buckets){
             b_sel.empty();
