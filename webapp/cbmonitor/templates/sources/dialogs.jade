@@ -15,11 +15,11 @@ div#dialog_new_server.new_item(title="Add new server")
         label(for="rest_username") * REST Username
         input#rest_username.text.ui-widget-content.ui-corner-all(type="text", name="rest_username")
         label(for="rest_password") * REST Password
-        input#rest_password.text.ui-widget-content.ui-corner-all(type="text", name="rest_password")
+        input#rest_password.text.ui-widget-content.ui-corner-all(type="password", name="rest_password")
         label(for="ssh_username") * SSH Username
         input#ssh_username.text.ui-widget-content.ui-corner-all(type="text", name="ssh_username")
         label(for="ssh_password") SSH Password
-        input#ssh_password.text.ui-widget-content.ui-corner-all(type="text", name="ssh_password")
+        input#ssh_password.text.ui-widget-content.ui-corner-all(type="password", name="ssh_password")
         label(for="ssh_key") SSH key
         textarea#ssh_key.text.ui-widget-content.ui-corner-all
         label(for="description") Description
@@ -36,7 +36,7 @@ div#dialog_new_bucket.new_item(title="Add new bucket")
         label(for="port") Port
         input#port.text.ui-widget-content.ui-corner-all(type="text", name="port")
         label(for="password") Password
-        input#password.text.ui-widget-content.ui-corner-all(type="text", name="password")
+        input#password.text.ui-widget-content.ui-corner-all(type="password", name="password")
         p * Required field
 
 div#dialog_delete("")
