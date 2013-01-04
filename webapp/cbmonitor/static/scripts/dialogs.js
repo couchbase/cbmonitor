@@ -25,6 +25,8 @@ CBMONITOR.highlightErrors = function(jqXHR, prefix) {
 };
 
 CBMONITOR.getSelectedParent = function(selected) {
+    "use strict";
+
     if (selected === undefined) {
         selected = $("#tree").jstree("get_selected");
     }
