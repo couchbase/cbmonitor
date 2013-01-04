@@ -128,6 +128,7 @@ def get(request):
 
     return HttpResponse(json.dumps(response), mimetype='application/json')
 
+
 @csrf_exempt
 @require_POST
 def post_comment(request):
@@ -160,6 +161,7 @@ def post_comment(request):
 
     return HttpResponse(content=comment)
 
+
 @require_GET
 def get_comment(request):
     """REST API to get comment for litmus results.
@@ -188,6 +190,7 @@ def get_comment(request):
         return HttpResponse("empty result set", status=404)
 
     return HttpResponse(content=objs[0].comment)
+
 
 @require_GET
 def get_settings(request):
@@ -221,6 +224,6 @@ def get_settings(request):
         return HttpResponse("empty result set", status=404)
 
     response = map(lambda d: d["fields"],
-                   serializers.serialize("python", [ obj, ]))
+                   serializers.serialize("python", [obj, ]))
 
     return HttpResponse(content=json.dumps(response))

@@ -109,4 +109,4 @@ COUCHDB_URI = "http://perf-cabinet.hq.couchbase.com:5984/"
 LITMUS_BASELINE = "1.8.1-938-rel-enterprise"
 LITMUS_WARNING = 0.1
 LITMUS_ERROR = 0.3
-LITMUS_AVG_RESULTS = False # average results for multiple runs
+LITMUS_AVG_RESULTS = False  # average results for multiple runs
