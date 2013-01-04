@@ -1,8 +1,8 @@
 "use strict";
 
 var oTable;
-var colHdrs = [];       // e.g: ['sTitle': 'Testcase', 'sTitle': 'Env', ... ]
-var rowHdrs = [];       // e.g: ['mixed-2suv', 'lucky6', ...]
+var colHdrs;     // e.g: ['sTitle': 'Testcase', 'sTitle': 'Env', ... ]
+var rowHdrs;       // e.g: ['mixed-2suv', 'lucky6', ...]
 var BASELINE = "1.8.1-938-rel-enterprise";
 var WARNING = 0.1;
 var ERROR = 0.3;
@@ -25,6 +25,21 @@ function getSettings(settings) {
             settings.error = data.error;
             settings.warning = data.warning;
             settings.baseline = data.baseline;
+        }, 'json');
+}
+
+function showResults(tag) {
+    var url, oTable;
+    if (tag) {
+        url = '/litmus/get?tag=';
+    } else {
+        url = '/litmus/get?';
+    }
+    $.get(url + tag, { },
+        function(data) {
+            processData(data);
+            renderTable(data);
+            applyErrorRanges();
         }, 'json');
 }
 
@@ -85,6 +100,8 @@ function processData(data) {
      * Process json data coming from the server
      * Current implementation retrieves info only
      */
+    colHdrs = [];
+    rowHdrs = [];
     $.each(data[0], function(i, v) {
         colHdrs[i] = {'sTitle': v};
     });
@@ -101,6 +118,11 @@ function renderTable(data) {
      * Render table with the given data
      */
 
+    if (oTable) {
+        oTable.fnDestroy();
+        $("thead").remove();
+    }
+
     oTable = $('#litmus table').dataTable({
         "sDom": 'Tlfrtip',
         'bProcessing': true,
@@ -112,7 +134,9 @@ function renderTable(data) {
         'bStateSave': true,
         'fnDrawCallback': function() {
             $('#loading').remove();
-        }
+        },
+        'bDestroy': true,
+        "bAutoWidth": false
     }).bind('sort', function () {
         applyErrorRanges();
     });

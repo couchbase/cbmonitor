@@ -11,18 +11,15 @@ block include
     script(src='/static/scripts/litmus.js')
     script(charset='utf-8')
         $(document).ready(function(){
-            $.get('/litmus/get?all', { },
-                function(data) {
-                    processData(data);
-                    renderTable(data);
-                    applyErrorRanges();
-            }, 'json');
+            showResults("");
             setInterval(function() {
                 location.reload()
             }, 300000);
         });
 
 block main
+    #tag
+        input(type='button', onclick="showResults('2.0.0');", value='2.0.0')
     #litmus
         table
             p(style='text-align: center', id='loading') Loading

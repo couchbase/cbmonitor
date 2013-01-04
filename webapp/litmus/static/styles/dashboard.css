@@ -27,3 +27,7 @@ footer {
 .FixedHeader_Cloned th {
     background-color: #ffffff;
 }
+
+#tag {
+    float: right;
+}
