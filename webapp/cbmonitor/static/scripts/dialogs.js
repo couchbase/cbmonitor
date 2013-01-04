@@ -141,10 +141,12 @@ CBMONITOR.addNewBucket = function() {
 
     var jstree = $("#tree"),
         name = $("#bname"),
-        type = $("#type"),
+        type = $("input[name=btype]:checked"),
         port = $("#port"),
         password = $("#password"),
         fields = $([]).add(name).add(type).add(port).add(password);
+
+    $("#bucket_type").buttonset();
 
     $("#dialog_new_bucket").dialog({
         autoOpen: false,
@@ -161,7 +163,7 @@ CBMONITOR.addNewBucket = function() {
                     data: {
                         "name": name.val(),
                         "cluster": cluster.attr("id"),
-                        "type": type.val(),
+                        "type": type.attr("id"),
                         "port": port.val(),
                         "password": password.val()
                     },

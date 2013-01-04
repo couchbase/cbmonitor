@@ -17,11 +17,11 @@ body {
     height: 99.8%;
 }
 .new_item label, .new_item input {
-    display: block;
+    /*display: block;*/
 }
 .new_item input.text, .new_item textarea {
     margin-bottom: 12px;
-    width:95%;
+    width: 95%;
     padding: .4em;
 }
 .new_item fieldset {
@@ -153,5 +153,10 @@ body {
     width: 385px;
 }
 .ui-menu .ui-menu-item a {
+    font-size: 77%;
+}
+#bucket_type label {
+    width: 49%;
+    margin-bottom: 12px;
     font-size: 77%;
 }
