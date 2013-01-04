@@ -24,6 +24,13 @@ CBMONITOR.highlightErrors = function(jqXHR, prefix) {
     }
 };
 
+CBMONITOR.getSelectedParent = function(selected) {
+    if (selected === undefined) {
+        selected = $("#tree").jstree("get_selected");
+    }
+    return $.jstree._reference(selected)._get_parent(selected);
+};
+
 CBMONITOR.addNewCluster = function() {
     "use strict";
 
@@ -93,8 +100,7 @@ CBMONITOR.addNewServer = function() {
         buttons: {
             "Add new server": function() {
                 fields.removeClass("ui-state-error");
-                var servers = jstree.jstree("get_selected"),
-                    cluster = $.jstree._reference(servers)._get_parent(servers);
+                var cluster = CBMONITOR.getSelectedParent();
                 $.ajax({
                     type: "POST", url: "/cbmonitor/add_server/",
                     data: {
@@ -149,8 +155,7 @@ CBMONITOR.addNewBucket = function() {
         buttons: {
             "Add new bucket": function() {
                 fields.removeClass("ui-state-error");
-                var buckets = jstree.jstree("get_selected"),
-                    cluster = $.jstree._reference(buckets)._get_parent(buckets);
+                var cluster = CBMONITOR.getSelectedParent();
                 $.ajax({
                     type: "POST", url: "/cbmonitor/add_bucket/",
                     data: {
@@ -200,13 +205,13 @@ CBMONITOR.deleteItem = function() {
                     renc = $("#renc"),
                     delc = $("#delc"),
                     adds = $("#adds"),
-                    prnt_cont = $.jstree._reference(selected)._get_parent(selected),
-                    prev_cont = $.jstree._reference(selected)._get_parent(selected),
+                    prnt_cont = CBMONITOR.getSelectedParent(),
+                    prev_cont = CBMONITOR.getSelectedParent(),
                     data,
                     url,
                     prnt;
                 if (prnt_cont !== -1 && prev_cont !== -1) {
-                    prnt = $.jstree._reference(prnt_cont)._get_parent(prnt_cont);
+                    prnt = CBMONITOR.getSelectedParent(prnt_cont);
                 }
                 switch(selected_class) {
                     case "cluster":
