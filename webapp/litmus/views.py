@@ -235,3 +235,14 @@ def get_settings(request):
                    serializers.serialize("python", [obj, ]))
 
     return HttpResponse(content=json.dumps(response))
+
+@require_GET
+def get_tags(request):
+    """ REST API to get dinstinctive tags
+
+    Sample request to get all settings:
+        curl http://localhost:8000/litmus/get/tags
+    """
+    vals = TestResults.objects.values('tag').order_by('tag').distinct()
+    tags = map(lambda val: val['tag'], vals)
+    return HttpResponse(content=json.dumps(tags))
