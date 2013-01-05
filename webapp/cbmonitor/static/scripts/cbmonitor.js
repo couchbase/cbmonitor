@@ -197,64 +197,48 @@ CBMONITOR.configureChartPanel = function() {
 CBMONITOR.configureMEPanel = function() {
     "use strict";
 
-    CBMONITOR.configureClusters($("#met_cluster"), $("#met_server"), $("#met_bucket"));
-    CBMONITOR.configureClusters($("#evnt_cluster"), $("#evnt_server"), $("#evnt_bucket"));
+    CBMONITOR.configureClusters("metric");
+    CBMONITOR.configureClusters("event");
 };
 
-CBMONITOR.configureClusters = function(c_sel, s_sel, b_sel) {
+CBMONITOR.configureClusters = function(type) {
     "use strict";
 
     $.ajax({url: "/cbmonitor/get_clusters/", dataType: "json",
         success: function(clusters){
-            c_sel.empty();
+            var sel = (type === "metric") ? $("#met_cluster") : $("#evnt_cluster");
+            sel.empty();
             clusters.forEach(function(cluster) {
                 var o = new Option(cluster, cluster);
-                c_sel.append(o);
+                sel.append(o);
             });
-            c_sel.selectmenu({
+            sel.selectmenu({
                 select: function(event, option) {
-                    CBMONITOR.configureMEServers(option.value, s_sel);
-                    CBMONITOR.configureMEBuckets(option.value, b_sel);
+                    CBMONITOR.configureMEItems(option.value, type, "server");
+                    CBMONITOR.configureMEItems(option.value, type, "bucket");
                 }
             });
-            CBMONITOR.configureMEServers(clusters[0], s_sel);
-            CBMONITOR.configureMEBuckets(clusters[0], b_sel);
+            CBMONITOR.configureMEItems(clusters[0], type, "server");
+            CBMONITOR.configureMEItems(clusters[0], type, "bucket");
         }
     });
 };
 
-CBMONITOR.configureMEServers = function(cluster, s_sel) {
+CBMONITOR.configureMEItems = function(cluster, type, item) {
     "use strict";
 
-    $.ajax({url: "/cbmonitor/get_servers/", dataType: "json",
+    $.ajax({url: "/cbmonitor/get_" + item + "s/", dataType: "json",
         data: {"cluster": cluster},
-        success: function(servers) {
-            s_sel.empty();
+        success: function(items) {
+            var sel = (type === "metric") ? $("#met_" + item) : $("#evnt_" + item);
+            sel.empty();
             var o = new Option("None", null);
-            s_sel.append(o);
-            servers.forEach(function(server) {
-                var o = new Option(server, server);
-                s_sel.append(o);
+            sel.append(o);
+            items.forEach(function(item) {
+                var o = new Option(item, item);
+                sel.append(o);
             });
-            s_sel.selectmenu();
-        }
-    });
-};
-
-CBMONITOR.configureMEBuckets = function(cluster, b_sel) {
-    "use strict";
-
-    $.ajax({url: "/cbmonitor/get_buckets/", dataType: "json",
-        data: {"cluster": cluster},
-        success: function(buckets) {
-            b_sel.empty();
-            var o = new Option("None", null);
-            b_sel.append(o);
-            buckets.forEach(function(bucket) {
-                var o = new Option(bucket, bucket);
-                b_sel.append(o);
-            });
-            b_sel.selectmenu();
+            sel.selectmenu();
         }
     });
 };
