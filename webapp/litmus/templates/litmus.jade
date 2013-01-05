@@ -11,6 +11,7 @@ block include
     script(src='/static/scripts/litmus.js')
     script(charset='utf-8')
         $(document).ready(function(){
+            getAllTags();
             showResults("");
             setInterval(function() {
                 location.reload()
@@ -19,7 +20,7 @@ block include
 
 block main
     #tag
-        input(type='button', onclick="showResults('2.0.0');", value='2.0.0')
+        input(type='button', onclick="showResults('');", value='All')
     #litmus
         table
             p(style='text-align: center', id='loading') Loading

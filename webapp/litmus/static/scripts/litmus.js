@@ -28,6 +28,16 @@ function getSettings(settings) {
         }, 'json');
 }
 
+function getAllTags() {
+    $.get('/litmus/get/tags',
+        function(data) {
+            $.each(data, function(i, v) {
+                var button = "<input type='button' onclick=\"showResults('" + v + "');\" value='" + v + "'>";
+                $('#tag').append(button);
+            })
+        }, 'json');
+}
+
 function showResults(tag) {
     var url, oTable;
     if (tag) {
