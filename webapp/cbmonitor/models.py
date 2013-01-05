@@ -46,7 +46,6 @@ class BucketType(models.Model):
 class Bucket(models.Model):
 
     class Meta:
-
         unique_together = ["name", "cluster"]
 
     name = models.CharField(max_length=32, default="default")
@@ -65,7 +64,6 @@ class Bucket(models.Model):
 class Metric(models.Model):
 
     class Meta:
-
         unique_together = ["name", "cluster", "server", "bucket"]
 
     cluster = models.ForeignKey("Cluster")
@@ -83,7 +81,6 @@ class Metric(models.Model):
 class Event(models.Model):
 
     class Meta:
-
         unique_together = ["name", "cluster", "server", "bucket"]
 
     cluster = models.ForeignKey("Cluster")
