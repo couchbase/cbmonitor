@@ -194,6 +194,22 @@ CBMONITOR.configureChartPanel = function() {
     $("#rpanel").buttonset();
 };
 
+CBMONITOR.getMetricsAndEvents = function(type) {
+    "use strict";
+
+    var prefix = (type === "metric")? "met" : "evnt";
+    $.ajax({
+        url: "/cbmonitor/get_metrics_and_events/", dataType: "json",
+        data: {
+            "cluster": $("#" + prefix + "_cluster option:selected").val(),
+            "server": $("#" + prefix + "_server option:selected").val(),
+            "bucket": $("#" + prefix + "_bucket option:selected").val(),
+            "type": type
+        },
+        success: function(data) {}
+    });
+};
+
 CBMONITOR.configureMEPanel = function() {
     "use strict";
 
@@ -232,13 +248,18 @@ CBMONITOR.configureMEItems = function(cluster, type, item) {
         success: function(items) {
             var sel = (type === "metric") ? $("#met_" + item) : $("#evnt_" + item);
             sel.empty();
-            var o = new Option("None", null);
+            var o = new Option("None", "");
             sel.append(o);
             items.forEach(function(item) {
                 var o = new Option(item, item);
                 sel.append(o);
             });
-            sel.selectmenu();
+            sel.selectmenu({
+                select: function() {
+                    CBMONITOR.getMetricsAndEvents(type);
+                }
+            });
+            CBMONITOR.getMetricsAndEvents(type);
         }
     });
 };
