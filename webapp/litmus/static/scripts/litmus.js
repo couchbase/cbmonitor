@@ -32,10 +32,17 @@ function getAllTags() {
     $.get('/litmus/get/tags',
         function(data) {
             $.each(data, function(i, v) {
-                var button = "<input type='button' onclick=\"showResults('" + v + "');\" value='" + v + "'>";
+                // input(type='radio', name='tag', onclick="showResults('');", id="2.0.1")label(for="2.0.1") 2.0.1
+                var button = "<input type='radio' name='tag' onclick=\"showResults('" + v + "');\" id='"
+                             + v.replace(/\./g, '-')  + "'><label for='"
+                             + v.replace(/\./g, '-') + "'>" + v + "</label>";
                 $('#tag').append(button);
-            })
+            });
+            $(function() {
+                $("#tag").buttonset();
+            });
         }, 'json');
+
 }
 
 function showResults(tag) {

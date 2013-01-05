@@ -20,7 +20,7 @@ block include
 
 block main
     #tag
-        input(type='button', onclick="showResults('');", value='All')
+        input(type='radio', name='tag', onclick="showResults('');", id="All")label(for="All") All
     #litmus
         table
             p(style='text-align: center', id='loading') Loading
