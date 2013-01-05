@@ -68,7 +68,7 @@ class Metric(models.Model):
 
         unique_together = ["name", "cluster", "server", "bucket"]
 
-    cluster = models.ForeignKey("Cluster", null=True, blank=True)
+    cluster = models.ForeignKey("Cluster")
     server = models.ForeignKey("Server", null=True, blank=True)
     bucket = models.ForeignKey("Bucket", null=True, blank=True)
     name = models.CharField(max_length=64)
@@ -86,7 +86,7 @@ class Event(models.Model):
 
         unique_together = ["name", "cluster", "server", "bucket"]
 
-    cluster = models.ForeignKey("Cluster", null=True, blank=True)
+    cluster = models.ForeignKey("Cluster")
     server = models.ForeignKey("Server", null=True, blank=True)
     bucket = models.ForeignKey("Bucket", null=True, blank=True)
     name = models.CharField(max_length=64)

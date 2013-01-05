@@ -197,26 +197,18 @@ def get_buckets(request):
         raise ValidationError(form)
 
 
+@form_validation
 def get_metrics_and_events(request):
     """Get list of metrics or events for given cluster, server and bucket"""
-    params = {"cluster": request.GET["cluster"]}
+    form = forms.GetMetricsAndEvents(request.GET)
 
-    server = request.GET.get("server", None)
-    if server:
-        params.update({"server": server})
+    if form.is_valid():
+        if form.cleaned_data["type"] == "metric":
+            data = models.Metric.objects.values("name").get(**form.params)
+        else:
+            data = models.Event.objects.values("name").get(**form.params)
+        content = json.dumps(data.values())
+
+        return HttpResponse(content)
     else:
-        params.update({"server__isnull": True})
-
-    bucket = request.GET.get("bucket", None)
-    if bucket:
-        params.update({"bucket": bucket})
-    else:
-        params.update({"bucket__isnull": True})
-
-    if request.GET["type"] == "metric":
-        data = models.Metric.objects.values("name").get(**params)
-    else:
-        data = models.Event.objects.values("name").get(**params)
-    content = json.dumps(data.values())
-
-    return HttpResponse(content)
+        raise ValidationError(form)

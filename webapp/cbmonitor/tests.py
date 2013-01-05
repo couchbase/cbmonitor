@@ -383,7 +383,7 @@ class ApiTest(TestCase):
         params = {"type": "metric",
                   "cluster": "East",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                  "bucket": 1}
+                  "bucket": "default"}
         request = self.factory.get("/get_metrics_and_events", params)
         response = rest_api.dispatcher(request, path="get_metrics_and_events")
 
@@ -397,7 +397,7 @@ class ApiTest(TestCase):
     def test_get_metrics_no_server(self):
         params = {"type": "metric",
                   "cluster": "East",
-                  "bucket": 1}
+                  "bucket": "default"}
         request = self.factory.get("/get_metrics_and_events", params)
         response = rest_api.dispatcher(request, path="get_metrics_and_events")
 
@@ -412,7 +412,7 @@ class ApiTest(TestCase):
         params = {"type": "event",
                   "cluster": "East",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                  "bucket": 1}
+                  "bucket": "default"}
         request = self.factory.get("/get_metrics_and_events", params)
         response = rest_api.dispatcher(request, path="get_metrics_and_events")
 
