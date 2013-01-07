@@ -190,6 +190,7 @@ CBMONITOR.configureChartPanel = function() {
             default:
                 break;
         }
+        CBMONITOR.enableDroppable();
     });
     $("#rpanel").buttonset();
 };
@@ -207,15 +208,32 @@ CBMONITOR.getMetricsAndEvents = function(type) {
             "type": type
         },
         success: function(metrics) {
-            var ul = (type === "metric") ? $("#metrics_ul") : $("#events_ul");
+            var ul = (type === "metric") ? "#metrics_ul" : "#events_ul";
             metrics.forEach(function(metric) {
-                ul.empty();
-                ul.append(
+                $(ul).empty();
+                $(ul).append(
                     $("<li>").addClass("ui-state-default ui-corner-all").append(
                         metric
                     )
                 );
             });
+            $(ul + " li").draggable({
+                "revert": "invalid",
+                "appendTo": "#views",
+                "helper": "clone"
+            });
+        }
+    });
+};
+
+CBMONITOR.enableDroppable = function() {
+    "use strict";
+
+    $("#views div").droppable({
+        activeClass: "ui-state-default",
+        hoverClass: "ui-state-hover",
+        drop: function(event, ui) {
+            //$(this).attr("id") ui.draggable.text();
         }
     });
 };
@@ -286,4 +304,5 @@ $(document).ready(function(){
     CBMONITOR.addNewBucket();
     CBMONITOR.deleteItem();
     CBMONITOR.configureChartPanel();
+    CBMONITOR.enableDroppable();
 });
