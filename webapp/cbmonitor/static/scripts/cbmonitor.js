@@ -206,7 +206,17 @@ CBMONITOR.getMetricsAndEvents = function(type) {
             "bucket": $("#" + prefix + "_bucket option:selected").val(),
             "type": type
         },
-        success: function(data) {}
+        success: function(metrics) {
+            var ul = (type === "metric") ? $("#metrics_ul") : $("#events_ul");
+            metrics.forEach(function(metric) {
+                ul.empty();
+                ul.append(
+                    $("<li>").addClass("ui-state-default ui-corner-all").append(
+                        metric
+                    )
+                );
+            });
+        }
     });
 };
 
