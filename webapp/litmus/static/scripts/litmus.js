@@ -227,6 +227,8 @@ function renderTable(data) {
                 ['red', 'yellow', 'green'],
                 ['pink', 'lightyellow', 'lightgreen']
             ],
+            localStorageKey: "litmus.dashboard",
+            showInput: true,
             change: function(color) {
                 $(this).css('background-color', color.toHexString());
             }
