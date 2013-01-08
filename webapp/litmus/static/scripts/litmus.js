@@ -159,6 +159,7 @@ function renderTable(data) {
     });
 
     oTable.$('td').each(function() {
+        var target = this;
         var pos = oTable.fnGetPosition(this);
         if (pos[1] < 4) {
             return;     // support test results for now
@@ -167,6 +168,14 @@ function renderTable(data) {
         var env = data[pos[0] + 1][1];
         var metric = data[pos[0] + 1][2];
         var build = colHdrs[pos[1]]['sTitle'];
+
+        $.get('/litmus/get/color',
+              {'testcase': testcase, 'env': env,
+               'build': build, 'metric': metric},
+              function(data) {
+                $(target).css('background-color', data);
+        });
+
         $(this).qtip({
             content: {
                 text: 'Loading...',
@@ -231,7 +240,20 @@ function renderTable(data) {
             localStorageKey: "litmus.dashboard",
             showInput: true,
             change: function(color) {
-                $(this).css('background-color', color.toHexString());
+                var hexColor = color.toHexString();
+                $(this).css('background-color', hexColor);
+                $.ajax({
+                    type: 'POST',
+                    url: '../post/color/',
+                    data: {'testcase': testcase,
+                           'env': env,
+                           'build': build,
+                           'metric': metric,
+                           'color': hexColor},
+                    error: function(response) {
+                        console.error(response.responseText);
+                    }
+                });
             }
         });
     });

@@ -8,5 +8,7 @@ urlpatterns = patterns(
     url(r'post/comment/$', 'litmus.views.post_comment'),
     url(r'get/comment$', 'litmus.views.get_comment'),
     url(r'get/settings$', 'litmus.views.get_settings'),
-    url(r'get/tags$', 'litmus.views.get_tags')
+    url(r'get/tags$', 'litmus.views.get_tags'),
+    url(r'post/color/$', 'litmus.views.post_color'),
+    url(r'get/color$', 'litmus.views.get_color')
 )

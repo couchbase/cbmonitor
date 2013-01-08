@@ -28,6 +28,7 @@ class TestResults(models.Model):
     comment = models.CharField(max_length=1024)
     tag = models.CharField(max_length=1024)
     settings = models.ForeignKey(Settings)
+    color=models.CharField(max_length=50, default="white")
 
     class Meta:
         unique_together = ("testcase", "env", "metric", "build")

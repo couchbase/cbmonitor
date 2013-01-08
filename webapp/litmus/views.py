@@ -24,7 +24,7 @@ def gen_tag(build):
         return build[:5]
     return "unknown"
 
-def update_or_create(testcase, env, build, metric, value=None, comment=None):
+def update_or_create(testcase, env, build, metric, value=None, comment=None, color=None):
     """Update testresults/settings if exist, otherwise create new ones.
 
     :return created     True if created new results, otherwise False
@@ -44,6 +44,8 @@ def update_or_create(testcase, env, build, metric, value=None, comment=None):
         testresults.value_set.add(v)
     if comment:
         testresults.comment = comment
+    if color:
+        testresults.color = color
     testresults.save()
 
     return created
@@ -246,3 +248,64 @@ def get_tags(request):
     vals = TestResults.objects.values('tag').order_by('tag').distinct()
     tags = map(lambda val: val['tag'], vals)
     return HttpResponse(content=json.dumps(tags))
+
+@csrf_exempt
+@require_POST
+def post_color(request):
+    """REST API to change background color for litmus results.
+
+    build -- build version (e.g., '2.0.0-1723-rel-enterprise')
+    testcase -- testcase (e.g: 'lucky6')
+    env -- test enviornment (e.g, 'terra')
+    metric -- metric name (e.g., 'Latency, ms')
+    color -- color string (e.g,  'white', '#90ee90')
+
+    Sample request:
+        curl -d "testcase=lucky6\
+                 &env=terra\
+                 &build=2.0.0-1723-rel-enterprise\
+                 &metric=Latency, ms\
+                 &color=red" \
+            -X POST http://localhost:8000/litmus/post/color/
+    """
+    try:
+        testcase = request.POST['testcase'].strip()
+        env = request.POST['env'].strip()
+        build = request.POST['build'].strip()
+        metric = request.POST['metric'].strip()
+        color = request.POST['color'].strip()
+    except KeyError, e:
+        return HttpResponse(e, status=400)
+
+    update_or_create(testcase, env, build, metric, color=color)
+
+    return HttpResponse(content=color)
+
+@require_GET
+def get_color(request):
+    """REST API to get color for litmus results.
+
+    build -- build version (e.g., '2.0.0-1723-rel-enterprise')
+    testcase -- testcase (e.g: 'lucky6')
+    env -- test enviornment (e.g, 'terra')
+    metric -- metric name (e.g., 'Rebalance time, sec')
+
+    Sample request:
+        curl -G http://localhost:8000/litmus/get/color \
+            -d "testcase=lucky6&env=terra&build=2.0.0-1723-rel-enterprise&metric=Latency,%20ms"
+    """
+    try:
+        testcase = request.GET['testcase'].strip()
+        env = request.GET['env'].strip()
+        build = request.GET['build'].strip()
+        metric = request.GET['metric'].strip()
+    except KeyError, e:
+        return HttpResponse(e, status=400)
+
+    objs = TestResults.objects.filter(testcase=testcase, env=env,
+                                      build=build, metric=metric).distinct()
+
+    if not objs:
+        return HttpResponse("empty result set", status=404)
+
+    return HttpResponse(content=objs[0].color)
