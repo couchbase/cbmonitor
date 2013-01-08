@@ -220,6 +220,17 @@ function renderTable(data) {
                 }
             }
         });
+
+        $(this).spectrum({
+            showPalette: true,
+            palette: [
+                ['red', 'yellow', 'green'],
+                ['pink', 'lightyellow', 'lightgreen']
+            ],
+            change: function(color) {
+                $(this).css('background-color', color.toHexString());
+            }
+        });
     });
 
     new FixedHeader(oTable);
