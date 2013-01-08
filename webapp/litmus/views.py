@@ -17,6 +17,7 @@ def dashboard(request):
     """Main litmus dashboard"""
     return render_to_response('litmus.jade')
 
+
 def gen_tag(build):
     """Generate tag, e.g: 2.0.0, 2.0.1 in current impl.
     """
@@ -24,7 +25,9 @@ def gen_tag(build):
         return build[:5]
     return "unknown"
 
-def update_or_create(testcase, env, build, metric, value=None, comment=None, color=None):
+
+def update_or_create(testcase, env, build, metric, value=None, comment=None,
+                     color=None):
     """Update testresults/settings if exist, otherwise create new ones.
 
     :return created     True if created new results, otherwise False
@@ -238,6 +241,7 @@ def get_settings(request):
 
     return HttpResponse(content=json.dumps(response))
 
+
 @require_GET
 def get_tags(request):
     """ REST API to get dinstinctive tags
@@ -248,6 +252,7 @@ def get_tags(request):
     vals = TestResults.objects.values('tag').order_by('tag').distinct()
     tags = map(lambda val: val['tag'], vals)
     return HttpResponse(content=json.dumps(tags))
+
 
 @csrf_exempt
 @require_POST
@@ -280,6 +285,7 @@ def post_color(request):
     update_or_create(testcase, env, build, metric, color=color)
 
     return HttpResponse(content=color)
+
 
 @require_GET
 def get_color(request):

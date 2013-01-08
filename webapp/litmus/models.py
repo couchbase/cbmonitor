@@ -7,7 +7,8 @@ from django.conf import settings as DjangoSettings
 class Settings(models.Model):
     testcase = models.CharField(max_length=128)
     metric = models.CharField(max_length=128)
-    beseline = models.CharField(max_length=128, default=DjangoSettings.LITMUS_BASELINE)
+    beseline = models.CharField(max_length=128,
+                                default=DjangoSettings.LITMUS_BASELINE)
     warning = models.FloatField(validators=[MinValueValidator(-1.0),
                                             MaxValueValidator(1.0)],
                                 default=DjangoSettings.LITMUS_WARNING)
@@ -28,7 +29,7 @@ class TestResults(models.Model):
     comment = models.CharField(max_length=1024)
     tag = models.CharField(max_length=1024)
     settings = models.ForeignKey(Settings)
-    color=models.CharField(max_length=50, default="white")
+    color = models.CharField(max_length=50, default="white")
 
     class Meta:
         unique_together = ("testcase", "env", "metric", "build")
