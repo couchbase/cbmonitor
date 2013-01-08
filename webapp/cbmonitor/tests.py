@@ -74,6 +74,11 @@ class ApiTest(TestCase):
         json.loads(response.content)
         self.assertEqual(response.status_code, 200)
 
+    def verify_empty_array(self, response):
+        response_body = json.loads(response.content)
+        self.assertEqual(response_body, [])
+        self.assertEqual(response.status_code, 200)
+
     def test_add_cluster(self):
         """Adding new cluster with full set of params"""
         params = {"name": uhex(), "description": uhex()}
@@ -357,7 +362,7 @@ class ApiTest(TestCase):
         response = rest_api.dispatcher(request, path="get_servers")
 
         # Verify response
-        self.verify_missing_parameter(response)
+        self.verify_empty_array(response)
 
     def test_get_servers_wrong_param(self):
         params = {"cluster": "West"}
@@ -365,7 +370,7 @@ class ApiTest(TestCase):
         response = rest_api.dispatcher(request, path="get_servers")
 
         # Verify response
-        self.verify_bad_parent(response)
+        self.verify_empty_array(response)
 
     def test_get_buckets(self):
         params = {"cluster": "East"}

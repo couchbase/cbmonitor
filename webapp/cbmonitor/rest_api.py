@@ -174,10 +174,10 @@ def get_servers(request):
                 values("address").get(cluster=cluster).values()
         except DoesNotExist:
             servers = []
-        content = json.dumps(servers)
-        return HttpResponse(content)
     else:
-        raise ValidationError(form)
+        servers = []
+    content = json.dumps(servers)
+    return HttpResponse(content)
 
 
 @form_validation
@@ -191,10 +191,10 @@ def get_buckets(request):
                 values("name").get(cluster=cluster).values()
         except DoesNotExist:
             buckets = []
-        content = json.dumps(buckets)
-        return HttpResponse(content)
     else:
-        raise ValidationError(form)
+        buckets = []
+    content = json.dumps(buckets)
+    return HttpResponse(content)
 
 
 @form_validation
@@ -203,12 +203,14 @@ def get_metrics_and_events(request):
     form = forms.GetMetricsAndEvents(request.GET)
 
     if form.is_valid():
-        if form.cleaned_data["type"] == "metric":
-            data = models.Metric.objects.values("name").get(**form.params)
-        else:
-            data = models.Event.objects.values("name").get(**form.params)
-        content = json.dumps(data.values())
-
-        return HttpResponse(content)
+        try:
+            if form.cleaned_data["type"] == "metric":
+                data = models.Metric.objects.values("name").get(**form.params)
+            else:
+                data = models.Event.objects.values("name").get(**form.params)
+            content = json.dumps(data.values())
+        except DoesNotExist:
+            content = json.dumps([])
     else:
-        raise ValidationError(form)
+        content = json.dumps([])
+    return HttpResponse(content)
