@@ -209,8 +209,8 @@ CBMONITOR.getMetricsAndEvents = function(type) {
         },
         success: function(metrics) {
             var ul = (type === "metric") ? "#metrics_ul" : "#events_ul";
+            $(ul).empty();
             metrics.forEach(function(metric) {
-                $(ul).empty();
                 $(ul).append(
                     $("<li>").addClass("ui-state-default ui-corner-all").append(
                         metric
@@ -252,6 +252,8 @@ CBMONITOR.configureClusters = function(type) {
         success: function(clusters){
             var sel = (type === "metric") ? $("#met_cluster") : $("#evnt_cluster");
             sel.empty();
+            var o = new Option("None", "");
+            sel.append(o);
             clusters.forEach(function(cluster) {
                 var o = new Option(cluster, cluster);
                 sel.append(o);
