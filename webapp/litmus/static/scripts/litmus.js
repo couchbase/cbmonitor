@@ -224,6 +224,7 @@ function renderTable(data) {
         $(this).spectrum({
             showPalette: true,
             palette: [
+                ['white'],
                 ['red', 'yellow', 'green'],
                 ['pink', 'lightyellow', 'lightgreen']
             ],
