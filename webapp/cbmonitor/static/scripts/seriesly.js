@@ -1,15 +1,21 @@
-"use strict";
+/*jshint jquery: true, browser: true*/
 
-
-var SERIESLY = SERIESLY || {};  // namespace
+/*
+ * Name space
+ */
+var SERIESLY = SERIESLY || {};
 
 
 SERIESLY.Seriesly = function(db_name) {
+    "use strict";
+
     this.db_name = db_name;
 };
 
 
 SERIESLY.Seriesly.prototype.biuldURL = function(group, ptrs, from, to) {
+    "use strict";
+
     var url = "/seriesly/" + this.db_name + "/_query?group=" + group;
 
     for(var i = 0, l = ptrs.length; i < l; i++) {
@@ -26,9 +32,13 @@ SERIESLY.Seriesly.prototype.biuldURL = function(group, ptrs, from, to) {
 
 
 SERIESLY.Seriesly.prototype.query = function(group, ptrs, from, to, object) {
+    "use strict";
+
     var url = this.biuldURL(group, ptrs, from, to);
 
-    $.ajax({url: url, dataType: "json", success: function(data){
-        object.handleData(data);
-    }});
+    $.ajax({url: url, dataType: "json",
+        success: function(data) {
+            //object.handleData(data);
+        }
+    });
 };
