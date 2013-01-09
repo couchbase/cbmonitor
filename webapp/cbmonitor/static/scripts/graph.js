@@ -1,23 +1,24 @@
-"use strict";
-
-
-var GRAPH = GRAPH || {};  // namespace
-
+/*jshint jquery: true, browser: true*/
+/*global d3: true, nv: true*/
 
 /*
- ******************************************************************************
- ******************************************************************************
+ * Name space
  */
+var GRAPH = GRAPH || {};
+
 GRAPH.GraphManager = function(args) {
-    this.data = args.data;
+    "use strict";
+
     this.metrics = args.metrics;
-    this.seriesly = args.seriesly;
+    this.container = args.container;
 };
 
+GRAPH.GraphManager.prototype.init = function(data) {
+    "use strict";
 
-GRAPH.GraphManager.prototype.init = function() {
-    var dataHandler = new GRAPH.DataHandler(this.data);
-    var series_data = dataHandler.prepareSeries(this.metrics);
+    var dataHandler = new GRAPH.DataHandler(data),
+        series_data = dataHandler.prepareSeries(this.metrics),
+        container = "#" + this.container + " svg";
 
     var format = d3.time.format("%H:%M:%S");
     nv.addGraph(function() {
@@ -32,7 +33,7 @@ GRAPH.GraphManager.prototype.init = function() {
         chart.y2Axis
             .tickFormat(d3.format(',.2f'));
 
-        d3.select('#chart svg')
+        d3.select(container)
             .datum(series_data)
             .call(chart);
 
@@ -40,20 +41,17 @@ GRAPH.GraphManager.prototype.init = function() {
     });
 };
 
-
-
-/*
- ******************************************************************************
- ******************************************************************************
- */
-
 GRAPH.DataHandler = function(data) {
+    "use strict";
+
     this.data = data;
     this.timestamps = this.prepareTimestamps();
 };
 
 
 GRAPH.DataHandler.prototype.prepareTimestamps = function() {
+    "use strict";
+
     var timestamps = [];
     for(var timestamp in this.data) {
         if (this.data.hasOwnProperty(timestamp)) {
@@ -65,6 +63,8 @@ GRAPH.DataHandler.prototype.prepareTimestamps = function() {
 
 
 GRAPH.DataHandler.prototype.prepareSeries = function(metrics) {
+    "use strict";
+
     var i, j,
         len, len_metrics,
         timestamp,
@@ -82,7 +82,7 @@ GRAPH.DataHandler.prototype.prepareSeries = function(metrics) {
             series[j].values.push({
                 x: timestamp,
                 y: this.data[timestamp][j] / 1024 / 1024
-            })
+            });
         }
     }
     return series;

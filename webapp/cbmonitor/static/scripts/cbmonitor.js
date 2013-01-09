@@ -1,5 +1,5 @@
 /*jshint jquery: true, browser: true*/
-/*global SERIESLY:true*/
+/*global SERIESLY: true, GRAPH: true*/
 
 /*
  * Name space
@@ -160,35 +160,35 @@ CBMONITOR.configureChartPanel = function() {
                 $("<div/>", {
                     "id": "first_view",
                     "class": "chart_view_single"
-                }).appendTo(views);
+                }).appendTo(views).append("<svg>");
                 break;
             case "view2":
                 $("<div/>", {
                     "id": "first_view",
                     "class": "chart_view_double"
-                }).appendTo(views);
+                }).appendTo(views).append("<svg>");
                 $("<div/>", {
                     "id": "second_view_double",
                     "class": "chart_view_double"
-                }).appendTo(views);
+                }).appendTo(views).append("<svg>");
                 break;
             case "view4":
                 $("<div/>", {
                     "id": "first_view",
                     "class": "chart_view_quadruple"
-                }).appendTo(views);
+                }).appendTo(views).append("<svg>");
                 $("<div/>", {
                     "id": "second_view",
                     "class": "chart_view_quadruple"
-                }).appendTo(views);
+                }).appendTo(views).append("<svg>");
                 $("<div/>", {
                     "id": "third_view",
                     "class": "chart_view_quadruple"
-                }).appendTo(views);
+                }).appendTo(views).append("<svg>");
                 $("<div/>", {
                     "id": "fourth_view",
                     "class": "chart_view_quadruple"
-                }).appendTo(views);
+                }).appendTo(views).append("<svg>");
                 break;
             default:
                 break;
@@ -260,7 +260,12 @@ CBMONITOR.getChartData = function(container, ui) {
     var ptr = CBMONITOR.buildPointer(ui);
     var seriesly = new SERIESLY.Seriesly("cbmonitor");
 
-    seriesly.query(1000, [ptr], null, null, null);
+    var graphManager = new GRAPH.GraphManager({
+        "metrics": [ui.draggable.text()],
+        "container": container
+    });
+
+    seriesly.query(1000, [ptr], null, null, graphManager);
 };
 
 CBMONITOR.enableDroppable = function() {
@@ -270,7 +275,7 @@ CBMONITOR.enableDroppable = function() {
         activeClass: "ui-state-default",
         hoverClass: "ui-state-hover",
         drop: function(event, ui) {
-            CBMONITOR.getChartData($(this), ui);
+            CBMONITOR.getChartData($(this).attr("id"), ui);
         }
     });
 };

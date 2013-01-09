@@ -31,14 +31,14 @@ SERIESLY.Seriesly.prototype.biuldURL = function(group, ptrs, from, to) {
 };
 
 
-SERIESLY.Seriesly.prototype.query = function(group, ptrs, from, to, object) {
+SERIESLY.Seriesly.prototype.query = function(group, ptrs, from, to, cb_object) {
     "use strict";
 
     var url = this.biuldURL(group, ptrs, from, to);
 
     $.ajax({url: url, dataType: "json",
         success: function(data) {
-            //object.handleData(data);
+            cb_object.init(data);
         }
     });
 };
