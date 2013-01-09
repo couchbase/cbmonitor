@@ -93,7 +93,6 @@ INSTALLED_APPS = (
     'httpproxy',
     'pyjade',
     'litmus',
-    'demos',
     'reports',
     'cbmonitor',
 )
