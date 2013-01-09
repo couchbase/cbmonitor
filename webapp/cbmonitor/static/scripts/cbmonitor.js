@@ -1,3 +1,5 @@
+/*global SERIESLY:true*/
+
 /*
  * Name space
  */
@@ -198,23 +200,29 @@ CBMONITOR.configureChartPanel = function() {
 CBMONITOR.getMetricsAndEvents = function(type) {
     "use strict";
 
-    var prefix = (type === "metric")? "met" : "evnt";
+    var prefix = (type === "metric")? "met" : "evnt",
+        cluster = $("#" + prefix + "_cluster option:selected").val(),
+        server = $("#" + prefix + "_server option:selected").val(),
+        bucket = $("#" + prefix + "_bucket option:selected").val();
     $.ajax({
         url: "/cbmonitor/get_metrics_and_events/", dataType: "json",
         data: {
-            "cluster": $("#" + prefix + "_cluster option:selected").val(),
-            "server": $("#" + prefix + "_server option:selected").val(),
-            "bucket": $("#" + prefix + "_bucket option:selected").val(),
+            "cluster": cluster,
+            "server": server,
+            "bucket": bucket,
             "type": type
         },
-        success: function(metrics) {
+        success: function(items) {
             var ul = (type === "metric") ? "#metrics_ul" : "#events_ul";
             $(ul).empty();
-            metrics.forEach(function(metric) {
+            items.forEach(function(item) {
                 $(ul).append(
-                    $("<li>").addClass("ui-state-default ui-corner-all").append(
-                        metric
-                    )
+                    $("<li>").addClass("ui-state-default ui-corner-all")
+                        .attr("type", type)
+                        .attr("cluster", cluster)
+                        .attr("server", server)
+                        .attr("bucket", bucket)
+                        .append(item)
                 );
             });
             $(ul + " li").draggable({
@@ -226,6 +234,34 @@ CBMONITOR.getMetricsAndEvents = function(type) {
     });
 };
 
+CBMONITOR.buildPointer = function(ui) {
+    "use strict";
+
+    var type = ui.draggable.attr("type"),
+        cluster = ui.draggable.attr("cluster"),
+        server = ui.draggable.attr("server"),
+        bucket = ui.draggable.attr("bucket"),
+        item = ui.draggable.text();
+
+    var ptr = type + "/" + cluster + "/";
+    if (server.length > 0) {
+        ptr += server + "/";
+    }
+    if (bucket.length > 0) {
+        ptr += bucket + "/";
+    }
+    return ptr + item;
+};
+
+CBMONITOR.getChartData = function(container, ui) {
+    "use strict";
+
+    var ptr = CBMONITOR.buildPointer(ui);
+    var seriesly = new SERIESLY.Seriesly("cbmonitor");
+
+    seriesly.query(1000, [ptr], null, null, null);
+};
+
 CBMONITOR.enableDroppable = function() {
     "use strict";
 
@@ -233,7 +269,7 @@ CBMONITOR.enableDroppable = function() {
         activeClass: "ui-state-default",
         hoverClass: "ui-state-hover",
         drop: function(event, ui) {
-            //$(this).attr("id") ui.draggable.text();
+            CBMONITOR.getChartData($(this), ui);
         }
     });
 };
