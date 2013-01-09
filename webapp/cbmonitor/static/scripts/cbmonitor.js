@@ -265,7 +265,7 @@ CBMONITOR.getChartData = function(container, ui) {
         "container": container
     });
 
-    seriesly.query(1000, [ptr], null, null, graphManager);
+    seriesly.query({group: 1000, ptrs: [ptr], callback_object: graphManager});
 };
 
 CBMONITOR.enableDroppable = function() {

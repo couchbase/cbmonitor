@@ -13,32 +13,32 @@ SERIESLY.Seriesly = function(db_name) {
 };
 
 
-SERIESLY.Seriesly.prototype.biuldURL = function(group, ptrs, from, to) {
+SERIESLY.Seriesly.prototype.biuldURL = function(args) {
     "use strict";
 
-    var url = "/seriesly/" + this.db_name + "/_query?group=" + group;
+    var url = "/seriesly/" + this.db_name + "/_query?group=" + args.group;
 
-    for(var i = 0, l = ptrs.length; i < l; i++) {
-        url = url + "&ptr=/" + ptrs[i] + "&reducer=avg";
+    for(var i = 0, l = args.ptrs.length; i < l; i++) {
+        url = url + "&ptr=/" + args.ptrs[i] + "&reducer=avg";
     }
-    if (from) {
-        url = url + "&from=" + from;
+    if (args.from) {
+        url = url + "&from=" + args.from;
     }
-    if (to) {
-        url = url + "&to=" + to;
+    if (args.to) {
+        url = url + "&to=" + args.to;
     }
     return url;
 };
 
 
-SERIESLY.Seriesly.prototype.query = function(group, ptrs, from, to, cb_object) {
+SERIESLY.Seriesly.prototype.query = function(args) {
     "use strict";
 
-    var url = this.biuldURL(group, ptrs, from, to);
+    var url = this.biuldURL(args);
 
     $.ajax({url: url, dataType: "json",
         success: function(data) {
-            cb_object.init(data);
+            args.callback_object.init(data);
         }
     });
 };
