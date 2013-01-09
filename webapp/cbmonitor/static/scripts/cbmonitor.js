@@ -1,3 +1,4 @@
+/*jshint jquery: true, browser: true*/
 /*global SERIESLY:true*/
 
 /*

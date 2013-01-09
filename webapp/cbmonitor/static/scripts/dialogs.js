@@ -1,3 +1,5 @@
+/*jshint jquery: true, browser: true*/
+
 /*
  * Name space
  */
