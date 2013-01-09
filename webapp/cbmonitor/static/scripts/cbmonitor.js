@@ -294,6 +294,10 @@ CBMONITOR.configureClusters = function(type) {
         success: function(clusters){
             var sel = (type === "metric") ? $("#met_cluster") : $("#evnt_cluster");
             sel.empty();
+            if (!clusters.length) {
+                var o = new Option("None", "");
+                sel.append(o);
+            }
             clusters.forEach(function(cluster) {
                 var o = new Option(cluster, cluster);
                 sel.append(o);
