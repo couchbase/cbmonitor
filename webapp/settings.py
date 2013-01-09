@@ -94,6 +94,7 @@ INSTALLED_APPS = (
     'pyjade',
     'litmus',
     'cbmonitor',
+    'django_coverage',
 )
 
 # Proxy settings
