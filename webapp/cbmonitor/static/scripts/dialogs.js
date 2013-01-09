@@ -66,6 +66,8 @@ CBMONITOR.addNewCluster = function() {
                             },
                             false, true
                         );
+                        CBMONITOR.configureCTree();
+                        CBMONITOR.configureMEPanel();
                         $("#dialog_new_cluster").dialog("close");
                     },
                     error: function(jqXHR) {
@@ -247,6 +249,7 @@ CBMONITOR.deleteItem = function() {
                             adds.addClass("ui-state-disabled");
                         }
                         jstree.jstree("remove", selected);
+                        CBMONITOR.configureMEPanel();
                     }
                 });
                 $(this).dialog("close");
