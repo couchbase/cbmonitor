@@ -37,6 +37,34 @@ class ApiTest(TestCase):
         response = rest_api.dispatcher(request, path="add_" + item)
         return response
 
+    def add_valid_cluster(self):
+        cluster = uhex()
+        params = {"name": cluster, "description": uhex()}
+        self.add_item("cluster", params)
+        return cluster
+
+    def add_valid_server(self):
+        cluster = self.add_valid_cluster()
+
+        params = {
+            "cluster": cluster, "address": uhex(),
+            "rest_username": uhex(), "rest_password": uhex(),
+            "ssh_username": uhex(), "ssh_password": uhex(), "ssh_key": uhex(),
+            "description": uhex()
+        }
+        return self.add_item("server", params)
+
+    def add_valid_bucket(self):
+        cluster = self.add_valid_cluster()
+
+        params = {
+            "cluster": cluster,
+            "name": uhex(), "type": choice(("Couchbase", "Memcached")),
+            "port": randint(1, 65535), "password": uhex(),
+            "description": uhex()
+        }
+        return self.add_item("bucket", params)
+
     def delete_item(self, item, params):
         """Add new cluster/server/bucket"""
         request = self.factory.post("/delete_" + item, params)
@@ -132,8 +160,7 @@ class ApiTest(TestCase):
 
     def test_add_server(self):
         """Adding new server with full set of params"""
-        cluster = uhex()
-        self.add_item("cluster", {"name": cluster})
+        cluster = self.add_valid_cluster()
 
         params = {
             "cluster": cluster, "address": uhex(),
@@ -167,8 +194,7 @@ class ApiTest(TestCase):
 
     def test_add_server_wo_ssh_credentials(self):
         """Adding new server w/o SSH password and key"""
-        cluster = uhex()
-        self.add_item("cluster", {"name": cluster})
+        cluster = self.add_valid_cluster()
 
         params = {
             "cluster": cluster, "address": uhex(),
@@ -184,17 +210,7 @@ class ApiTest(TestCase):
 
     def test_add_bucket(self):
         """Adding new bucket with full set of params"""
-
-        cluster = uhex()
-        self.add_item("cluster", {"name": cluster})
-
-        server = uhex()
-        params = {
-            "cluster": cluster, "address": server,
-            "rest_username": uhex(), "rest_password": uhex(),
-            "ssh_username": uhex(), "ssh_password": uhex()
-        }
-        self.add_item("server", params)
+        cluster = self.add_valid_cluster()
 
         params = {
             "cluster": cluster,
@@ -212,19 +228,10 @@ class ApiTest(TestCase):
 
     def test_add_bucket_with_wrong_port(self):
         """Adding new bucket with wrong type of port parameter"""
-        cluster = uhex()
-        self.add_item("cluster", {"name": cluster})
-
-        server = uhex()
-        params = {
-            "cluster": cluster, "address": server,
-            "rest_username": uhex(), "rest_password": uhex(),
-            "ssh_username": uhex(), "ssh_password": uhex()
-        }
-        self.add_item("server", params)
+        cluster = self.add_valid_cluster()
 
         params = {
-            "server": server,
+            "cluster": cluster,
             "name": uhex(), "type": choice(("Couchbase", "Memcached")),
             "port": uhex(), "password": uhex()
         }
@@ -235,19 +242,10 @@ class ApiTest(TestCase):
 
     def test_add_bucket_with_wrong_type(self):
         """Adding new bucket with wrong type parameter"""
-        cluster = uhex()
-        self.add_item("cluster", {"name": cluster})
-
-        server = uhex()
-        params = {
-            "cluster": cluster, "address": server,
-            "rest_username": uhex(), "rest_password": uhex(),
-            "ssh_username": uhex(), "ssh_password": uhex()
-        }
-        self.add_item("server", params)
+        cluster = self.add_valid_cluster()
 
         params = {
-            "server": server,
+            "cluster": cluster,
             "name": uhex(), "type": uhex(),
             "port": randint(1, 65535), "password": uhex()
         }
@@ -258,8 +256,7 @@ class ApiTest(TestCase):
 
     def test_remove_cluster(self):
         """Removing existing cluster"""
-        cluster = uhex()
-        self.add_item("cluster", {"name": cluster})
+        cluster = self.add_valid_cluster()
 
         response = self.delete_item("cluster", {"name": cluster})
 
@@ -279,8 +276,8 @@ class ApiTest(TestCase):
 
     def test_remove_server(self):
         """Removing existing cluster"""
-        cluster = uhex()
-        self.add_item("cluster", {"name": cluster})
+        cluster = self.add_valid_cluster()
+
         params = {
             "cluster": cluster, "address": uhex(),
             "rest_username": uhex(), "rest_password": uhex(),
@@ -300,16 +297,7 @@ class ApiTest(TestCase):
 
     def test_remove_bucket(self):
         """Removing existing cluster"""
-        cluster = uhex()
-        self.add_item("cluster", {"name": cluster})
-        server = uhex()
-        params = {
-            "cluster": cluster, "address": server,
-            "rest_username": uhex(), "rest_password": uhex(),
-            "ssh_username": uhex(), "ssh_password": uhex(), "ssh_key": uhex(),
-            "description": uhex()
-        }
-        self.add_item("server", params)
+        cluster = self.add_valid_cluster()
 
         params = {
             "name": uhex(), "cluster": cluster,
