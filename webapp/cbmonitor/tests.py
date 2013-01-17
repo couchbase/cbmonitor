@@ -13,6 +13,77 @@ import models
 uhex = lambda: uuid4().hex
 
 
+class Verifier(object):
+
+    @staticmethod
+    def valid_response(test):
+        def wrapper(self, *args):
+            test(self, *args)
+            self.assertEqual(self.response.content, "Success")
+            self.assertEqual(self.response.status_code, 200)
+        return wrapper
+
+    @staticmethod
+    def missing_parameter(test):
+        def wrapper(self, *args):
+            test(self, *args)
+            self.assertTrue("field is required" in self.response.content)
+            self.assertEqual(self.response.status_code, 400)
+        return wrapper
+
+    @staticmethod
+    def duplicate(test):
+        def wrapper(self, *args):
+            test(self, *args)
+            self.assertTrue("already exists" in self.response.content)
+            self.assertEqual(self.response.status_code, 400)
+        return wrapper
+
+    @staticmethod
+    def bad_parent(test):
+        def wrapper(self, *args):
+            test(self, *args)
+            self.assertTrue(
+                "does not exist" in self.response.content or
+                "Select a valid choice" in self.response.content
+            )
+            self.assertEqual(self.response.status_code, 400)
+        return wrapper
+
+    @staticmethod
+    def not_existing(test):
+        def wrapper(self, *args):
+            test(self, *args)
+            self.assertTrue("matches the given query" in self.response.content)
+            self.assertEqual(self.response.status_code, 404)
+        return wrapper
+
+    @staticmethod
+    def bad_parameter(test):
+        def wrapper(self, *args):
+            test(self, *args)
+            self.assertTrue("Enter a whole number" in self.response.content)
+            self.assertEqual(self.response.status_code, 400)
+        return wrapper
+
+    @staticmethod
+    def valid_json(test):
+        def wrapper(self, *args):
+            test(self, *args)
+            json.loads(self.response.content)
+            self.assertEqual(self.response.status_code, 200)
+        return wrapper
+
+    @staticmethod
+    def empty_array(test):
+        def wrapper(self, *args):
+            test(self, *args)
+            response_body = json.loads(self.response.content)
+            self.assertEqual(response_body, [])
+            self.assertEqual(self.response.status_code, 200)
+        return wrapper
+
+
 class BasicTest(TestCase):
 
     def setUp(self):
@@ -71,93 +142,46 @@ class ApiTest(TestCase):
         response = rest_api.dispatcher(request, path="delete_" + item)
         return response
 
-    def verify_valid_response(self, response):
-        self.assertEqual(response.content, "Success")
-        self.assertEqual(response.status_code, 200)
-
-    def verify_missing_parameter(self, response):
-        self.assertTrue("field is required" in response.content)
-        self.assertEqual(response.status_code, 400)
-
-    def verify_duplicate(self, response):
-        self.assertTrue("already exists" in response.content)
-        self.assertEqual(response.status_code, 400)
-
-    def verify_bad_parent(self, response):
-        self.assertTrue(
-            "does not exist" in response.content or
-            "Select a valid choice" in response.content
-        )
-        self.assertEqual(response.status_code, 400)
-
-    def verify_not_existing(self, response):
-        self.assertTrue("matches the given query" in response.content)
-        self.assertEqual(response.status_code, 404)
-
-    def verify_bad_parameter(self, response):
-        self.assertTrue("Enter a whole number" in response.content)
-        self.assertEqual(response.status_code, 400)
-
-    def verify_valid_json(self, response):
-        json.loads(response.content)
-        self.assertEqual(response.status_code, 200)
-
-    def verify_empty_array(self, response):
-        response_body = json.loads(response.content)
-        self.assertEqual(response_body, [])
-        self.assertEqual(response.status_code, 200)
-
+    @Verifier.valid_response
     def test_add_cluster(self):
         """Adding new cluster with full set of params"""
         params = {"name": uhex(), "description": uhex()}
-        response = self.add_item("cluster", params)
-
-        # Verify response
-        self.verify_valid_response(response)
+        self.response = self.add_item("cluster", params)
 
         # Verify persistence
         cluster = models.Cluster.objects.get(name=params["name"])
         self.assertEqual(cluster.description, params["description"])
 
+    @Verifier.valid_response
     def test_add_cluster_wo_description(self):
         """Adding new cluster with missing optional params"""
         params = {"name": uhex()}
-        response = self.add_item("cluster", params)
-
-        # Verify response
-        self.verify_valid_response(response)
+        self.response = self.add_item("cluster", params)
 
         # Verify persistence
         cluster = models.Cluster.objects.get(name=params["name"])
         self.assertEqual(cluster.description, "")
 
+    @Verifier.duplicate
     def test_add_cluster_duplicate(self):
         """Adding duplicate cluster"""
         params = {"name": uhex()}
+        self.add_item("cluster", params)
+        self.response = self.add_item("cluster", params)
 
-        # Verify response
-        response = self.add_item("cluster", params)
-        self.verify_valid_response(response)
-
-        response = self.add_item("cluster", params)
-        self.verify_duplicate(response)
-
+    @Verifier.missing_parameter
     def test_add_cluster_wo_name(self):
         """Adding new cluster with missing mandatory params"""
         params = {"description": uhex()}
-        response = self.add_item("cluster", params)
+        self.response = self.add_item("cluster", params)
 
-        # Verify response
-        self.verify_missing_parameter(response)
-
+    @Verifier.missing_parameter
     def test_add_cluster_with_empty_name(self):
         """Adding new cluster with empty mandatory params"""
         params = {"name": ""}
-        response = self.add_item("cluster", params)
+        self.response = self.add_item("cluster", params)
 
-        # Verify response
-        self.verify_missing_parameter(response)
-
+    @Verifier.valid_response
     def test_add_server(self):
         """Adding new server with full set of params"""
         cluster = self.add_valid_cluster()
@@ -168,16 +192,13 @@ class ApiTest(TestCase):
             "ssh_username": uhex(), "ssh_password": uhex(), "ssh_key": uhex(),
             "description": uhex()
         }
-
-        response = self.add_item("server", params)
-
-        # Verify response
-        self.verify_valid_response(response)
+        self.response = self.add_item("server", params)
 
         # Verify persistence
         server = models.Server.objects.get(address=params["address"])
         self.assertEqual(server.cluster.name, cluster)
 
+    @Verifier.bad_parent
     def test_add_server_to_wrong_cluster(self):
         """Adding new server with wrong cluster parameter"""
         params = {
@@ -187,11 +208,9 @@ class ApiTest(TestCase):
             "description": uhex()
         }
 
-        response = self.add_item("server", params)
+        self.response = self.add_item("server", params)
 
-        # Verify response
-        self.verify_bad_parent(response)
-
+    @Verifier.missing_parameter
     def test_add_server_wo_ssh_credentials(self):
         """Adding new server w/o SSH password and key"""
         cluster = self.add_valid_cluster()
@@ -202,12 +221,9 @@ class ApiTest(TestCase):
             "ssh_username": uhex(),
             "description": uhex()
         }
+        self.response = self.add_item("server", params)
 
-        response = self.add_item("server", params)
-
-        # Verify response
-        self.verify_missing_parameter(response)
-
+    @Verifier.valid_response
     def test_add_bucket(self):
         """Adding new bucket with full set of params"""
         cluster = self.add_valid_cluster()
@@ -217,15 +233,13 @@ class ApiTest(TestCase):
             "name": uhex(), "type": choice(("Couchbase", "Memcached")),
             "port": randint(1, 65535), "password": uhex()
         }
-        response = self.add_item("bucket", params)
-
-        # Verify response
-        self.verify_valid_response(response)
+        self.response = self.add_item("bucket", params)
 
         # Verify persistence
         bucket = models.Bucket.objects.get(name=params["name"])
         self.assertEqual(bucket.cluster.name, cluster)
 
+    @Verifier.bad_parameter
     def test_add_bucket_with_wrong_port(self):
         """Adding new bucket with wrong type of port parameter"""
         cluster = self.add_valid_cluster()
@@ -235,11 +249,9 @@ class ApiTest(TestCase):
             "name": uhex(), "type": choice(("Couchbase", "Memcached")),
             "port": uhex(), "password": uhex()
         }
-        response = self.add_item("bucket", params)
+        self.response = self.add_item("bucket", params)
 
-        # Verify response
-        self.verify_bad_parameter(response)
-
+    @Verifier.bad_parent
     def test_add_bucket_with_wrong_type(self):
         """Adding new bucket with wrong type parameter"""
         cluster = self.add_valid_cluster()
@@ -249,31 +261,25 @@ class ApiTest(TestCase):
             "name": uhex(), "type": uhex(),
             "port": randint(1, 65535), "password": uhex()
         }
-        response = self.add_item("bucket", params)
+        self.response = self.add_item("bucket", params)
 
-        # Verify response
-        self.verify_bad_parent(response)
-
+    @Verifier.valid_response
     def test_remove_cluster(self):
         """Removing existing cluster"""
         cluster = self.add_valid_cluster()
 
-        response = self.delete_item("cluster", {"name": cluster})
-
-        # Verify response
-        self.verify_valid_response(response)
+        self.response = self.delete_item("cluster", {"name": cluster})
 
         # Verify persistence
         self.assertRaises(ObjectDoesNotExist, models.Cluster.objects.get,
                           name=cluster)
 
+    @Verifier.not_existing
     def test_remove_cluster_not_existing(self):
         """Removing not existing cluster"""
-        response = self.delete_item("cluster", {"name": uhex()})
+        self.response = self.delete_item("cluster", {"name": uhex()})
 
-        # Verify response
-        self.verify_not_existing(response)
-
+    @Verifier.valid_response
     def test_remove_server(self):
         """Removing existing cluster"""
         cluster = self.add_valid_cluster()
@@ -286,15 +292,14 @@ class ApiTest(TestCase):
         }
         self.add_item("server", params)
 
-        response = self.delete_item("server", {"address": params["address"]})
-
-        # Verify response
-        self.verify_valid_response(response)
+        self.response = self.delete_item("server",
+                                         {"address": params["address"]})
 
         # Verify persistence
         self.assertRaises(ObjectDoesNotExist, models.Server.objects.get,
                           address=params["address"])
 
+    @Verifier.valid_response
     def test_remove_bucket(self):
         """Removing existing cluster"""
         cluster = self.add_valid_cluster()
@@ -306,72 +311,59 @@ class ApiTest(TestCase):
         }
         self.add_item("bucket", params)
 
-        response = self.delete_item("bucket",
-                                    {"name": params["name"],
-                                     "cluster": cluster})
-
-        # Verify response
-        self.verify_valid_response(response)
+        self.response = self.delete_item("bucket",
+                                         {"name": params["name"],
+                                          "cluster": cluster})
 
         # Verify persistence
         self.assertRaises(ObjectDoesNotExist, models.Bucket.objects.get,
                           name=params["name"], cluster=cluster)
 
+    @Verifier.valid_json
     def test_get_tree_data(self):
         request = self.factory.get("/get_tree_data")
-        response = rest_api.dispatcher(request, path="get_tree_data")
+        self.response = rest_api.dispatcher(request, path="get_tree_data")
 
-        self.verify_valid_json(response)
-
+    @Verifier.valid_json
     def test_get_clusters(self):
         request = self.factory.get("/get_clusters")
-        response = rest_api.dispatcher(request, path="get_clusters")
-
-        # Verify response
-        self.verify_valid_json(response)
+        self.response = rest_api.dispatcher(request, path="get_clusters")
 
         # Verify content
-        self.assertEquals(response.content, json.dumps(["East"]))
+        self.assertEquals(self.response.content, json.dumps(["East"]))
 
+    @Verifier.valid_json
     def test_get_servers(self):
         params = {"cluster": "East"}
         request = self.factory.get("/get_servers", params)
-        response = rest_api.dispatcher(request, path="get_servers")
-
-        # Verify response
-        self.verify_valid_json(response)
+        self.response = rest_api.dispatcher(request, path="get_servers")
 
         # Verify content
         expected = json.dumps(["ec2-54-242-160-13.compute-1.amazonaws.com"])
-        self.assertEquals(response.content, expected)
+        self.assertEquals(self.response.content, expected)
 
+    @Verifier.empty_array
     def test_get_servers_with_missing_param(self):
         request = self.factory.get("/get_servers")
-        response = rest_api.dispatcher(request, path="get_servers")
+        self.response = rest_api.dispatcher(request, path="get_servers")
 
-        # Verify response
-        self.verify_empty_array(response)
-
+    @Verifier.empty_array
     def test_get_servers_wrong_param(self):
         params = {"cluster": "West"}
         request = self.factory.get("/get_servers", params)
-        response = rest_api.dispatcher(request, path="get_servers")
+        self.response = rest_api.dispatcher(request, path="get_servers")
 
-        # Verify response
-        self.verify_empty_array(response)
-
+    @Verifier.valid_json
     def test_get_buckets(self):
         params = {"cluster": "East"}
         request = self.factory.get("/get_buckets", params)
-        response = rest_api.dispatcher(request, path="get_buckets")
-
-        # Verify response
-        self.verify_valid_json(response)
+        self.response = rest_api.dispatcher(request, path="get_buckets")
 
         # Verify content
         expected = json.dumps(["default"])
-        self.assertEquals(response.content, expected)
+        self.assertEquals(self.response.content, expected)
 
+    @Verifier.valid_json
     def test_get_metrics(self, params=None):
         if not params:
             params = {"type": "metric",
@@ -379,30 +371,28 @@ class ApiTest(TestCase):
                       "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                       "bucket": "default"}
         request = self.factory.get("/get_metrics_and_events", params)
-        response = rest_api.dispatcher(request, path="get_metrics_and_events")
-
-        # Verify response
-        self.verify_valid_json(response)
+        self.response = rest_api.dispatcher(request,
+                                            path="get_metrics_and_events")
 
         # Verify content
         expected = json.dumps(["cache_miss"])
-        self.assertEquals(response.content, expected)
+        self.assertEquals(self.response.content, expected)
 
+    @Verifier.valid_json
     def test_get_metrics_no_server(self, params=None):
         if not params:
             params = {"type": "metric",
                       "cluster": "East",
                       "bucket": "default"}
         request = self.factory.get("/get_metrics_and_events", params)
-        response = rest_api.dispatcher(request, path="get_metrics_and_events")
-
-        # Verify response
-        self.verify_valid_json(response)
+        self.response = rest_api.dispatcher(request,
+                                            path="get_metrics_and_events")
 
         # Verify content
         expected = json.dumps(["disk_queue"])
-        self.assertEquals(response.content, expected)
+        self.assertEquals(self.response.content, expected)
 
+    @Verifier.valid_json
     def test_get_events(self, params=None):
         if not params:
             params = {"type": "event",
@@ -410,15 +400,14 @@ class ApiTest(TestCase):
                       "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                       "bucket": "default"}
         request = self.factory.get("/get_metrics_and_events", params)
-        response = rest_api.dispatcher(request, path="get_metrics_and_events")
-
-        # Verify response
-        self.verify_valid_json(response)
+        self.response = rest_api.dispatcher(request,
+                                            path="get_metrics_and_events")
 
         # Verify content
         expected = json.dumps(["Rebalance start"])
-        self.assertEquals(response.content, expected)
+        self.assertEquals(self.response.content, expected)
 
+    @Verifier.valid_response
     def test_add_metric(self):
         params = {"type": "metric",
                   "name": "mem_used",
@@ -428,12 +417,12 @@ class ApiTest(TestCase):
         request = self.factory.post("/add_metric_or_event", params)
         response = rest_api.dispatcher(request, path="add_metric_or_event")
 
-        # Verify response
-        self.verify_valid_response(response)
-
         # Verify persistence
         self.test_get_metrics(params)
 
+        self.response = response
+
+    @Verifier.valid_response
     def test_add_metric_no_server(self):
         params = {"type": "metric",
                   "name": "mem_used",
@@ -442,12 +431,12 @@ class ApiTest(TestCase):
         request = self.factory.post("/add_metric_or_event", params)
         response = rest_api.dispatcher(request, path="add_metric_or_event")
 
-        # Verify response
-        self.verify_valid_response(response)
-
         # Verify persistence
         self.test_get_metrics_no_server(params)
 
+        self.response = response
+
+    @Verifier.valid_response
     def test_add_event(self):
         params = {"type": "event",
                   "name": "failover",
@@ -457,19 +446,17 @@ class ApiTest(TestCase):
         request = self.factory.post("/add_metric_or_event", params)
         response = rest_api.dispatcher(request, path="add_metric_or_event")
 
-        # Verify response
-        self.verify_valid_response(response)
-
         # Verify persistence
         self.test_get_events(params)
 
+        self.response = response
+
+    @Verifier.missing_parameter
     def test_add_event_no_cluster(self):
         params = {"type": "event",
                   "name": "failover",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                   "bucket": "default"}
         request = self.factory.post("/add_metric_or_event", params)
-        response = rest_api.dispatcher(request, path="add_metric_or_event")
-
-        # Verify response
-        self.verify_missing_parameter(response)
+        self.response = rest_api.dispatcher(request,
+                                            path="add_metric_or_event")
