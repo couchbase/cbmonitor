@@ -95,12 +95,7 @@ class BasicTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class ApiTest(TestCase):
-
-    fixtures = ["bucket_type.json", "testdata.json"]
-
-    def setUp(self):
-        self.factory = RequestFactory()
+class TestHelper(TestCase):
 
     def add_item(self, item, params):
         """Add new cluster/server/bucket"""
@@ -141,6 +136,14 @@ class ApiTest(TestCase):
         request = self.factory.post("/delete_" + item, params)
         response = rest_api.dispatcher(request, path="delete_" + item)
         return response
+
+
+class ApiTest(TestHelper):
+
+    fixtures = ["bucket_type.json", "testdata.json"]
+
+    def setUp(self):
+        self.factory = RequestFactory()
 
     @Verifier.valid_response
     def test_add_cluster(self):
