@@ -12,5 +12,19 @@
         "fields": {
             "type": "Memcached"
         }
+    },
+    {
+        "model": "cbmonitor.ObservableType",
+        "pk": "metric",
+        "fields": {
+            "type": "metric"
+        }
+    },
+    {
+        "model": "cbmonitor.ObservableType",
+        "pk": "event",
+        "fields": {
+            "type": "event"
+        }
     }
 ]

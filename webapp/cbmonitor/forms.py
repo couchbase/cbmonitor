@@ -66,24 +66,21 @@ class GetBucketsForm(forms.ModelForm):
 
 class GetMetricsAndEvents(forms.ModelForm):
 
-    TYPES = (
-        ("metric", "metric"),
-        ("event", "event")
-    )
-
-    type = forms.ChoiceField(choices=TYPES)
     bucket = forms.CharField(max_length=32, required=False)
 
     class Meta:
-        model = models.Metric
-        fields = ("cluster", "server")
+        model = models.Observable
+        fields = ("type", "cluster", "server")
 
     def clean(self):
         cleaned_data = super(GetMetricsAndEvents, self).clean()
 
-        # Cluster
+        # Type and Cluster
         cluster = cleaned_data.get("cluster")
-        self.params = {"cluster": cluster}
+        self.params = {
+            "type": cleaned_data.get("type"),
+            "cluster": cluster
+        }
 
         # Server
         server = cleaned_data["server"]

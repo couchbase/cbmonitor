@@ -205,9 +205,9 @@ def get_metrics_and_events(request):
     if form.is_valid():
         try:
             if form.cleaned_data["type"] == "metric":
-                data = models.Metric.objects.values("name").get(**form.params)
+                data = models.Observable.objects.values("name").get(**form.params)
             else:
-                data = models.Event.objects.values("name").get(**form.params)
+                data = models.Observable.objects.values("name").get(**form.params)
             content = json.dumps(data.values())
         except DoesNotExist:
             content = json.dumps([])

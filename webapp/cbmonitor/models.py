@@ -61,32 +61,27 @@ class Bucket(models.Model):
         pass
 
 
-class Metric(models.Model):
+class ObservableType(models.Model):
 
-    class Meta:
-        unique_together = ["name", "cluster", "server", "bucket"]
-
-    cluster = models.ForeignKey("Cluster")
-    server = models.ForeignKey("Server", null=True, blank=True)
-    bucket = models.ForeignKey("Bucket", null=True, blank=True)
-    name = models.CharField(max_length=64)
+    type = models.CharField(max_length=6, primary_key=True)
 
     def __str__(self):
-        return self.name
+        return self.type
 
     class Admin:
         pass
 
 
-class Event(models.Model):
+class Observable(models.Model):
 
     class Meta:
         unique_together = ["name", "cluster", "server", "bucket"]
 
+    name = models.CharField(max_length=64)
+    type = models.ForeignKey(ObservableType)
     cluster = models.ForeignKey("Cluster")
     server = models.ForeignKey("Server", null=True, blank=True)
     bucket = models.ForeignKey("Bucket", null=True, blank=True)
-    name = models.CharField(max_length=64)
 
     def __str__(self):
         return self.name
@@ -97,5 +92,4 @@ class Event(models.Model):
 admin.site.register(Cluster)
 admin.site.register(Server)
 admin.site.register(Bucket)
-admin.site.register(Metric)
-admin.site.register(Event)
+admin.site.register(Observable)

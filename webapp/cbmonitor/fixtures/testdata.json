@@ -31,30 +31,33 @@
         }
     },
     {
-        "model": "cbmonitor.metric",
+        "model": "cbmonitor.observable",
         "pk": null,
         "fields": {
             "name": "cache_miss",
+            "type": "metric",
             "cluster": "East",
             "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
             "bucket": 1
         }
     },
     {
-        "model": "cbmonitor.metric",
+        "model": "cbmonitor.observable",
         "pk": null,
         "fields": {
             "name": "disk_queue",
+            "type": "metric",
             "cluster": "East",
             "server": null,
             "bucket": 1
         }
     },
     {
-        "model": "cbmonitor.event",
+        "model": "cbmonitor.observable",
         "pk": null,
         "fields": {
             "name": "Rebalance start",
+            "type": "event",
             "cluster": "East",
             "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
             "bucket": 1
