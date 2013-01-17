@@ -372,11 +372,12 @@ class ApiTest(TestCase):
         expected = json.dumps(["default"])
         self.assertEquals(response.content, expected)
 
-    def test_get_metrics(self):
-        params = {"type": "metric",
-                  "cluster": "East",
-                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                  "bucket": "default"}
+    def test_get_metrics(self, params=None):
+        if not params:
+            params = {"type": "metric",
+                      "cluster": "East",
+                      "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+                      "bucket": "default"}
         request = self.factory.get("/get_metrics_and_events", params)
         response = rest_api.dispatcher(request, path="get_metrics_and_events")
 
@@ -387,10 +388,11 @@ class ApiTest(TestCase):
         expected = json.dumps(["cache_miss"])
         self.assertEquals(response.content, expected)
 
-    def test_get_metrics_no_server(self):
-        params = {"type": "metric",
-                  "cluster": "East",
-                  "bucket": "default"}
+    def test_get_metrics_no_server(self, params=None):
+        if not params:
+            params = {"type": "metric",
+                      "cluster": "East",
+                      "bucket": "default"}
         request = self.factory.get("/get_metrics_and_events", params)
         response = rest_api.dispatcher(request, path="get_metrics_and_events")
 
@@ -401,11 +403,12 @@ class ApiTest(TestCase):
         expected = json.dumps(["disk_queue"])
         self.assertEquals(response.content, expected)
 
-    def test_get_events(self):
-        params = {"type": "event",
-                  "cluster": "East",
-                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                  "bucket": "default"}
+    def test_get_events(self, params=None):
+        if not params:
+            params = {"type": "event",
+                      "cluster": "East",
+                      "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+                      "bucket": "default"}
         request = self.factory.get("/get_metrics_and_events", params)
         response = rest_api.dispatcher(request, path="get_metrics_and_events")
 
@@ -415,3 +418,58 @@ class ApiTest(TestCase):
         # Verify content
         expected = json.dumps(["Rebalance start"])
         self.assertEquals(response.content, expected)
+
+    def test_add_metric(self):
+        params = {"type": "metric",
+                  "name": "mem_used",
+                  "cluster": "East",
+                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+                  "bucket": "default"}
+        request = self.factory.post("/add_metric_or_event", params)
+        response = rest_api.dispatcher(request, path="add_metric_or_event")
+
+        # Verify response
+        self.verify_valid_response(response)
+
+        # Verify persistence
+        self.test_get_metrics(params)
+
+    def test_add_metric_no_server(self):
+        params = {"type": "metric",
+                  "name": "mem_used",
+                  "cluster": "East",
+                  "bucket": "default"}
+        request = self.factory.post("/add_metric_or_event", params)
+        response = rest_api.dispatcher(request, path="add_metric_or_event")
+
+        # Verify response
+        self.verify_valid_response(response)
+
+        # Verify persistence
+        self.test_get_metrics_no_server(params)
+
+    def test_add_event(self):
+        params = {"type": "event",
+                  "name": "failover",
+                  "cluster": "East",
+                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+                  "bucket": "default"}
+        request = self.factory.post("/add_metric_or_event", params)
+        response = rest_api.dispatcher(request, path="add_metric_or_event")
+
+        # Verify response
+        self.verify_valid_response(response)
+
+        # Verify persistence
+        self.test_get_events(params)
+
+    def test_add_event_no_cluster(self):
+        params = {"type": "event",
+                  "name": "failover",
+                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+                  "bucket": "default"}
+        request = self.factory.post("/add_metric_or_event", params)
+        response = rest_api.dispatcher(request, path="add_metric_or_event")
+
+        # Verify response
+        self.verify_missing_parameter(response)

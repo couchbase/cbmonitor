@@ -27,7 +27,8 @@ def dispatcher(request, path):
         "get_clusters": get_clusters,
         "get_servers": get_servers,
         "get_buckets": get_buckets,
-        "get_metrics_and_events": get_metrics_and_events
+        "get_metrics_and_events": get_metrics_and_events,
+        "add_metric_or_event": add_metric_or_event,
     }.get(path)
     if handler:
         return handler(request)
@@ -214,3 +215,12 @@ def get_metrics_and_events(request):
     else:
         content = json.dumps([])
     return HttpResponse(content)
+
+
+@form_validation
+def add_metric_or_event(request):
+    form = forms.AddMetricsAndEvents(request.POST)
+    if form.is_valid():
+        form.save()
+    else:
+        raise ValidationError(form)

@@ -98,3 +98,25 @@ class GetMetricsAndEvents(forms.ModelForm):
             self.params.update({"bucket__isnull": True})
 
         return cleaned_data
+
+
+class AddMetricsAndEvents(forms.ModelForm):
+
+    bucket = forms.CharField(max_length=32, required=False)
+
+    class Meta:
+        model = models.Observable
+        fields = ("type", "cluster", "server")
+
+    def clean(self):
+        cleaned_data = super(AddMetricsAndEvents, self).clean()
+        cluster = cleaned_data.get("cluster")
+
+        try:
+            bucket = models.Bucket.objects.get(name=cleaned_data["bucket"],
+                                               cluster=cluster)
+        except (DoesNotExist, KeyError):
+            bucket = None
+
+        cleaned_data["bucket"] = bucket
+        return cleaned_data
