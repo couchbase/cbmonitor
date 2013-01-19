@@ -2,6 +2,7 @@
 
 import logging
 import logging.config
+import ConfigParser
 import sys
 import signal
 from optparse import OptionParser
@@ -20,6 +21,11 @@ Examples:
 
 HOST = "127.0.0.1"
 ctl = {}
+
+try:
+    logging.config.fileConfig("logging.conf")
+except ConfigParser.NoSectionError:
+    logging.config.fileConfig("cbtop/logging.conf")
 
 def handle_signal(signum, frame):
     """
@@ -41,8 +47,6 @@ def usage():
 
 def cbtop_main():
     signal.signal(signal.SIGINT, handle_signal)
-
-    logging.config.fileConfig("logging.conf")
 
     parser = OptionParser(usage=USAGE)
     parser.add_option("-i", "--itv", dest="itv", default="1",
