@@ -1,7 +1,6 @@
 import getopt
 import re
-from lib.builds.build_query import BuildQuery
-import lib.logger
+from cbtestlib.builds.build_query import BuildQuery
 import ConfigParser
 import os
 import collections

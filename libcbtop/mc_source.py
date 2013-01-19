@@ -6,7 +6,7 @@ import json
 from source import Source
 from server import Server
 
-from lib.memcached.helper.data_helper import MemcachedClientHelper
+from cbtestlib.memcached.helper.data_helper import MemcachedClientHelper
 
 class MemcachedSource(Source):
 

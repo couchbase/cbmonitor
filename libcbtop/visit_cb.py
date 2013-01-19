@@ -5,8 +5,8 @@ import time
 import multiprocessing
 import Queue
 
-from lib.membase.api.rest_client import RestConnection
-from lib.membase.api.exception import ServerUnavailableException
+from cbtestlib.membase.api.rest_client import RestConnection
+from cbtestlib.membase.api.exception import ServerUnavailableException
 
 from tabula.table import Table
 from tabula.section import Section
