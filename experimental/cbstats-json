@@ -11,8 +11,8 @@ import sys
 import time
 import urllib
 
-from metadata.visit import main as visit_main
-from metadata.visit import VISIT_RETRIEVE_FUNCS, VISIT_ENTRY_FUNCS
+from cbtop.metadata.visit import main as visit_main
+from cbtop.metadata.visit import VISIT_RETRIEVE_FUNCS, VISIT_ENTRY_FUNCS
 
 USAGE = """./%prog [HOST[:PORT]] DIRECTORY
 
