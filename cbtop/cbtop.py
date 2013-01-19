@@ -19,6 +19,7 @@ Examples:
     ./%prog 10.2.1.65 -i 4"""
 
 HOST = "127.0.0.1"
+ctl = {}
 
 def handle_signal(signum, frame):
     """
@@ -32,12 +33,13 @@ def handle_signal(signum, frame):
 
     ctl["run_ok"] = False
 
+
 def usage():
     print USAGE
     sys.exit(-1)
 
-if __name__ == "__main__":
 
+def cbtop_main():
     signal.signal(signal.SIGINT, handle_signal)
 
     logging.config.fileConfig("logging.conf")
@@ -66,7 +68,10 @@ if __name__ == "__main__":
         logging.error("invalid polling interval: %s" % options.itv)
         usage()
 
-
+    global ctl
     ctl = {"run_ok": True, "bg": options.bg}
     main(_server, itv=_itv, ctl=ctl, dbhost=options.dbhost,
          dbslow=options.dbslow, dbfast=options.dbfast)
+
+if __name__ == "__main__":
+    cbtop_main()

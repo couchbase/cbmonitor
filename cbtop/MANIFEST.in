@@ -1,4 +1,3 @@
-include README.md
-include LICENSE.txt
+include ../LICENSE.txt
 include metadata/stats.json
 recursive-include metadata/ns_server *
