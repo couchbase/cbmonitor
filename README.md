@@ -7,40 +7,25 @@ Prerequisites
 Dependencies
 ------------
 
-Django:
+    $ pip install zc.buildbot
 
-    pip install zc.buildbot
 
-cbtop:
+General setup
+-------------
 
-    pip install blessings
+    $ buildout
 
-    pip install tabula
+Running webapp
+--------------
 
-Web application setup
----------------------
+    $ ./bin/django syncdb
 
-    buildout
+    $ ./bin/django runserver
 
-    ./bin/django syncdb
+Testing webapp
+--------------
 
-    ./bin/django runserver
-
-Testing
--------
-
-    ./bin/test_webapp
-
-virtualenv tips
----------------
-
-    virtualenv -p python2.6 --no-site-packages priority15
-
-    source priority15/bin/activate
-
-    ...
-
-    deactivate
+    $ ./bin/test_webapp
 
 Logging
 -------
@@ -54,7 +39,7 @@ Cbtop tells you about a couchbase cluster.
 
 Simply point it to one of the servers:
 
-    ./cbtop 10.2.1.65
+    $ ./bin/cbtop 10.2.1.65
 
     DB Compaction:30.00  View Compaction:30.00  Min Items Threshold:10  Min Memory Threshold:10  Compact Running:False  Disk Format Ver:0
 
