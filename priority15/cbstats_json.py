@@ -11,8 +11,8 @@ import sys
 import time
 import urllib
 
-from cbtop.metadata.visit import main as visit_main
-from cbtop.metadata.visit import VISIT_RETRIEVE_FUNCS, VISIT_ENTRY_FUNCS
+from metadata.visit import main as visit_main
+from metadata.visit import VISIT_RETRIEVE_FUNCS, VISIT_ENTRY_FUNCS
 
 USAGE = """./%prog [HOST[:PORT]] DIRECTORY
 
@@ -174,9 +174,9 @@ def rest_request_json(host, port, user, pswd, path, reason=''):
                 "; please check URL, username (-u) and password (-p)") % \
                 (host, port, path, e), None, None
 
-def main(argv):
+def main():
     p = optparse.OptionParser(usage=USAGE)
-    opts, rest = p.parse_args(argv[1:])
+    opts, rest = p.parse_args(sys.argv[1:])
     if len(rest) < 1:
         return "error: please provide an output DIRECTORY"
     if len(rest) > 2:
@@ -193,4 +193,4 @@ def main(argv):
     return VisitorToJSON(host_port, user, pswd, directory).go()
 
 if __name__ == '__main__':
-    sys.exit(main(sys.argv))
+    main()

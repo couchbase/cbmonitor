@@ -6,7 +6,7 @@ import sys
 import requests
 from seriesly import Seriesly
 
-from cbtop.metadata.visit import main as visit_main, VISIT_RETRIEVE_FUNCS
+from metadata.visit import main as visit_main, VISIT_RETRIEVE_FUNCS
 
 
 class VisitorToSeriesly(object):
