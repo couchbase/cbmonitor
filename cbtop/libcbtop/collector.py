@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 class Collector(object):
     """
     Collector to collect data from data @class Source

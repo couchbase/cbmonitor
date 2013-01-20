@@ -8,6 +8,7 @@ from server import Server
 
 from cbtestlib.memcached.helper.data_helper import MemcachedClientHelper
 
+
 class MemcachedSource(Source):
 
     META_FILE = "%s/../metadata/stats.json" % os.path.dirname(__file__)
@@ -42,8 +43,7 @@ class MemcachedSource(Source):
                     self.fast[mkey] = stats[key]
 
     def connect(self):
-        if not self.server or \
-            not isinstance(self.server, Server):
+        if not self.server or not isinstance(self.server, Server):
             return False
 
         self.mc = MemcachedClientHelper.direct_client(

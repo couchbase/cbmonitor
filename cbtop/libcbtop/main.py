@@ -11,6 +11,7 @@ import paint as pt
 
 CTL = {"run_ok": True, "bg": True}
 
+
 def main(server, itv=5, ctl=CTL, port=8091, path="/pools/default",
          dbhost="127.0.0.1", dbslow="slow", dbfast="fast"):
 
@@ -22,8 +23,8 @@ def main(server, itv=5, ctl=CTL, port=8091, path="/pools/default",
     mc_store = vc.SerieslyStore(dbhost, dbslow, dbfast)
 
     mc_proc = multiprocessing.Process(target=vc.mc_worker,
-        args=(vc.mc_jobs, vc.mc_stats,
-              ctl, mc_store, itv))
+                                      args=(vc.mc_jobs, vc.mc_stats,
+                                            ctl, mc_store, itv))
 
     mc_proc.daemon = True
     mc_proc.start()
@@ -35,13 +36,11 @@ def main(server, itv=5, ctl=CTL, port=8091, path="/pools/default",
 
         vc.store.clear()
         visit(server, port, path,
-                {"fast": vc.store_fast,
-                 "slow": vc.store_slow},
-                {"url_before": vc.url_before,
-                 "url_after": vc.url_after},
-            retrieve_funcs={"retrieve_data": vc.retrieve_data,
-                            "retrieve_meta": retrieve_meta},
-            entry_funcs=visit_entry_func, ctl=ctl)
+              {"fast": vc.store_fast, "slow": vc.store_slow},
+              {"url_before": vc.url_before, "url_after": vc.url_after},
+              retrieve_funcs={"retrieve_data": vc.retrieve_data,
+                              "retrieve_meta": retrieve_meta},
+              entry_funcs=visit_entry_func, ctl=ctl)
         vc.store.persist()
 
         if not ctl["bg"]:

@@ -27,6 +27,7 @@ try:
 except ConfigParser.NoSectionError:
     logging.config.fileConfig("cbtop/logging.conf")
 
+
 def handle_signal(signum, frame):
     """
     Handles registered signals and exit.

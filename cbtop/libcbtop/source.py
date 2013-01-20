@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 class Source(object):
     """
     Base class for all data sources

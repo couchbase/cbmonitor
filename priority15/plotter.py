@@ -70,8 +70,8 @@ def main():
 
     # get a set of all unique keys
     all_docs = db.get_all()
-    all_keys = set(key for doc in all_docs.itervalues()
-                       for key in doc.iterkeys())
+    all_keys = \
+        set(key for doc in all_docs.itervalues() for key in doc.iterkeys())
 
     # plot all metrics to PNG images
     outdir = mkdtemp()

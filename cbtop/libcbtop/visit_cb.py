@@ -33,9 +33,9 @@ SECTION_CONFIG = {"settings": {"id": 0,
                               "show_col_hdrs": False,
                               "show_col_hdr_in_cell": True},
                   "buckets": {"id": 2,
-                            "show_row_hdrs": False,
-                            "show_col_hdrs": True,
-                            "show_col_hdr_in_cell": False},
+                              "show_row_hdrs": False,
+                              "show_col_hdrs": True,
+                              "show_col_hdr_in_cell": False},
                   "nodes": {"id": 3,
                             "show_row_hdrs": False,
                             "show_col_hdrs": True,
@@ -50,6 +50,7 @@ cur_row = {}      # {sec_nam: row name}
 mc_jobs = multiprocessing.Queue(1)
 mc_stats = multiprocessing.Queue(20)
 store = None
+
 
 class SerieslyStore(object):
 
@@ -92,6 +93,7 @@ class SerieslyStore(object):
 
         return True
 
+
 def _show_stats(key, val, meta_inf):
     """
     Show stats on the ascii table
@@ -117,8 +119,8 @@ def _show_stats(key, val, meta_inf):
                               conv_funcs=TABULA_CONV_FUNCS,
                               deco_funcs=TABULA_DECO_FUNCS)
             section.config(config["show_row_hdrs"],
-                config["show_col_hdrs"],
-                config["show_col_hdr_in_cell"])
+                           config["show_col_hdrs"],
+                           config["show_col_hdr_in_cell"])
         else:
             return False
         tbl.add_section(section)
@@ -143,6 +145,7 @@ def _show_stats(key, val, meta_inf):
 
     return True
 
+
 def show_all_stats(stats, meta):
     if not isinstance(stats, dict) or not isinstance(meta, dict):
         logging.error("failed to show all stats : invalid data")
@@ -154,11 +157,13 @@ def show_all_stats(stats, meta):
 
         _show_stats(key, val, meta[key])
 
+
 def store_fast(root, parents, data, meta, coll,
                key, val, meta_val, meta_inf, level):
     """Store time-series data into fast-changing database"""
     store.add_fast(key, val)
     return _show_stats(key, val, meta_inf)
+
 
 def store_slow(root, parents, data, meta, coll,
                key, val, meta_val, meta_inf, level):
@@ -166,11 +171,14 @@ def store_slow(root, parents, data, meta, coll,
     store.add_slow(key, val)
     return _show_stats(key, val, meta_inf)
 
+
 def url_before(context, path):
     return context, path
 
+
 def url_after(context, path, root):
     pass
+
 
 def retrieve_data(context, path):
     """Retrieve json data from a couchbase server through REST calls"""
@@ -180,7 +188,7 @@ def retrieve_data(context, path):
     api = rest.baseUrl + path
 
     try:
-        status, content, header = rest._http_request(api)   #TODO: expose
+        status, content, header = rest._http_request(api)  # TODO: expose
     except ServerUnavailableException, e:
         logging.error("unable to retrieve data from %s: %s" % (server, e))
         return retrieve_meta(context, path)
@@ -189,6 +197,7 @@ def retrieve_data(context, path):
         return json.loads(content)
 
     return retrieve_meta(context, path)
+
 
 def collect_mc_stats(root, parents, data, meta, coll,
                      key, val, meta_val, meta_inf, level=0):
@@ -213,6 +222,7 @@ def collect_mc_stats(root, parents, data, meta, coll,
     except Queue.Full:
         logging.debug("unable to collect mcstats : queue is full")
         return False
+
 
 def mc_worker(jobs, stats, ctl, store, timeout=5):
     logging.info("mc_worker started")

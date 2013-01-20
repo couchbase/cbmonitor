@@ -4,6 +4,7 @@ import logging
 from collector import Collector
 from mc_source import MemcachedSource
 
+
 class MemcachedCollector(Collector):
     """
     Collect memcached stats across the cluster, \
@@ -18,8 +19,7 @@ class MemcachedCollector(Collector):
         """
         Collect stats from data sources
         """
-        if not self.sources or \
-            not isinstance(self.sources, list):
+        if not self.sources or not isinstance(self.sources, list):
             logging.error("invalid sources: must be a list")
             return False
 
@@ -28,8 +28,8 @@ class MemcachedCollector(Collector):
                 logging.error("not a MemcachedSource, skipped")
                 continue
 
-            logging.info(
-                "collecting mc stats from server %s" %source.server.ip)
+            logging.info("collecting mc stats from server %s"
+                         % source.server.ip)
             source.connect()
             source.feed()
             source.disconnect()
@@ -42,8 +42,7 @@ class MemcachedCollector(Collector):
         """
         Emit stats to data handlers
         """
-        if not self.handlers or \
-            not isinstance(self.handlers, list):
+        if not self.handlers or not isinstance(self.handlers, list):
             logging.error("invalid handlers: must be a list")
             return False
 

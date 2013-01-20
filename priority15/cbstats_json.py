@@ -24,6 +24,7 @@ Examples:
   ./%prog 10.3.121.192
   ./%prog 10.3.121.192:8091"""
 
+
 class VisitorToJSON(object):
     """Implements callbacks for metadata.visit, saving metrics/data
        to JSON files in a time-stamped subdirectory."""
@@ -129,10 +130,10 @@ def rest_request(host, port, user, pswd, path, method='GET', body='', reason='')
     try:
         conn.request(method, path, body, rest_headers(user, pswd))
     except Exception, e:
-        return ("error: could not access REST API: %s:%s%s" +
-                "; please check source URL, username (-u) and password (-p)" +
-                "; exception: %s%s") % \
-                (host, port, path, e, reason), None, None
+        return \
+            ("error: could not access REST API: %s:%s%s" +
+             "; please check source URL, username (-u) and password (-p)" +
+             "; exception: %s%s") % (host, port, path, e, reason), None, None
 
     resp = conn.getresponse()
     if resp.status in [200, 201, 202, 204, 302]:
@@ -141,14 +142,16 @@ def rest_request(host, port, user, pswd, path, method='GET', body='', reason='')
     conn.close()
 
     if resp.status == 401:
-        return ("error: unable to access REST API: %s:%s%s" +
-                "; please check source URL, username (-u) and password (-p)%s") % \
-                (host, port, path, reason), None, None
+        return \
+            ("error: unable to access REST API: %s:%s%s" +
+             "; please check source URL, username (-u) and password (-p)%s") % \
+            (host, port, path, reason), None, None
 
-    return ("error: unable to access REST API: %s:%s%s" +
-            "; please check source URL, username (-u) and password (-p)" +
-            "; response: %s%s") % \
-            (host, port, path, resp.status, reason), None, None
+    return \
+        ("error: unable to access REST API: %s:%s%s" +
+         "; please check source URL, username (-u) and password (-p)" +
+         "; response: %s%s") % (host, port, path, resp.status, reason), None, None
+
 
 def rest_headers(user, pswd, headers=None):
     if not headers:
@@ -158,6 +161,7 @@ def rest_headers(user, pswd, headers=None):
             string.strip(base64.encodestring(user + ':' + (pswd or '')))
         headers['Authorization'] = auth
     return headers
+
 
 def rest_request_json(host, port, user, pswd, path, reason=''):
     err, conn, rest_json = rest_request(host, port, user, pswd, path,
@@ -169,10 +173,12 @@ def rest_request_json(host, port, user, pswd, path, reason=''):
     try:
         return None, rest_json, json.loads(rest_json)
     except ValueError, e:
-        return ("error: could not decode JSON from REST API: %s:%s%s" +
-                "; exception: %s" +
-                "; please check URL, username (-u) and password (-p)") % \
-                (host, port, path, e), None, None
+        return \
+            ("error: could not decode JSON from REST API: %s:%s%s" +
+             "; exception: %s" +
+             "; please check URL, username (-u) and password (-p)") % \
+            (host, port, path, e), None, None
+
 
 def main():
     p = optparse.OptionParser(usage=USAGE)
@@ -187,7 +193,7 @@ def main():
         host_port = "127.0.0.1:8091"
     directory = rest[-1]
 
-    user = 'Administrator' # TODO: Get user/pswd from cmd-line.
+    user = 'Administrator'  # TODO: Get user/pswd from cmd-line.
     pswd = 'password'
 
     return VisitorToJSON(host_port, user, pswd, directory).go()

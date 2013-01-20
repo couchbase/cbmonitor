@@ -3,6 +3,7 @@
 import logging
 from handler import Handler
 
+
 class SerieslyHandler(Handler):
     """
     Handler to dump data to seriesly

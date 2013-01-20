@@ -36,6 +36,7 @@ COLORS = {"red": term.red,
           "magenta": term.magenta,
           "white": term.white}
 
+
 def conv_units(val, meta):
     """
     Callback function for tabula
@@ -63,6 +64,7 @@ def conv_units(val, meta):
 
     return "%.2f" % val
 
+
 def change_style(val, meta):
     """
     Callback function for tabula
@@ -79,6 +81,7 @@ def change_style(val, meta):
 
     return val
 
+
 def change_color(val, meta):
     """
     Callback function for tabula
@@ -92,6 +95,7 @@ def change_color(val, meta):
         return COLORS[meta](val)
 
     return val
+
 
 def check_range(val, meta):
     """
@@ -133,6 +137,7 @@ TABULA_DECO_FUNCS = {"style": change_style,
                      "color": change_color,
                      "range": check_range}
 
+
 def enter_fullscreen():
     """
     Invoke before printing out anything.
@@ -141,6 +146,7 @@ def enter_fullscreen():
     term.stream.write(term.enter_fullscreen)
     term.stream.write(term.hide_cursor)
 
+
 def exit_fullscreen():
     """
     Invoke before printing out anything.
@@ -148,6 +154,7 @@ def exit_fullscreen():
     """
     term.stream.write(term.exit_fullscreen)
     term.stream.write(term.normal_cursor)
+
 
 def paint(tbl):
     """

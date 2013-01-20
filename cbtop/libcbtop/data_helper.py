@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 class DataHelper:
     """
     Helper to retrieve data from particular nodes

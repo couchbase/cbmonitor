@@ -3,6 +3,7 @@
 import logging
 from functools import wraps
 
+
 class SocketHelper:
 
     @staticmethod
@@ -78,6 +79,7 @@ class SocketHelper:
 
         return None
 
+
 def synchronized(lock_name):
     """synchronized access to class method"""
     def _outer(func):
@@ -92,6 +94,7 @@ def synchronized(lock_name):
                 return func(self, *args, **kwargs)
         return _inner
     return _outer
+
 
 def is_num(val):
     """check if a string is numeric"""

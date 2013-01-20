@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 class Handler(object):
     """
     Base class for data handlers

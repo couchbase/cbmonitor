@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
+
 class Server(object):
 
-    def __init__(self, ip="127.0.0.1", port="8091",ssh_username="root",
+    def __init__(self, ip="127.0.0.1", port="8091", ssh_username="root",
                  ssh_password="coucbhase", ssh_key="",
-                 rest_username="Administrator",rest_password="password",
+                 rest_username="Administrator", rest_password="password",
                  data_path=""):
         self.ip = ip
         self.port = port

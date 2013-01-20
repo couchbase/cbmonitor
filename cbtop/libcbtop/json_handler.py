@@ -4,6 +4,7 @@ import logging
 import json
 from handler import Handler
 
+
 class JsonHandler(Handler):
     """
     Handler to dump data to a json file
@@ -13,8 +14,7 @@ class JsonHandler(Handler):
 
     def handle(self, source):
         """Wrap data into json doc and dump to a file"""
-        if not source or \
-            not source.data:
+        if not source or not source.data:
             logging.error("unable to handle : invalid data")
             return False
 

@@ -179,7 +179,7 @@ class TestInputParser():
                 client_ips = TestInputParser.get_server_ips(config, section)
             elif section == 'membase':
                 input.membase_settings = TestInputParser.get_membase_settings(config, section)
-            elif  section == 'global':
+            elif section == 'global':
                 #get global stuff and override for those unset
                 for option in config.options(section):
                     global_properties[option] = config.get(section, option)
