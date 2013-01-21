@@ -3,23 +3,14 @@
 import logging
 import logging.config
 import ConfigParser
-import sys
 import signal
 from optparse import OptionParser
 
 from libcbtop.main import main
 import libcbtop.paint as pt
 
-USAGE = """./%prog HOST [options]
 
-Monitor a couchbase cluster.
-
-Examples:
-    ./%prog                     -- defaults to 127.0.0.1
-    ./%prog 10.2.1.65
-    ./%prog 10.2.1.65 -i 4"""
-
-HOST = "127.0.0.1"
+DEFAULT_HOST = "127.0.0.1"
 ctl = {}
 
 try:
@@ -29,30 +20,30 @@ except ConfigParser.NoSectionError:
 
 
 def handle_signal(signum, frame):
-    """
-    Handles registered signals and exit.
-    """
+    """Handles registered signals and exit."""
+    global ctl
+
     logging.info("received signal %s, aborting" % signum)
 
-    global ctl
     if not ctl["bg"]:
         pt.exit_fullscreen()
 
     ctl["run_ok"] = False
 
 
-def usage():
-    print USAGE
-    sys.exit(-1)
+def parse_args():
+    usage = \
+        "./%prog HOST [options]\n\n" + \
+        "Monitor a couchbase cluster.\n\n" + \
+        "Examples:\n" + \
+        "    ./%prog                     -- defaults to 127.0.0.1\n" + \
+        "    ./%prog 10.2.1.65\n" + \
+        "    ./%prog 10.2.1.65 -i 4\n"
 
-
-def cbtop_main():
-    signal.signal(signal.SIGINT, handle_signal)
-
-    parser = OptionParser(usage=USAGE)
-    parser.add_option("-i", "--itv", dest="itv", default="1",
+    parser = OptionParser(usage=usage)
+    parser.add_option("-i", "--itv", dest="itv", default="1", type="int",
                       help="stats polling interval (seconds)")
-    parser.add_option("-d", "--dbhost", dest="dbhost", default=HOST,
+    parser.add_option("-d", "--dbhost", dest="dbhost", default=DEFAULT_HOST,
                       help="host where seriesly database is located")
     parser.add_option("-s", "--dbslow", dest="dbslow", default="slow",
                       help="seriesly database to store slow changing data")
@@ -60,22 +51,19 @@ def cbtop_main():
                       help="seriesly database to store fast changing data")
     parser.add_option("-b", "--background", dest="bg", default=False,
                       action="store_true", help="run cbtop in background")
-    options, args = parser.parse_args()
+    return parser.parse_args()
 
-    if len(args) > 0:
-        _server = args[0]
-    else:
-        _server = HOST
 
-    try:
-        _itv = int(options.itv)
-    except ValueError, e:
-        logging.error("invalid polling interval: %s" % options.itv)
-        usage()
-
+def cbtop_main():
     global ctl
+
+    signal.signal(signal.SIGINT, handle_signal)
+
+    options, args = parse_args()
+    server = args and args[0] or DEFAULT_HOST
     ctl = {"run_ok": True, "bg": options.bg}
-    main(_server, itv=_itv, ctl=ctl, dbhost=options.dbhost,
+
+    main(server, itv=options.itv, ctl=ctl, dbhost=options.dbhost,
          dbslow=options.dbslow, dbfast=options.dbfast)
 
 if __name__ == "__main__":
