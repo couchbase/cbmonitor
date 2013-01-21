@@ -106,7 +106,7 @@ class AddMetricsAndEvents(forms.ModelForm):
 
     class Meta:
         model = models.Observable
-        fields = ("type", "cluster", "server")
+        fields = ("name", "type", "cluster", "server")
 
     def clean(self):
         cleaned_data = super(AddMetricsAndEvents, self).clean()

@@ -205,11 +205,8 @@ def get_metrics_and_events(request):
 
     if form.is_valid():
         try:
-            if form.cleaned_data["type"] == "metric":
-                data = models.Observable.objects.values("name").get(**form.params)
-            else:
-                data = models.Observable.objects.values("name").get(**form.params)
-            content = json.dumps(data.values())
+            observables = models.Observable.objects.filter(**form.params).values()
+            content = json.dumps([o["name"] for o in observables])
         except DoesNotExist:
             content = json.dumps([])
     else:
@@ -221,6 +218,8 @@ def get_metrics_and_events(request):
 def add_metric_or_event(request):
     form = forms.AddMetricsAndEvents(request.POST)
     if form.is_valid():
-        form.save()
+        observable = form.save(commit=False)
+        observable.bucket = form.cleaned_data["bucket"]
+        observable.save()
     else:
         raise ValidationError(form)

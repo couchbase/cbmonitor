@@ -373,13 +373,16 @@ class ApiTest(TestHelper):
                       "cluster": "East",
                       "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                       "bucket": "default"}
+            expected = ["cache_miss"]
+        else:
+            expected = ["cache_miss", params["name"]]
         request = self.factory.get("/get_metrics_and_events", params)
         self.response = rest_api.dispatcher(request,
                                             path="get_metrics_and_events")
 
         # Verify content
-        expected = json.dumps(["cache_miss"])
-        self.assertEquals(self.response.content, expected)
+        self.assertEquals(sorted(self.response.content),
+                          sorted(json.dumps(expected)))
 
     @Verifier.valid_json
     def test_get_metrics_no_server(self, params=None):
@@ -387,13 +390,16 @@ class ApiTest(TestHelper):
             params = {"type": "metric",
                       "cluster": "East",
                       "bucket": "default"}
+            expected = ["disk_queue"]
+        else:
+            expected = ["disk_queue", params["name"]]
         request = self.factory.get("/get_metrics_and_events", params)
         self.response = rest_api.dispatcher(request,
                                             path="get_metrics_and_events")
 
         # Verify content
-        expected = json.dumps(["disk_queue"])
-        self.assertEquals(self.response.content, expected)
+        self.assertEquals(sorted(self.response.content),
+                          sorted(json.dumps(expected)))
 
     @Verifier.valid_json
     def test_get_events(self, params=None):
@@ -402,13 +408,16 @@ class ApiTest(TestHelper):
                       "cluster": "East",
                       "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                       "bucket": "default"}
+            expected = ["Rebalance start"]
+        else:
+            expected = ["Rebalance start", params["name"]]
         request = self.factory.get("/get_metrics_and_events", params)
         self.response = rest_api.dispatcher(request,
                                             path="get_metrics_and_events")
 
         # Verify content
-        expected = json.dumps(["Rebalance start"])
-        self.assertEquals(self.response.content, expected)
+        self.assertEquals(sorted(self.response.content),
+                          sorted(json.dumps(expected)))
 
     @Verifier.valid_response
     def test_add_metric(self):
