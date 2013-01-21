@@ -245,11 +245,11 @@ CBMONITOR.buildPointer = function(ui) {
         item = ui.draggable.text();
 
     var ptr = type + "/" + cluster + "/";
-    if (server.length > 0) {
-        ptr += server + "/";
-    }
     if (bucket.length > 0) {
         ptr += bucket + "/";
+    }
+    if (server.length > 0) {
+        ptr += server + "/";
     }
     return ptr + item;
 };
