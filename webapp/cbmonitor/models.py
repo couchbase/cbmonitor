@@ -18,9 +18,9 @@ class Server(models.Model):
 
     cluster = models.ForeignKey('Cluster')
     address = models.CharField(max_length=80, primary_key=True, blank=False)
-    rest_username = models.CharField(max_length=32, blank=False)
-    rest_password = models.CharField(max_length=64, blank=False)
-    ssh_username = models.CharField(max_length=32, blank=False)
+    rest_username = models.CharField(max_length=32, blank=True)
+    rest_password = models.CharField(max_length=64, blank=True)
+    ssh_username = models.CharField(max_length=32, blank=True)
     ssh_password = models.CharField(max_length=64, blank=True)
     ssh_key = models.CharField(max_length=4096, blank=True)
     description = models.CharField(max_length=1024, blank=True)

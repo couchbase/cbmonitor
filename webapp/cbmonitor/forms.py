@@ -15,13 +15,6 @@ class AddServerForm(forms.ModelForm):
     class Meta:
         model = models.Server
 
-    def clean(self):
-        cleaned_data = super(AddServerForm, self).clean()
-        if not cleaned_data["ssh_password"] and not cleaned_data["ssh_key"]:
-            raise forms.ValidationError("This field is required.")
-        else:
-            return cleaned_data
-
 
 class AddBucketForm(forms.ModelForm):
 

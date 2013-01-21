@@ -213,7 +213,7 @@ class ApiTest(TestHelper):
 
         self.response = self.add_item("server", params)
 
-    @Verifier.missing_parameter
+    @Verifier.valid_response
     def test_add_server_wo_ssh_credentials(self):
         """Adding new server w/o SSH password and key"""
         cluster = self.add_valid_cluster()
