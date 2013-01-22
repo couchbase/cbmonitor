@@ -144,13 +144,13 @@ body {
 .selectors {
     margin-top: 5px;
     font-size: 77%;
-    width: 385px;
+    width: 360px;
 }
 .selectors label {
     line-height: 2.0;
 }
 .selectors select {
-    width: 385px;
+    width: 360px;
 }
 .ui-menu .ui-menu-item a {
     font-size: 77%;
