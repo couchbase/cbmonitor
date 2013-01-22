@@ -162,41 +162,50 @@ CBMONITOR.configureChartPanel = function() {
                 $("<div/>", {
                     "id": "first_view",
                     "class": "chart_view_single"
-                }).appendTo(views).append("<svg>");
+                }).appendTo(views);
                 break;
             case "view2":
                 $("<div/>", {
                     "id": "first_view",
                     "class": "chart_view_double"
-                }).appendTo(views).append("<svg>");
+                }).appendTo(views);
                 $("<div/>", {
                     "id": "second_view_double",
                     "class": "chart_view_double"
-                }).appendTo(views).append("<svg>");
+                }).appendTo(views);
                 break;
             case "view4":
                 $("<div/>", {
                     "id": "first_view",
                     "class": "chart_view_quadruple"
-                }).appendTo(views).append("<svg>");
+                }).appendTo(views);
                 $("<div/>", {
                     "id": "second_view",
                     "class": "chart_view_quadruple"
-                }).appendTo(views).append("<svg>");
+                }).appendTo(views);
                 $("<div/>", {
                     "id": "third_view",
                     "class": "chart_view_quadruple"
-                }).appendTo(views).append("<svg>");
+                }).appendTo(views);
                 $("<div/>", {
                     "id": "fourth_view",
                     "class": "chart_view_quadruple"
-                }).appendTo(views).append("<svg>");
+                }).appendTo(views);
                 break;
             default:
                 break;
         }
+        CBMONITOR.graphManager.clear();
         CBMONITOR.enableDroppable();
     });
+    $("#clear_views")
+        .button()
+        .css({
+            fontSize: "77%",
+            width: "100%"
+        }).click(function() {
+            CBMONITOR.graphManager.clear();
+        });
     $("#rpanel").buttonset();
 };
 

@@ -81,6 +81,17 @@ GRAPH.GraphManager.prototype.plot = function(container, ui) {
     });
 };
 
+GRAPH.GraphManager.prototype.clear = function() {
+    "use strict";
+
+    this.metrics = {};
+    $("#first_view").empty().append("<svg>");
+    $("#second_view").empty().append("<svg>");
+    $("#second_view_double").empty().append("<svg>");
+    $("#third_view").empty().append("<svg>");
+    $("#fourth_view").empty().append("<svg>");
+};
+
 GRAPH.DataHandler = function(data) {
     "use strict";
 
