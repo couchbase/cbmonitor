@@ -25,37 +25,23 @@ GRAPH.buildPointer = function(ui) {
     return ptr + item;
 };
 
-GRAPH.getChartData = function(container, ui) {
+GRAPH.GraphManager = function() {
     "use strict";
 
-    var ptr = GRAPH.buildPointer(ui);
-    var seriesly = new SERIESLY.Seriesly("cbmonitor");
-
-    var graphManager = new GRAPH.GraphManager({
-        "metrics": [ui.draggable.text()],
-        "container": container
-    });
-
-    seriesly.query({group: 1000, ptrs: [ptr], callback_object: graphManager});
-};
-
-GRAPH.GraphManager = function(args) {
-    "use strict";
-
-    this.metrics = args.metrics;
-    this.container = args.container;
+    this.seriesly = new SERIESLY.Seriesly("cbmonitor");
+    this.metrics = {};
 };
 
 GRAPH.GraphManager.prototype.init = function(data) {
     "use strict";
 
     var dataHandler = new GRAPH.DataHandler(data),
-        series_data = dataHandler.prepareSeries(this.metrics),
+        series_data = dataHandler.prepareSeries(this.metrics[this.container]),
         container = "#" + this.container + " svg";
 
     var format = d3.time.format("%H:%M:%S");
     nv.addGraph(function() {
-        var chart = nv.models.lineWithFocusChart();
+        var chart = nv.models.lineWithFocusChart().forceY([0]);
 
         chart.xAxis
             .tickFormat(format);
@@ -71,6 +57,27 @@ GRAPH.GraphManager.prototype.init = function(data) {
             .call(chart);
 
         return chart;
+    });
+};
+
+GRAPH.GraphManager.prototype.plot = function(container, ui) {
+    "use strict";
+
+    var new_metric = ui.draggable.text();
+
+    if (this.metrics[container] === undefined) {
+        this.metrics[container] = [new_metric];
+        this.ptrs = [GRAPH.buildPointer(ui)];
+    } else if (this.metrics[container].indexOf(new_metric) === -1) {
+        this.metrics[container].push(new_metric);
+        this.ptrs.push(GRAPH.buildPointer(ui));
+    }
+    this.container = container;
+
+    this.seriesly.query({
+        group: 1000,
+        ptrs: this.ptrs,
+        callback_object: this
     });
 };
 

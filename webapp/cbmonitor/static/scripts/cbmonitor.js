@@ -6,6 +6,8 @@
  */
 var CBMONITOR = CBMONITOR || {};
 
+CBMONITOR.graphManager = new GRAPH.GraphManager();
+
 /*
  * Tabs with clusters/metrics/events
  */
@@ -243,7 +245,7 @@ CBMONITOR.enableDroppable = function() {
         activeClass: "ui-state-default",
         hoverClass: "ui-state-hover",
         drop: function(event, ui) {
-            GRAPH.getChartData($(this).attr("id"), ui);
+            CBMONITOR.graphManager.plot($(this).attr("id"), ui);
         }
     });
 };
