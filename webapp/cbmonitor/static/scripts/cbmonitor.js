@@ -229,7 +229,8 @@ CBMONITOR.getMetricsAndEvents = function(type) {
             $(ul + " li").draggable({
                 "revert": "invalid",
                 "appendTo": "#views",
-                "helper": "clone"
+                "helper": "clone",
+                "cursor": "move"
             });
         }
     });

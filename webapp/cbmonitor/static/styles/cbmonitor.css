@@ -160,3 +160,9 @@ body {
     margin-bottom: 12px;
     font-size: 77%;
 }
+.ui-state-default.ui-corner-all.ui-draggable {
+    margin: 5px 0;
+}
+.ui-state-default.ui-corner-all.ui-draggable:hover {
+    cursor: pointer;
+}
