@@ -29,9 +29,9 @@ GRAPH.GraphManager.prototype.init = function(data) {
         chart.x2Axis
             .tickFormat(format);
         chart.yAxis
-            .tickFormat(d3.format(',.2f'));
+            .tickFormat(d3.format(',.2s'));
         chart.y2Axis
-            .tickFormat(d3.format(',.2f'));
+            .tickFormat(d3.format(',.2s'));
 
         d3.select(container)
             .datum(series_data)
@@ -81,7 +81,7 @@ GRAPH.DataHandler.prototype.prepareSeries = function(metrics) {
         for(j = 0, len_metrics = metrics.length; j < len_metrics; j++) {
             series[j].values.push({
                 x: timestamp,
-                y: this.data[timestamp][j] / 1024 / 1024
+                y: this.data[timestamp][j]
             });
         }
     }
