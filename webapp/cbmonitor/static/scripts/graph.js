@@ -1,10 +1,43 @@
 /*jshint jquery: true, browser: true*/
-/*global d3: true, nv: true*/
+/*global d3: true, nv: true, SERIESLY: true*/
 
 /*
  * Name space
  */
 var GRAPH = GRAPH || {};
+
+GRAPH.buildPointer = function(ui) {
+    "use strict";
+
+    var type = ui.draggable.attr("type"),
+        cluster = ui.draggable.attr("cluster"),
+        server = ui.draggable.attr("server"),
+        bucket = ui.draggable.attr("bucket"),
+        item = ui.draggable.text();
+
+    var ptr = type + "/" + cluster + "/";
+    if (bucket.length > 0) {
+        ptr += bucket + "/";
+    }
+    if (server.length > 0) {
+        ptr += server + "/";
+    }
+    return ptr + item;
+};
+
+GRAPH.getChartData = function(container, ui) {
+    "use strict";
+
+    var ptr = GRAPH.buildPointer(ui);
+    var seriesly = new SERIESLY.Seriesly("cbmonitor");
+
+    var graphManager = new GRAPH.GraphManager({
+        "metrics": [ui.draggable.text()],
+        "container": container
+    });
+
+    seriesly.query({group: 1000, ptrs: [ptr], callback_object: graphManager});
+};
 
 GRAPH.GraphManager = function(args) {
     "use strict";

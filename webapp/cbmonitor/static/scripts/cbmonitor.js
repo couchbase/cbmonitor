@@ -1,5 +1,5 @@
 /*jshint jquery: true, browser: true*/
-/*global SERIESLY: true, GRAPH: true*/
+/*global GRAPH: true*/
 
 /*
  * Name space
@@ -236,39 +236,6 @@ CBMONITOR.getMetricsAndEvents = function(type) {
     });
 };
 
-CBMONITOR.buildPointer = function(ui) {
-    "use strict";
-
-    var type = ui.draggable.attr("type"),
-        cluster = ui.draggable.attr("cluster"),
-        server = ui.draggable.attr("server"),
-        bucket = ui.draggable.attr("bucket"),
-        item = ui.draggable.text();
-
-    var ptr = type + "/" + cluster + "/";
-    if (bucket.length > 0) {
-        ptr += bucket + "/";
-    }
-    if (server.length > 0) {
-        ptr += server + "/";
-    }
-    return ptr + item;
-};
-
-CBMONITOR.getChartData = function(container, ui) {
-    "use strict";
-
-    var ptr = CBMONITOR.buildPointer(ui);
-    var seriesly = new SERIESLY.Seriesly("cbmonitor");
-
-    var graphManager = new GRAPH.GraphManager({
-        "metrics": [ui.draggable.text()],
-        "container": container
-    });
-
-    seriesly.query({group: 1000, ptrs: [ptr], callback_object: graphManager});
-};
-
 CBMONITOR.enableDroppable = function() {
     "use strict";
 
@@ -276,7 +243,7 @@ CBMONITOR.enableDroppable = function() {
         activeClass: "ui-state-default",
         hoverClass: "ui-state-hover",
         drop: function(event, ui) {
-            CBMONITOR.getChartData($(this).attr("id"), ui);
+            GRAPH.getChartData($(this).attr("id"), ui);
         }
     });
 };
