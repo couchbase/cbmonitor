@@ -7,7 +7,6 @@ setup(
             "plotter = plotter:main",
             "cbstats_json = cbstats_json:main",
             "cbstats_seriesly = cbstats_seriesly:main",
-            "ns_to_seriesly = ns_to_seriesly:main",
         ],
     },
 )
