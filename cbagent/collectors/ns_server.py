@@ -2,12 +2,12 @@
 import requests
 
 from cbagent.metadata_client import MetadataClient
-from collector import Collector
+from cbagent.collectors.collector import Collector
 
 
 class NSServer(Collector):
 
-    def __init__(self, host, cluster, store):
+    def __init__(self, host, cluster, store=None):
         self.store = store
         self.cluster = cluster
         self.root_url = "http://{0}:8091".format(host)

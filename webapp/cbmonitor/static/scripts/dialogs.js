@@ -1,4 +1,5 @@
 /*jshint jquery: true, browser: true*/
+/*global Spinner: true*/
 
 /*
  * Name space
@@ -39,6 +40,7 @@ CBMONITOR.addNewCluster = function() {
     "use strict";
 
     var jstree = $("#tree"),
+        spinner_opts = {width: 4, top: "400px"},
         name = $("#cname"),
         master_node = $("#master_node"),
         description = $("#description"),
@@ -53,6 +55,7 @@ CBMONITOR.addNewCluster = function() {
         buttons: {
             "Add new cluster": function() {
                 fields.removeClass("ui-state-error");
+                var spinner = new Spinner(spinner_opts).spin(document.getElementById('spinner'));
                 $.ajax({
                     type: "POST", url: "/cbmonitor/add_cluster/",
                     data: {
@@ -61,6 +64,7 @@ CBMONITOR.addNewCluster = function() {
                         "master_node": master_node.val()
                     },
                     success: function(){
+                        spinner.stop();
                         jstree.jstree("create", -1, "last",
                             {
                                 "attr": {"class": "cluster", "id": name.val()},

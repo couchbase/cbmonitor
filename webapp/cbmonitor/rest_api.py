@@ -6,6 +6,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
+from cbagent.collectors import NSServer
 
 import models
 import forms
@@ -65,6 +66,10 @@ def add_cluster(request):
     form = forms.AddClusterForm(request.POST)
     if form.is_valid():
         form.save()
+        if form.cleaned_data.get("master_node"):
+            collector = NSServer(form.cleaned_data["master_node"],
+                                 form.cleaned_data["name"])
+            collector.update_metadata()
     else:
         raise ValidationError(form)
 
