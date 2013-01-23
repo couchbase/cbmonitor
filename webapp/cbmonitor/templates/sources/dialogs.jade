@@ -3,6 +3,8 @@ div#dialog_new_cluster.new_item(title="Add new cluster")
     fieldset
         label.mandatory(for="cname") * Name
         input#cname.text.ui-widget-content.ui-corner-all(type="text", name="name")
+        label(for="master_node") Master node
+        input#master_node.text.ui-widget-content.ui-corner-all(type="text", name="master_node")
         label(for="description") Description
         textarea#description.text.ui-widget-content.ui-corner-all
         p * Required field

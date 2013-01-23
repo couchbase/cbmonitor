@@ -5,6 +5,7 @@ from django.contrib import admin
 class Cluster(models.Model):
 
     name = models.CharField(max_length=64, primary_key=True, blank=False)
+    master_node = models.CharField(max_length=128, null=True, blank=True)
     description = models.CharField(max_length=1024, null=True, blank=True)
 
     def __str__(self):

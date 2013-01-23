@@ -40,12 +40,13 @@ CBMONITOR.addNewCluster = function() {
 
     var jstree = $("#tree"),
         name = $("#cname"),
+        master_node = $("#master_node"),
         description = $("#description"),
         fields = $([]).add(name).add(description);
 
     $("#dialog_new_cluster").dialog({
         autoOpen: false,
-        height: 330,
+        height: 380,
         width: 350,
         modal: true,
         resizable: false,
@@ -56,7 +57,8 @@ CBMONITOR.addNewCluster = function() {
                     type: "POST", url: "/cbmonitor/add_cluster/",
                     data: {
                         "name": name.val(),
-                        "description": description.val()
+                        "description": description.val(),
+                        "master_node": master_node.val()
                     },
                     success: function(){
                         jstree.jstree("create", -1, "last",
