@@ -161,10 +161,28 @@ function renderTable(data) {
     oTable.$('td').each(function() {
         var target = this;
         var pos = oTable.fnGetPosition(this);
+        var testcase= data[pos[0] + 1][0];
+        if (pos[1] === 0) {
+            var url = 'https://raw.github.com/couchbase/testrunner/master/conf/perf/' + testcase + '.conf';
+
+            $(this).qtip({
+                content: '<a href=' + url + '>' + url + '</a>',
+                position: {
+                    at: 'bottom center',
+                    my: 'top left'
+                },
+                show: {
+                    solo: true
+                },
+                hide: 'unfocus',
+                style: {
+                    classes: 'qtip-shadow'
+                }
+            });
+        }
         if (pos[1] < 4) {
             return;     // support test results for now
         }
-        var testcase= data[pos[0] + 1][0];
         var env = data[pos[0] + 1][1];
         var metric = data[pos[0] + 1][2];
         var build = colHdrs[pos[1]]['sTitle'];
