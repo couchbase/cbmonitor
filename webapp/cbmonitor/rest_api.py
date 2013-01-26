@@ -176,8 +176,8 @@ def get_servers(request):
     if form.is_valid():
         try:
             cluster = models.Cluster.objects.get(name=request.GET["cluster"])
-            servers = models.Server.objects.\
-                values("address").get(cluster=cluster).values()
+            servers = models.Server.objects.filter(cluster=cluster).values()
+            servers = [s["address"] for s in servers]
         except DoesNotExist:
             servers = []
     else:
@@ -193,8 +193,8 @@ def get_buckets(request):
     if form.is_valid():
         try:
             cluster = models.Cluster.objects.get(name=request.GET["cluster"])
-            buckets = models.Bucket.objects.\
-                values("name").get(cluster=cluster).values()
+            buckets = models.Bucket.objects.filter(cluster=cluster).values()
+            buckets = [b["name"] for b in buckets]
         except DoesNotExist:
             buckets = []
     else:
