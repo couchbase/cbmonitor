@@ -3,6 +3,8 @@
         "model": "cbmonitor.cluster",
         "pk": "East",
         "fields": {
+            "rest_password": "password",
+            "rest_username": "Administrator",
             "description": "Virginia"
         }
     },
@@ -12,8 +14,6 @@
         "fields": {
             "cluster": "East",
             "description": "",
-            "rest_password": "password",
-            "rest_username": "Administrator",
             "ssh_username": "root",
             "ssh_password": "couchbase",
             "ssh_key": ""

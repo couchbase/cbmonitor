@@ -14,9 +14,12 @@ class MetadataClient(object):
         self.base_url = "http://{0}:8000/cbmonitor".format(host)
 
     @post_request
-    def add_cluster(self, name):
+    def add_cluster(self, name, rest_username="Administrator",
+                    rest_password="password"):
         url = self.base_url + "/add_cluster/"
-        params = {"name": name}
+        params = {"name": name,
+                  "rest_username": rest_username,
+                  "rest_password": rest_password}
         return url, params
 
     @post_request

@@ -40,15 +40,18 @@ CBMONITOR.addNewCluster = function() {
     "use strict";
 
     var jstree = $("#tree"),
-        spinner_opts = {width: 4, top: "400px"},
+        spinner_opts = {width: 4, top: "450px"},
         name = $("#cname"),
+        rest_username = $("#rest_username"),
+        rest_password = $("#rest_password"),
         master_node = $("#master_node"),
         description = $("#description"),
-        fields = $([]).add(name).add(description);
+        fields = $([]).add(name).add(rest_username).add(rest_password)
+            .add(master_node).add(description);
 
     $("#dialog_new_cluster").dialog({
         autoOpen: false,
-        height: 380,
+        height: 500,
         width: 350,
         modal: true,
         resizable: false,
@@ -60,8 +63,10 @@ CBMONITOR.addNewCluster = function() {
                     type: "POST", url: "/cbmonitor/add_cluster/",
                     data: {
                         "name": name.val(),
-                        "description": description.val(),
-                        "master_node": master_node.val()
+                        "rest_username": rest_username.val(),
+                        "rest_password": rest_password.val(),
+                        "master_node": master_node.val(),
+                        "description": description.val()
                     },
                     success: function(){
                         spinner.stop();
@@ -94,14 +99,12 @@ CBMONITOR.addNewServer = function() {
 
     var jstree = $("#tree"),
         address = $("#address"),
-        rest_username = $("#rest_username"),
-        rest_password = $("#rest_password"),
         ssh_username = $("#ssh_username"),
         ssh_password = $("#ssh_password"),
         ssh_key = $("#ssh_key"),
         description = $("#description"),
-        fields = $([]).add(address).add(rest_username).add(rest_password)
-            .add(ssh_username).add(ssh_password).add(ssh_key).add(description);
+        fields = $([]).add(address).add(ssh_username).add(ssh_password)
+            .add(ssh_key).add(description);
 
     $("#dialog_new_server").dialog({
         autoOpen: false,
@@ -118,8 +121,6 @@ CBMONITOR.addNewServer = function() {
                     data: {
                         "address": address.val(),
                         "cluster": cluster.attr("id"),
-                        "rest_username": rest_username.val(),
-                        "rest_password": rest_password.val(),
                         "ssh_username": ssh_username.val(),
                         "ssh_password": ssh_password.val(),
                         "ssh_key": ssh_key.val(),

@@ -105,7 +105,10 @@ class TestHelper(TestCase):
 
     def add_valid_cluster(self):
         cluster = uhex()
-        params = {"name": cluster, "description": uhex()}
+        params = {
+            "name": cluster, "rest_username": uhex(), "rest_password": uhex(),
+            "description": uhex()
+        }
         self.add_item("cluster", params)
         return cluster
 
@@ -114,7 +117,6 @@ class TestHelper(TestCase):
 
         params = {
             "cluster": cluster, "address": uhex(),
-            "rest_username": uhex(), "rest_password": uhex(),
             "ssh_username": uhex(), "ssh_password": uhex(), "ssh_key": uhex(),
             "description": uhex()
         }
@@ -148,7 +150,10 @@ class ApiTest(TestHelper):
     @Verifier.valid_response
     def test_add_cluster(self):
         """Adding new cluster with full set of params"""
-        params = {"name": uhex(), "description": uhex()}
+        params = {
+            "name": uhex(), "rest_username": uhex(), "rest_password": uhex(),
+            "description": uhex()
+        }
         self.response = self.add_item("cluster", params)
 
         # Verify persistence
@@ -158,7 +163,9 @@ class ApiTest(TestHelper):
     @Verifier.valid_response
     def test_add_cluster_wo_description(self):
         """Adding new cluster with missing optional params"""
-        params = {"name": uhex()}
+        params = {
+            "name": uhex(), "rest_username": uhex(), "rest_password": uhex()
+        }
         self.response = self.add_item("cluster", params)
 
         # Verify persistence
@@ -168,7 +175,9 @@ class ApiTest(TestHelper):
     @Verifier.duplicate
     def test_add_cluster_duplicate(self):
         """Adding duplicate cluster"""
-        params = {"name": uhex()}
+        params = {
+            "name": uhex(), "rest_username": uhex(), "rest_password": uhex()
+        }
         self.add_item("cluster", params)
         self.response = self.add_item("cluster", params)
 
