@@ -114,7 +114,11 @@ def get(request):
         criteria = dict((key, request.GET[key]) for key in request.GET.iterkeys())
         objs = TestResults.objects.filter(**criteria)
 
-    builds = objs.values('build').order_by('build').reverse().distinct()
+    builds = list(objs.values('build').order_by('build').reverse().distinct())
+    if {'build': DjangoSettings.LITMUS_BASELINE} in builds:
+        builds.remove({'build': DjangoSettings.LITMUS_BASELINE})
+        builds.insert(0, {'build': DjangoSettings.LITMUS_BASELINE})
+
     agg_stats = defaultdict(dict)
     for obj in objs:
         key = "%s-%s-%s" % (obj.testcase, obj.env, obj.metric)
