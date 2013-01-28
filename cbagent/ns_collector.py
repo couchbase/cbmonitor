@@ -41,7 +41,7 @@ def main():
 
     store = SerieslyStore(options.out_host, options.database)
 
-    ns_collector = NSServer(host=options.node, cluster=options.cluster,
+    ns_collector = NSServer(master_node=options.node, cluster=options.cluster,
                             rest_username=options.rest_username,
                             rest_password=options.rest_password, store=store)
 

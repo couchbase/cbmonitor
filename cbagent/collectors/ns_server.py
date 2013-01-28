@@ -1,26 +1,9 @@
 #!/usr/bin/env python
-import requests
-
 from cbagent.metadata_client import MetadataClient
 from cbagent.collectors.collector import Collector
 
 
 class NSServer(Collector):
-
-    def __init__(self, host, cluster, rest_username="Administrator",
-                 rest_password="password", store=None):
-        self.store = store
-        self.cluster = cluster
-        self.capi = "http://{0}:8091".format(host)
-        self.auth = (rest_username, rest_password)
-
-    def _get(self, url):
-        return requests.get(url=self.capi + url, auth=self.auth).json()
-
-    def _get_nodes(self):
-        pool = self._get("/pools/default")
-        for node in pool["nodes"]:
-            yield node["hostname"].split(":")[0]
 
     def _get_buckets(self):
         buckets = self._get("/pools/default/buckets")
