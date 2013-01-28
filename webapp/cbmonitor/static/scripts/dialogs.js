@@ -82,6 +82,7 @@ CBMONITOR.addNewCluster = function() {
                         $("#dialog_new_cluster").dialog("close");
                     },
                     error: function(jqXHR) {
+                        spinner.stop();
                         CBMONITOR.highlightErrors(jqXHR, "c");
                     }
                 });
