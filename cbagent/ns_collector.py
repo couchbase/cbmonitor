@@ -21,7 +21,7 @@ def parse_args():
     parser.add_option('-s', dest='out_host', default='127.0.0.1',
                       help='seriesly address', metavar='127.0.0.1')
     parser.add_option('-d', dest='database', default='cbmonitor',
-                      help='database name', metavar='seriesly_db')
+                      help='database name', metavar='cbmonitor')
 
     options, args = parser.parse_args()
 
