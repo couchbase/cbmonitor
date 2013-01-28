@@ -22,6 +22,10 @@ def parse_args():
                       help='seriesly address', metavar='127.0.0.1')
     parser.add_option('-d', dest='database', default='cbmonitor',
                       help='database name', metavar='cbmonitor')
+    parser.add_option('-u', dest='rest_username', default='Administrator',
+                      help='REST username', metavar='Administrator')
+    parser.add_option('-p', dest='rest_password', default='password',
+                      help='REST password', metavar='password')
 
     options, args = parser.parse_args()
 
@@ -37,7 +41,9 @@ def main():
 
     store = SerieslyStore(options.out_host, options.database)
 
-    ns_collector = NSServer(options.node, options.cluster, store)
+    ns_collector = NSServer(host=options.node, cluster=options.cluster,
+                            rest_username=options.rest_username,
+                            rest_password=options.rest_password, store=store)
 
     ns_collector.update_metadata()
     while True:
