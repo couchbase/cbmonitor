@@ -56,7 +56,6 @@ function showResults(tag) {
         function(data) {
             processData(data);
             renderTable(data);
-            applyErrorRanges();
         }, 'json');
 }
 
