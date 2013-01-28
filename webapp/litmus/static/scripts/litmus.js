@@ -153,8 +153,6 @@ function renderTable(data) {
         },
         'bDestroy': true,
         "bAutoWidth": false
-    }).bind('sort', function () {
-        applyErrorRanges();
     });
 
     oTable.$('td').each(function() {
