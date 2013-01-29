@@ -9,8 +9,9 @@ uhex = lambda: uuid4().hex
 def multi_task(task):
     def wrapper(*args, **kargs):
         self = args[0]
-        with hide('commands'):
-            with settings(user=self.user, password=self.password):
+        with hide("output"):
+            with settings(user=self.user, password=self.password,
+                          warn_only=True):
                 return execute(task, *args, hosts=self.hosts, **kargs)
     return wrapper
 
@@ -18,9 +19,9 @@ def multi_task(task):
 def single_task(task):
     def wrapper(*args, **kargs):
         self = args[0]
-        with hide('commands'):
+        with hide("output"):
             with settings(host_string=self.hosts[0], user=self.user,
-                          password=self.password):
+                          password=self.password, warn_only=True):
                 return task(*args, **kargs)
     return wrapper
 

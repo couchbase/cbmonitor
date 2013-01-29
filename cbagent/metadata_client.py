@@ -22,9 +22,12 @@ class MetadataClient(object):
         return url, params
 
     @post_request
-    def add_server(self, cluster, address):
+    def add_server(self, cluster, address, ssh_username=None, ssh_password=None):
         url = self.base_url + "/add_server/"
-        params = {"cluster": cluster, "address": address}
+        params = {"cluster": cluster,
+                  "address": address,
+                  "ssh_username": ssh_username,
+                  "ssh_password": ssh_password}
         return url, params
 
     @post_request

@@ -23,7 +23,8 @@ setup(
     packages=["collectors", "stores"],
     py_modules=["metadata_client", "ns_collector"],
     entry_points={
-        'console_scripts': ['ns_collector = ns_collector:main']
+        'console_scripts': ['ns_collector = ns_collector:main',
+                            'atop_collector = atop_collector:main']
     },
     include_package_data=True,
     install_requires=[

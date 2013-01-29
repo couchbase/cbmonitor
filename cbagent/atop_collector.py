@@ -1,18 +1,21 @@
 import time
 
-from collectors.ns_server import NSServer
+from cbagent.collectors.atop import Atop
+
 from cbagent.settings import Settings
 
 
 def main():
     settings = Settings()
 
-    ns_collector = NSServer(settings)
-    ns_collector.update_metadata()
+    atop_collector = Atop(settings)
+    atop_collector.update_metadata()
+    atop_collector.restart()
+    atop_collector.update_columns()
 
     while True:
         try:
-            ns_collector.collect()
+            atop_collector.collect()
             time.sleep(settings.interval)
         except KeyboardInterrupt:
             break

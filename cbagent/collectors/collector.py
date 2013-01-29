@@ -3,12 +3,11 @@ import requests
 
 class Collector(object):
 
-    def __init__(self, master_node, cluster, rest_username="Administrator",
-                 rest_password="password", store=None):
-        self.cluster = cluster
-        self.capi = "http://{0}:8091".format(master_node)
-        self.auth = (rest_username, rest_password)
-        self.store = store
+    def __init__(self, settings):
+        self.cluster = settings.cluster
+        self.capi = "http://{0}:8091".format(settings.master_node)
+        self.auth = (settings.rest_username, settings.rest_password)
+        self.store = settings.store
 
     def _get(self, url):
         return requests.get(url=self.capi + url, auth=self.auth).json()
