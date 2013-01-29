@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.1'
+version = '0.1.3'
 
 setup(
     name='cbagent',
@@ -20,15 +20,27 @@ setup(
     author="Couchbase",
     author_email="admin@couchbase.com",
     license="Apache Software License",
-    packages=["collectors", "stores"],
-    py_modules=["metadata_client", "ns_collector"],
+    packages=[
+        "cbagent",
+        "cbagent.collectors",
+        "cbagent.stores",
+        "cbagent.collectors.libstats"
+    ],
+    py_modules=[
+        "atop_collector",
+        "ns_collector"
+    ],
     entry_points={
-        'console_scripts': ['ns_collector = ns_collector:main',
-                            'atop_collector = atop_collector:main']
+        'console_scripts': [
+            'ns_collector = ns_collector:main',
+            'atop_collector = atop_collector:main',
+        ]
     },
     include_package_data=True,
     install_requires=[
-        'requests',
-        'seriesly',
+        'requests==1.0.4',
+        'seriesly==0.3.2',
+        'fabric==1.5.3',
+        'argparse==1.2.1'
     ],
 )

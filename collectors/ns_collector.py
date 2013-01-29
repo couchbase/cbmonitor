@@ -1,6 +1,6 @@
 import time
 
-from collectors.ns_server import NSServer
+from cbagent.collectors.ns_server import NSServer
 from cbagent.settings import Settings
 
 

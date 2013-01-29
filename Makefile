@@ -3,5 +3,5 @@ clean:
 	rm -fr cbtop/cbtop.egg-info
 	rm -f MemcachedSource-*.json cbtop.log
 	rm -fr priority15/priority15.egg-info
-	rm -fr cbagent/priority15.egg-info
+	rm -fr cbagent/cbagent.egg-info cbagent/dist cbagent/build
 	rm -f `find . -name *.pyc`
