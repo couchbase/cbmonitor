@@ -106,7 +106,9 @@ GRAPH.DataHandler.prototype.prepareTimestamps = function() {
     var timestamps = [];
     for(var timestamp in this.data) {
         if (this.data.hasOwnProperty(timestamp)) {
-            timestamps.push(parseInt(timestamp, 10));
+            if (this.data[timestamp][0] !== null) {
+                timestamps.push(parseInt(timestamp, 10));
+            }
         }
     }
     return timestamps.sort();
