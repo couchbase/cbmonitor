@@ -2,8 +2,8 @@ from uuid import uuid4
 
 from fabric.api import run
 
-from cbagent.collectors.libstats.systemstats import SystemStats, multi_task,\
-    single_task
+from cbagent.collectors.libstats.systemstats import SystemStats, \
+    multi_node_task, single_node_task
 
 
 uhex = lambda: uuid4().hex
@@ -18,17 +18,17 @@ class AtopStats(SystemStats):
         self._base_cmd =\
             "d=`date +%H:%M` && atop -r {0} -b $d -e $d".format(self.logfile)
 
-    @multi_task
+    @multi_node_task
     def stop_atop(self):
         run("killall -q atop")
         run("rm -rf /tmp/*.atop")
 
-    @multi_task
+    @multi_node_task
     def start_atop(self):
         run("nohup atop -a -w {0} 5 > /dev/null 2>&1 &".format(self.logfile),
             pty=False)
 
-    @single_task
+    @single_node_task
     def update_columns(self):
         self._cpu_column = self._get_cpu_column()
         self._vsize_column = self._get_vsize_column()
@@ -41,36 +41,36 @@ class AtopStats(SystemStats):
         self.stop_atop()
         self.start_atop()
 
-    @single_task
+    @single_node_task
     def _get_vsize_column(self):
         output = run("atop -m 1 1 | grep PID")
         return output.split().index("VSIZE")
 
-    @single_task
+    @single_node_task
     def _get_rss_column(self):
         output = run("atop -m 1 1 | grep PID")
         return output.split().index("RSIZE")
 
-    @single_task
+    @single_node_task
     def _get_cpu_column(ip):
         output = run("atop 1 1 | grep PID")
         return output.split().index("CPU")
 
-    @multi_task
+    @multi_node_task
     def get_process_cpu(self, process):
         title = process + "_cpu"
         cmd = self._base_cmd + "| grep {0}".format(process)
         output = run(cmd)
         return title, output.split()[self._cpu_column]
 
-    @multi_task
+    @multi_node_task
     def get_process_vsize(self, process):
         title = process + "_vsize"
         cmd = self._base_cmd + " -m | grep {0}".format(process)
         output = run(cmd)
         return title, output.split()[self._vsize_column]
 
-    @multi_task
+    @multi_node_task
     def get_process_rss(self, process):
         title = process + "_rss"
         cmd = self._base_cmd + " -m | grep {0}".format(process)

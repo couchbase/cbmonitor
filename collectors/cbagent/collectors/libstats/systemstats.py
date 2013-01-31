@@ -6,7 +6,7 @@ from fabric.tasks import execute
 uhex = lambda: uuid4().hex
 
 
-def multi_task(task):
+def multi_node_task(task):
     def wrapper(*args, **kargs):
         self = args[0]
         with hide("output"):
@@ -16,7 +16,7 @@ def multi_task(task):
     return wrapper
 
 
-def single_task(task):
+def single_node_task(task):
     def wrapper(*args, **kargs):
         self = args[0]
         with hide("output"):
@@ -33,7 +33,7 @@ class SystemStats(object):
         self.user = user
         self.password = password
 
-    @multi_task
+    @multi_node_task
     def swap_usage(ip):
         output = run("free | grep -i swap")
         swap_usage = {}
@@ -41,7 +41,7 @@ class SystemStats(object):
             swap_usage["swap_" + metric] = output.split()[i + 1]
         return swap_usage
 
-    @multi_task
+    @multi_node_task
     def mem_usage(ip):
         output = run("free | grep -i mem")
         mem_usage = {}
