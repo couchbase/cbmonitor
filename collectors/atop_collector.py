@@ -9,7 +9,10 @@ def main():
     settings = Settings()
 
     atop_collector = Atop(settings)
-    atop_collector.update_metadata()
+
+    if settings.update_metadata:
+        atop_collector.update_metadata()
+
     atop_collector.restart()
     atop_collector.update_columns()
 

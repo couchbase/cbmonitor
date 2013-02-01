@@ -8,7 +8,8 @@ def main():
     settings = Settings()
 
     ns_collector = NSServer(settings)
-    ns_collector.update_metadata()
+    if settings.update_metadata:
+        ns_collector.update_metadata()
 
     while True:
         try:
