@@ -9,6 +9,18 @@ class AddClusterForm(forms.ModelForm):
     class Meta:
         model = models.Cluster
 
+    def clean(self):
+        cleaned_data = super(AddClusterForm, self).clean()
+        self.settings = type("Settings", (object, ), {
+            "master_node": cleaned_data.get("master_node"),
+            "cluster": cleaned_data.get("name"),
+            "rest_username": cleaned_data.get("rest_username"),
+            "rest_password": cleaned_data.get("rest_password"),
+            "interval": None, "store": None,
+            "seriesly_host": None, "seriesly_database": None
+        })
+        return cleaned_data
+
 
 class AddServerForm(forms.ModelForm):
 
