@@ -10,9 +10,11 @@ class Collector(object):
         self.store = settings.store
 
     def _get(self, url):
+        """HTTP GET requests with basic authentication"""
         return requests.get(url=self.capi + url, auth=self.auth).json()
 
     def _get_nodes(self):
+        """Yield name of nodes in cluster"""
         pool = self._get("/pools/default")
         for node in pool["nodes"]:
             yield node["hostname"].split(":")[0]

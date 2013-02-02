@@ -41,6 +41,7 @@ setup(
         'requests==1.0.4',
         'seriesly==0.3.2',
         'fabric==1.5.3',
-        'argparse==1.2.1'
+        'argparse==1.2.1',
+        'eventlet==0.12.1',
     ],
 )
