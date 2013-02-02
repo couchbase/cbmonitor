@@ -1,6 +1,5 @@
 from eventlet import GreenPool
 
-from cbagent.metadata_client import MetadataClient
 from cbagent.collectors.collector import Collector
 
 
@@ -15,13 +14,6 @@ class NSServer(Collector):
         buckets = self._get("/pools/default/buckets")
         for bucket in buckets:
             yield bucket["name"], bucket["stats"]
-
-    def _get_metrics(self):
-        bucket, stats = self._get_buckets().next()
-        stats = self._get(stats["directoryURI"])
-        for block in stats["blocks"]:
-            for metric in block["stats"]:
-                yield metric["name"]
 
     def _get_stats_uri(self):
         """Yield stats URIs"""
@@ -53,14 +45,25 @@ class NSServer(Collector):
         for stats in self.pool.imap(self._get_stats, self._get_stats_uri()):
             self.store.append(stats)
 
+    def _get_metrics(self):
+        """Yield names of metrics for every bucket"""
+        for bucket, stats in self._get_buckets():
+            stats_directory = self._get(stats["directoryURI"])
+            for block in stats_directory["blocks"]:
+                for metric in block["stats"]:
+                    yield metric["name"], bucket, None
+                    for node in self._get_nodes():
+                        yield metric["name"], bucket, node
+
     def update_metadata(self):
-        mc = MetadataClient()
-        mc.add_cluster(self.cluster, self.auth[0], self.auth[1])
+        """Update cluster's, server's and bucket's metadata"""
+        self.mc.add_cluster(self.cluster, self.auth[0], self.auth[1])
+
         for bucket, _ in self._get_buckets():
-            mc.add_bucket(self.cluster, bucket)
-            for metric in self._get_metrics():
-                mc.add_metric(self.cluster, metric, bucket)
-            for node in self._get_nodes():
-                mc.add_server(self.cluster, node)
-                for metric in self._get_metrics():
-                    mc.add_metric(self.cluster, metric, bucket, node)
+            self.mc.add_bucket(self.cluster, bucket)
+
+        for node in self._get_nodes():
+            self.mc.add_server(self.cluster, node)
+
+        for metric, bucket, node in self._get_metrics():
+            self.mc.add_metric(self.cluster, metric, bucket, node)

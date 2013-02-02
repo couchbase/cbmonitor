@@ -1,5 +1,7 @@
 import requests
 
+from cbagent.metadata_client import MetadataClient
+
 
 class Collector(object):
 
@@ -8,6 +10,7 @@ class Collector(object):
         self.capi = "http://{0}:8091".format(settings.master_node)
         self.auth = (settings.rest_username, settings.rest_password)
         self.store = settings.store
+        self.mc = MetadataClient()
 
     def _get(self, url):
         """HTTP GET requests with basic authentication"""
