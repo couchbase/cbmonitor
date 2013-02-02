@@ -65,10 +65,10 @@ def form_validation(method):
 def add_cluster(request):
     form = forms.AddClusterForm(request.POST)
     if form.is_valid():
-        form.save()
         if form.cleaned_data.get("master_node"):
             collector = NSServer(form.settings)
             collector.update_metadata()
+        form.save()
     else:
         raise ValidationError(form)
 
