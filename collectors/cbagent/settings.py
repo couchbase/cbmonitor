@@ -12,7 +12,7 @@ class Settings(object):
         self.interval = config.getint("store", "interval")
         self.seriesly_host = config.get("store", "host")
         self.seriesly_database = config.get("store", "database")
-        self.update_metadata = config.get("store", "update_metadata")
+        self.update_metadata = config.getboolean("store", "update_metadata")
 
         self.master_node = config.get("target", "master_node")
         self.cluster = config.get("target", "cluster")
