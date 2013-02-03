@@ -16,6 +16,12 @@ class Collector(object):
         """HTTP GET requests with basic authentication"""
         return requests.get(url=self.capi + url, auth=self.auth).json()
 
+    def _get_buckets(self):
+        """Yield bucket names and stats metadata"""
+        buckets = self._get("/pools/default/buckets")
+        for bucket in buckets:
+            yield bucket["name"], bucket["stats"]
+
     def _get_nodes(self):
         """Yield name of nodes in cluster"""
         pool = self._get("/pools/default")

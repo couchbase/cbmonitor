@@ -9,12 +9,6 @@ class NSServer(Collector):
         super(NSServer, self).__init__(settings)
         self.pool = GreenPool()
 
-    def _get_buckets(self):
-        """Yield bucket names and stats metadata"""
-        buckets = self._get("/pools/default/buckets")
-        for bucket in buckets:
-            yield bucket["name"], bucket["stats"]
-
     def _get_stats_uri(self):
         """Yield stats URIs"""
         for bucket, stats in self._get_buckets():
