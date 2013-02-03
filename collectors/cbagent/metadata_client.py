@@ -10,36 +10,39 @@ def post_request(request):
 
 class MetadataClient(object):
 
-    def __init__(self, host="127.0.0.1"):
+    def __init__(self, settings, host="127.0.0.1"):
+        self.settings = settings
         self.base_url = "http://{0}:8000/cbmonitor".format(host)
 
     @post_request
-    def add_cluster(self, name, rest_username, rest_password):
+    def add_cluster(self):
         url = self.base_url + "/add_cluster/"
-        params = {"name": name,
-                  "rest_username": rest_username,
-                  "rest_password": rest_password}
+        params = {"name": self.settings.cluster,
+                  "rest_username": self.settings.rest_username,
+                  "rest_password": self.settings.rest_password}
         return url, params
 
     @post_request
-    def add_server(self, cluster, address, ssh_username=None, ssh_password=None):
+    def add_server(self, address):
         url = self.base_url + "/add_server/"
-        params = {"cluster": cluster,
-                  "address": address,
-                  "ssh_username": ssh_username,
-                  "ssh_password": ssh_password}
+        params = {"address": address,
+                  "cluster": self.settings.cluster,
+                  "ssh_username": self.settings.ssh_username,
+                  "ssh_password": self.settings.ssh_password}
         return url, params
 
     @post_request
-    def add_bucket(self, cluster, name):
+    def add_bucket(self, name):
         url = self.base_url + "/add_bucket/"
-        params = {"cluster": cluster, "name": name, "type": "Couchbase"}
+        params = {"name": name, "type": "Couchbase",
+                  "cluster": self.settings.cluster}
         return url, params
 
     @post_request
-    def add_metric(self, cluster, name, bucket=None, server=None):
+    def add_metric(self, name, bucket=None, server=None):
         url = self.base_url + "/add_metric_or_event/"
-        params = {"type": "metric", "cluster": cluster, "name": name}
+        params = {"name": name, "type": "metric",
+                  "cluster": self.settings.cluster}
         if server:
             params["server"] = server
         if bucket:

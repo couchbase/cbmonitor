@@ -4,34 +4,32 @@ from ConfigParser import ConfigParser
 from cbagent.stores.seriesly_store import SerieslyStore
 
 
-class Settings(object):
+class Settings(dict):
 
-    def __init__(self):
-        config = self._get_cfg()
+    def __init__(self, options={}):
+        for option, value in options.iteritems():
+            self.__setattr__(option, value)
 
-        self.interval = config.getint("store", "interval")
-        self.seriesly_host = config.get("store", "host")
-        self.seriesly_database = config.get("store", "database")
-        self.update_metadata = config.getboolean("store", "update_metadata")
-
-        self.master_node = config.get("target", "master_node")
-        self.cluster = config.get("target", "cluster")
-        self.rest_username = config.get("target", "rest_username")
-        self.rest_password = config.get("target", "rest_password")
-        self.ssh_username = config.get("target", "ssh_username")
-        self.ssh_password = config.get("target", "ssh_password")
-
-        self._set_store()
-
-    @staticmethod
-    def _get_cfg():
+    def read_cfg(self):
         parser = ArgumentParser()
         parser.add_argument("config", help="name of configuration file")
         args = parser.parse_args()
 
-        config = ConfigParser()
-        config.read(args.config)
-        return config
+        self.config = ConfigParser()
+        self.config.read(args.config)
 
-    def _set_store(self):
-        self.store = SerieslyStore(self.seriesly_host, self.seriesly_database)
+        self.interval = self.config.getint("store", "interval")
+        self.seriesly_host = self.config.get("store", "host")
+        self.seriesly_database = self.config.get("store", "database")
+        self.update_metadata = self.config.getboolean("store", "update_metadata")
+
+    def __getattribute__(self, name):
+        if name == "store":
+            return SerieslyStore(self.seriesly_host, self.seriesly_database)
+        try:
+            return super(Settings, self).__getattribute__(name)
+        except AttributeError:
+            return self.config.get("target", name)
+
+    def __getitem__(self, item):
+        return self.__getattribute__(item)

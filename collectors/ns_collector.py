@@ -6,6 +6,7 @@ from cbagent.settings import Settings
 
 def main():
     settings = Settings()
+    settings.read_cfg()
 
     ns_collector = NSServer(settings)
     if settings.update_metadata:

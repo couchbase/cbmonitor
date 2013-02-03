@@ -51,13 +51,13 @@ class NSServer(Collector):
 
     def update_metadata(self):
         """Update cluster's, server's and bucket's metadata"""
-        self.mc.add_cluster(self.cluster, self.auth[0], self.auth[1])
+        self.mc.add_cluster()
 
         for bucket, _ in self._get_buckets():
-            self.mc.add_bucket(self.cluster, bucket)
+            self.mc.add_bucket(bucket)
 
         for node in self._get_nodes():
-            self.mc.add_server(self.cluster, node)
+            self.mc.add_server(node)
 
         for metric, bucket, node in self._get_metrics():
-            self.mc.add_metric(self.cluster, metric, bucket, node)
+            self.mc.add_metric(metric, bucket, node)

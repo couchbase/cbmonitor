@@ -7,6 +7,7 @@ from cbagent.settings import Settings
 
 def main():
     settings = Settings()
+    settings.read_cfg()
 
     atop_collector = Atop(settings)
 

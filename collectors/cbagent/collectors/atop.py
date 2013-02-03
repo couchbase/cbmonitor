@@ -22,12 +22,11 @@ class Atop(Collector):
         self.atop.update_columns()
 
     def update_metadata(self):
-        self.mc.add_cluster(self.cluster, self.auth[0], self.auth[1])
+        self.mc.add_cluster()
         for node in self._get_nodes():
-            self.mc.add_server(self.cluster, node, self.ssh_username,
-                          self.ssh_password)
+            self.mc.add_server(node)
             for metric in self._METRICS:
-                self.mc.add_metric(self.cluster, metric, server=node)
+                self.mc.add_metric(metric, server=node)
 
     @staticmethod
     def _remove_value_units(value):
