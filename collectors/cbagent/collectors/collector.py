@@ -7,14 +7,20 @@ class Collector(object):
 
     def __init__(self, settings):
         self.cluster = settings.cluster
-        self.capi = "http://{0}:8091".format(settings.master_node)
+        self.web = "http://{0}:8091".format(settings.master_node)
         self.auth = (settings.rest_username, settings.rest_password)
         self.store = settings.store
         self.mc = MetadataClient(settings)
 
     def _get(self, url):
-        """HTTP GET requests with basic authentication"""
-        return requests.get(url=self.capi + url, auth=self.auth).json()
+        """HTTP GET requests with basic authentication (web administration
+        port)"""
+        return requests.get(url=self.web + url, auth=self.auth).json()
+
+    def _get_capi(self, server, path):
+        """HTTP GET requests with basic authentication (Couchbase API port)"""
+        url = 'http://{0}:8092{1}'.format(server, path)
+        return requests.get(url=url, auth=self.auth).json()
 
     def _get_buckets(self):
         """Yield bucket names and stats metadata"""

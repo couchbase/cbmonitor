@@ -34,6 +34,7 @@ setup(
         'console_scripts': [
             'ns_collector = ns_collector:main',
             'atop_collector = atop_collector:main',
+            'at_collector = at_collector:main',
         ]
     },
     include_package_data=True,
