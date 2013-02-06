@@ -1,5 +1,6 @@
 "use strict";
 
+var reloadTimerId = null;
 var oTable;
 var colHdrs;     // e.g: ['sTitle': 'Testcase', 'sTitle': 'Env', ... ]
 var rowHdrs;       // e.g: ['mixed-2suv', 'lucky6', ...]
@@ -26,6 +27,26 @@ function getSettings(settings) {
             settings.warning = data.warning;
             settings.baseline = data.baseline;
         }, 'json');
+}
+
+function setReloadInterval(itv_str) {
+    if (isNaN(itv_str)) {
+        console.error("cannot parse reload interval : " + itv_str);
+        return;
+    }
+
+    var itv = parseInt(itv_str);
+
+    // cancel reload events
+    if (reloadTimerId !== null) {
+        clearInterval(reloadTimerId);
+    }
+
+    if (itv !== 0) {
+        reloadTimerId = setInterval(function() {
+            location.reload();
+        }, itv);
+    }
 }
 
 function getAllTags() {

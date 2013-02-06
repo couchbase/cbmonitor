@@ -15,14 +15,17 @@ block include
         $(document).ready(function(){
             getAllTags();
             showResults("");
-            setInterval(function() {
-                location.reload()
-            }, 300000);
+            setReloadInterval('300000');
         });
 
 block main
     #tag
-        input(type='radio', name='tag', onclick="showResults('');", id="All")label(for="All") All
+        input(type='radio', name='tag', onclick="showResults('');", id="all")label(for="all") All
     #litmus
+        label(for="reload") Reload
+        select(name='reload', id='reload', onchange="setReloadInterval(this.value);")
+            option(value='0') Manual
+            option(value='300000', selected='selected') 5 minutes
+            option(value='1800000') 30 minutes
         table
             p(style='text-align: center', id='loading') Loading
