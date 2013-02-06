@@ -1,6 +1,6 @@
 import time
 
-from cbagent.collectors.active_tasks import ActiveTasks
+from cbagent.collectors import ActiveTasks
 from cbagent.settings import Settings
 
 

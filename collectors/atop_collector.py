@@ -1,6 +1,6 @@
 import time
 
-from cbagent.collectors.atop import Atop
+from cbagent.collectors import Atop
 
 from cbagent.settings import Settings
 
