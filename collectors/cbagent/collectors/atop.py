@@ -47,14 +47,14 @@ class Atop(Collector):
 
     def _extend_samples(self, data):
         data = self._format_data(data)
-        if not self._samples["metric"][self.cluster]:
-            self._samples["metric"][self.cluster] = data
+        if not self._samples:
+            self._samples = data
         else:
-            for node in self._samples["metric"][self.cluster]:
-                self._samples["metric"][self.cluster][node].update(data[node])
+            for node in self._samples:
+                self._samples[node].update(data[node])
 
     def collect(self):
-        self._samples = {"metric": {self.cluster: {}}}
+        self._samples = {}
         self._extend_samples(self.atop.get_process_rss("beam.smp"))
         self._extend_samples(self.atop.get_process_vsize("beam.smp"))
         self._extend_samples(self.atop.get_process_rss("memcached"))
@@ -62,4 +62,5 @@ class Atop(Collector):
         self._extend_samples(self.atop.get_process_cpu("beam.smp"))
         self._extend_samples(self.atop.get_process_cpu("memcached"))
 
+        self._samples = {"metric": {self.cluster: self._samples}}
         self.store.append(self._samples)
