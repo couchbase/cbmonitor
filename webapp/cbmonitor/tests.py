@@ -1,7 +1,9 @@
 import json
 from uuid import uuid4
 from random import randint, choice
+from multiprocessing import Process
 
+from cbmock import cbmock
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.core.exceptions import ObjectDoesNotExist
@@ -143,6 +145,15 @@ class TestHelper(TestCase):
 class ApiTest(TestHelper):
 
     fixtures = ["bucket_type.json", "testdata.json"]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mock = Process(target=cbmock.main, kwargs={"num_nodes": 1})
+        cls.mock.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.mock.terminate()
 
     def setUp(self):
         self.factory = RequestFactory()
