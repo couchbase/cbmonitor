@@ -7,7 +7,7 @@ Prerequisites
 Dependencies
 ------------
 
-    $ pip install zc.buildbot
+    $ pip install zc.buildout
 
 
 General setup
