@@ -41,12 +41,13 @@ class NSServer(Collector):
 
     def _get_metrics(self):
         """Yield names of metrics for every bucket"""
+        nodes = self._get_nodes()
         for bucket, stats in self._get_buckets():
             stats_directory = self._get(stats["directoryURI"])
             for block in stats_directory["blocks"]:
                 for metric in block["stats"]:
                     yield metric["name"], bucket, None
-                    for node in self._get_nodes():
+                    for node in nodes:
                         yield metric["name"], bucket, node
 
     def update_metadata(self):
