@@ -7,8 +7,7 @@ Prerequisites
 Dependencies
 ------------
 
-    $ pip install zc.buildout
-
+    $ pip install zc.buildout==1.7.0
 
 General setup
 -------------
