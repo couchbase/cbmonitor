@@ -1,5 +1,6 @@
 import requests
 
+from cbagent.stores.seriesly_store import SerieslyStore
 from cbagent.metadata_client import MetadataClient
 
 
@@ -9,7 +10,8 @@ class Collector(object):
         self.cluster = settings.cluster
         self.web = "http://{0}:8091".format(settings.master_node)
         self.auth = (settings.rest_username, settings.rest_password)
-        self.store = settings.store
+        self.store = SerieslyStore(settings.seriesly_host,
+                                   settings.seriesly_database)
         self.mc = MetadataClient(settings)
 
     def _get(self, url):
