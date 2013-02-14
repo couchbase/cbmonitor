@@ -115,9 +115,10 @@ def get(request):
         objs = TestResults.objects.filter(**criteria)
 
     builds = list(objs.values('build').order_by('build').reverse().distinct())
-    if {'build': DjangoSettings.LITMUS_BASELINE} in builds:
-        builds.remove({'build': DjangoSettings.LITMUS_BASELINE})
-        builds.insert(0, {'build': DjangoSettings.LITMUS_BASELINE})
+    for baseline in DjangoSettings.LITMUS_BASELINE:
+        if {'build': baseline } in builds:
+            builds.remove({'build': baseline})
+            builds.insert(0, {'build': baseline})
 
     agg_stats = defaultdict(dict)
     for obj in objs:
