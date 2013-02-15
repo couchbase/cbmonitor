@@ -6,7 +6,7 @@ clean: ; \
     rm -fr collectors/cbagent.egg-info collectors/dist collectors/build; \
     rm -f `find . -name *.pyc`
 
-buildout: ; \
+build: ; \
     buildout -t 120 -q;
 
 pep8: ; \
@@ -29,4 +29,4 @@ stop_webapp: ; \
 test_collectors: ; \
     ./bin/nosetests collectors
 
-test: buildout pep8 jshint test_webapp start_webapp test_collectors stop_webapp;
+test: build pep8 jshint test_webapp start_webapp test_collectors stop_webapp;
