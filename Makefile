@@ -18,15 +18,7 @@ jshint: ; \
 test_webapp: ; \
     ./bin/webapp test_coverage cbmonitor
 
-start_webapp: ; \
-    ./bin/webapp syncdb --noinput; \
-    ./bin/webapp runserver --nothreading --traceback &
-
-stop_webapp: ; \
-    kill -9 `ps -ef | grep webapp | grep -v grep | awk '{print $$2}'` 2>/dev/null; \
-    rm -fr cbmonitor.db
-
 test_collectors: ; \
     ./bin/nosetests collectors
 
-test: build pep8 jshint test_webapp start_webapp test_collectors stop_webapp;
+test: build pep8 jshint test_webapp test_collectors;
