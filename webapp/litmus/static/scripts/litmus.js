@@ -212,6 +212,20 @@ function renderTable(data) {
                 $(target).css('background-color', data);
         });
 
+        var rcMenu = [
+            {'<div><div style="float:left;">Color: </div><div class="swatch" style="background-color:white"></div><div class="swatch" style="background-color:lightgreen"></div><div class="swatch" style="background-color:yellow"></div><div class="swatch" style="background-color:red"></div><div class="swatch" style="background-color:pink"></div></div><br>':
+                function(menuItem, cmenu, e) {
+                    var t = $(e.target);
+                    if ($(t).is('.swatch')) {
+                        $(target).css('background-color', $(t).css('background-color'));
+                        $(t).parent().find('.swatch').removeClass('swatch-selected');
+                        $(t).addClass('swatch-selected');
+                    }
+                }
+            }
+        ];
+
+        $(this).contextMenu(rcMenu , {theme:'osx'});
         $(this).qtip({
             content: {
                 text: 'Loading...',
