@@ -116,7 +116,7 @@ def get(request):
 
     builds = list(objs.values('build').order_by('build').reverse().distinct())
     for baseline in DjangoSettings.LITMUS_BASELINE:
-        if {'build': baseline } in builds:
+        if {'build': baseline} in builds:
             builds.remove({'build': baseline})
             builds.insert(0, {'build': baseline})
 
