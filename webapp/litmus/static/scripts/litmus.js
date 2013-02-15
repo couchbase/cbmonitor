@@ -217,15 +217,28 @@ function renderTable(data) {
                 function(menuItem, cmenu, e) {
                     var t = $(e.target);
                     if ($(t).is('.swatch')) {
-                        $(target).css('background-color', $(t).css('background-color'));
+                        var color = $(t).css('background-color');
+                        $(target).css('background-color', color);
                         $(t).parent().find('.swatch').removeClass('swatch-selected');
                         $(t).addClass('swatch-selected');
+                        $.ajax({
+                            type: 'POST',
+                            url: '../post/color/',
+                            data: {'testcase': testcase,
+                                   'env': env,
+                                   'build': build,
+                                   'metric': metric,
+                                   'color': color},
+                            error: function(response) {
+                                console.error(response.responseText);
+                            }
+                        });
                     }
                 }
             }
         ];
 
-        $(this).contextMenu(rcMenu , {theme:'osx'});
+        $(this).contextMenu(rcMenu , {theme:'gloss'});
         $(this).qtip({
             content: {
                 text: 'Loading...',
@@ -277,33 +290,6 @@ function renderTable(data) {
                         width: '100%'
                     });
                 }
-            }
-        });
-
-        $(this).spectrum({
-            showPalette: true,
-            palette: [
-                ['white'],
-                ['red', 'yellow', 'green'],
-                ['pink', 'lightyellow', 'lightgreen']
-            ],
-            localStorageKey: "litmus.dashboard",
-            showInput: true,
-            change: function(color) {
-                var hexColor = color.toHexString();
-                $(this).css('background-color', hexColor);
-                $.ajax({
-                    type: 'POST',
-                    url: '../post/color/',
-                    data: {'testcase': testcase,
-                           'env': env,
-                           'build': build,
-                           'metric': metric,
-                           'color': hexColor},
-                    error: function(response) {
-                        console.error(response.responseText);
-                    }
-                });
             }
         });
     });
