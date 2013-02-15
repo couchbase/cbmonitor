@@ -16,14 +16,14 @@ jshint: ; \
     jshint webapp/cbmonitor/static/scripts
 
 test_webapp: ; \
-    ./bin/django test_coverage cbmonitor
+    ./bin/webapp test_coverage cbmonitor
 
 start_webapp: ; \
-    ./bin/django syncdb --noinput; \
-    ./bin/django runserver --nothreading --traceback &
+    ./bin/webapp syncdb --noinput; \
+    ./bin/webapp runserver --nothreading --traceback &
 
 stop_webapp: ; \
-    kill -9 `ps -ef | grep django | grep -v grep | awk '{print $$2}'` 2>/dev/null; \
+    kill -9 `ps -ef | grep webapp | grep -v grep | awk '{print $$2}'` 2>/dev/null; \
     rm -fr cbmonitor.db
 
 test_collectors: ; \
