@@ -19,6 +19,6 @@ test_webapp: ; \
     ./bin/webapp test_coverage cbmonitor
 
 test_collectors: ; \
-    ./bin/nosetests collectors
+    ./bin/nosetests --nocapture collectors
 
 test: build pep8 jshint test_webapp test_collectors;
