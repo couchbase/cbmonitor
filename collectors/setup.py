@@ -44,5 +44,6 @@ setup(
         'fabric==1.5.3',
         'argparse==1.2.1',
         'eventlet==0.12.1',
+        'ujson==1.23',
     ],
 )
