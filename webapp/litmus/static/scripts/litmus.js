@@ -6,6 +6,8 @@ var colHdrs;     // e.g: ['sTitle': 'Testcase', 'sTitle': 'Env', ... ]
 var rowHdrs;       // e.g: ['mixed-2suv', 'lucky6', ...]
 var WARNING = 0.1;
 var ERROR = 0.3;
+var JIRA_PAT = /MB-([0-9])+|CBD-([0-9])+|CBSE-([0-9])+/gi;
+var JIRA_URL = "http://www.couchbase.com/issues/browse/";
 
 function setReloadInterval(itv_str) {
     if (isNaN(itv_str)) {
@@ -74,6 +76,28 @@ function processData(data) {
     });
 
     return data;
+}
+
+function matchJiraTickets(text) {
+    /**
+     * Run regexp check and detect jira tickets
+     * @return text with hyperlinkable jira tickets
+     */
+    if (text === undefined || !text) {
+        return text;
+    }
+
+    var tickets = text.match(JIRA_PAT);
+    if (!tickets) {
+        return text;
+    }
+
+    $.each(tickets, function(i, v) {
+        var url = JIRA_URL + v;
+        text = text.replace(v, '<a href=' + url + '>' + v + '</a>');
+    });
+
+    return text;
 }
 
 function regTdActions(data, target, col, comment) {
@@ -146,8 +170,10 @@ function regTdActions(data, target, col, comment) {
                         }
                     },
                     open: function() {
-                        if (comment !== undefined && comment) {
-                            $('#comment-form textarea').html(comment);
+                        if (comment === undefined) {
+                            $('#comment-form textarea').val("");
+                        } else {
+                            $('#comment-form textarea').val(comment);
                         }
                     }
                 });
@@ -193,7 +219,8 @@ function renderTable(data) {
                     $(nTd).css('background-color', arr[1]);
                 }
                 if (typeof(arr[2]) !== undefined && arr[2]) {
-                    $(nTd).append("<div class='comment'>" + arr[2] + "</div>");
+                    var comment = matchJiraTickets(arr[2]);
+                    $(nTd).append("<div class='comment'>" + comment + "</div>");
                 }
                 regTdActions(oData, nTd, iCol, arr[2]);
             }
