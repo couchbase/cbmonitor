@@ -1,11 +1,4 @@
-import requests
-
-
-def post_request(request):
-    def wrapper(*args, **kargs):
-        url, params = request(*args, **kargs)
-        requests.post(url, params)
-    return wrapper
+from cbagent.decorators import post_request
 
 
 class MetadataClient(object):

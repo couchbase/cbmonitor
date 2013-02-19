@@ -1,15 +1,8 @@
 import requests
-import ujson
 
 from cbagent.stores.seriesly_store import SerieslyStore
 from cbagent.metadata_client import MetadataClient
-
-
-def json(method):
-    def wrapper(*args, **kargs):
-        response = method(*args, **kargs)
-        return ujson.loads(response.text)
-    return wrapper
+from cbagent.decorators import json
 
 
 class Collector(object):
