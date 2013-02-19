@@ -131,7 +131,8 @@ def get(request):
         if DjangoSettings.LITMUS_AVG_RESULTS:
             agg_stats[key][obj.build] = reduce(lambda x, y: x.value + y.value, values) / len(values)
         else:
-            agg_stats[key][obj.build] = " / ".join(map(lambda v: str(v.value), values))
+            agg_stats[key][obj.build] = "-&-".join([" / ".join(map(lambda v: str(v.value), values)),
+                                                  obj.color, obj.comment])
 
     response = [['Testcase', 'Env', 'Metric', 'Timestamp']
                 + [row['build'] for row in builds], ]

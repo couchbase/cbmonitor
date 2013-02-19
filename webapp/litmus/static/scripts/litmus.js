@@ -172,6 +172,19 @@ function renderTable(data) {
         'fnDrawCallback': function() {
             $('#loading').remove();
         },
+        "aoColumnDefs": [ {
+            "aTargets": [ '_all' ],
+            "mRender": function ( data, type, full ) {
+                var arr = data.split("-&-");
+                return arr[0];
+            },
+            "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                var arr = oData[iCol].split("-&-");
+                if (typeof(arr[1]) !== undefined && arr[1]) {
+                    $(nTd).css('background-color', arr[1]);
+                }
+            }
+        }],
         'bDestroy': true,
         "bAutoWidth": false
     });
@@ -204,13 +217,6 @@ function renderTable(data) {
         var env = data[pos[0] + 1][1];
         var metric = data[pos[0] + 1][2];
         var build = colHdrs[pos[1]]['sTitle'];
-
-        $.get('/litmus/get/color',
-              {'testcase': testcase, 'env': env,
-               'build': build, 'metric': metric},
-              function(data) {
-                $(target).css('background-color', data);
-        });
 
         var rcMenu = [
             {'<div><div style="float:left;">Color: </div><div class="swatch" style="background-color:white"></div><div class="swatch" style="background-color:lightgreen"></div><div class="swatch" style="background-color:yellow"></div><div class="swatch" style="background-color:red"></div><div class="swatch" style="background-color:pink"></div></div><br>':
