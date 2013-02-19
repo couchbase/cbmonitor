@@ -1,8 +1,15 @@
 import requests
-import ujson as json
+import ujson
 
 from cbagent.stores.seriesly_store import SerieslyStore
 from cbagent.metadata_client import MetadataClient
+
+
+def json(method):
+    def wrapper(*args, **kargs):
+        response = method(*args, **kargs)
+        return ujson.loads(response.text)
+    return wrapper
 
 
 class Collector(object):
@@ -15,18 +22,18 @@ class Collector(object):
                                    settings.seriesly_database)
         self.mc = MetadataClient(settings)
 
+    @json
     def _get(self, path):
         """HTTP GET requests with basic authentication (web administration
         port)"""
         url = "http://{0}:8091{1}".format(self.master_node, path)
-        response = requests.get(url=url, auth=self.auth).text
-        return json.loads(response)
+        return requests.get(url=url, auth=self.auth)
 
+    @json
     def _get_capi(self, server, path):
         """HTTP GET requests with basic authentication (Couchbase API port)"""
         url = 'http://{0}:8092{1}'.format(server, path)
-        response = requests.get(url=url, auth=self.auth).text
-        return json.loads(response)
+        return requests.get(url=url, auth=self.auth)
 
     def _get_buckets(self):
         """Yield bucket names and stats metadata"""
