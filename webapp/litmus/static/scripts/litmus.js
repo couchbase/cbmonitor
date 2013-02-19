@@ -150,7 +150,7 @@ function processData(data) {
     return data;
 }
 
-function regTdActions(data, target, col) {
+function regTdActions(data, target, col, comment) {
     /**
      * Register actions to each table cell
      */
@@ -191,6 +191,41 @@ function regTdActions(data, target, col) {
                         }
                     });
                 }
+            }
+        },
+        {'Comment': function(menuItem, cmenu, e) {
+                $('#comment-form').dialog({
+                    autoOpen: false,
+                    modal: true,
+                    width: 350,
+                    buttons: {
+                        Ok: function() {
+                            var comment = $('#comment-form textarea').val();
+                            $.ajax({
+                                type: 'POST',
+                                url: '../post/comment/',
+                                data: {'testcase': testcase,
+                                    'env': env,
+                                    'build': build,
+                                    'metric': metric,
+                                    'comment': comment},
+                                error: function(response) {
+                                    console.error(response.responseText);
+                                }
+                            });
+                            $(this).dialog("close");
+                        },
+                        Cancel: function() {
+                            $(this).dialog("close");
+                        }
+                    },
+                    open: function() {
+                        if (comment !== undefined && comment) {
+                            $('#comment-form textarea').html(comment);
+                        }
+                    }
+                });
+                $("#comment-form").dialog("open");
             }
         }
     ];
@@ -287,7 +322,7 @@ function renderTable(data) {
                 if (typeof(arr[2]) !== undefined && arr[2]) {
                     $(nTd).append("<div class='comment'>" + arr[2] + "</div>");
                 }
-                regTdActions(oData, nTd, iCol);
+                regTdActions(oData, nTd, iCol, arr[2]);
             }
         }],
         'bDestroy': true,
