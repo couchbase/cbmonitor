@@ -9,16 +9,17 @@ class Collector(object):
 
     def __init__(self, settings):
         self.cluster = settings.cluster
-        self.web = "http://{0}:8091".format(settings.master_node)
+        self.master_node = settings.master_node
         self.auth = (settings.rest_username, settings.rest_password)
         self.store = SerieslyStore(settings.seriesly_host,
                                    settings.seriesly_database)
         self.mc = MetadataClient(settings)
 
-    def _get(self, url):
+    def _get(self, path):
         """HTTP GET requests with basic authentication (web administration
         port)"""
-        response = requests.get(url=self.web + url, auth=self.auth).text
+        url = "http://{0}:8091{1}".format(self.master_node, path)
+        response = requests.get(url=url, auth=self.auth).text
         return json.loads(response)
 
     def _get_capi(self, server, path):
