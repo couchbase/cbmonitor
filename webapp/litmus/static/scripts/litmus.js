@@ -150,6 +150,119 @@ function processData(data) {
     return data;
 }
 
+function regTdActions(data, target, col) {
+    /**
+     * Register actions to each table cell
+     */
+    var testcase= data[0];
+    var env = data[1];
+    var metric = data[2];
+    var build = colHdrs[col]['sTitle'];
+
+    if (col === 0) {
+        var url = 'https://raw.github.com/couchbase/testrunner/master/conf/perf/' + testcase + '.conf';
+
+        $(target).qtip({
+            content: '<a href=' + url + '>' + url + '</a>',
+            position: {
+                at: 'bottom center',
+                my: 'top left'
+            },
+            show: {
+                solo: true
+            },
+            hide: 'unfocus',
+            style: {
+                classes: 'qtip-shadow'
+            }
+        });
+    }
+    if (col < 4) {
+        return;     // support test results for now
+    }
+
+    var rcMenu = [
+        {'<div><div style="float:left;">Color: </div><div class="swatch" style="background-color:white"></div><div class="swatch" style="background-color:lightgreen"></div><div class="swatch" style="background-color:yellow"></div><div class="swatch" style="background-color:red"></div><div class="swatch" style="background-color:pink"></div></div><br>':
+            function(menuItem, cmenu, e) {
+                var t = $(e.target);
+                if ($(t).is('.swatch')) {
+                    var color = $(t).css('background-color');
+                    $(target).css('background-color', color);
+                    $(t).parent().find('.swatch').removeClass('swatch-selected');
+                    $(t).addClass('swatch-selected');
+                    $.ajax({
+                        type: 'POST',
+                        url: '../post/color/',
+                        data: {'testcase': testcase,
+                            'env': env,
+                            'build': build,
+                            'metric': metric,
+                            'color': color},
+                        error: function(response) {
+                            console.error(response.responseText);
+                        }
+                    });
+                }
+            }
+        }
+    ];
+
+    $(target).contextMenu(rcMenu , {theme:'gloss'});
+    $(target).qtip({
+        content: {
+            text: 'Loading...',
+            ajax: {
+                url: '../get/comment',
+                type: 'GET',
+                loading: false,
+                data: {'testcase': testcase,
+                    'env': env,
+                    'build': build,
+                    'metric': metric},
+                success: function(data, status) {
+                    if ($.trim(data).length === 0) {
+                        this.set('content.text', 'Click to edit comment');
+                    } else {
+                        this.set('content.text', data);
+                    }
+                },
+                error: function(response) {
+                    console.error(response.responseText);
+                    this.set('content.text', 'Click to edit comment');
+                }
+            }
+        },
+        position: {
+            at: 'bottom center',
+            my: 'top left'
+        },
+        show: {
+            solo: true
+        },
+        hide: 'unfocus',
+        style: {
+            classes: 'qtip-shadow'
+        },
+        events: {
+            focus: function(event, api) {
+                $(this).find('.qtip-content').editable( '../post/comment/', {
+                    submitdata: function (value, settings) {
+                        return {
+                            "testcase": testcase,
+                            "env": env,
+                            "metric": metric,
+                            "build": build,
+                            "comment": $('input[name=value]').val()
+                        };
+                    },
+                    height: '14px',
+                    width: '100%'
+                });
+            }
+        }
+    });
+}
+
 function renderTable(data) {
     /*
      * Render table with the given data
@@ -186,121 +299,11 @@ function renderTable(data) {
                 if (typeof(arr[2]) !== undefined && arr[2]) {
                     $(nTd).append("<div class='comment'>" + arr[2] + "</div>");
                 }
+                regTdActions(oData, nTd, iCol);
             }
         }],
         'bDestroy': true,
         "bAutoWidth": false
-    });
-
-    oTable.$('td').each(function() {
-        var target = this;
-        var pos = oTable.fnGetPosition(this);
-        var testcase= data[pos[0] + 1][0];
-        if (pos[1] === 0) {
-            var url = 'https://raw.github.com/couchbase/testrunner/master/conf/perf/' + testcase + '.conf';
-
-            $(this).qtip({
-                content: '<a href=' + url + '>' + url + '</a>',
-                position: {
-                    at: 'bottom center',
-                    my: 'top left'
-                },
-                show: {
-                    solo: true
-                },
-                hide: 'unfocus',
-                style: {
-                    classes: 'qtip-shadow'
-                }
-            });
-        }
-        if (pos[1] < 4) {
-            return;     // support test results for now
-        }
-        var env = data[pos[0] + 1][1];
-        var metric = data[pos[0] + 1][2];
-        var build = colHdrs[pos[1]]['sTitle'];
-
-        var rcMenu = [
-            {'<div><div style="float:left;">Color: </div><div class="swatch" style="background-color:white"></div><div class="swatch" style="background-color:lightgreen"></div><div class="swatch" style="background-color:yellow"></div><div class="swatch" style="background-color:red"></div><div class="swatch" style="background-color:pink"></div></div><br>':
-                function(menuItem, cmenu, e) {
-                    var t = $(e.target);
-                    if ($(t).is('.swatch')) {
-                        var color = $(t).css('background-color');
-                        $(target).css('background-color', color);
-                        $(t).parent().find('.swatch').removeClass('swatch-selected');
-                        $(t).addClass('swatch-selected');
-                        $.ajax({
-                            type: 'POST',
-                            url: '../post/color/',
-                            data: {'testcase': testcase,
-                                   'env': env,
-                                   'build': build,
-                                   'metric': metric,
-                                   'color': color},
-                            error: function(response) {
-                                console.error(response.responseText);
-                            }
-                        });
-                    }
-                }
-            }
-        ];
-
-        $(this).contextMenu(rcMenu , {theme:'gloss'});
-        $(this).qtip({
-            content: {
-                text: 'Loading...',
-                ajax: {
-                    url: '../get/comment',
-                    type: 'GET',
-                    loading: false,
-                    data: {'testcase': testcase,
-                           'env': env,
-                           'build': build,
-                           'metric': metric},
-                    success: function(data, status) {
-                        if ($.trim(data).length === 0) {
-                            this.set('content.text', 'Click to edit comment');
-                        } else {
-                            this.set('content.text', data);
-                        }
-                    },
-                    error: function(response) {
-                        console.error(response.responseText);
-                        this.set('content.text', 'Click to edit comment');
-                    }
-                }
-            },
-            position: {
-                at: 'bottom center',
-                my: 'top left'
-            },
-            show: {
-                solo: true
-            },
-            hide: 'unfocus',
-            style: {
-                classes: 'qtip-shadow'
-            },
-            events: {
-                focus: function(event, api) {
-                    $(this).find('.qtip-content').editable( '../post/comment/', {
-                        submitdata: function (value, settings) {
-                            return {
-                                "testcase": testcase,
-                                "env": env,
-                                "metric": metric,
-                                "build": build,
-                                "comment": $('input[name=value]').val()
-                            };
-                        },
-                        height: '14px',
-                        width: '100%'
-                    });
-                }
-            }
-        });
     });
 
     new FixedHeader(oTable);
