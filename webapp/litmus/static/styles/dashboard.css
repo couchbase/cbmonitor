@@ -32,6 +32,11 @@ footer {
     float: right;
 }
 
+div.comment {
+    font-size: 10px;
+    color: grey;
+}
+
 div.swatch, div.swatch-selected {
     font-size:0px;
     width:12px;

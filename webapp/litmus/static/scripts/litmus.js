@@ -183,6 +183,9 @@ function renderTable(data) {
                 if (typeof(arr[1]) !== undefined && arr[1]) {
                     $(nTd).css('background-color', arr[1]);
                 }
+                if (typeof(arr[2]) !== undefined && arr[2]) {
+                    $(nTd).append("<div class='comment'>" + arr[2] + "</div>");
+                }
             }
         }],
         'bDestroy': true,
