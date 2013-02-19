@@ -1,11 +1,6 @@
-from uuid import uuid4
-
 from fabric.api import run
 
 from cbagent.collectors.libstats.decorators import multi_node_task
-
-
-uhex = lambda: uuid4().hex
 
 
 class SystemStats(object):

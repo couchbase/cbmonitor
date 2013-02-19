@@ -7,14 +7,11 @@ from cbagent.collectors.libstats.decorators import (multi_node_task,
                                                     single_node_task)
 
 
-uhex = lambda: uuid4().hex
-
-
 class AtopStats(SystemStats):
 
     def __init__(self, hosts, user, password):
         super(AtopStats, self).__init__(hosts, user, password)
-        self.logfile = "/tmp/{0}.atop".format(uhex())
+        self.logfile = "/tmp/{0}.atop".format(uuid4().hex)
 
         self._base_cmd =\
             "d=`date +%H:%M` && atop -r {0} -b $d -e $d".format(self.logfile)
