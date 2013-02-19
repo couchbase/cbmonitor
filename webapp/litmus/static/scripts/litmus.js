@@ -4,30 +4,8 @@ var reloadTimerId = null;
 var oTable;
 var colHdrs;     // e.g: ['sTitle': 'Testcase', 'sTitle': 'Env', ... ]
 var rowHdrs;       // e.g: ['mixed-2suv', 'lucky6', ...]
-var BASELINE = "1.8.1-938-rel-enterprise";
 var WARNING = 0.1;
 var ERROR = 0.3;
-
-function Settings(testcase, metric) {
-    this.testcase = testcase;
-    this.metric = metric;
-    this.baseline = BASELINE;
-    this.error = ERROR;
-    this.warning = WARNING;
-}
-
-function getSettings(settings) {
-    /*
-     * Get user defined settings
-     */
-    $.get('/litmus/get/settings',
-        {'testcase': settings.testcase, 'metric': settings.metric},
-        function(data) {
-            settings.error = data.error;
-            settings.warning = data.warning;
-            settings.baseline = data.baseline;
-        }, 'json');
-}
 
 function setReloadInterval(itv_str) {
     if (isNaN(itv_str)) {
@@ -78,58 +56,6 @@ function showResults(tag) {
             processData(data);
             renderTable(data);
         }, 'json');
-}
-
-function changeColors(row, vals, error, warning) {
-    /**
-     * Change cell colors based on the baseline values
-     */
-    return function(data) {
-        if (data.length === 1) {
-            return;
-        }
-        var baseval = data[1][4];
-        $.each(vals.slice(4), function(j, v) {
-            v = parseInt(v);
-            $(row).find('td').eq(j+4).removeAttr("style");
-            if (!isNaN(baseval) && !isNaN(v)) {
-                var delta = (v - baseval) / baseval;
-                if (Math.abs(error) < Math.abs(warning)) {
-                    console.error("invalid error/warning ranges");
-                    return;
-                }
-                if ((delta > error && error > 0) ||
-                    (delta < error && error < 0)) {
-                    $(row).find('td').eq(j+4).css("background-color","red");
-                } else if ((delta > warning && delta < error) ||
-                    (delta < warning && delta > error)) {
-                    $(row).find('td').eq(j+4).css("background-color","yellow");
-                }
-            }
-        });
-    };
-}
-function applyErrorRanges() {
-    /*
-     * Apply error range check for each cell
-     *
-     * If data falls out of the range, turns cell to red
-     * Accept negative ranges
-     */
-    oTable.$('tr').each(function() {
-        var row = this;
-        var vals = oTable.fnGetData(this);
-        var settings = new Settings(vals[0], vals[2]);
-        getSettings(settings);
-        var uri = '/litmus/get';
-        var criteria = {'testcase': settings.testcase,
-                        'metric': settings.metric,
-                        'build': settings.baseline,
-                        'env': vals[1]};
-        $.get(uri, criteria,
-              changeColors(row, vals, settings.error, settings.warning),
-              'json');
-    });
 }
 
 function processData(data) {
