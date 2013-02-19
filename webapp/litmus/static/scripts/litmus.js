@@ -231,59 +231,6 @@ function regTdActions(data, target, col, comment) {
     ];
 
     $(target).contextMenu(rcMenu , {theme:'gloss'});
-    $(target).qtip({
-        content: {
-            text: 'Loading...',
-            ajax: {
-                url: '../get/comment',
-                type: 'GET',
-                loading: false,
-                data: {'testcase': testcase,
-                    'env': env,
-                    'build': build,
-                    'metric': metric},
-                success: function(data, status) {
-                    if ($.trim(data).length === 0) {
-                        this.set('content.text', 'Click to edit comment');
-                    } else {
-                        this.set('content.text', data);
-                    }
-                },
-                error: function(response) {
-                    console.error(response.responseText);
-                    this.set('content.text', 'Click to edit comment');
-                }
-            }
-        },
-        position: {
-            at: 'bottom center',
-            my: 'top left'
-        },
-        show: {
-            solo: true
-        },
-        hide: 'unfocus',
-        style: {
-            classes: 'qtip-shadow'
-        },
-        events: {
-            focus: function(event, api) {
-                $(this).find('.qtip-content').editable( '../post/comment/', {
-                    submitdata: function (value, settings) {
-                        return {
-                            "testcase": testcase,
-                            "env": env,
-                            "metric": metric,
-                            "build": build,
-                            "comment": $('input[name=value]').val()
-                        };
-                    },
-                    height: '14px',
-                    width: '100%'
-                });
-            }
-        }
-    });
 }
 
 function renderTable(data) {
