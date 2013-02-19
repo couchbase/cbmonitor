@@ -161,20 +161,8 @@ function regTdActions(data, target, col) {
 
     if (col === 0) {
         var url = 'https://raw.github.com/couchbase/testrunner/master/conf/perf/' + testcase + '.conf';
-
-        $(target).qtip({
-            content: '<a href=' + url + '>' + url + '</a>',
-            position: {
-                at: 'bottom center',
-                my: 'top left'
-            },
-            show: {
-                solo: true
-            },
-            hide: 'unfocus',
-            style: {
-                classes: 'qtip-shadow'
-            }
+        $(target).html(function(i, oldText) {
+            return '<a href=' + url + '>' + oldText + '</a>';
         });
     }
     if (col < 4) {
