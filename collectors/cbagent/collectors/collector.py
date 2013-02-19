@@ -44,10 +44,10 @@ class Collector(object):
             raise Exception("Cluster is not available")
 
     def _get_buckets(self):
-        """Yield bucket names and stats metadata"""
+        """Yield bucket names"""
         buckets = self._get("/pools/default/buckets")
         for bucket in buckets:
-            yield bucket["name"], bucket["stats"]
+            yield bucket["name"]
 
     def _get_nodes(self):
         """Yield name of nodes in cluster"""
