@@ -52,7 +52,7 @@ class ActiveTasks(Collector):
                                     metric)
 
     def _get_couchdb_tasks(self, server):
-        tasks = self._get_capi(server, "/_active_tasks")
+        tasks = self._get("/_active_tasks", server=server, port=8092)
         for task in tasks:
             if "index_barrier" in task["type"]:
                 self._extend_samples("running_" + task["type"], task["running"])

@@ -16,16 +16,9 @@ class Collector(object):
         self.mc = MetadataClient(settings)
 
     @json
-    def _get(self, path):
-        """HTTP GET requests with basic authentication (web administration
-        port)"""
-        url = "http://{0}:8091{1}".format(self.master_node, path)
-        return requests.get(url=url, auth=self.auth)
-
-    @json
-    def _get_capi(self, server, path):
-        """HTTP GET requests with basic authentication (Couchbase API port)"""
-        url = 'http://{0}:8092{1}'.format(server, path)
+    def _get(self, path, server=None, port=8091):
+        """HTTP GET request to Couchbase server with basic authentication"""
+        url = "http://{0}:{1}{2}".format(server or self.master_node, port, path)
         return requests.get(url=url, auth=self.auth)
 
     def _get_buckets(self):
