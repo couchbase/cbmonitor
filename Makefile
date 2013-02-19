@@ -1,7 +1,5 @@
 clean: ; \
     rm -fr bin eggs develop-eggs parts .installed.cfg; \
-    rm -fr cbtop/cbtop.egg-info; \
-    rm -f MemcachedSource-*.json cbtop.log; \
     rm -fr priority15/priority15.egg-info; \
     rm -fr collectors/cbagent.egg-info collectors/dist collectors/build; \
     rm -f `find . -name *.pyc`
@@ -10,7 +8,7 @@ build: ; \
     buildout -t 120 -q;
 
 pep8: ; \
-    ./bin/pep8 --ignore=E501 collectors cbtop priority15 webapp
+    ./bin/pep8 --ignore=E501 collectors priority15 webapp
 
 jshint: ; \
     jshint webapp/cbmonitor/static/scripts
