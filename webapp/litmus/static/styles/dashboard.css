@@ -44,6 +44,7 @@ div.swatch, div.swatch-selected {
     float:left;
     margin:2px 2px 2px 10px;
 }
+
 div.swatch-selected {
     border:2px solid black;
     margin:0px 0px 0px 8px;

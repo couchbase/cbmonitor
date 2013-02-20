@@ -41,6 +41,17 @@ table.dataTable tr.even td.sorting_1 { background-color: white; }
 table.dataTable tr.even td.sorting_2 { background-color: white; }
 table.dataTable tr.even td.sorting_3 { background-color: white; }
 
+table.dataTable tr:hover td {
+    font-weight: bold;
+    border-bottom: 1px dashed grey;
+    border-top: 1px dashed grey;
+}
+
+table.dataTable .hovered {
+    font-weight: bold;
+    border-left: 1px dashed grey;
+    border-right: 1px dashed grey;
+}
 
 /*
  * Table wrapper

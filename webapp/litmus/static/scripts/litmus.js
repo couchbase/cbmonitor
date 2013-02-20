@@ -226,8 +226,18 @@ function renderTable(data) {
             }
         }],
         'bDestroy': true,
-        "bAutoWidth": false
+        "bAutoWidth": false,
+        "bSortClasses": false
     });
 
     new FixedHeader(oTable);
+
+    $('td', oTable.fnGetNodes()).hover(function() {
+        var iCol = $('td').index(this) % colHdrs.length;
+        var nTrs = oTable.fnGetNodes();
+        $('td:nth-child('+(iCol+1)+')', nTrs).addClass('hovered');
+    }, function() {
+        $('td.hovered', oTable.fnGetNodes()).removeClass('hovered');
+    });
+
 }
