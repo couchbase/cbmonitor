@@ -3,7 +3,7 @@ clean: ; \
     rm -fr priority15/priority15.egg-info; \
     rm -fr collectors/cbagent.egg-info collectors/dist collectors/build; \
     rm -f `find . -name *.pyc`; \
-    rm .coverage
+    rm -f .coverage
 
 build: ; \
     buildout -t 120 -q;
