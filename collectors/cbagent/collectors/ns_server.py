@@ -52,9 +52,9 @@ class NSServer(Collector):
             stats_directory = self._get(stats["directoryURI"])
             for block in stats_directory["blocks"]:
                 for metric in block["stats"]:
-                    yield metric["name"], bucket, None
+                    yield metric["title"], bucket, None
                     for node in nodes:
-                        yield metric["name"], bucket, node
+                        yield metric["title"], bucket, node
 
     def update_metadata(self):
         """Update cluster's, server's and bucket's metadata"""
