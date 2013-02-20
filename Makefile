@@ -2,7 +2,8 @@ clean: ; \
     rm -fr bin eggs develop-eggs parts .installed.cfg; \
     rm -fr priority15/priority15.egg-info; \
     rm -fr collectors/cbagent.egg-info collectors/dist collectors/build; \
-    rm -f `find . -name *.pyc`
+    rm -f `find . -name *.pyc`; \
+    rm .coverage
 
 build: ; \
     buildout -t 120 -q;
@@ -17,6 +18,6 @@ test_webapp: ; \
     ./bin/webapp test_coverage cbmonitor
 
 test_collectors: ; \
-    ./bin/nosetests collectors
+    ./bin/nosetests --with-coverage --cover-package=cbagent collectors
 
 test: build pep8 jshint test_webapp test_collectors;
