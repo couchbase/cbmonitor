@@ -62,7 +62,11 @@ class Verifier(object):
     def bad_parameter(test):
         def wrapper(self, *args):
             test(self, *args)
-            self.assertTrue("Enter a whole number" in self.response.content)
+            print self.response.content
+            self.assertTrue(
+                "Enter a whole number" in self.response.content or
+                "Ensure this value has at most" in self.response.content
+            )
             self.assertEqual(self.response.status_code, 400)
         return wrapper
 
@@ -431,7 +435,7 @@ class ApiTest(TestHelper):
     @Verifier.valid_response
     def test_add_metric(self):
         params = {"type": "metric",
-                  "name": "mem_used",
+                  "name": uhex(),
                   "cluster": "East",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                   "bucket": "default"}
@@ -444,9 +448,39 @@ class ApiTest(TestHelper):
         self.response = response
 
     @Verifier.valid_response
+    def test_add_metric_with_description(self):
+        params = {"type": "metric",
+                  "name": uhex(),
+                  "cluster": "East",
+                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+                  "bucket": "default",
+                  "description": "new metric"}
+        request = self.factory.post("/add_metric_or_event", params)
+        response = rest_api.dispatcher(request, path="add_metric_or_event")
+
+        # Verify persistence
+        self.test_get_metrics(params)
+
+        self.response = response
+
+    @Verifier.bad_parameter
+    def test_add_metric_with_too_long_unit(self):
+        params = {"type": "metric",
+                  "name": uhex(),
+                  "cluster": "East",
+                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+                  "bucket": "default",
+                  "unit": uhex()}
+        request = self.factory.post("/add_metric_or_event", params)
+        response = rest_api.dispatcher(request, path="add_metric_or_event")
+
+        # Verify persistence
+        self.response = response
+
+    @Verifier.valid_response
     def test_add_metric_no_server(self):
         params = {"type": "metric",
-                  "name": "mem_used",
+                  "name": uhex(),
                   "cluster": "East",
                   "bucket": "default"}
         request = self.factory.post("/add_metric_or_event", params)
@@ -460,7 +494,7 @@ class ApiTest(TestHelper):
     @Verifier.valid_response
     def test_add_event(self):
         params = {"type": "event",
-                  "name": "failover",
+                  "name": uhex(),
                   "cluster": "East",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                   "bucket": "default"}
@@ -474,7 +508,7 @@ class ApiTest(TestHelper):
 
     @Verifier.missing_parameter
     def test_add_event_no_cluster(self):
-        params = {"type": "event",
+        params = {"type": uhex(),
                   "name": "failover",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                   "bucket": "default"}

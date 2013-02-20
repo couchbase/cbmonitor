@@ -80,6 +80,8 @@ class Observable(models.Model):
 
     name = models.CharField(max_length=64)
     type = models.ForeignKey(ObservableType)
+    unit = models.CharField(max_length=16, null=True, blank=True)
+    description = models.CharField(max_length=1024, null=True, blank=True)
     cluster = models.ForeignKey("Cluster")
     server = models.ForeignKey("Server", null=True, blank=True)
     bucket = models.ForeignKey("Bucket", null=True, blank=True)
