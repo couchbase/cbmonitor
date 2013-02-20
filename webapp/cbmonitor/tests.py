@@ -1,4 +1,6 @@
+import datetime
 import json
+import time
 from uuid import uuid4
 from random import randint, choice
 
@@ -62,10 +64,11 @@ class Verifier(object):
     def bad_parameter(test):
         def wrapper(self, *args):
             test(self, *args)
-            print self.response.content
+            err_messages = ("Enter a whole number",
+                            "Ensure this value has at most",
+                            "Enter a valid date/time")
             self.assertTrue(
-                "Enter a whole number" in self.response.content or
-                "Ensure this value has at most" in self.response.content
+                filter(lambda msg: msg in self.response.content, err_messages)
             )
             self.assertEqual(self.response.status_code, 400)
         return wrapper
@@ -515,3 +518,35 @@ class ApiTest(TestHelper):
         request = self.factory.post("/add_metric_or_event", params)
         self.response = rest_api.dispatcher(request,
                                             path="add_metric_or_event")
+
+    @Verifier.valid_response
+    def test_add_snapshot(self):
+        cluster = self.add_valid_cluster()
+
+        ts = datetime.datetime(2000, 1, 1, 0, 0, 0)
+        params = {"cluster": cluster, "name": uhex(),
+                  "ts_from": ts, "ts_to": ts, "description": uhex()}
+        self.response = self.add_item("snapshot", params)
+
+        # Verify persistence
+        snapshot = models.Snapshot.objects.get(name=params["name"])
+        self.assertEqual(snapshot.cluster.name, cluster)
+
+    @Verifier.bad_parameter
+    def test_add_snapshot_with_wrong_ts_type(self):
+        cluster = self.add_valid_cluster()
+
+        ts = time.time()
+        params = {"cluster": cluster, "name": uhex(),
+                  "ts_from": ts, "ts_to": ts, "description": uhex()}
+        self.response = self.add_item("snapshot", params)
+
+    @Verifier.valid_json
+    def test_get_snapshots(self):
+        params = {"cluster": "East"}
+        request = self.factory.get("/get_snapshots", params)
+        self.response = rest_api.dispatcher(request, path="get_snapshots")
+
+        # Verify content
+        expected = json.dumps(["run-1_access-phase_vperf-reb_2.0.0-1976"])
+        self.assertEquals(self.response.content, expected)

@@ -92,6 +92,21 @@ class Observable(models.Model):
     class Admin:
         pass
 
+
+class Snapshot(models.Model):
+
+    name = models.CharField(max_length=256, primary_key=True, blank=False)
+    ts_from = models.DateTimeField()
+    ts_to = models.DateTimeField()
+    description = models.CharField(max_length=1024, null=True, blank=True)
+    cluster = models.ForeignKey("Cluster")
+
+    def __str__(self):
+        return self.name
+
+    class Admin:
+        pass
+
 admin.site.register(Cluster)
 admin.site.register(Server)
 admin.site.register(Bucket)

@@ -62,5 +62,14 @@
             "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
             "bucket": 1
         }
+    },
+    {
+        "model": "cbmonitor.snapshot",
+        "pk": "run-1_access-phase_vperf-reb_2.0.0-1976",
+        "fields": {
+            "ts_from": "2000-01-01 00:00:00",
+            "ts_to": "2000-01-02 00:00:00",
+            "cluster": "East"
+        }
     }
 ]

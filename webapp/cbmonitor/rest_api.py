@@ -30,6 +30,8 @@ def dispatcher(request, path):
         "get_buckets": get_buckets,
         "get_metrics_and_events": get_metrics_and_events,
         "add_metric_or_event": add_metric_or_event,
+        "add_snapshot": add_shapshot,
+        "get_snapshots": get_snapshots,
     }.get(path)
     if handler:
         return handler(request)
@@ -227,3 +229,28 @@ def add_metric_or_event(request):
         observable.save()
     else:
         raise ValidationError(form)
+
+
+@form_validation
+def add_shapshot(request):
+    form = forms.AddSnapshot(request.POST)
+    if form.is_valid():
+        form.save()
+    else:
+        raise ValidationError(form)
+
+
+@form_validation
+def get_snapshots(request):
+    form = forms.GetSnapshots(request.GET)
+    if form.is_valid():
+        try:
+            cluster = models.Cluster.objects.get(name=request.GET["cluster"])
+            snapshots = models.Snapshot.objects.filter(cluster=cluster).values()
+            snapshots = [snapshot["name"] for snapshot in snapshots]
+        except DoesNotExist:
+            snapshots = []
+    else:
+        snapshots = []
+    content = json.dumps(snapshots)
+    return HttpResponse(content)

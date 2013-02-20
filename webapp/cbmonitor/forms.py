@@ -121,3 +121,16 @@ class AddMetricsAndEvents(forms.ModelForm):
 
         cleaned_data["bucket"] = bucket
         return cleaned_data
+
+
+class AddSnapshot(forms.ModelForm):
+
+    class Meta:
+        model = models.Snapshot
+
+
+class GetSnapshots(forms.ModelForm):
+
+    class Meta:
+        model = models.Snapshot
+        fields = ("cluster", )
