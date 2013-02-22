@@ -4,9 +4,9 @@
 /*
  * Name space
  */
-var GRAPH = GRAPH || {};
+var CBMONITOR = CBMONITOR || {};
 
-GRAPH.buildPointer = function(ui) {
+CBMONITOR.buildPointer = function(ui) {
     "use strict";
 
     var type = ui.draggable.attr("type"),
@@ -25,17 +25,17 @@ GRAPH.buildPointer = function(ui) {
     return ptr + item;
 };
 
-GRAPH.GraphManager = function() {
+CBMONITOR.GraphManager = function() {
     "use strict";
 
     this.seriesly = new SERIESLY.Seriesly("cbmonitor");
     this.metrics = {};
 };
 
-GRAPH.GraphManager.prototype.init = function(data) {
+CBMONITOR.GraphManager.prototype.init = function(data) {
     "use strict";
 
-    var dataHandler = new GRAPH.DataHandler(data),
+    var dataHandler = new CBMONITOR.DataHandler(data),
         series_data = dataHandler.prepareSeries(this.metrics[this.container]),
         container = "#" + this.container + " svg";
 
@@ -60,17 +60,17 @@ GRAPH.GraphManager.prototype.init = function(data) {
     });
 };
 
-GRAPH.GraphManager.prototype.plot = function(container, ui) {
+CBMONITOR.GraphManager.prototype.plot = function(container, ui) {
     "use strict";
 
     var new_metric = ui.draggable.text();
 
     if (this.metrics[container] === undefined) {
         this.metrics[container] = [new_metric];
-        this.ptrs = [GRAPH.buildPointer(ui)];
+        this.ptrs = [CBMONITOR.buildPointer(ui)];
     } else if (this.metrics[container].indexOf(new_metric) === -1) {
         this.metrics[container].push(new_metric);
-        this.ptrs.push(GRAPH.buildPointer(ui));
+        this.ptrs.push(CBMONITOR.buildPointer(ui));
     }
     this.container = container;
 
@@ -81,7 +81,7 @@ GRAPH.GraphManager.prototype.plot = function(container, ui) {
     });
 };
 
-GRAPH.GraphManager.prototype.clear = function() {
+CBMONITOR.GraphManager.prototype.clear = function() {
     "use strict";
 
     this.metrics = {};
@@ -92,15 +92,14 @@ GRAPH.GraphManager.prototype.clear = function() {
     $("#fourth_view").empty().append("<svg>");
 };
 
-GRAPH.DataHandler = function(data) {
+CBMONITOR.DataHandler = function(data) {
     "use strict";
 
     this.data = data;
     this.timestamps = this.prepareTimestamps();
 };
 
-
-GRAPH.DataHandler.prototype.prepareTimestamps = function() {
+CBMONITOR.DataHandler.prototype.prepareTimestamps = function() {
     "use strict";
 
     var timestamps = [];
@@ -114,8 +113,7 @@ GRAPH.DataHandler.prototype.prepareTimestamps = function() {
     return timestamps.sort();
 };
 
-
-GRAPH.DataHandler.prototype.prepareSeries = function(metrics) {
+CBMONITOR.DataHandler.prototype.prepareSeries = function(metrics) {
     "use strict";
 
     var i, j,

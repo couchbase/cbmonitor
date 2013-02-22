@@ -1,27 +1,16 @@
 div.charts_panel
     div.cpanel_left
-        form
-            div#vpanel
-                input#view1.vradio(type="radio", name="views", checked)
-                label(for="view1") 1 view
-                input#view2.vradio(type="radio", name="views")
-                label(for="view2") 2 views
-                input#view4.vradio(type="radio", name="views")
-                label(for="view4") 4 views
+        div.btn-group(data-toggle="buttons-radio")
+            button#view1.btn.btn-mini.vradio(type="button") 1 view
+            button#view2.btn.btn-mini.vradio(type="button") 2 views
+            button#view4.btn.btn-mini.vradio(type="button") 4 views
     div.cpanel_middle
-        div#mvpanel
-            input#clear_views(type="button", value="Clear All")
+        button#clear_views.btn.btn-mini Clear All
     div.cpanel_right
-        div#rpanel
-            input#minute(type="radio", name="ranges")
-            label(for="minute") minute
-            input#hour(type="radio", name="ranges")
-            label(for="hour") hour
-            input#day(type="radio", name="ranges")
-            label(for="day") day
-            input#week(type="radio", name="ranges")
-            label(for="week") week
-            input#month(type="radio", name="ranges")
-            label(for="month") month
-            input#all(type="radio", name="ranges", checked)
-            label(for="all") all
+        div.btn-group(data-toggle="buttons-radio")
+            button#minute.btn.btn-mini(type="button") minute
+            button#hour.btn.btn-mini(type="button") hour
+            button#day.btn.btn-mini(type="button") day
+            button#week.btn.btn-mini(type="button") week
+            button#month.btn.btn-mini(type="button") month
+            button#all.btn.btn-mini(type="button") all

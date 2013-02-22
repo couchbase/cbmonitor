@@ -6,7 +6,12 @@ head
     include static
 
 body
-    div.header CBMONITOR
+    div.navbar
+        div.navbar-inner
+            div.brand cbmonitor
+            ul.nav
+                li.active
+                    a(href="/").header-menu Charts
     div.main
         div.sources
             div#accordion
@@ -18,4 +23,6 @@ body
             include charts/views
     div#spinner
 
-    div.footer Copyright Couchbase Inc. 2013
+    div.navbar
+        div.navbar-inner.navbar-fixed-bottom
+            div.footer Copyright Couchbase Inc., 2013

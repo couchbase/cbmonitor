@@ -1,7 +1,7 @@
 div#dialog_new_cluster.new_item(title="Add new cluster")
     form
     fieldset
-        label.mandatory(for="cname") * Name
+        label(for="cname") * Name
         input#cname.text.ui-widget-content.ui-corner-all(type="text", name="name")
         label(for="master_node") Master node
         input#master_node.text.ui-widget-content.ui-corner-all(type="text", name="master_node")
@@ -10,7 +10,7 @@ div#dialog_new_cluster.new_item(title="Add new cluster")
         label(for="rest_password") * REST Password
         input#rest_password.text.ui-widget-content.ui-corner-all(type="password", name="rest_password")
         label(for="description") Description
-        textarea#description.text.ui-widget-content.ui-corner-all
+        textarea#description.textarea.ui-widget-content.ui-corner-all
         p * Required field
 
 div#dialog_new_server.new_item(title="Add new server")
@@ -23,9 +23,9 @@ div#dialog_new_server.new_item(title="Add new server")
         label(for="ssh_password") SSH Password
         input#ssh_password.text.ui-widget-content.ui-corner-all(type="password", name="ssh_password")
         label(for="ssh_key") SSH key
-        textarea#ssh_key.text.ui-widget-content.ui-corner-all
+        textarea#ssh_key.textarea.ui-widget-content.ui-corner-all
         label(for="description") Description
-        textarea#description.text.ui-widget-content.ui-corner-all
+        textarea#description.textarea.ui-widget-content.ui-corner-all
         p * Required field
 
 div#dialog_new_bucket.new_item(title="Add new bucket")
@@ -34,11 +34,9 @@ div#dialog_new_bucket.new_item(title="Add new bucket")
         label(for="bname") * Name
         input#bname.text.ui-widget-content.ui-corner-all(type="text", name="name")
         label(for="bucket_types") * Type
-        div#bucket_type
-            input#Couchbase(type="radio", name="btype", checked)
-            label(for="Couchbase") Couchbase
-            input#Memcached(type="radio", name="btype")
-            label(for="Memcached") Memcached
+        div#bucket_type.btn-group(data-toggle="buttons-radio")
+            button#Couchbase.btn.btn-mini.btradio(type="button") Couchbase
+            button#Memcached.btn.btn-mini.btradio(type="button") Memcached
         label(for="port") Port
         input#port.text.ui-widget-content.ui-corner-all(type="text", name="port")
         label(for="password") Password

@@ -6,7 +6,12 @@
  */
 var CBMONITOR = CBMONITOR || {};
 
-CBMONITOR.highlightErrors = function(jqXHR, prefix) {
+/*
+ * Modal dialogs for adding/removing clusters, servers, buckets
+ */
+CBMONITOR.Dialogs = function () {};
+
+CBMONITOR.Dialogs.prototype.highlightErrors = function(jqXHR, prefix) {
     "use strict";
 
     var response = JSON.parse(jqXHR.responseText),
@@ -27,7 +32,17 @@ CBMONITOR.highlightErrors = function(jqXHR, prefix) {
     }
 };
 
-CBMONITOR.getSelectedParent = function(selected) {
+CBMONITOR.Dialogs.prototype.adjustStyles = function() {
+    "use strict";
+
+    $(".text").css({"height": "12px", "fontSize": "77%"});
+    $(".textarea").css({"fontSize": "77%"});
+    $(".btradio").css({"width": "157px"});
+    $("#Couchbase").button("toggle");
+    $(".btn-dialog").css({"fontSize": "85%"});
+};
+
+CBMONITOR.Dialogs.prototype.getSelectedParent = function(selected) {
     "use strict";
 
     if (selected === undefined) {
@@ -36,131 +51,103 @@ CBMONITOR.getSelectedParent = function(selected) {
     return $.jstree._reference(selected)._get_parent(selected);
 };
 
-CBMONITOR.addNewCluster = function() {
+CBMONITOR.Dialogs.prototype.getFields = function(parameters) {
     "use strict";
 
-    var jstree = $("#tree"),
-        spinner_opts = {width: 4, top: "450px"},
-        name = $("#cname"),
-        rest_username = $("#rest_username"),
-        rest_password = $("#rest_password"),
-        master_node = $("#master_node"),
-        description = $("#description"),
-        fields = $([]).add(name).add(rest_username).add(rest_password)
-            .add(master_node).add(description);
+    var parameter,
+        fields = $([]);
+    $.each(parameters, function(index, value) {
+        parameter =  $("#" + value);
+        fields.add(parameter);
+    });
+    return fields;
+};
+
+CBMONITOR.Dialogs.prototype.configureAddNewCluster = function() {
+    "use strict";
+
+    var that = this,
+        fields;
+
+    fields = this.getFields(["cname", "rest_username", "rest_password",
+                             "master_node", "description"]);
 
     $("#dialog_new_cluster").dialog({
         autoOpen: false,
-        height: 500,
+        height: 525,
         width: 350,
         modal: true,
         resizable: false,
         buttons: {
-            "Add new cluster": function() {
-                fields.removeClass("ui-state-error");
-                var spinner = new Spinner(spinner_opts).spin(document.getElementById('spinner'));
-                $.ajax({
-                    type: "POST", url: "/cbmonitor/add_cluster/",
-                    data: {
-                        "name": name.val(),
-                        "rest_username": rest_username.val(),
-                        "rest_password": rest_password.val(),
-                        "master_node": master_node.val(),
-                        "description": description.val()
-                    },
-                    success: function(){
-                        spinner.stop();
-                        jstree.jstree("create", -1, "last",
-                            {
-                                "attr": {"class": "cluster", "id": name.val()},
-                                "data": name.val()
-                            },
-                            false, true
-                        );
-                        CBMONITOR.configureCTree();
-                        CBMONITOR.configureMEPanel();
-                        $("#dialog_new_cluster").dialog("close");
-                    },
-                    error: function(jqXHR) {
-                        spinner.stop();
-                        CBMONITOR.highlightErrors(jqXHR, "c");
-                    }
-                });
+            confirm: {
+                "text": "Add new cluster",
+                "class": "btn btn-mini btn-dialog",
+                "click": function() {
+                    fields.removeClass("ui-state-error");
+                    that.addNewCluster(fields);
+                }
             },
-            Cancel: function() {
-                fields.val("").removeClass("ui-state-error");
-                $("#dialog_new_cluster").dialog("close");
+            cancel: {
+                "text": "Cancel",
+                "class": "btn btn-mini btn-dialog",
+                "click": function() {
+                    fields.val("").removeClass("ui-state-error");
+                    $("#dialog_new_cluster").dialog("close");
+                }
             }
+        },
+        create: function () {
+            that.adjustStyles();
         }
     });
 };
 
-CBMONITOR.addNewServer = function() {
+CBMONITOR.Dialogs.prototype.configureAddNewServer = function() {
     "use strict";
 
-    var jstree = $("#tree"),
-        address = $("#address"),
-        ssh_username = $("#ssh_username"),
-        ssh_password = $("#ssh_password"),
-        ssh_key = $("#ssh_key"),
-        description = $("#description"),
-        fields = $([]).add(address).add(ssh_username).add(ssh_password)
-            .add(ssh_key).add(description);
+    var that = this,
+        fields;
+
+    fields = this.getFields(["address", "ssh_username", "ssh_password",
+                             "ssh_key", "description"]);
 
     $("#dialog_new_server").dialog({
         autoOpen: false,
         resizable: false,
-        height: 620,
-        width: 400,
+        height: 550,
+        width: 350,
         modal: true,
         buttons: {
-            "Add new server": function() {
-                fields.removeClass("ui-state-error");
-                var cluster = CBMONITOR.getSelectedParent();
-                $.ajax({
-                    type: "POST", url: "/cbmonitor/add_server/",
-                    data: {
-                        "address": address.val(),
-                        "cluster": cluster.attr("id"),
-                        "ssh_username": ssh_username.val(),
-                        "ssh_password": ssh_password.val(),
-                        "ssh_key": ssh_key.val(),
-                        "description": description.val()
-                    },
-                    success: function(){
-                        jstree.jstree("create", null, "last",
-                            {
-                                "attr": {"class": "server", "id": address.val()},
-                                "data": address.val()
-                            },
-                            false, true
-                        );
-                        $("#dialog_new_server").dialog("close");
-                    },
-                    error: function(jqXHR) {
-                        CBMONITOR.highlightErrors(jqXHR, "");
-                    }
-                });
+            confirm: {
+                "text": "Add new server",
+                "class": "btn btn-mini btn-dialog",
+                "click": function() {
+                    fields.removeClass("ui-state-error");
+                    that.addNewServer(fields);
+                }
             },
-            Cancel: function() {
-                fields.val("").removeClass("ui-state-error");
-                $("#dialog_new_server").dialog("close");
+            cancel: {
+                "text": "Cancel",
+                "class": "btn btn-mini btn-dialog",
+                "click": function() {
+                    fields.val("").removeClass("ui-state-error");
+                    $("#dialog_new_server").dialog("close");
+                }
             }
+        },
+        create: function () {
+            that.adjustStyles();
         }
     });
 };
 
-CBMONITOR.addNewBucket = function() {
+CBMONITOR.Dialogs.prototype.configureAddNewBucket = function() {
     "use strict";
 
-    var jstree = $("#tree"),
-        name = $("#bname"),
-        type = $("input[name=btype]:checked"),
-        port = $("#port"),
-        password = $("#password"),
-        fields = $([]).add(name).add(type).add(port).add(password);
+    var that = this,
+        fields;
 
-    $("#bucket_type").buttonset();
+    fields = this.getFields(["bname", "bucket_type", "port", "password"]);
 
     $("#dialog_new_bucket").dialog({
         autoOpen: false,
@@ -169,102 +156,226 @@ CBMONITOR.addNewBucket = function() {
         width: 350,
         modal: true,
         buttons: {
-            "Add new bucket": function() {
-                fields.removeClass("ui-state-error");
-                var cluster = CBMONITOR.getSelectedParent();
-                $.ajax({
-                    type: "POST", url: "/cbmonitor/add_bucket/",
-                    data: {
-                        "name": name.val(),
-                        "cluster": cluster.attr("id"),
-                        "type": type.attr("id"),
-                        "port": port.val(),
-                        "password": password.val()
-                    },
-                    success: function(){
-                        jstree.jstree("create", null, "last",
-                            {
-                                "attr": {"class": "bucket", "id": name.val()},
-                                "data": name.val()
-                            },
-                            false, true
-                        );
-                        $("#dialog_new_bucket").dialog("close");
-                    },
-                    error: function(jqXHR) {
-                        CBMONITOR.highlightErrors(jqXHR, "b");
-                    }
-                });
+            confirm: {
+                "text": "Add new bucket",
+                "class": "btn btn-mini btn-dialog",
+                "click": function() {
+                    fields.removeClass("ui-state-error");
+                    that.addNewBucket();
+                }
             },
-            Cancel: function() {
-                fields.val("").removeClass("ui-state-error");
-                $("#dialog_new_bucket").dialog("close");
+            cancel: {
+                "text": "Cancel",
+                "class": "btn btn-mini btn-dialog",
+                "click": function() {
+                    fields.val("").removeClass("ui-state-error");
+                    $("#dialog_new_bucket").dialog("close");
+                }
             }
+        },
+        create: function () {
+            that.adjustStyles();
         }
     });
 };
 
-CBMONITOR.deleteItem = function() {
+CBMONITOR.Dialogs.prototype.configureDeleteItem = function() {
     "use strict";
 
+    var that = this;
     $("#dialog_delete").dialog({
         autoOpen: false,
         resizable: false,
         height:160,
         modal: true,
         buttons: {
-            "Delete": function() {
-                var jstree = $("#tree"),
-                    selected = jstree.jstree("get_selected"),
-                    selected_id = selected.attr("id"),
-                    selected_class = selected.attr("class").split(" ")[0],
-                    renc = $("#renc"),
-                    delc = $("#delc"),
-                    adds = $("#adds"),
-                    prnt_cont = CBMONITOR.getSelectedParent(),
-                    prev_cont = CBMONITOR.getSelectedParent(),
-                    data,
-                    url,
-                    prnt;
-                if (prnt_cont !== -1 && prev_cont !== -1) {
-                    prnt = CBMONITOR.getSelectedParent(prnt_cont);
+            confirm: {
+                "text": "Delete",
+                "class": "btn btn-mini btn-dialog",
+                "click": function() {
+                    that.deleteItem();
+                    $(this).dialog("close");
                 }
-                switch(selected_class) {
-                    case "cluster":
-                        data = {"name": selected_id};
-                        url = "/cbmonitor/delete_cluster/";
-                        break;
-                    case "server":
-                        data = {"address": selected_id};
-                        url = "/cbmonitor/delete_server/";
-                        break;
-                    case "bucket":
-                        data = {
-                            "name": selected_id,
-                            "cluster": prnt.attr("id")
-                        };
-                        url = "/cbmonitor/delete_bucket/";
-                        break;
-                    default:
-                        break;
-                }
-                $.ajax({
-                    type: "POST", url: url, data: data,
-                    success: function(){
-                        if (prnt_cont === -1 && prev_cont === -1) {
-                            renc.addClass("ui-state-disabled");
-                            delc.addClass("ui-state-disabled");
-                            adds.addClass("ui-state-disabled");
-                        }
-                        jstree.jstree("remove", selected);
-                        CBMONITOR.configureMEPanel();
-                    }
-                });
-                $(this).dialog("close");
             },
-            Cancel: function() {
-                $(this).dialog("close");
+            cancel: {
+                "text": "Cancel",
+                "class": "btn btn-mini btn-dialog",
+                "click": function() {
+                    $(this).dialog("close");
+                }
             }
+        },
+        create: function () {
+            that.adjustStyles();
+        }
+    });
+};
+
+CBMONITOR.Dialogs.prototype.addNewCluster = function() {
+    "use strict";
+
+    var that = this,
+        jstree = $("#tree"),
+        name = $("#cname"),
+        rest_username = $("#rest_username"),
+        rest_password = $("#rest_password"),
+        master_node = $("#master_node"),
+        description = $("#description");
+
+    var spinner = new Spinner({width: 4, top: "450px"});
+    spinner.spin(document.getElementById('spinner'));
+
+    $.ajax({
+        type: "POST", url: "/cbmonitor/add_cluster/",
+        data: {
+            "name": name.val(),
+            "rest_username": rest_username.val(),
+            "rest_password": rest_password.val(),
+            "master_node": master_node.val(),
+            "description": description.val()
+        },
+        success: function(){
+            spinner.stop();
+            jstree.jstree("create", -1, "last",
+                {
+                    "attr": {"class": "cluster", "id": name.val()},
+                    "data": name.val()
+                },
+                false, true
+            );
+            CBMONITOR.inventory.configureTree();
+            CBMONITOR.observables.updateSelectors();
+            $("#dialog_new_cluster").dialog("close");
+        },
+        error: function(jqXHR) {
+            spinner.stop();
+            that.highlightErrors(jqXHR, "c");
+        }
+    });
+};
+
+CBMONITOR.Dialogs.prototype.addNewServer = function() {
+    "use strict";
+
+    var that = this,
+        jstree = $("#tree"),
+        address = $("#address"),
+        ssh_username = $("#ssh_username"),
+        ssh_password = $("#ssh_password"),
+        ssh_key = $("#ssh_key"),
+        description = $("#description");
+    var cluster = that.getSelectedParent();
+
+    $.ajax({
+        type: "POST", url: "/cbmonitor/add_server/",
+        data: {
+            "address": address.val(),
+            "cluster": cluster.attr("id"),
+            "ssh_username": ssh_username.val(),
+            "ssh_password": ssh_password.val(),
+            "ssh_key": ssh_key.val(),
+            "description": description.val()
+        },
+        success: function(){
+            jstree.jstree("create", null, "last",
+                {
+                    "attr": {"class": "server", "id": address.val()},
+                    "data": address.val()
+                },
+                false, true
+            );
+            $("#dialog_new_server").dialog("close");
+        },
+        error: function(jqXHR) {
+            that.highlightErrors(jqXHR, "");
+        }
+    });
+};
+
+CBMONITOR.Dialogs.prototype.addNewBucket = function() {
+    "use strict";
+
+    var that = this,
+        jstree = $("#tree"),
+        name = $("#bname"),
+        type = $("#bucket_type"),
+        port = $("#port"),
+        password = $("#password");
+    var cluster = that.getSelectedParent();
+
+    $.ajax({
+        type: "POST", url: "/cbmonitor/add_bucket/",
+        data: {
+            "name": name.val(),
+            "cluster": cluster.attr("id"),
+            "type": type.children(".active").attr("id"),
+            "port": port.val(),
+            "password": password.val()
+        },
+        success: function(){
+            jstree.jstree("create", null, "last",
+                {
+                    "attr": {"class": "bucket", "id": name.val()},
+                    "data": name.val()
+                },
+                false, true
+            );
+            $("#dialog_new_bucket").dialog("close");
+        },
+        error: function(jqXHR) {
+            that.highlightErrors(jqXHR, "b");
+        }
+    });
+};
+
+CBMONITOR.Dialogs.prototype.deleteItem = function() {
+    "use strict";
+
+    var that = this,
+        jstree = $("#tree"),
+        selected = jstree.jstree("get_selected"),
+        selected_id = selected.attr("id"),
+        selected_class = selected.attr("class").split(" ")[0],
+        renc = $("#renc"),
+        delc = $("#delc"),
+        adds = $("#adds"),
+        prnt_cont = that.getSelectedParent(),
+        prev_cont = that.getSelectedParent(),
+        data,
+        url,
+        prnt;
+    if (prnt_cont !== -1 && prev_cont !== -1) {
+        prnt = that.getSelectedParent(prnt_cont);
+    }
+    switch(selected_class) {
+        case "cluster":
+            data = {"name": selected_id};
+            url = "/cbmonitor/delete_cluster/";
+            break;
+        case "server":
+            data = {"address": selected_id};
+            url = "/cbmonitor/delete_server/";
+            break;
+        case "bucket":
+            data = {
+                "name": selected_id,
+                "cluster": prnt.attr("id")
+            };
+            url = "/cbmonitor/delete_bucket/";
+            break;
+        default:
+            break;
+    }
+    $.ajax({
+        type: "POST", url: url, data: data,
+        success: function(){
+            if (prnt_cont === -1 && prev_cont === -1) {
+                renc.addClass("ui-state-disabled");
+                delc.addClass("ui-state-disabled");
+                adds.addClass("ui-state-disabled");
+            }
+            jstree.jstree("remove", selected);
+            CBMONITOR.observables.updateSelectors();
         }
     });
 };
