@@ -78,7 +78,7 @@ class Observable(models.Model):
     class Meta:
         unique_together = ["name", "cluster", "server", "bucket"]
 
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=128)
     type = models.ForeignKey(ObservableType)
     unit = models.CharField(max_length=16, null=True, blank=True)
     description = models.CharField(max_length=1024, null=True, blank=True)
