@@ -6,6 +6,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
+from django.db.utils import IntegrityError
 from cbagent.collectors import NSServer
 
 import models
@@ -56,6 +57,9 @@ def form_validation(method):
             logger.warn(error)
             return HttpResponse(content=error, status=404)
         except ValidationError, error:
+            logger.warn(error)
+            return HttpResponse(content=error, status=400)
+        except IntegrityError, error:
             logger.warn(error)
             return HttpResponse(content=error, status=400)
         else:
