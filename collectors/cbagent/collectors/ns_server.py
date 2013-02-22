@@ -47,7 +47,7 @@ class NSServer(Collector):
 
     def _get_metrics(self):
         """Yield names of metrics for every bucket"""
-        nodes = self._get_nodes()
+        nodes = list(self._get_nodes())
         for bucket, stats in self._get_buckets():
             stats_directory = self._get(stats["directoryURI"])
             for block in stats_directory["blocks"]:
