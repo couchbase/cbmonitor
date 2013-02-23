@@ -1,7 +1,8 @@
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns(
-    '',
-    url(r'^$', 'cbmonitor.views.index'),
-    url(r'/(?P<path>[a-z_]+)/$', 'cbmonitor.rest_api.dispatcher'),
+    'cbmonitor',
+    url(r'^$', 'views.index'),
+    url(r'^snapshots$', 'views.snapshots'),
+    url(r'^cbmonitor/(?P<path>[a-z_]+)/$', 'rest_api.dispatcher'),
 )

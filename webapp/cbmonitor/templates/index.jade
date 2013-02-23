@@ -1,28 +1,14 @@
-!!! 5
+include header
 
-html(lang="en")
-head
-    title cbmonitor
-    include static
+div.main
+    div.sources
+        div#accordion
+            include sources/clusters
+            include sources/metrics
+            include sources/events
+    div.charts
+        include charts/panel
+        include charts/views
+div#spinner
 
-body
-    div.navbar
-        div.navbar-inner
-            div.brand cbmonitor
-            ul.nav
-                li.active
-                    a(href="/").header-menu Charts
-    div.main
-        div.sources
-            div#accordion
-                include sources/clusters
-                include sources/metrics
-                include sources/events
-        div.charts
-            include charts/panel
-            include charts/views
-    div#spinner
-
-    div.navbar
-        div.navbar-inner.navbar-fixed-bottom
-            div.footer Copyright Couchbase Inc., 2013
+include footer

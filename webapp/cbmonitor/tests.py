@@ -101,6 +101,11 @@ class BasicTest(TestCase):
         response = views.index(request)
         self.assertEqual(response.status_code, 200)
 
+    def test_snapshots(self):
+        request = self.factory.get('/snapshots')
+        response = views.snapshots(request)
+        self.assertEqual(response.status_code, 200)
+
 
 class TestHelper(TestCase):
 
