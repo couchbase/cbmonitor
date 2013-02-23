@@ -6,23 +6,6 @@
  */
 var CBMONITOR = CBMONITOR || {};
 
-CBMONITOR.buildPointer = function(ui) {
-    "use strict";
-
-    var cluster = ui.draggable.attr("cluster"),
-        server = ui.draggable.attr("server"),
-        bucket = ui.draggable.attr("bucket"),
-        item = ui.draggable.text();
-
-    var ptr = "&ptr=/samples/" + item + "&reducer=avg";
-
-    var filter = "&f=/meta/cluster&fv=" + cluster;
-    filter += "&f=/meta/bucket&fv="; filter += bucket.length ? bucket : "none";
-    filter += "&f=/meta/server&fv="; filter += server.length ? server : "none";
-
-    return ptr + filter;
-};
-
 CBMONITOR.GraphManager = function() {
     "use strict";
 
@@ -65,17 +48,17 @@ CBMONITOR.GraphManager.prototype.plot = function(container, ui) {
 
     if (this.metrics[container] === undefined) {
         this.metrics[container] = [new_metric];
-        this.ptrs = [CBMONITOR.buildPointer(ui)];
+        this.uis = [ui];
     } else if (this.metrics[container].indexOf(new_metric) === -1) {
         this.metrics[container].push(new_metric);
-        this.ptrs.push(CBMONITOR.buildPointer(ui));
+        this.uis.push(ui);
     }
     this.container = container;
 
     var chart_data = [];
-    for(var i = 0, l = this.ptrs.length; i < l; i++) {
+    for(var i = 0, l = this.uis.length; i < l; i++) {
         chart_data.push(
-            this.seriesly.query({group: 1000, ptr: this.ptrs[i]})
+            this.seriesly.query(this.uis[i])
         );
     }
     this.init(chart_data);

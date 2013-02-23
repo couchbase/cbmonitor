@@ -35,15 +35,13 @@ class NSServer(Collector):
     def _get_stats(self, (uri, bucket, host)):
         """Generate stats dictionary (json document)"""
         samples = self._get_samples(uri)
-        meta = {"cluster": self.cluster,
-                "server": host or "none",
-                "bucket": bucket}
+        meta = {"server": host or "none", "bucket": bucket}
         return {"samples": samples, "meta": meta}
 
     def collect(self):
         """Collect all available stata from ns_server"""
         for stats in self.pool.imap(self._get_stats, self._get_stats_uri()):
-            self.store.append(stats)
+            self.store.append(stats, self.cluster)
 
     def _get_metrics(self):
         """Yield names of metrics for every bucket"""

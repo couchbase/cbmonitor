@@ -7,7 +7,6 @@ class DefaultSettings(dict):
     def __init__(self):
         self.interval = 10
         self.seriesly_host = "127.0.0.1"
-        self.seriesly_database = "cbmonitor"
         self.update_metadata = False
 
         self.cluster = "default"
@@ -35,7 +34,6 @@ class Settings(DefaultSettings):
 
         self.interval = config.getint("store", "interval")
         self.seriesly_host = config.get("store", "host")
-        self.seriesly_database = config.get("store", "database")
         self.update_metadata = config.getboolean("store", "update_metadata")
 
         self.cluster = config.get("target", "cluster")

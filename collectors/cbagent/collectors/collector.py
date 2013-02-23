@@ -15,8 +15,7 @@ class Collector(object):
         self.auth = (settings.rest_username, settings.rest_password)
         self.nodes = list(self._get_nodes())
 
-        self.store = SerieslyStore(settings.seriesly_host,
-                                   settings.seriesly_database)
+        self.store = SerieslyStore(settings.seriesly_host)
         self.mc = MetadataClient(settings)
 
     @json

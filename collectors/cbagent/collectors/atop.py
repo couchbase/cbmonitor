@@ -63,7 +63,6 @@ class Atop(Collector):
         self._extend_samples(self.atop.get_process_cpu("memcached"))
 
         for node, samples in self._samples.iteritems():
-            meta = {"cluster": self.cluster,
-                    "server": node,
-                    "bucket": "none"}
-            self.store.append({"meta": meta, "samples": samples})
+            meta = {"server": node, "bucket": "none"}
+            data = {"meta": meta, "samples": samples}
+            self.store.append(data, self.cluster)
