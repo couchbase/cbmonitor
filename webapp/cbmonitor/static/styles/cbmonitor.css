@@ -22,7 +22,7 @@ body a:link, body a:hover {
 /* --Left board-- */
 .sources {
     position: absolute;
-    width: 32.8%;
+    width: 29.8%;
     height: 99.8%;
 }
 .inventorybtn {
@@ -47,9 +47,9 @@ body a:link, body a:hover {
 /* --Right board-- */
 .charts {
     position: absolute;
-    width: 67%;
+    width: 70%;
     height: 100%;
-    left: 33%;
+    left: 30%;
 }
 .charts_panel {
     position: relative;
