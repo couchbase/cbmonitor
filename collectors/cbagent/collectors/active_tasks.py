@@ -15,7 +15,7 @@ class ActiveTasks(Collector):
         """Update cluster's, server's and bucket's metadata"""
         self.mc.add_cluster()
 
-        for bucket, _ in self._get_buckets():
+        for bucket in self._get_buckets():
             self.mc.add_bucket(bucket)
 
         for node in self._get_nodes():
