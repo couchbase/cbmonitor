@@ -17,10 +17,7 @@ SERIESLY.Seriesly.prototype.biuldURL = function(args) {
     "use strict";
 
     var url = "/seriesly/" + this.db_name + "/_query?group=" + args.group;
-
-    for(var i = 0, l = args.ptrs.length; i < l; i++) {
-        url = url + "&ptr=/" + args.ptrs[i] + "&reducer=avg";
-    }
+    url = url + args.ptr;
     if (args.from) {
         url = url + "&from=" + args.from;
     }
@@ -34,11 +31,13 @@ SERIESLY.Seriesly.prototype.biuldURL = function(args) {
 SERIESLY.Seriesly.prototype.query = function(args) {
     "use strict";
 
-    var url = this.biuldURL(args);
+    var url = this.biuldURL(args),
+        chart_data;
 
-    $.ajax({url: url, dataType: "json",
+    $.ajax({url: url, dataType: "json", async: false,
         success: function(data) {
-            args.callback_object.init(data);
+            chart_data = data;
         }
     });
+    return chart_data;
 };

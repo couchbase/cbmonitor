@@ -62,5 +62,8 @@ class Atop(Collector):
         self._extend_samples(self.atop.get_process_cpu("beam.smp"))
         self._extend_samples(self.atop.get_process_cpu("memcached"))
 
-        self._samples = {"metric": {self.cluster: self._samples}}
-        self.store.append(self._samples)
+        for node, samples in self._samples.iteritems():
+            meta = {"cluster": self.cluster,
+                    "server": node,
+                    "bucket": "none"}
+            self.store.append({"meta": meta, "samples": samples})

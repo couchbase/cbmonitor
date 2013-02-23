@@ -35,10 +35,10 @@ class NSServer(Collector):
     def _get_stats(self, (uri, bucket, host)):
         """Generate stats dictionary (json document)"""
         samples = self._get_samples(uri)
-        if host:
-            return {"metric": {self.cluster: {bucket: {host: samples}}}}
-        else:
-            return {"metric": {self.cluster: {bucket: samples}}}
+        meta = {"cluster": self.cluster,
+                "server": host or "none",
+                "bucket": bucket}
+        return {"samples": samples, "meta": meta}
 
     def collect(self):
         """Collect all available stata from ns_server"""

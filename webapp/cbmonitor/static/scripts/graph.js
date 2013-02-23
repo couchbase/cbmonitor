@@ -9,20 +9,18 @@ var CBMONITOR = CBMONITOR || {};
 CBMONITOR.buildPointer = function(ui) {
     "use strict";
 
-    var type = ui.draggable.attr("type"),
-        cluster = ui.draggable.attr("cluster"),
+    var cluster = ui.draggable.attr("cluster"),
         server = ui.draggable.attr("server"),
         bucket = ui.draggable.attr("bucket"),
         item = ui.draggable.text();
 
-    var ptr = type + "/" + cluster + "/";
-    if (bucket.length > 0) {
-        ptr += bucket + "/";
-    }
-    if (server.length > 0) {
-        ptr += server + "/";
-    }
-    return ptr + item;
+    var ptr = "&ptr=/samples/" + item + "&reducer=avg";
+
+    var filter = "&f=/meta/cluster&fv=" + cluster;
+    filter += "&f=/meta/bucket&fv="; filter += bucket.length ? bucket : "none";
+    filter += "&f=/meta/server&fv="; filter += server.length ? server : "none";
+
+    return ptr + filter;
 };
 
 CBMONITOR.GraphManager = function() {
@@ -74,11 +72,13 @@ CBMONITOR.GraphManager.prototype.plot = function(container, ui) {
     }
     this.container = container;
 
-    this.seriesly.query({
-        group: 1000,
-        ptrs: this.ptrs,
-        callback_object: this
-    });
+    var chart_data = [];
+    for(var i = 0, l = this.ptrs.length; i < l; i++) {
+        chart_data.push(
+            this.seriesly.query({group: 1000, ptr: this.ptrs[i]})
+        );
+    }
+    this.init(chart_data);
 };
 
 CBMONITOR.GraphManager.prototype.clear = function() {
@@ -99,15 +99,13 @@ CBMONITOR.DataHandler = function(data) {
     this.timestamps = this.prepareTimestamps();
 };
 
-CBMONITOR.DataHandler.prototype.prepareTimestamps = function() {
+CBMONITOR.DataHandler.prototype.prepareTimestamps = function(dataset) {
     "use strict";
 
     var timestamps = [];
-    for(var timestamp in this.data) {
-        if (this.data.hasOwnProperty(timestamp)) {
-            if (this.data[timestamp][0] !== null) {
-                timestamps.push(parseInt(timestamp, 10));
-            }
+    for(var timestamp in dataset) {
+        if (dataset.hasOwnProperty(timestamp)) {
+            timestamps.push(parseInt(timestamp, 10));
         }
     }
     return timestamps.sort();
@@ -116,25 +114,22 @@ CBMONITOR.DataHandler.prototype.prepareTimestamps = function() {
 CBMONITOR.DataHandler.prototype.prepareSeries = function(metrics) {
     "use strict";
 
-    var i, j,
-        len, len_metrics,
-        timestamp,
+    var timestamp, timestamps, values,
         series = [];
-    for(i = 0, len = metrics.length; i < len; i++) {
-        series.push({
-            key: metrics[i],
-            values: []
-        });
-    }
-
-    for(i = 0, len = this.timestamps.sort().length; i < len; i++) {
-        timestamp = this.timestamps[i];
-        for(j = 0, len_metrics = metrics.length; j < len_metrics; j++) {
-            series[j].values.push({
+    for(var i = 0, lenm = metrics.length; i < lenm; i++) {
+        timestamps = this.prepareTimestamps(this.data[i]);
+        values = [];
+        for(var j = 0, lent = timestamps.length; j < lent; j++) {
+            timestamp = timestamps[j];
+            values.push({
                 x: timestamp,
-                y: this.data[timestamp][j]
+                y: this.data[i][timestamp]
             });
         }
+        series.push({
+            key: metrics[i],
+            values: values
+        });
     }
     return series;
 };
