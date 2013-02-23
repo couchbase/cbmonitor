@@ -5,9 +5,6 @@
  */
 var CBMONITOR = CBMONITOR || {};
 
-/*
- * Inventory: accordion with clusters/metrics/events
- */
 CBMONITOR.Inventory = function () {};
 
 /*
