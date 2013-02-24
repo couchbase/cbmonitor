@@ -1,3 +1,9 @@
 include header
 
+script(src='/static/scripts/snapshots.js')
+
+div.snapshots
+    select#snapshot.snapshot(name="snapshot")
+    button#plot.btn.btn-plot(value="Plot") Plot
+
 include footer

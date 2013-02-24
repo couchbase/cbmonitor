@@ -246,15 +246,6 @@ def add_shapshot(request):
 
 @form_validation
 def get_snapshots(request):
-    form = forms.GetSnapshots(request.GET)
-    if form.is_valid():
-        try:
-            cluster = models.Cluster.objects.get(name=request.GET["cluster"])
-            snapshots = models.Snapshot.objects.filter(cluster=cluster).values()
-            snapshots = [snapshot["name"] for snapshot in snapshots]
-        except DoesNotExist:
-            snapshots = []
-    else:
-        snapshots = []
+    snapshots = [s.name for s in models.Snapshot.objects.all()]
     content = json.dumps(snapshots)
     return HttpResponse(content)

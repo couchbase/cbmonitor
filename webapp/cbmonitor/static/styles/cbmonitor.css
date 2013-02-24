@@ -158,3 +158,13 @@ body a:link, body a:hover {
 .ui-state-default.ui-corner-all.ui-draggable:hover {
     cursor: pointer;
 }
+.snapshot {
+    font-size: 100%;
+    margin-left: 20%;
+    width: 50%;
+    position: absolute;
+}
+.btn-plot {
+    position: relative;
+    left: 71%;
+}

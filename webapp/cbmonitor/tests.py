@@ -548,8 +548,7 @@ class ApiTest(TestHelper):
 
     @Verifier.valid_json
     def test_get_snapshots(self):
-        params = {"cluster": "East"}
-        request = self.factory.get("/get_snapshots", params)
+        request = self.factory.get("/get_snapshots")
         self.response = rest_api.dispatcher(request, path="get_snapshots")
 
         # Verify content
