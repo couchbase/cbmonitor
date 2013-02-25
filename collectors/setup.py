@@ -40,7 +40,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'requests==1.0.4',
-        'seriesly==0.3.2',
+        'seriesly==0.3.3',
         'fabric==1.5.3',
         'argparse==1.2.1',
         'eventlet==0.12.1',
