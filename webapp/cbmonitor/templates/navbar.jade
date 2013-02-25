@@ -1,0 +1,15 @@
+div.navbar
+    div.navbar-inner
+        div.brand cbmonitor
+
+        if snapshots
+            sclass = "active"
+            iclass = ""
+        else
+            sclass = ""
+            iclass = "active"
+        ul.nav
+            li(class="#{ iclass }")
+                a(href="/").header-menu Charts
+            li(class="#{ sclass }")
+                a(href="/snapshots").header-menu Snapshots

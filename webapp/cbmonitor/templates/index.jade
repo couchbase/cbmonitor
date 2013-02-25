@@ -1,26 +1,30 @@
-include header
+!!! 5
 
-script(src="/static/scripts/jquery.jstree.js")
-script(src="/static/scripts/inventory.js")
-script(src="/static/scripts/observables.js")
-script(src="/static/scripts/views.js")
-script(src="/static/scripts/graph.js")
-script(src="/static/scripts/dialogs.js")
-script(src="/static/scripts/seriesly.js")
-script(src="/static/scripts/charts.js")
-script(src='/static/scripts/d3.v2.js')
-script(src='/static/scripts/nv.d3.js')
-script(src='/static/scripts/spin.min.js')
-
-div.main
-    div.sources
-        div#accordion
-            include sources/clusters
-            include sources/metrics
-            include sources/events
-    div.charts
-        include charts/panel
-        include charts/views
-div#spinner
-
-include footer
+html(lang="en")
+    head
+        title cbmonitor
+        include static
+        script(src="/static/scripts/jquery.jstree.js")
+        script(src="/static/scripts/inventory.js")
+        script(src="/static/scripts/observables.js")
+        script(src="/static/scripts/views.js")
+        script(src="/static/scripts/graph.js")
+        script(src="/static/scripts/dialogs.js")
+        script(src="/static/scripts/seriesly.js")
+        script(src="/static/scripts/charts.js")
+        script(src='/static/scripts/d3.v2.js')
+        script(src='/static/scripts/nv.d3.js')
+        script(src='/static/scripts/spin.min.js')
+    body
+        include navbar
+        div.main
+            div.sources
+                div#accordion
+                    include sources/clusters
+                    include sources/metrics
+                    include sources/events
+            div.charts
+                include charts/panel
+                include charts/views
+        div#spinner
+        include footer

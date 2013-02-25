@@ -1,9 +1,13 @@
-include header
+!!! 5
 
-script(src='/static/scripts/snapshots.js')
-
-div.snapshots
-    select#snapshot.snapshot(name="snapshot")
-    button#plot.btn.btn-plot(value="Plot") Plot
-
-include footer
+html(lang="en")
+    head
+        title cbmonitor
+        include static
+        script(src='/static/scripts/snapshots.js')
+    body
+        include navbar
+        div.snapshots
+            select#snapshot.snapshot(name="snapshot")
+            button#plot.btn.btn-plot(value="Plot") Plot
+        include footer
