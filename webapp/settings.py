@@ -1,5 +1,5 @@
 # Django settings for cbmonitor project.
-import os
+from os import path
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -31,7 +31,7 @@ USE_L10N = False
 USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
-MEDIA_ROOT = ''
+MEDIA_ROOT = path.join(path.dirname(path.abspath(__file__)), 'media')
 
 # URL that handles the media served from MEDIA_ROOT.
 MEDIA_URL = '/media/'
@@ -44,7 +44,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'static').replace('\\', '/'),
+    path.join(path.dirname(__file__), 'static'),
 )
 
 # List of finder classes that know how to find static files in
