@@ -10,3 +10,4 @@ eggs
 parts
 *.egg-info
 webapp/media/*.png
+db
