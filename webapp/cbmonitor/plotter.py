@@ -14,7 +14,8 @@ class Plotter(object):
 
     def __init__(self):
         self.db = Seriesly()
-        self.fig = figure()
+        self.fig = figure(frameon=False)
+        self.fig.set_size_inches(10.66, 6)
 
     def _get_metrics(self, snapshot):
         """Get all metrics object for given snapshot"""
@@ -65,7 +66,7 @@ class Plotter(object):
         grid()
         ax.plot(timestamps, values, '.')
 
-        self.fig.savefig(filename)
+        self.fig.savefig(filename, dpi=200)
 
     def plot(self, snapshot):
         urls = list()
