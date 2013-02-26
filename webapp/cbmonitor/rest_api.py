@@ -11,6 +11,7 @@ from cbagent.collectors import NSServer
 
 import models
 import forms
+from plotter import Plotter
 
 logging.config.fileConfig("webapp/logging.conf")
 logger = logging.getLogger()
@@ -33,6 +34,7 @@ def dispatcher(request, path):
         "add_metric_or_event": add_metric_or_event,
         "add_snapshot": add_shapshot,
         "get_snapshots": get_snapshots,
+        "plot": plot,
     }.get(path)
     if handler:
         return handler(request)
@@ -249,3 +251,10 @@ def get_snapshots(request):
     snapshots = [s.name for s in models.Snapshot.objects.all()]
     content = json.dumps(snapshots)
     return HttpResponse(content)
+
+
+def plot(request):
+    snapshot = request.POST["snapshot"]
+    plotter = Plotter()
+    response = plotter.plot(snapshot)
+    return HttpResponse(content=json.dumps(response))

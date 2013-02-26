@@ -1,10 +1,13 @@
 import os
 
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib.pyplot import figure, grid
 from seriesly import Seriesly
-from django.conf.settings import MEDIA_ROOT
+from seriesly.exceptions import NotExistingDatabase
+from django.conf import settings
 
-from webapp.cbmonitor import models
+import models
 
 
 class Plotter(object):
@@ -47,7 +50,7 @@ class Plotter(object):
         """Generate filename in webapp media folder"""
         filename = "_".join((cluster, str(server), str(bucket),
                              metric.replace("/", "_")))
-        return os.path.join(MEDIA_ROOT, filename + ".png")
+        return os.path.join(settings.MEDIA_ROOT, filename + ".png")
 
     def _savePNG(self, timestamps, values, metric, filename):
         """Save chart as PNG file"""
@@ -68,7 +71,12 @@ class Plotter(object):
             server = metric["server_id"]
             name = metric["name"]
 
-            timestamps, values = self._get_data(cluster, server, bucket, name)
+            try:
+                timestamps, values = self._get_data(cluster, server, bucket,
+                                                    name)
+            except NotExistingDatabase:
+                continue
             filename = self._generate_filename(cluster, server, bucket, name)
 
             self._savePNG(timestamps, values, name, filename)
+        return []

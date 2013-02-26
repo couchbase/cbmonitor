@@ -7,6 +7,7 @@ from random import randint, choice
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.core.exceptions import ObjectDoesNotExist
+from cbagent.tests import MockHelper
 
 import views
 import rest_api
@@ -155,6 +156,15 @@ class TestHelper(TestCase):
 class ApiTest(TestHelper):
 
     fixtures = ["bucket_type.json", "testdata.json"]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mock = MockHelper()
+        cls.mock.train_seriesly()
+
+    @classmethod
+    def tearDownClass(cls):
+        del cls.mock
 
     def setUp(self):
         self.factory = RequestFactory()
@@ -553,4 +563,14 @@ class ApiTest(TestHelper):
 
         # Verify content
         expected = json.dumps(["run-1_access-phase_vperf-reb_2.0.0-1976"])
+        self.assertEquals(self.response.content, expected)
+
+    @Verifier.valid_json
+    def test_plot(self):
+        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
+        request = self.factory.post("/plot", params)
+        self.response = rest_api.dispatcher(request, path="plot")
+
+        # Verify content
+        expected = json.dumps([])
         self.assertEquals(self.response.content, expected)
