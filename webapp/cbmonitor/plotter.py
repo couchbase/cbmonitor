@@ -70,13 +70,14 @@ class Plotter(object):
             cluster = metric["cluster_id"]
             server = metric["server_id"]
             name = metric["name"]
-
+            filename = self._generate_filename(cluster, server, bucket, name)
+            if os.path.exists(filename):
+                continue
             try:
                 timestamps, values = self._get_data(cluster, server, bucket,
                                                     name)
             except NotExistingDatabase:
                 continue
-            filename = self._generate_filename(cluster, server, bucket, name)
-
-            self._savePNG(timestamps, values, name, filename)
+            else:
+                self._savePNG(timestamps, values, name, filename)
         return []
