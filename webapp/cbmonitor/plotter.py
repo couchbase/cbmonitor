@@ -47,21 +47,21 @@ class Plotter(object):
 
         return timestamps, values
 
-    def _generate_filename(self, cluster, server, bucket, metric):
+    def _generate_descr(self, cluster, server, bucket, metric):
         """Generate filename in webapp media folder"""
-        filename = "_".join((cluster, str(server), str(bucket),
-                             metric.replace("/", "_")))
-        filename += ".png"
+        metric = metric.replace("/", "_")
+        title = "_".join((cluster, str(server), str(bucket), metric))
+        filename = title + ".png"
         media_url = settings.MEDIA_URL + filename
         media_path = os.path.join(settings.MEDIA_ROOT, filename)
-        return media_url, media_path
+        return title, media_url, media_path
 
-    def _savePNG(self, timestamps, values, metric, filename):
+    def _savePNG(self, timestamps, values, title, filename):
         """Save chart as PNG file"""
         self.fig.clear()
 
         ax = self.fig.add_subplot(1, 1, 1)
-        ax.set_title(metric)
+        ax.set_title(title)
         ax.set_xlabel("Time elapsed (sec)")
         grid()
         ax.plot(timestamps, values, '.')
@@ -75,8 +75,8 @@ class Plotter(object):
             cluster = metric["cluster_id"]
             server = metric["server_id"]
             name = metric["name"]
-            url, filename = self._generate_filename(cluster, server, bucket,
-                                                    name)
+            title, url, filename = \
+                self._generate_descr(cluster, server, bucket, name)
             if os.path.exists(filename):
                 urls.append(url)
                 continue
@@ -86,6 +86,6 @@ class Plotter(object):
             except NotExistingDatabase:
                 continue
             else:
-                self._savePNG(timestamps, values, name, filename)
+                self._savePNG(timestamps, values, title, filename)
                 urls.append(url)
         return urls
