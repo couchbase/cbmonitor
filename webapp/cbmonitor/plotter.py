@@ -14,7 +14,7 @@ class Plotter(object):
 
     def __init__(self):
         self.db = Seriesly()
-        self.fig = figure(frameon=False)
+        self.fig = figure()
         self.fig.set_size_inches(10.66, 6)
 
     def _get_metrics(self, snapshot):

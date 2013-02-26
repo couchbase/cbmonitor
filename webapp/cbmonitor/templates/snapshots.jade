@@ -11,4 +11,9 @@ html(lang="en")
             select#snapshot.snapshot(name="snapshot")
             button#plot.btn.btn-plot(value="Plot") Plot
         div#spinner
+        div#carousel.carousel.slide
+            o.carousel-indicators
+            div.carousel-inner
+            a.carousel-control.left(href="#carousel", data-slide="prev") &lsaquo;
+            a.carousel-control.right.inverse(href="#carousel", data-slide="next") &rsaquo;
         include footer

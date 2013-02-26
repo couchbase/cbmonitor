@@ -38,13 +38,36 @@ CBMONITOR.Snapshots.prototype.plot = function () {
 
     var snapshot = $("#snapshot").find(":selected").text();
 
-    var spinner = new Spinner({width: 4, top: "150px"});
+    var spinner = new Spinner({width: 4, top: "210px"});
     spinner.spin(document.getElementById('spinner'));
 
+    $(".carousel").css("display", "none");
     $.ajax({url: "/cbmonitor/plot/", dataType: "json", type: "POST",
         data: {snapshot: snapshot},
         success: function(images) {
             spinner.stop();
+            if (images.length) {
+                $.each(images, function(index, value) {
+                    $(".carousel-indicators").append(
+                        $("<li>")
+                            .attr("id", "carousel-indicator" + index)
+                            .attr("data-target", "#carousel")
+                            .attr("data-slide-to", index.toString())
+                    );
+                    $(".carousel-inner").append(
+                        $("<div>")
+                            .addClass("item")
+                            .attr("id", "carousel-item" + index)
+                            .append($("<img>").attr("src", value))
+                    );
+                });
+                $("#carousel-indicator0").addClass("active");
+                $("#carousel-item0").addClass("active");
+                $('.carousel').carousel({
+                    interval: false
+                });
+                $(".carousel").css("display", "block");
+            }
         },
         error: function() {
             spinner.stop();
