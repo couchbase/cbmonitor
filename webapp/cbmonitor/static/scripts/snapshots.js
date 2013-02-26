@@ -43,7 +43,7 @@ CBMONITOR.Snapshots.prototype.plot = function () {
 
     $.ajax({url: "/cbmonitor/plot/", dataType: "json", type: "POST",
         data: {snapshot: snapshot},
-        success: function(data) {
+        success: function(images) {
             spinner.stop();
         },
         error: function() {

@@ -50,7 +50,10 @@ class Plotter(object):
         """Generate filename in webapp media folder"""
         filename = "_".join((cluster, str(server), str(bucket),
                              metric.replace("/", "_")))
-        return os.path.join(settings.MEDIA_ROOT, filename + ".png")
+        filename += ".png"
+        media_url = settings.MEDIA_URL + filename
+        media_path = os.path.join(settings.MEDIA_ROOT, filename)
+        return media_url, media_path
 
     def _savePNG(self, timestamps, values, metric, filename):
         """Save chart as PNG file"""
@@ -65,13 +68,16 @@ class Plotter(object):
         self.fig.savefig(filename)
 
     def plot(self, snapshot):
+        urls = list()
         for metric in self._get_metrics(snapshot):
             bucket = models.Bucket.objects.get(id=metric["bucket_id"])
             cluster = metric["cluster_id"]
             server = metric["server_id"]
             name = metric["name"]
-            filename = self._generate_filename(cluster, server, bucket, name)
+            url, filename = self._generate_filename(cluster, server, bucket,
+                                                    name)
             if os.path.exists(filename):
+                urls.append(url)
                 continue
             try:
                 timestamps, values = self._get_data(cluster, server, bucket,
@@ -80,4 +86,5 @@ class Plotter(object):
                 continue
             else:
                 self._savePNG(timestamps, values, name, filename)
-        return []
+                urls.append(url)
+        return urls
