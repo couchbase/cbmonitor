@@ -86,6 +86,7 @@ class Plotter(object):
             except NotExistingDatabase:
                 continue
             else:
-                self._savePNG(timestamps, values, title, filename)
-                urls.append(url)
+                if set(values) - set([None]):
+                    self._savePNG(timestamps, values, title, filename)
+                    urls.append(url)
         return urls
