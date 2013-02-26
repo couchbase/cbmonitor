@@ -2,6 +2,7 @@ Prerequisites
 -------------
 
 * Python 2.6 or 2.7
+* matplotlib
 * pip
 * [seriesly](https://github.com/dustin/seriesly)
 
