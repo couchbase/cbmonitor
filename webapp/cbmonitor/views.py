@@ -1,11 +1,11 @@
+from django.http import Http404
 from django.shortcuts import render_to_response
 
 
-def tab(request, path=None):
-    tab_name = {
-        None: "inventory",
-        "charts": "charts",
-        "snapshots": "snapshots"
-    }.get(path)
-    template = "{0}/{0}".format(tab_name) + ".jade"
-    return render_to_response(template, {tab_name: True})
+def tab(request):
+    path = request.path.replace("/", "") or "inventory"
+    if path in ("inventory", "charts", "snapshots"):
+        template = "{0}/{0}".format(path) + ".jade"
+        return render_to_response(template, {path: True})
+    else:
+        raise Http404

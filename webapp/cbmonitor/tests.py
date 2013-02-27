@@ -7,6 +7,7 @@ from random import randint, choice
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from cbagent.tests import MockHelper
 
 import views
@@ -111,6 +112,10 @@ class BasicTest(TestCase):
         request = self.factory.get('/snapshots')
         response = views.tab(request)
         self.assertEqual(response.status_code, 200)
+
+    def test_not_existing_page(self):
+        request = self.factory.get('/404')
+        self.assertRaises(Http404, views.tab, request)
 
 
 class TestHelper(TestCase):
