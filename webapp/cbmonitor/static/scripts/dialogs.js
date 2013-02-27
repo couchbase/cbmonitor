@@ -244,7 +244,6 @@ CBMONITOR.Dialogs.prototype.addNewCluster = function() {
                 false, true
             );
             CBMONITOR.inventory.configureTree();
-            CBMONITOR.observables.updateSelectors();
             $("#dialog_new_cluster").dialog("close");
         },
         error: function(jqXHR) {
@@ -375,7 +374,6 @@ CBMONITOR.Dialogs.prototype.deleteItem = function() {
                 adds.addClass("ui-state-disabled");
             }
             jstree.jstree("remove", selected);
-            CBMONITOR.observables.updateSelectors();
         }
     });
 };

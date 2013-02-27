@@ -1,0 +1,27 @@
+!!! 5
+
+html(lang="en")
+    head
+        title cbmonitor
+        include static
+        link(rel="stylesheet", href="/static/styles/inventory.css")
+        script(src="/static/scripts/jquery.jstree.js")
+        script(src="/static/scripts/inventory.js")
+        script(src="/static/scripts/dialogs.js")
+    body
+        include navbar
+        div.inventory-container
+            h4 Inventory
+            div#inventory.sub-container
+                button#addc.btn.btn-mini.inventorybtn(value="Add cluster") Add cluster
+                button#renc.btn.btn-mini.inventorybtn(value="Edit") Edit
+                button#delc.btn.btn-mini.inventorybtn(value="Delete") Delete
+                button#adds.btn.btn-mini.inventorybtn(value="Add server") Add server
+                div#tree
+            include inventory/dialogs
+        div.collectors-container
+            h4 Collectors
+            div#collectors.sub-container
+
+        div#spinner
+        include footer

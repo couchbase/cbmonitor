@@ -4,8 +4,7 @@ html(lang="en")
     head
         title cbmonitor
         include static
-        script(src="/static/scripts/jquery.jstree.js")
-        script(src="/static/scripts/inventory.js")
+        link(rel="stylesheet", href="/static/styles/charts.css")
         script(src="/static/scripts/observables.js")
         script(src="/static/scripts/views.js")
         script(src="/static/scripts/graph.js")
@@ -19,9 +18,8 @@ html(lang="en")
         div.main
             div.sources
                 div#accordion
-                    include sources/clusters
-                    include sources/metrics
-                    include sources/events
+                    include charts/metrics
+                    include charts/events
             div.charts
                 include charts/panel
                 include charts/views

@@ -2,14 +2,20 @@ div.navbar
     div.navbar-inner
         div.brand cbmonitor
 
-        if snapshots
-            sclass = "active"
-            iclass = ""
-        else
-            sclass = ""
+        iclass = ""
+        cclass = ""
+        sclass = ""
+        if inventory
             iclass = "active"
+        else
+            if charts
+                cclass = "active"
+            else
+                sclass = "active"
         ul.nav
             li(class="#{ iclass }")
-                a(href="/").header-menu Charts
+                a(href="/").header-menu Inventory
+            li(class="#{ cclass }")
+                a(href="/charts").header-menu Charts
             li(class="#{ sclass }")
                 a(href="/snapshots").header-menu Snapshots

@@ -131,3 +131,19 @@ CBMONITOR.Inventory.prototype.configureTree = function() {
         }
     });
 };
+
+
+$(document).ready(function(){
+    "use strict";
+
+    CBMONITOR.inventory = new CBMONITOR.Inventory();
+    CBMONITOR.inventory.configureButtons();
+    CBMONITOR.inventory.configureTree();
+
+    CBMONITOR.dialogs = new CBMONITOR.Dialogs();
+    CBMONITOR.dialogs.configureAddNewCluster();
+    CBMONITOR.dialogs.configureAddNewServer();
+    CBMONITOR.dialogs.configureAddNewBucket();
+    CBMONITOR.dialogs.configureDeleteItem();
+
+});

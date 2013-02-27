@@ -99,12 +99,17 @@ class BasicTest(TestCase):
 
     def test_index(self):
         request = self.factory.get('/')
-        response = views.index(request)
+        response = views.tab(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_index(self):
+        request = self.factory.get('/charts')
+        response = views.tab(request)
         self.assertEqual(response.status_code, 200)
 
     def test_snapshots(self):
         request = self.factory.get('/snapshots')
-        response = views.snapshots(request)
+        response = views.tab(request)
         self.assertEqual(response.status_code, 200)
 
 

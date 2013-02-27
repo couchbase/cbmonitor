@@ -1,11 +1,13 @@
+import inspect
+
 from django.shortcuts import render_to_response
 
 
-def index(request):
-    data = {"index": True, "snapshots": False}
-    return render_to_response("index.jade", data)
-
-
-def snapshots(request):
-    data = {"index": False, "snapshots": True}
-    return render_to_response("snapshots.jade", data)
+def tab(request, path=None):
+    tab_name = {
+        None: "inventory",
+        "charts": "charts",
+        "snapshots": "snapshots"
+    }.get(path)
+    template = "{0}/{0}".format(tab_name) + ".jade"
+    return render_to_response(template, {tab_name: True})

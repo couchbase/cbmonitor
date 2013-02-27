@@ -1,0 +1,31 @@
+.snapshot {
+    position:absolute;
+    font-size: 100%;
+    left: 50%;
+    width: 500px;
+    margin-left: -275px;
+    position: absolute;
+}
+.btn-plot {
+    position: relative;
+    left: 50%;
+    margin-left: 235px;
+}
+.carousel {
+    display: none;
+    position: absolute;
+    left: 50%;
+    margin-left: -465px;
+    width: 930px;
+    height: 525px;
+}
+.carousel-control {
+    height: 60px;
+    font-size: 120px;
+    margin-top: 0;
+    margin-left: -50px;
+    margin-right: -50px;
+    color: #000000;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+    background-color: transparent;
+}
