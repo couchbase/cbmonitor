@@ -48,10 +48,14 @@ function getAllTags() {
 
 function showResults(tag) {
     var url, oTable;
+    var params = document.URL.split('?')[1];
+    if (params === undefined) {
+        params = "";
+    }
     if (tag) {
         url = '/litmus/get?tag=';
     } else {
-        url = '/litmus/get?';
+        url = '/litmus/get?' + params;
     }
     $.get(url + tag, { },
         function(data) {
