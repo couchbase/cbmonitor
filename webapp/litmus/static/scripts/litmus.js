@@ -204,6 +204,12 @@ function renderTable(data) {
         'aoColumns': colHdrs,
         'aaSorting': [[0, 'desc']],
         'bStateSave': true,
+        "fnStateSave": function (oSettings, oData) {
+            localStorage.setItem('datatable', JSON.stringify(oData));
+        },
+        "fnStateLoad": function (oSettings) {
+            return JSON.parse(localStorage.getItem('datatable'));
+        },
         'fnDrawCallback': function() {
             $('#loading').remove();
         },
