@@ -57,6 +57,7 @@ CBMONITOR.Snapshots.prototype.pdf = function (snapshot) {
         },
         error: function() {
             that.spinner.stop();
+            window.alert("Fail to export snapshot");
         }
     });
 };
@@ -92,7 +93,7 @@ CBMONITOR.Snapshots.prototype.plot = function (snapshot) {
         },
         error: function() {
             that.spinner.stop();
-            window.alert("Invalid snapshot");
+            window.alert("Fail to export snapshot");
         }
     });
 };
