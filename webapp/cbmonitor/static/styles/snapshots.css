@@ -25,6 +25,7 @@
     height: 525px;
 }
 .titles {
+    display: none;
     position: relative;
     top: 30px;
     left: 50%;

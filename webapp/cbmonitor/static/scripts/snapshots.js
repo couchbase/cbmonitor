@@ -72,6 +72,7 @@ CBMONITOR.Snapshots.prototype.plot = function (snapshot) {
     this.spinner.spin(document.getElementById("spinner"));
 
     $(".carousel").css("display", "none");
+    $(".titles").css("display", "none");
     var that = this;
     $.ajax({url: "/cbmonitor/plot/", dataType: "json", type: "POST",
         data: {snapshot: snapshot},
@@ -89,6 +90,7 @@ CBMONITOR.Snapshots.prototype.plot = function (snapshot) {
                     interval: false
                 });
                 $(".carousel").css("display", "block");
+                $(".titles").css("display", "block");
             }
         },
         error: function() {
