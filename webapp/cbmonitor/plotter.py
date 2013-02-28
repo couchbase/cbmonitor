@@ -6,6 +6,7 @@ matplotlib.rcParams.update({'font.size': 5})
 matplotlib.rcParams.update({'lines.linewidth': 1})
 from matplotlib.pyplot import figure, grid
 
+from eventlet import GreenPool
 from reportlab.lib.pagesizes import landscape, B4
 from reportlab.platypus import SimpleDocTemplate, Image
 from seriesly import Seriesly
@@ -19,8 +20,14 @@ class Plotter(object):
 
     def __init__(self):
         self.db = Seriesly()
+
         self.fig = figure()
         self.fig.set_size_inches(4.66, 2.625)
+
+        self.urls = list()
+        self.images = list()
+
+        self.pool = GreenPool()
 
     def _get_metrics(self, snapshot):
         """Get all metrics object for given snapshot"""
@@ -80,15 +87,36 @@ class Plotter(object):
 
         self.fig.savefig(filename, dpi=200)
 
-    def _savePDF(self, snapshot, images):
+    def _savePDF(self, snapshot):
         """Save PNG charts as PDF report"""
         _, media_path = self._generate_PDF_meta(snapshot)
         doc = SimpleDocTemplate(media_path, pagesize=landscape(B4))
         if not os.path.exists(media_path):
             pages = list()
-            for filename in sorted(images):
+            for filename in sorted(self.images):
                 pages.append(Image(filename))
             doc.build(pages)
+
+    def _extract(self, metric):
+        """Extract time series data and metadata"""
+        bucket = models.Bucket.objects.get(id=metric["bucket_id"])
+        cluster = metric["cluster_id"]
+        server = metric["server_id"]
+        name = metric["name"]
+
+        title, url, filename = \
+            self._generate_PNG_meta(cluster, server, bucket, name)
+
+        if os.path.exists(filename):
+            self.urls.append([title, url])
+            self.images.append(filename)
+            return
+        try:
+            timestamps, values = self._get_data(cluster, server, bucket, name)
+            if set(values) - set([None]):
+                return timestamps, values, title, filename, url
+        except NotExistingDatabase:
+            return
 
     def pdf(self, snapshot):
         """"End point of PDF plotter"""
@@ -98,28 +126,11 @@ class Plotter(object):
 
     def plot(self, snapshot):
         """"End point of PNG plotter"""
-        urls = list()
-        images = list()
-        for metric in self._get_metrics(snapshot):
-            bucket = models.Bucket.objects.get(id=metric["bucket_id"])
-            cluster = metric["cluster_id"]
-            server = metric["server_id"]
-            name = metric["name"]
-            title, url, filename = \
-                self._generate_PNG_meta(cluster, server, bucket, name)
-            if os.path.exists(filename):
-                urls.append([title, url])
-                images.append(filename)
-                continue
-            try:
-                timestamps, values = self._get_data(cluster, server, bucket,
-                                                    name)
-            except NotExistingDatabase:
-                continue
-            else:
-                if set(values) - set([None]):
-                    self._savePNG(timestamps, values, title, filename)
-                    images.append(filename)
-                    urls.append([title, url])
-        self._savePDF(snapshot, images)
-        return sorted(urls)
+        for data in self.pool.imap(self._extract, self._get_metrics(snapshot)):
+            if data:
+                timestamps, values, title, filename, url = data
+                self._savePNG(timestamps, values, title, filename)
+                self.images.append(filename)
+                self.urls.append([title, url])
+        self._savePDF(snapshot)
+        return sorted(self.urls)
