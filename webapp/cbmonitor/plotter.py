@@ -78,7 +78,7 @@ class Plotter(object):
             title, url, filename = \
                 self._generate_descr(cluster, server, bucket, name)
             if os.path.exists(filename):
-                urls.append(url)
+                urls.append([title, url])
                 continue
             try:
                 timestamps, values = self._get_data(cluster, server, bucket,
@@ -88,5 +88,5 @@ class Plotter(object):
             else:
                 if set(values) - set([None]):
                     self._savePNG(timestamps, values, title, filename)
-                    urls.append(url)
+                    urls.append([title, url])
         return urls

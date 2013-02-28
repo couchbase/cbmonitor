@@ -15,16 +15,28 @@
     display: none;
     position: absolute;
     left: 50%;
-    margin-left: -465px;
+    margin-left: -615px;
     width: 930px;
     height: 525px;
+}
+.titles {
+    position: relative;
+    top: 30px;
+    left: 50%;
+    margin-left: 315px;
+    width: 300px;
+    height: 490px;
+    overflow: auto;
+    white-space: nowrap;
+}
+.titles a {
+    margin: 10px;
+    color: darkslategray;
 }
 .carousel-control {
     height: 60px;
     font-size: 120px;
     margin-top: 0;
-    margin-left: -50px;
-    margin-right: -50px;
     color: #000000;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
     background-color: transparent;

@@ -42,24 +42,16 @@ CBMONITOR.Snapshots.prototype.plot = function () {
     spinner.spin(document.getElementById('spinner'));
 
     $(".carousel").css("display", "none");
+    var that = this;
     $.ajax({url: "/cbmonitor/plot/", dataType: "json", type: "POST",
         data: {snapshot: snapshot},
         success: function(images) {
             spinner.stop();
             if (images.length) {
                 $.each(images, function(index, value) {
-                    $(".carousel-indicators").append(
-                        $("<li>")
-                            .attr("id", "carousel-indicator" + index)
-                            .attr("data-target", "#carousel")
-                            .attr("data-slide-to", index.toString())
-                    );
-                    $(".carousel-inner").append(
-                        $("<div>")
-                            .addClass("item")
-                            .attr("id", "carousel-item" + index)
-                            .append($("<img>").attr("src", value))
-                    );
+                    that.addLink(index, value[0]);
+                    that.addIndicator(index);
+                    that.addItem(index, value[1]);
                 });
                 $("#carousel-indicator0").addClass("active");
                 $("#carousel-item0").addClass("active");
@@ -73,6 +65,41 @@ CBMONITOR.Snapshots.prototype.plot = function () {
             spinner.stop();
         }
     });
+};
+
+CBMONITOR.Snapshots.prototype.addLink = function (index, title) {
+    "use strict";
+
+    $("#titles").append(
+        $("<a>")
+            .append(title)
+            .attr("href", "#")
+            .click(function() {
+                $('.carousel').carousel(index);
+            })
+    ).append("<br>");
+};
+
+CBMONITOR.Snapshots.prototype.addIndicator = function (index) {
+    "use strict";
+
+    $(".carousel-indicators").append(
+        $("<li>")
+            .attr("id", "carousel-indicator" + index)
+            .attr("data-target", "#carousel")
+            .attr("data-slide-to", index.toString())
+    );
+};
+
+CBMONITOR.Snapshots.prototype.addItem = function (index, url) {
+    "use strict";
+
+    $(".carousel-inner").append(
+        $("<div>")
+            .addClass("item")
+            .attr("id", "carousel-item" + index)
+            .append($("<img>").attr("src", url))
+    );
 };
 
 $(document).ready(function(){
