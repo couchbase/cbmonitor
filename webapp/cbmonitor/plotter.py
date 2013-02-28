@@ -121,6 +121,7 @@ class Plotter(object):
     def pdf(self, snapshot):
         """"End point of PDF plotter"""
         self.plot(snapshot)
+        self._savePDF(snapshot)
         media_url, _ = self._generate_PDF_meta(snapshot)
         return media_url
 
@@ -132,5 +133,4 @@ class Plotter(object):
                 self._savePNG(timestamps, values, title, filename)
                 self.images.append(filename)
                 self.urls.append([title, url])
-        self._savePDF(snapshot)
         return sorted(self.urls)
