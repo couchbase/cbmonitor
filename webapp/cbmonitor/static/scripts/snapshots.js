@@ -33,10 +33,12 @@ CBMONITOR.Snapshots.prototype.getClusters = function () {
     });
 };
 
-CBMONITOR.Snapshots.prototype.plot = function () {
+CBMONITOR.Snapshots.prototype.plot = function (snapshot) {
     "use strict";
 
-    var snapshot = $("#snapshot").find(":selected").text();
+    if (snapshot === undefined) {
+        snapshot = $("#snapshot").find(":selected").text();
+    }
 
     var spinner = new Spinner({width: 4, top: "210px"});
     spinner.spin(document.getElementById('spinner'));
@@ -63,6 +65,7 @@ CBMONITOR.Snapshots.prototype.plot = function () {
         },
         error: function() {
             spinner.stop();
+            window.alert("Invalid snapshot");
         }
     });
 };
@@ -102,9 +105,34 @@ CBMONITOR.Snapshots.prototype.addItem = function (index, url) {
     );
 };
 
+CBMONITOR.Snapshots.prototype.autoPlot = function () {
+    "use strict";
+
+    var snapshot = this.getSnapshotFromURL();
+    if (snapshot !== null) {
+        this.plot(snapshot);
+    }
+};
+
+
+CBMONITOR.Snapshots.prototype.getSnapshotFromURL = function() {
+    "use strict";
+
+    var query = document.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i=0; i<vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] === "snapshot") {
+            return pair[1];
+        }
+    }
+    return null;
+};
+
 $(document).ready(function(){
     "use strict";
 
     CBMONITOR.snapshots = new CBMONITOR.Snapshots();
     CBMONITOR.snapshots.getClusters();
+    CBMONITOR.snapshots.autoPlot();
 });
