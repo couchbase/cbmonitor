@@ -11,12 +11,17 @@
     left: 50%;
     margin-left: 235px;
 }
+.btn-pdf {
+    position: relative;
+    left: 50%;
+    margin-left: 10px;
+}
 .carousel {
     display: none;
     position: absolute;
     left: 50%;
     margin-left: -615px;
-    width: 930px;
+    width: 933px;
     height: 525px;
 }
 .titles {

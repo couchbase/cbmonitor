@@ -35,6 +35,7 @@ def dispatcher(request, path):
         "add_snapshot": add_shapshot,
         "get_snapshots": get_snapshots,
         "plot": plot,
+        "pdf": pdf,
     }.get(path)
     if handler:
         return handler(request)
@@ -258,3 +259,10 @@ def plot(request):
     plotter = Plotter()
     response = plotter.plot(snapshot)
     return HttpResponse(content=json.dumps(response))
+
+
+def pdf(request):
+    snapshot = request.POST["snapshot"]
+    plotter = Plotter()
+    response = plotter.pdf(snapshot)
+    return HttpResponse(response)

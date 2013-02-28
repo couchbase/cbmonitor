@@ -584,3 +584,11 @@ class ApiTest(TestHelper):
         # Verify content
         expected = json.dumps([])
         self.assertEquals(self.response.content, expected)
+
+    def test_pdf(self):
+        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
+        request = self.factory.post("/pdf", params)
+        self.response = rest_api.dispatcher(request, path="pdf")
+
+        self.assertEqual("/media/run-1_access-phase_vperf-reb_2.0.0-1976.pdf",
+                         self.response.content)

@@ -10,4 +10,5 @@ eggs
 parts
 *.egg-info
 webapp/media/*.png
+webapp/media/*.pdf
 db

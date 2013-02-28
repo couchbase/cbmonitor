@@ -7,7 +7,11 @@
 var CBMONITOR = CBMONITOR || {};
 
 
-CBMONITOR.Snapshots = function () {};
+CBMONITOR.Snapshots = function () {
+    "use strict";
+
+    this.spinner = new Spinner({width: 4, top: "210px"});
+};
 
 CBMONITOR.Snapshots.prototype.getClusters = function () {
     "use strict";
@@ -24,11 +28,35 @@ CBMONITOR.Snapshots.prototype.getClusters = function () {
                 $("#plot").click(function() {
                     that.plot();
                 });
+                $("#pdf").click(function() {
+                    that.pdf();
+                });
             } else {
                 $("#plot").addClass("disabled");
+                $("#pdf").addClass("disabled");
                 var o = new Option("None", "");
                 sel.append(o);
             }
+        }
+    });
+};
+
+CBMONITOR.Snapshots.prototype.pdf = function (snapshot) {
+    "use strict";
+
+    snapshot = $("#snapshot").find(":selected").text();
+
+    this.spinner.spin(document.getElementById("spinner"));
+
+    var that = this;
+    $.ajax({url: "/cbmonitor/pdf/", type: "POST",
+        data: {snapshot: snapshot},
+        success: function(url) {
+            that.spinner.stop();
+            window.location = url;
+        },
+        error: function() {
+            that.spinner.stop();
         }
     });
 };
@@ -40,15 +68,14 @@ CBMONITOR.Snapshots.prototype.plot = function (snapshot) {
         snapshot = $("#snapshot").find(":selected").text();
     }
 
-    var spinner = new Spinner({width: 4, top: "210px"});
-    spinner.spin(document.getElementById('spinner'));
+    this.spinner.spin(document.getElementById("spinner"));
 
     $(".carousel").css("display", "none");
     var that = this;
     $.ajax({url: "/cbmonitor/plot/", dataType: "json", type: "POST",
         data: {snapshot: snapshot},
         success: function(images) {
-            spinner.stop();
+            that.spinner.stop();
             if (images.length) {
                 $.each(images, function(index, value) {
                     that.addLink(index, value[0]);
@@ -64,7 +91,7 @@ CBMONITOR.Snapshots.prototype.plot = function (snapshot) {
             }
         },
         error: function() {
-            spinner.stop();
+            that.spinner.stop();
             window.alert("Invalid snapshot");
         }
     });
