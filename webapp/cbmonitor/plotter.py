@@ -1,4 +1,5 @@
 import os
+from multiprocessing import Pool, cpu_count
 
 import matplotlib
 matplotlib.use('Agg')
@@ -16,6 +17,20 @@ from django.conf import settings
 import models
 
 
+def savePNG(timestamps, values, title, filename):
+    """Save chart as PNG file. Defined externally in order to be pickled"""
+    fig = figure()
+    fig.set_size_inches(4.66, 2.625)
+
+    ax = fig.add_subplot(1, 1, 1)
+    ax.set_title(title)
+    ax.set_xlabel("Time elapsed (sec)")
+    grid()
+    ax.plot(timestamps, values, '.', markersize=3)
+
+    fig.savefig(filename, dpi=200)
+
+
 class Plotter(object):
 
     def __init__(self):
@@ -27,7 +42,11 @@ class Plotter(object):
         self.urls = list()
         self.images = list()
 
-        self.pool = GreenPool()
+        self.async_pool = GreenPool()
+        self.mp_pool = Pool(cpu_count())
+
+    def __del__(self):
+        self.mp_pool.close()
 
     def _get_metrics(self, snapshot):
         """Get all metrics object for given snapshot"""
@@ -75,18 +94,6 @@ class Plotter(object):
         media_path = os.path.join(settings.MEDIA_ROOT, filename)
         return media_url, media_path
 
-    def _savePNG(self, timestamps, values, title, filename):
-        """Save chart as PNG file"""
-        self.fig.clear()
-
-        ax = self.fig.add_subplot(1, 1, 1)
-        ax.set_title(title)
-        ax.set_xlabel("Time elapsed (sec)")
-        grid()
-        ax.plot(timestamps, values, '.', markersize=3)
-
-        self.fig.savefig(filename, dpi=200)
-
     def _savePDF(self, snapshot):
         """Save PNG charts as PDF report"""
         _, media_path = self._generate_PDF_meta(snapshot)
@@ -127,10 +134,15 @@ class Plotter(object):
 
     def plot(self, snapshot):
         """"End point of PNG plotter"""
-        for data in self.pool.imap(self._extract, self._get_metrics(snapshot)):
+        apply_results = list()
+        for data in self.async_pool.imap(self._extract,
+                                         self._get_metrics(snapshot)):
             if data:
-                timestamps, values, title, filename, url = data
-                self._savePNG(timestamps, values, title, filename)
-                self.images.append(filename)
-                self.urls.append([title, url])
+                apply_results.append(  # (timestamps, values, title, filename)
+                    self.mp_pool.apply_async(savePNG, data[:4])
+                )
+                self.images.append(data[3])  # filename
+                self.urls.append([data[2], data[4]])  # title, url
+        for result in apply_results:
+            result.get()
         return sorted(self.urls)
