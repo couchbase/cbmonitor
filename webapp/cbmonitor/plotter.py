@@ -89,4 +89,4 @@ class Plotter(object):
                 if set(values) - set([None]):
                     self._savePNG(timestamps, values, title, filename)
                     urls.append([title, url])
-        return urls
+        return sorted(urls)
