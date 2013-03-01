@@ -43,7 +43,7 @@ class Plotter(object):
         self.urls = list()
         self.images = list()
 
-        self.async_pool = GreenPool()
+        self.eventlet_pool = GreenPool()
         self.mp_pool = Pool(cpu_count())
 
     def __del__(self):
@@ -144,14 +144,17 @@ class Plotter(object):
     def plot(self, snapshot):
         """"End point of PNG plotter"""
         self.snapshot = snapshot
+
         apply_results = list()
-        for data in self.async_pool.imap(self._extract, self._get_metrics()):
+        for data in self.eventlet_pool.imap(self._extract, self._get_metrics()):
             if data:
-                apply_results.append(  # (timestamps, values, title, filename)
-                    self.mp_pool.apply_async(savePNG, data[:4])
-                )
-                self.images.append(data[3])  # filename
-                self.urls.append([data[2], data[4]])  # title, url
+                timestamps, values, title, filename, url = data
+                result = self.mp_pool.apply_async(savePNG, data[:4])
+                apply_results.append(result)
+                self.images.append(filename)
+                self.urls.append([title, url])
+
         for result in apply_results:
             result.get()
+
         return sorted(self.urls)
