@@ -1,4 +1,5 @@
 import os
+import re
 from multiprocessing import Pool, cpu_count
 
 import matplotlib
@@ -48,9 +49,9 @@ class Plotter(object):
     def __del__(self):
         self.mp_pool.close()
 
-    def _get_metrics(self, snapshot):
+    def _get_metrics(self):
         """Get all metrics object for given snapshot"""
-        snapshot = models.Snapshot.objects.get(name=snapshot)
+        snapshot = models.Snapshot.objects.get(name=self.snapshot)
         return models.Observable.objects.filter(cluster=snapshot.cluster,
                                                 type_id="metric").values()
 
@@ -81,22 +82,30 @@ class Plotter(object):
     def _generate_PNG_meta(self, cluster, server, bucket, metric):
         """Generate PNG metadata (filenames, URLs)"""
         metric = metric.replace("/", "_")
-        title = "_".join((cluster, str(server), str(bucket), metric))
-        filename = title + ".png"
+        title = "{0}] {1}".format(bucket, metric)  # [server bucket] metric
+        if server:
+            title = "[{0} {1}".format(server, title)
+        else:
+            title = "[" + title
+
+        filename = "".join((self.snapshot, cluster, title))
+        filename = re.sub(r"[\[\]/\\:\*\?\"<>\|& ]", "", filename)
+        filename += ".png"
+
         media_url = settings.MEDIA_URL + filename
         media_path = os.path.join(settings.MEDIA_ROOT, filename)
         return title, media_url, media_path
 
-    def _generate_PDF_meta(self, snapshot):
+    def _generate_PDF_meta(self):
         """Generate PDF metadata (filenames, URLs)"""
-        filename = snapshot + ".pdf"
+        filename = self.snapshot + ".pdf"
         media_url = settings.MEDIA_URL + filename
         media_path = os.path.join(settings.MEDIA_ROOT, filename)
         return media_url, media_path
 
-    def _savePDF(self, snapshot):
+    def _savePDF(self):
         """Save PNG charts as PDF report"""
-        _, media_path = self._generate_PDF_meta(snapshot)
+        _, media_path = self._generate_PDF_meta()
         doc = SimpleDocTemplate(media_path, pagesize=landscape(B4))
         if not os.path.exists(media_path):
             pages = list()
@@ -128,15 +137,15 @@ class Plotter(object):
     def pdf(self, snapshot):
         """"End point of PDF plotter"""
         self.plot(snapshot)
-        self._savePDF(snapshot)
-        media_url, _ = self._generate_PDF_meta(snapshot)
+        self._savePDF()
+        media_url, _ = self._generate_PDF_meta()
         return media_url
 
     def plot(self, snapshot):
         """"End point of PNG plotter"""
+        self.snapshot = snapshot
         apply_results = list()
-        for data in self.async_pool.imap(self._extract,
-                                         self._get_metrics(snapshot)):
+        for data in self.async_pool.imap(self._extract, self._get_metrics()):
             if data:
                 apply_results.append(  # (timestamps, values, title, filename)
                     self.mp_pool.apply_async(savePNG, data[:4])
