@@ -103,15 +103,11 @@ class Plotter(object):
         media_path = os.path.join(settings.MEDIA_ROOT, filename)
         return media_url, media_path
 
-    def _savePDF(self):
+    def _savePDF(self, media_path):
         """Save PNG charts as PDF report"""
-        _, media_path = self._generate_PDF_meta()
+        pages = [Image(filename) for filename in sorted(self.images)]
         doc = SimpleDocTemplate(media_path, pagesize=landscape(B4))
-        if not os.path.exists(media_path):
-            pages = list()
-            for filename in sorted(self.images):
-                pages.append(Image(filename))
-            doc.build(pages)
+        doc.build(pages)
 
     def _extract(self, metric):
         """Extract time series data and metadata"""
@@ -136,14 +132,16 @@ class Plotter(object):
 
     def pdf(self, snapshot):
         """"End point of PDF plotter"""
-        self.plot(snapshot)
-        self._savePDF()
-        media_url, _ = self._generate_PDF_meta()
+        self.snapshot = snapshot
+        media_url, media_path = self._generate_PDF_meta()
+        if not os.path.exists(media_path):
+            self.plot()
+            self._savePDF(media_path)
         return media_url
 
-    def plot(self, snapshot):
+    def plot(self, snapshot=None):
         """"End point of PNG plotter"""
-        self.snapshot = snapshot
+        self.snapshot = snapshot or self.snapshot
 
         apply_results = list()
         for data in self.eventlet_pool.imap(self._extract, self._get_metrics()):
