@@ -101,9 +101,6 @@ INSTALLED_APPS = (
 PROXY_DOMAIN = 'localhost'
 PROXY_PORT = 3133
 
-# Couchbase Single Server
-COUCHDB_URI = "http://perf-cabinet.hq.couchbase.com:5984/"
-
 # Default settings for litmus dashboard
 LITMUS_BASELINE = ["2.0.0-1976-rel-enterprise", "1.8.1-938-rel-enterprise"]
 LITMUS_WARNING = 0.1
