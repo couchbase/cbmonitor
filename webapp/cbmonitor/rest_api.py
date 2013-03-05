@@ -1,6 +1,5 @@
 import json
 import logging
-import logging.config
 
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
@@ -13,8 +12,7 @@ import models
 import forms
 from plotter import Plotter
 
-logging.config.fileConfig("webapp/logging.conf")
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 @csrf_exempt

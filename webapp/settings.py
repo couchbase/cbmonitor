@@ -96,6 +96,31 @@ INSTALLED_APPS = (
     'django_coverage',
 )
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'default': {
+            'format': '%(asctime)s %(levelname)s - %(message)s',
+            'datefmt': '[%d/%b/%Y %H:%M:%S]'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'default',
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    }
+}
+
 # Proxy settings
 PROXY_DOMAIN = 'localhost'
 PROXY_PORT = 3133
