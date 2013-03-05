@@ -2,10 +2,14 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 
-from webapp.cbmonitor.urls import urlpatterns
-
 admin.autodiscover()
 
+urlpatterns = patterns(
+    'cbmonitor',
+    url(r'^$', 'views.tab'),
+    url(r'^[a-z_]+/$', 'views.tab'),
+    url(r'^cbmonitor/(?P<path>[a-z_]+)/$', 'rest_api.dispatcher'),
+)
 urlpatterns += patterns(
     '',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
