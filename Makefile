@@ -11,7 +11,14 @@ pep8: ; \
     ./bin/pep8 --ignore=E501 collectors webapp
 
 jshint: ; \
-    jshint webapp/cbmonitor/static/scripts
+    jshint webapp/cbmonitor/static/scripts/charts.js \
+           webapp/cbmonitor/static/scripts/dialogs.js \
+           webapp/cbmonitor/static/scripts/graph.js \
+           webapp/cbmonitor/static/scripts/inventory.js \
+           webapp/cbmonitor/static/scripts/observables.js \
+           webapp/cbmonitor/static/scripts/seriesly.js \
+           webapp/cbmonitor/static/scripts/snapshots.js \
+           webapp/cbmonitor/static/scripts/views.js
 
 test_webapp: ; \
     ./bin/webapp test_coverage cbmonitor
