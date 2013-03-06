@@ -16,11 +16,14 @@ SERIESLY.Seriesly = function(db_name) {
 SERIESLY.Seriesly.prototype.biuldURL = function(ui) {
     "use strict";
 
-    var db_name = ui.draggable.attr("cluster"),
+    var cluster = ui.draggable.attr("cluster"),
         server = ui.draggable.attr("server"),
         bucket = ui.draggable.attr("bucket"),
+        collector = ui.draggable.attr("collector"),
         item = ui.draggable.text();
 
+    var db_name = collector.length ? collector.replace(/\./g, "") : "";
+    db_name += cluster;
     db_name += bucket.length ? bucket.replace(/\./g, "") : "";
     db_name += server.length ? server.replace(/\./g, "") : "";
 

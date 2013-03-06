@@ -38,7 +38,8 @@
             "type": "metric",
             "cluster": "East",
             "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-            "bucket": 1
+            "bucket": 1,
+            "collector": "ns_server"
         }
     },
     {
@@ -49,7 +50,8 @@
             "type": "metric",
             "cluster": "East",
             "server": null,
-            "bucket": 1
+            "bucket": 1,
+            "collector": "ns_server"
         }
     },
     {
@@ -60,7 +62,8 @@
             "type": "event",
             "cluster": "East",
             "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-            "bucket": 1
+            "bucket": 1,
+            "collector": "ns_server"
         }
     },
     {

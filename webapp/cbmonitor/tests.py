@@ -413,10 +413,14 @@ class ApiTest(TestHelper):
             params = {"type": "metric",
                       "cluster": "East",
                       "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                      "bucket": "default"}
-            expected = ["cache_miss"]
+                      "bucket": "default",
+                      "collector": "ns_server"}
+            expected = [{"name": "cache_miss", "collector": "ns_server"}]
         else:
-            expected = ["cache_miss", params["name"]]
+            expected = [
+                {"name": "cache_miss", "collector": "ns_server"},
+                {"name": params["name"], "collector": params["collector"]}
+            ]
         request = self.factory.get("/get_metrics_and_events", params)
         self.response = rest_api.dispatcher(request,
                                             path="get_metrics_and_events")
@@ -431,9 +435,12 @@ class ApiTest(TestHelper):
             params = {"type": "metric",
                       "cluster": "East",
                       "bucket": "default"}
-            expected = ["disk_queue"]
+            expected = [{"name": "disk_queue", "collector": "ns_server"}]
         else:
-            expected = ["disk_queue", params["name"]]
+            expected = [
+                {"name": "disk_queue", "collector": "ns_server"},
+                {"name": params["name"], "collector": params["collector"]}
+            ]
         request = self.factory.get("/get_metrics_and_events", params)
         self.response = rest_api.dispatcher(request,
                                             path="get_metrics_and_events")
@@ -449,9 +456,12 @@ class ApiTest(TestHelper):
                       "cluster": "East",
                       "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                       "bucket": "default"}
-            expected = ["Rebalance start"]
+            expected = [{"name": "Rebalance start", "collector": "ns_server"}]
         else:
-            expected = ["Rebalance start", params["name"]]
+            expected = [
+                {"name": "Rebalance start", "collector": "ns_server"},
+                {"name": params["name"], "collector": params["collector"]}
+            ]
         request = self.factory.get("/get_metrics_and_events", params)
         self.response = rest_api.dispatcher(request,
                                             path="get_metrics_and_events")
@@ -466,7 +476,8 @@ class ApiTest(TestHelper):
                   "name": uhex(),
                   "cluster": "East",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                  "bucket": "default"}
+                  "bucket": "default",
+                  "collector": "ns_server"}
         request = self.factory.post("/add_metric_or_event", params)
         response = rest_api.dispatcher(request, path="add_metric_or_event")
 
@@ -482,6 +493,7 @@ class ApiTest(TestHelper):
                   "cluster": "East",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                   "bucket": "default",
+                  "collector": "ns_server",
                   "description": "new metric"}
         request = self.factory.post("/add_metric_or_event", params)
         response = rest_api.dispatcher(request, path="add_metric_or_event")
@@ -498,6 +510,7 @@ class ApiTest(TestHelper):
                   "cluster": "East",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                   "bucket": "default",
+                  "collector": "ns_server",
                   "unit": uhex()}
         request = self.factory.post("/add_metric_or_event", params)
         response = rest_api.dispatcher(request, path="add_metric_or_event")
@@ -510,7 +523,8 @@ class ApiTest(TestHelper):
         params = {"type": "metric",
                   "name": uhex(),
                   "cluster": "East",
-                  "bucket": "default"}
+                  "bucket": "default",
+                  "collector": "ns_server"}
         request = self.factory.post("/add_metric_or_event", params)
         response = rest_api.dispatcher(request, path="add_metric_or_event")
 
@@ -525,7 +539,8 @@ class ApiTest(TestHelper):
                   "name": uhex(),
                   "cluster": "East",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                  "bucket": "default"}
+                  "bucket": "default",
+                  "collector": "ns_server"}
         request = self.factory.post("/add_metric_or_event", params)
         response = rest_api.dispatcher(request, path="add_metric_or_event")
 
@@ -539,7 +554,8 @@ class ApiTest(TestHelper):
         params = {"type": uhex(),
                   "name": "failover",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                  "bucket": "default"}
+                  "bucket": "default",
+                  "collector": "ns_server"}
         request = self.factory.post("/add_metric_or_event", params)
         self.response = rest_api.dispatcher(request,
                                             path="add_metric_or_event")

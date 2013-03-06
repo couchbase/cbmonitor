@@ -26,7 +26,7 @@ class Atop(Collector):
         for node in self._get_nodes():
             self.mc.add_server(node)
             for metric in self._METRICS:
-                self.mc.add_metric(metric, server=node)
+                self.mc.add_metric(metric, server=node, collector="atop")
 
     @staticmethod
     def _remove_value_units(value):
@@ -63,4 +63,5 @@ class Atop(Collector):
         self._extend_samples(self.atop.get_process_cpu("memcached"))
 
         for node, samples in self._samples.iteritems():
-            self.store.append(samples, cluster=self.cluster, server=node)
+            self.store.append(samples, cluster=self.cluster, server=node,
+                              collector="atop")

@@ -41,7 +41,7 @@ class NSServer(Collector):
         """Collect all available stata from ns_server"""
         for stats, host, bucket in self.pool.imap(self._get_stats,
                                                   self._get_stats_uri()):
-            self.store.append(stats, self.cluster, host, bucket)
+            self.store.append(stats, self.cluster, host, bucket, "ns_server")
 
     def _get_metrics(self):
         """Yield names of metrics for every bucket"""
@@ -66,4 +66,4 @@ class NSServer(Collector):
 
         for metric, bucket, node, desc in self._get_metrics():
             self.mc.add_metric(metric, bucket=bucket, server=node,
-                               description=desc)
+                               description=desc, collector="ns_server")

@@ -217,7 +217,9 @@ def get_metrics_and_events(request):
     if form.is_valid():
         try:
             observables = models.Observable.objects.filter(**form.params).values()
-            content = json.dumps([o["name"] for o in observables])
+            observables = [{"name": o["name"], "collector": o["collector"]}
+                           for o in observables]
+            content = json.dumps(observables)
         except DoesNotExist:
             content = json.dumps([])
     else:

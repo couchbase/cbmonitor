@@ -89,7 +89,8 @@ CBMONITOR.Observables.prototype.getMetricsAndEvents = function(type) {
                         .attr("cluster", cluster)
                         .attr("server", server)
                         .attr("bucket", bucket)
-                        .append(item)
+                        .attr("collector", item.collector)
+                        .append(item.name)
                 );
             });
             $(ul + " li").draggable({

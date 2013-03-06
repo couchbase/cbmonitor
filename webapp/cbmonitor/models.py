@@ -85,6 +85,7 @@ class Observable(models.Model):
     cluster = models.ForeignKey("Cluster")
     server = models.ForeignKey("Server", null=True, blank=True)
     bucket = models.ForeignKey("Bucket", null=True, blank=True)
+    collector = models.CharField(max_length=32)
 
     def __str__(self):
         return self.name

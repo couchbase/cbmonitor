@@ -33,11 +33,12 @@ class MetadataClient(object):
 
     @post_request
     def add_metric(self, name, bucket=None, server=None, unit=None,
-                   description=None):
+                   description=None, collector=None):
         url = self.base_url + "/add_metric_or_event/"
         params = {"name": name, "type": "metric",
                   "cluster": self.settings.cluster}
-        for extra_param in ("bucket", "server", "unit", "description"):
+        for extra_param in ("bucket", "server", "unit", "description",
+                            "collector"):
             if eval(extra_param) is not None:
                 params[extra_param] = eval(extra_param)
         return url, params
