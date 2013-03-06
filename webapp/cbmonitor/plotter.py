@@ -8,6 +8,7 @@ matplotlib.rcParams.update({'font.size': 5})
 matplotlib.rcParams.update({'lines.linewidth': 1})
 from matplotlib.pyplot import figure, grid
 
+from cbagent.stores.seriesly_store import SerieslyStore
 from eventlet import GreenPool
 from reportlab.lib.pagesizes import landscape, B4
 from reportlab.platypus import SimpleDocTemplate, Image
@@ -55,16 +56,14 @@ class Plotter(object):
         return models.Observable.objects.filter(cluster=snapshot.cluster,
                                                 type_id="metric").values()
 
-    def _get_data(self, cluster, server, bucket, metric):
+    def _get_data(self, cluster, server, bucket, metric, collector):
         """Query data using metric as key, server and bucket as filters"""
         query_params = {
             "group": 10000,  # 10 seconds
-            "ptr": "/samples/{0}".format(metric),
-            "reducer": 'avg',
-            "f": ["/meta/server", "/meta/bucket"],
-            "fv": [server or "none", bucket or "none"]
+            "ptr": "/{0}".format(metric), "reducer": "avg"
         }
-        response = self.db[cluster].query(query_params)
+        db_name = SerieslyStore.build_dbname(cluster, server, bucket, collector)
+        response = self.db[db_name].query(query_params)
 
         # Convert data and generate sorted lists of timestamps and values
         timestamps = list()
@@ -111,10 +110,11 @@ class Plotter(object):
 
     def _extract(self, metric):
         """Extract time series data and metadata"""
-        bucket = models.Bucket.objects.get(id=metric["bucket_id"])
+        bucket = str(models.Bucket.objects.get(id=metric["bucket_id"]))
         cluster = metric["cluster_id"]
         server = metric["server_id"]
         name = metric["name"]
+        collector = metric["collector"]
 
         title, url, filename = \
             self._generate_PNG_meta(cluster, server, bucket, name)
@@ -124,7 +124,8 @@ class Plotter(object):
             self.images.append(filename)
             return
         try:
-            timestamps, values = self._get_data(cluster, server, bucket, name)
+            timestamps, values = self._get_data(cluster, server, bucket, name,
+                                                collector)
             if set(values) - set([None]):
                 return timestamps, values, title, filename, url
         except NotExistingDatabase:

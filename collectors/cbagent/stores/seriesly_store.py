@@ -8,7 +8,8 @@ class SerieslyStore(Store):
     def __init__(self, host):
         self.seriesly = Seriesly(host)
 
-    def _build_dbname(self, cluster, server, bucket, collector):
+    @staticmethod
+    def build_dbname(cluster, server, bucket, collector):
         if collector:
             db_name = collector + cluster
         else:
@@ -21,7 +22,7 @@ class SerieslyStore(Store):
 
     def append(self, data, cluster=None, server=None, bucket=None,
                collector=None):
-        db_name = self._build_dbname(cluster, server, bucket, collector)
+        db_name = self.build_dbname(cluster, server, bucket, collector)
         if db_name not in self.seriesly.list_dbs():
             self.seriesly.create_db(db_name)
         self.seriesly[db_name].append(data)
