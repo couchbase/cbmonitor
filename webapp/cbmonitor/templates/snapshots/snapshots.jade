@@ -5,11 +5,15 @@ html(lang="en")
         title cbmonitor
         include static
         link(rel="stylesheet", href="/static/styles/snapshots.css")
+        link(rel="stylesheet", href="/static/styles/dialogs.css")
+        script(src='/static/scripts/jquery-ui-timepicker-addon.js')
+        script(src='/static/scripts/dialogs.js')
         script(src='/static/scripts/snapshots.js')
     body
         include navbar
         div.snapshots
             select#snapshot.snapshot(name="snapshot")
+            button#add.btn.btn-add(value="add") +
             button#plot.btn.btn-plot(value="Plot") Plot
             button#pdf.btn.btn-pdf(value="PDF") PDF
         div#spinner
@@ -19,4 +23,16 @@ html(lang="en")
             a.carousel-control.left(href="#carousel", data-slide="prev") &lsaquo;
             a.carousel-control.right.inverse(href="#carousel", data-slide="next") &rsaquo;
         div#titles.titles
+        div#add_new_snapshot.new_item(title="Add new snapshot")
+            form
+            fieldset
+                label(for="name") * Name
+                input#name.text.ui-widget-content.ui-corner-all(type="text", name="name")
+                label(for="cluster") * Cluster
+                input#cluster.text.ui-widget-content.ui-corner-all(type="text", name="cluster")
+                label(for="ts_from") * Start time
+                input#ts_from.text.ui-widget-content.ui-corner-all(type="text", name="ts_from")
+                label(for="ts_to") * End time
+                input#ts_to.text.ui-widget-content.ui-corner-all(type="text", name="ts_to")
+                p * Required field
         include footer

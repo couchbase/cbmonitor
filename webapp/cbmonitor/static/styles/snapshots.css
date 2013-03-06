@@ -6,10 +6,15 @@
     margin-left: -275px;
     position: absolute;
 }
+.btn-add {
+    position: relative;
+    left: 50%;
+    margin-left: 240px;
+}
 .btn-plot {
     position: relative;
     left: 50%;
-    margin-left: 235px;
+    margin-left: 10px;
 }
 .btn-pdf {
     position: relative;

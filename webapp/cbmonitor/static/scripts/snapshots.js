@@ -25,6 +25,9 @@ CBMONITOR.Snapshots.prototype.getClusters = function () {
                     var o = new Option(snapshot, snapshot);
                     sel.append(o);
                 });
+                $("#add").click(function() {
+                    that.add();
+                });
                 $("#plot").click(function() {
                     that.plot();
                 });
@@ -32,6 +35,7 @@ CBMONITOR.Snapshots.prototype.getClusters = function () {
                     that.pdf();
                 });
             } else {
+                $("#add").addClass("disabled");
                 $("#plot").addClass("disabled");
                 $("#pdf").addClass("disabled");
                 var o = new Option("None", "");
@@ -39,6 +43,12 @@ CBMONITOR.Snapshots.prototype.getClusters = function () {
             }
         }
     });
+};
+
+CBMONITOR.Snapshots.prototype.add = function (snapshot) {
+    "use strict";
+
+    $("#add_new_snapshot").dialog("open");
 };
 
 CBMONITOR.Snapshots.prototype.pdf = function (snapshot) {
@@ -165,4 +175,7 @@ $(document).ready(function(){
     CBMONITOR.snapshots = new CBMONITOR.Snapshots();
     CBMONITOR.snapshots.getClusters();
     CBMONITOR.snapshots.autoPlot();
+
+    CBMONITOR.dialogs = new CBMONITOR.Dialogs();
+    CBMONITOR.dialogs.configureAddNewSnapshot();
 });

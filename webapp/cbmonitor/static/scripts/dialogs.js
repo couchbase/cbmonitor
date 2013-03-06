@@ -179,6 +179,46 @@ CBMONITOR.Dialogs.prototype.configureAddNewBucket = function() {
     });
 };
 
+CBMONITOR.Dialogs.prototype.configureAddNewSnapshot = function() {
+    "use strict";
+
+    var that = this,
+        fields;
+
+    fields = that.getFields(["name", "cluster", "ts_from", "ts_to"]);
+    $("#ts_from").datetimepicker({});
+    $("#ts_to").datetimepicker({});
+
+    $("#add_new_snapshot").dialog({
+        autoOpen: false,
+        resizable: false,
+        height: 450,
+        width: 360,
+        modal: true,
+        buttons: {
+            confirm: {
+                "text": "Add new snapshot",
+                "class": "btn btn-mini btn-dialog",
+                "click": function() {
+                    fields.removeClass("ui-state-error");
+                    that.addNewSnapshot();
+                }
+            },
+            cancel: {
+                "text": "Cancel",
+                "class": "btn btn-mini btn-dialog",
+                "click": function() {
+                    fields.val("").removeClass("ui-state-error");
+                    $("#add_new_snapshot").dialog("close");
+                }
+            }
+        },
+        create: function () {
+            that.adjustStyles();
+        }
+    });
+};
+
 CBMONITOR.Dialogs.prototype.configureDeleteItem = function() {
     "use strict";
 
@@ -323,6 +363,33 @@ CBMONITOR.Dialogs.prototype.addNewBucket = function() {
         },
         error: function(jqXHR) {
             that.highlightErrors(jqXHR, "b");
+        }
+    });
+};
+
+CBMONITOR.Dialogs.prototype.addNewSnapshot = function() {
+    "use strict";
+
+    var that = this,
+        name = $("#name"),
+        cluster = $("#cluster"),
+        ts_from = $("#ts_from"),
+        ts_to = $("#ts_to");
+
+    $.ajax({
+        type: "POST", url: "/cbmonitor/add_snapshot/",
+        data: {
+            "name": name.val(),
+            "cluster": cluster.val(),
+            "ts_from": ts_from.val(),
+            "ts_to": ts_to.val()
+        },
+        success: function() {
+            CBMONITOR.snapshots.getClusters();
+            $("#add_new_snapshot").dialog("close");
+        },
+        error: function(jqXHR) {
+            that.highlightErrors(jqXHR, "");
         }
     });
 };
