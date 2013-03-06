@@ -386,6 +386,8 @@ CBMONITOR.Dialogs.prototype.addNewSnapshot = function() {
         },
         success: function() {
             CBMONITOR.snapshots.getClusters();
+            $("#plot").removeClass("disabled");
+            $("#pdf").removeClass("disabled");
             $("#add_new_snapshot").dialog("close");
         },
         error: function(jqXHR) {

@@ -11,6 +11,11 @@ CBMONITOR.Snapshots = function () {
     "use strict";
 
     this.spinner = new Spinner({width: 4, top: "210px"});
+
+    var that = this;
+    $("#add").click(function() {
+        that.add();
+    });
 };
 
 CBMONITOR.Snapshots.prototype.getClusters = function () {
@@ -25,9 +30,6 @@ CBMONITOR.Snapshots.prototype.getClusters = function () {
                     var o = new Option(snapshot, snapshot);
                     sel.append(o);
                 });
-                $("#add").click(function() {
-                    that.add();
-                });
                 $("#plot").click(function() {
                     that.plot();
                 });
@@ -35,7 +37,6 @@ CBMONITOR.Snapshots.prototype.getClusters = function () {
                     that.pdf();
                 });
             } else {
-                $("#add").addClass("disabled");
                 $("#plot").addClass("disabled");
                 $("#pdf").addClass("disabled");
                 var o = new Option("None", "");
@@ -45,7 +46,7 @@ CBMONITOR.Snapshots.prototype.getClusters = function () {
     });
 };
 
-CBMONITOR.Snapshots.prototype.add = function (snapshot) {
+CBMONITOR.Snapshots.prototype.add = function () {
     "use strict";
 
     $("#add_new_snapshot").dialog("open");
