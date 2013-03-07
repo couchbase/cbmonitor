@@ -6,7 +6,7 @@ import matplotlib
 matplotlib.use('Agg')
 matplotlib.rcParams.update({'font.size': 5})
 matplotlib.rcParams.update({'lines.linewidth': 1})
-from matplotlib.pyplot import figure, grid
+from matplotlib.pyplot import figure, grid, close
 
 from cbagent.stores.seriesly_store import SerieslyStore
 from eventlet import GreenPool
@@ -31,15 +31,13 @@ def savePNG(timestamps, values, title, filename):
     ax.plot(timestamps, values, '.', markersize=3)
 
     fig.savefig(filename, dpi=200)
+    close()
 
 
 class Plotter(object):
 
     def __init__(self):
         self.db = Seriesly()
-
-        self.fig = figure()
-        self.fig.set_size_inches(4.66, 2.625)
 
         self.urls = list()
         self.images = list()
