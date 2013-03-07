@@ -21,33 +21,8 @@ class ActiveTasks(Collector):
         for node in self._get_nodes():
             self.mc.add_server(node)
 
-    def _update_metric_metadata(method):
-        def wrapper(self, metric, value, bucket=None, server=None):
-            pointer = hash((metric, bucket, server))
-            if pointer not in self.pointers and self.update_metadata_enabled:
-                self.pointers.append(pointer)
-                self.mc.add_metric(metric, bucket, server)
-            return method(self, metric, value, bucket, server)
-        return wrapper
-
-    @_update_metric_metadata
-    def _extend_samples(self, metric, value, bucket=None, server=None):
-        sample = {metric: value}
-        if server is not None:
-            if self._samples.get(bucket) is None:
-                self._samples[bucket] = {}
-            if self._samples[bucket].get(server) is None:
-                self._samples[bucket][server] = {}
-            self._samples[bucket][server].update(sample)
-        elif bucket is not None:
-            if self._samples.get(bucket) is None:
-                self._samples[bucket] = {}
-            self._samples[bucket].update(sample)
-        else:
-            self._samples.update(sample)
-
     @staticmethod
-    def _gen_couch_task_id(task, metric):
+    def _build_couchdb_task_id(task, metric):
         return "{0}_{1}_{2}".format(task["type"], task.get("indexer_type", ""),
                                     metric)
 
@@ -55,18 +30,18 @@ class ActiveTasks(Collector):
         tasks = self._get("/_active_tasks", server=server, port=8092)
         for task in tasks:
             if "index_barrier" in task["type"]:
-                self._extend_samples("running_" + task["type"], task["running"])
-                self._extend_samples("waiting_" + task["type"], task["waiting"])
+                yield "running_" + task["type"], task["running"], None, None
+                yield "waiting_" + task["type"], task["waiting"], None, None
             elif task["type"] in ("view_compaction", "indexer"):
-                bucket = task.get("set", "")
                 for metric in ("changes_done", "total_changes", "progress"):
                     value = task.get(metric, None)
                     if value is not None:
-                        metric = self._gen_couch_task_id(task, metric)
-                        self._extend_samples(metric, value, bucket, server)
+                        metric = self._build_couchdb_task_id(task, metric)
+                        bucket = task.get("set", "")
+                        yield metric, value, bucket, server
 
     @staticmethod
-    def _gen_ns_server_task_id(task, metric):
+    def _build_ns_server_task_id(task, metric):
         return "{0}{1}_{2}".format(task["type"], task.get("designDocument", ""),
                                    metric)
 
@@ -77,15 +52,23 @@ class ActiveTasks(Collector):
             for metric in ("changesDone", "totalChanges", "progress"):
                 value = task.get(metric, None)
                 if value is not None:
-                    metric = self._gen_ns_server_task_id(task, metric)
-                    self._extend_samples(metric, value, bucket)
+                    metric = self._build_ns_server_task_id(task, metric)
+                    yield metric, value, bucket
+
+    def _append(self, metric, value, bucket=None, server=None):
+        pointer = hash((metric, bucket, server))
+        if pointer not in self.pointers and self.update_metadata_enabled:
+            self.pointers.append(pointer)
+            self.mc.add_metric(metric, bucket, server, collector="active_tasks")
+
+        data = {metric: value}
+        self.store.append(data, cluster=self.cluster, bucket=bucket,
+                          server=None, collector="active_tasks")
 
     def collect(self):
         """Collect info about ns_server and couchdb active tasks"""
-        self._samples = {}
-        self._get_ns_server_tasks()
-        for _ in self.pool.imap(self._get_couchdb_tasks, self._get_nodes()):
-            continue
-
-        self._samples = {"metric": {self.cluster: self._samples}}
-        self.store.append(self._samples)
+        for metric, value, bucket in self._get_ns_server_tasks():
+            self._append(metric, value, bucket=bucket)
+        for metric, value, bucket, server in \
+                self.pool.imap(self._get_couchdb_tasks, self._get_nodes()):
+            self._append(metric, value, bucket, server)
