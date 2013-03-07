@@ -63,7 +63,7 @@ class ActiveTasks(Collector):
 
         data = {metric: value}
         self.store.append(data, cluster=self.cluster, bucket=bucket,
-                          server=None, collector="active_tasks")
+                          server=server, collector="active_tasks")
 
     def collect(self):
         """Collect info about ns_server and couchdb active tasks"""
