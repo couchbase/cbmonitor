@@ -10,9 +10,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from cbagent.tests import MockHelper
 
-import views
-import rest_api
-import models
+from cbmonitor import views
+from cbmonitor import rest_api
+from cbmonitor import models
 
 uhex = lambda: uuid4().hex
 

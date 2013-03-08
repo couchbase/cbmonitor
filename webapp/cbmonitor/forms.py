@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
 
 from cbagent.settings import Settings
 
-import models
+from cbmonitor import models
 
 
 class AddClusterForm(forms.ModelForm):

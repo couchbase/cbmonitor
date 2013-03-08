@@ -16,7 +16,7 @@ from seriesly import Seriesly
 from seriesly.exceptions import NotExistingDatabase
 from django.conf import settings
 
-import models
+from cbmonitor import models
 
 
 def savePNG(timestamps, values, title, filename):

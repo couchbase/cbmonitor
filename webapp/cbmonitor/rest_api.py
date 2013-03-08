@@ -8,9 +8,9 @@ from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
 from django.db.utils import IntegrityError
 from cbagent.collectors import NSServer
 
-import models
-import forms
-from plotter import Plotter
+from cbmonitor import models
+from cbmonitor import forms
+from cbmonitor.lib import Plotter
 
 logger = logging.getLogger(__name__)
 
