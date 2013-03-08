@@ -25,6 +25,7 @@ CBMONITOR.Snapshots.prototype.getClusters = function () {
     $.ajax({url: "/cbmonitor/get_snapshots/", dataType: "json",
         success: function(snapshots){
             var sel = $("#snapshot");
+            sel.empty();
             if (snapshots.length) {
                 snapshots.forEach(function(snapshot) {
                     var o = new Option(snapshot, snapshot);
