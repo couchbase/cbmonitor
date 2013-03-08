@@ -1,5 +1,6 @@
 import os
 import re
+from calendar import timegm
 from multiprocessing import Pool, cpu_count
 
 import matplotlib
@@ -58,10 +59,13 @@ class Plotter(object):
                                                 type_id="metric").values()
 
     def _get_data(self, cluster, server, bucket, metric, collector):
-        """Query data using metric as key, server and bucket as filters"""
+        # Query data using metric as key
+        ts_from = timegm(self.snapshot.ts_from.timetuple())
+        ts_to = timegm(self.snapshot.ts_to.timetuple())
+        group = max((ts_from - ts_to) / 2, 10000)  # min 10 sec; max 500 points
         query_params = {
-            "group": 10000,  # 10 seconds
-            "ptr": "/{0}".format(metric), "reducer": "avg"
+            "ptr": "/{0}".format(metric), "reducer": "avg",
+            "group": group, "from": ts_from, "to": ts_to
         }
         db_name = SerieslyStore.build_dbname(cluster, server, bucket, collector)
         response = self.db[db_name].query(query_params)
