@@ -39,7 +39,10 @@ class Verifier(object):
     def duplicate(test):
         def wrapper(self, *args):
             test(self, *args)
-            self.assertTrue("already exists" in self.response.content)
+            self.assertTrue(
+                "already exists" in self.response.content or
+                "not unique" in self.response.content
+            )
             self.assertEqual(self.response.status_code, 400)
         return wrapper
 
@@ -530,6 +533,19 @@ class ApiTest(TestHelper):
 
         # Verify persistence
         self.test_get_metrics_no_server(params)
+
+        self.response = response
+
+    @Verifier.duplicate
+    def test_add_metric_duplicate_empty_server(self):
+        params = {"type": "metric",
+                  "name": uhex(),
+                  "cluster": "East",
+                  "bucket": "default",
+                  "collector": "ns_server"}
+        request = self.factory.post("/add_metric_or_event", params)
+        rest_api.dispatcher(request, path="add_metric_or_event")
+        response = rest_api.dispatcher(request, path="add_metric_or_event")
 
         self.response = response
 

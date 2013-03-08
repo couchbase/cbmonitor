@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
+from django.db.utils import IntegrityError
 
 from cbagent.settings import Settings
 
@@ -112,15 +113,24 @@ class AddMetricsAndEvents(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(AddMetricsAndEvents, self).clean()
-        cluster = cleaned_data.get("cluster")
 
         try:
-            bucket = models.Bucket.objects.get(name=cleaned_data["bucket"],
-                                               cluster=cluster)
+            bucket = models.Bucket.objects.get(
+                name=cleaned_data["bucket"], cluster=cleaned_data.get("cluster"))
         except (DoesNotExist, KeyError):
             bucket = None
-
         cleaned_data["bucket"] = bucket
+
+        if cleaned_data["server"] is None:
+            try:
+                models.Observable.objects.get(name=cleaned_data["name"],
+                                              cluster=cleaned_data["cluster"],
+                                              server=cleaned_data["server"],
+                                              bucket=cleaned_data["bucket"])
+                raise IntegrityError("Null server is not unique")
+            except DoesNotExist:
+                pass
+
         return cleaned_data
 
 
