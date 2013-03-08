@@ -24,14 +24,10 @@ CBMONITOR.GraphManager.prototype.init = function(data) {
     nv.addGraph(function() {
         var chart = nv.models.lineWithFocusChart().forceY([0]);
 
-        chart.xAxis
-            .tickFormat(format);
-        chart.x2Axis
-            .tickFormat(format);
-        chart.yAxis
-            .tickFormat(d3.format(',.2s'));
-        chart.y2Axis
-            .tickFormat(d3.format(',.2s'));
+        chart.xAxis.tickFormat(format);
+        chart.x2Axis.tickFormat(format);
+        chart.yAxis.tickFormat(d3.format(',.2s'));
+        chart.y2Axis.tickFormat(d3.format(',.2s'));
 
         d3.select(container)
             .datum(series_data)
@@ -105,7 +101,7 @@ CBMONITOR.DataHandler.prototype.prepareSeries = function(metrics) {
             timestamp = timestamps[j];
             values.push({
                 x: timestamp,
-                y: this.data[i][timestamp]
+                y: parseInt(this.data[i][timestamp], 10)
             });
         }
         series.push({
