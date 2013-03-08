@@ -48,10 +48,13 @@ class Plotter(object):
     def __del__(self):
         self.mp_pool.close()
 
+    @staticmethod
+    def _get_snapshot(snapshot):
+        return models.Snapshot.objects.get(name=snapshot)
+
     def _get_metrics(self):
         """Get all metrics object for given snapshot"""
-        snapshot = models.Snapshot.objects.get(name=self.snapshot)
-        return models.Observable.objects.filter(cluster=snapshot.cluster,
+        return models.Observable.objects.filter(cluster=self.snapshot.cluster,
                                                 type_id="metric").values()
 
     def _get_data(self, cluster, server, bucket, metric, collector):
@@ -85,7 +88,7 @@ class Plotter(object):
         else:
             title = "[" + title
 
-        filename = "".join((self.snapshot, cluster, title))
+        filename = "".join((self.snapshot.name, cluster, title))
         filename = re.sub(r"[\[\]/\\:\*\?\"<>\|& ]", "", filename)
         filename += ".png"
 
@@ -95,7 +98,7 @@ class Plotter(object):
 
     def _generate_PDF_meta(self):
         """Generate PDF metadata (filenames, URLs)"""
-        filename = self.snapshot + ".pdf"
+        filename = self.snapshot.name + ".pdf"
         media_url = settings.MEDIA_URL + filename
         media_path = os.path.join(settings.MEDIA_ROOT, filename)
         return media_url, media_path
@@ -131,7 +134,7 @@ class Plotter(object):
 
     def pdf(self, snapshot):
         """"End point of PDF plotter"""
-        self.snapshot = snapshot
+        self.snapshot = self._get_snapshot(snapshot)
         media_url, media_path = self._generate_PDF_meta()
         if not os.path.exists(media_path):
             self.plot()
@@ -140,7 +143,8 @@ class Plotter(object):
 
     def plot(self, snapshot=None):
         """"End point of PNG plotter"""
-        self.snapshot = snapshot or self.snapshot
+        if snapshot:
+            self.snapshot = self._get_snapshot(snapshot)
 
         apply_results = list()
         for data in self.eventlet_pool.imap(self._extract, self._get_metrics()):
