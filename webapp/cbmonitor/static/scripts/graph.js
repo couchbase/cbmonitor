@@ -79,7 +79,6 @@ CBMONITOR.DataHandler = function(data) {
     "use strict";
 
     this.data = data;
-    this.timestamps = this.prepareTimestamps();
 };
 
 CBMONITOR.DataHandler.prototype.prepareTimestamps = function(dataset) {
