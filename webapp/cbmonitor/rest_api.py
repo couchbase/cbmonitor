@@ -171,7 +171,7 @@ def get_tree_data(request):
 def get_clusters(request):
     """Get list of active clusters"""
     clusters = [c.name for c in models.Cluster.objects.all()]
-    content = json.dumps(clusters)
+    content = json.dumps(sorted(clusters))
     return HttpResponse(content)
 
 
@@ -188,7 +188,7 @@ def get_servers(request):
             servers = []
     else:
         servers = []
-    content = json.dumps(servers)
+    content = json.dumps(sorted(servers))
     return HttpResponse(content)
 
 
@@ -205,7 +205,7 @@ def get_buckets(request):
             buckets = []
     else:
         buckets = []
-    content = json.dumps(buckets)
+    content = json.dumps(sorted(buckets))
     return HttpResponse(content)
 
 
@@ -219,11 +219,11 @@ def get_metrics_and_events(request):
             observables = models.Observable.objects.filter(**form.params).values()
             observables = [{"name": o["name"], "collector": o["collector"]}
                            for o in observables]
-            content = json.dumps(observables)
         except DoesNotExist:
-            content = json.dumps([])
+            observables = []
     else:
-        content = json.dumps([])
+        observables = []
+    content = json.dumps(sorted(observables))
     return HttpResponse(content)
 
 
