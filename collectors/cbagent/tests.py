@@ -25,11 +25,14 @@ class MockHelper(object):
         self.mock.terminate()
 
     def train_seriesly(self):
-        params = {
-            "path": "/_all_dbs", "response_body": '["cbmonitor"]',
-            "method": "GET", "response_code": "200"
-        }
-        requests.post(url="http://127.0.0.1:8080/", params=params)
+        dbs = ["ns_serverEastdefaultec2-54-242-160-13compute-1amazonawscom",
+               "ns_serverEastdefault"]
+        for db in dbs:
+            params = {
+                "path": "/{0}/_query".format(db), "method": "GET",
+                "response_code": "200", "response_body": "{}",
+            }
+            requests.post(url="http://127.0.0.1:8080/", params=params)
 
     def _submit_sample(self, path, sample):
         base_path = "collectors/cbagent/fixtures/"

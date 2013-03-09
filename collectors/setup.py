@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.2'
+version = '0.2.1'
 
 setup(
     name='cbagent',
@@ -39,8 +39,8 @@ setup(
     },
     include_package_data=True,
     install_requires=[
-        'requests==1.0.4',
-        'seriesly==0.3.3',
+        'requests==1.1.0',
+        'seriesly==0.5.1',
         'fabric==1.5.3',
         'argparse==1.2.1',
         'eventlet==0.12.1',
