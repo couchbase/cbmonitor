@@ -27,7 +27,7 @@ Assuming that seriesly instance is up and running:
 Running collectors via CLI:
 ---------------------------
 
-    $ ./bin/ns_collector sample.cfg
+    $ ./bin/ns_collector collectors/sample.cfg
 
 Running tests
 -------------
