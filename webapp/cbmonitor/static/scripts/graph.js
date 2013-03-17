@@ -101,7 +101,7 @@ CBMONITOR.DataHandler.prototype.prepareSeries = function(metrics) {
             timestamp = timestamps[j];
             values.push({
                 x: timestamp,
-                y: parseInt(this.data[i][timestamp], 10)
+                y: parseFloat(this.data[i][timestamp])
             });
         }
         series.push({
