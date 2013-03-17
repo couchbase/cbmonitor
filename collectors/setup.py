@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.2.1'
+version = '0.3'
 
 setup(
     name='cbagent',
@@ -28,17 +28,22 @@ setup(
     ],
     py_modules=[
         "atop_collector",
-        "ns_collector"
+        "ns_collector",
+        "at_collector",
+        "latency_collector",
+        "TestInput"
     ],
     entry_points={
         'console_scripts': [
             'ns_collector = ns_collector:main',
             'atop_collector = atop_collector:main',
             'at_collector = at_collector:main',
+            'latency_collector = latency_collector:main',
         ]
     },
     include_package_data=True,
     install_requires=[
+        'cbtestlib==1.0.0',
         'requests==1.1.0',
         'seriesly==0.5.1',
         'fabric==1.5.3',
