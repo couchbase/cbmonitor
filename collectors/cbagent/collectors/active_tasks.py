@@ -47,8 +47,8 @@ class ActiveTasks(Collector):
         for task in tasks:
             bucket = task.get("bucket", None)
             for metric in ("changesDone", "totalChanges", "progress"):
-                metric = self._build_ns_server_task_id(task, metric)
                 value = task.get(metric, 0)
+                metric = self._build_ns_server_task_id(task, metric)
                 yield metric, value, bucket
 
     def _append(self, metric, value, bucket=None, server=None):
