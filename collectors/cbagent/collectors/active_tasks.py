@@ -1,5 +1,3 @@
-from eventlet import GreenPool
-
 from cbagent.collectors import Collector
 
 
@@ -7,7 +5,6 @@ class ActiveTasks(Collector):
 
     def __init__(self, settings):
         super(ActiveTasks, self).__init__(settings)
-        self.pool = GreenPool()
         self.pointers = list()
         self.update_metadata_enabled = settings.update_metadata
 
@@ -69,6 +66,6 @@ class ActiveTasks(Collector):
         """Collect info about ns_server and couchdb active tasks"""
         for metric, value, bucket in self._get_ns_server_tasks():
             self._append(metric, value, bucket=bucket)
-        for metric, value, bucket, server in \
-                self.pool.imap(self._get_couchdb_tasks, self._get_nodes()):
-            self._append(metric, value, bucket, server)
+        for node in self._get_nodes():
+            for metric, value, bucket, server in self._get_couchdb_tasks(node):
+                self._append(metric, value, bucket, server)
