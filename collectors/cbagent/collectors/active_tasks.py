@@ -47,10 +47,9 @@ class ActiveTasks(Collector):
         for task in tasks:
             bucket = task.get("bucket", None)
             for metric in ("changesDone", "totalChanges", "progress"):
-                value = task.get(metric, None)
-                if value is not None:
-                    metric = self._build_ns_server_task_id(task, metric)
-                    yield metric, value, bucket
+                metric = self._build_ns_server_task_id(task, metric)
+                value = task.get(metric, 0)
+                yield metric, value, bucket
 
     def _append(self, metric, value, bucket=None, server=None):
         pointer = hash((metric, bucket, server))
