@@ -92,17 +92,17 @@ CBMONITOR.DataHandler.prototype.prepareTimestamps = function(dataset) {
 CBMONITOR.DataHandler.prototype.prepareSeries = function(metrics) {
     "use strict";
 
-    var timestamp, timestamps, values,
+    var timestamp, timestamps, value, values,
         series = [];
     for(var i = 0, lenm = metrics.length; i < lenm; i++) {
         timestamps = this.prepareTimestamps(this.data[i]);
         values = [];
         for(var j = 0, lent = timestamps.length; j < lent; j++) {
             timestamp = timestamps[j];
-            values.push({
-                x: timestamp,
-                y: parseFloat(this.data[i][timestamp])
-            });
+            value = parseFloat(this.data[i][timestamp]);
+            if (!isNaN(value)) {
+                values.push({x: timestamp, y: value});
+            }
         }
         series.push({
             key: metrics[i],
