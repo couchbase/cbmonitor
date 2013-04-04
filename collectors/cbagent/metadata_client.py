@@ -1,4 +1,5 @@
 from cbagent.decorators import post_request
+from cbagent.logger import logger
 
 
 class MetadataClient(object):
@@ -10,6 +11,8 @@ class MetadataClient(object):
 
     @post_request
     def add_cluster(self):
+        logger.info("Adding cluster: {0}".format(self.settings.cluster))
+
         url = self.base_url + "/add_cluster/"
         params = {"name": self.settings.cluster,
                   "rest_username": self.settings.rest_username,
@@ -18,6 +21,8 @@ class MetadataClient(object):
 
     @post_request
     def add_server(self, address):
+        logger.info("Adding server: {0}".format(address))
+
         url = self.base_url + "/add_server/"
         params = {"address": address,
                   "cluster": self.settings.cluster,
@@ -27,6 +32,8 @@ class MetadataClient(object):
 
     @post_request
     def add_bucket(self, name):
+        logger.info("Adding bucket: {0}".format(name))
+
         url = self.base_url + "/add_bucket/"
         params = {"name": name, "type": "Couchbase",
                   "cluster": self.settings.cluster}
@@ -35,6 +42,8 @@ class MetadataClient(object):
     @post_request
     def add_metric(self, name, bucket=None, server=None, unit=None,
                    description=None, collector=None):
+        logger.info("Adding metric: {0}".format(name))
+
         url = self.base_url + "/add_metric_or_event/"
         params = {"name": name, "type": "metric",
                   "cluster": self.settings.cluster}
