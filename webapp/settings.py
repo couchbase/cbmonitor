@@ -1,6 +1,10 @@
 # Django settings for cbmonitor project.
 from os import path
 
+import djcelery
+
+djcelery.setup_loader()
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -94,6 +98,8 @@ INSTALLED_APPS = (
     'pyjade',
     'cbmonitor',
     'django_coverage',
+    "djcelery",
+    "kombu.transport.django",
 )
 
 LOGGING = {
@@ -124,3 +130,6 @@ LOGGING = {
 # Proxy settings
 PROXY_DOMAIN = 'localhost'
 PROXY_PORT = 3133
+
+# Celery
+BROKER_URL = 'django://'
