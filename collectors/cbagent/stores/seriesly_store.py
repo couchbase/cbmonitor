@@ -12,14 +12,9 @@ class SerieslyStore(Store):
 
     @staticmethod
     def build_dbname(cluster, server, bucket, collector):
-        if collector:
-            db_name = collector + cluster
-        else:
-            db_name = cluster
-        if bucket:
-            db_name += bucket
-        if server:
-            db_name += server.replace(".", "")
+        db_name = (collector or "") + cluster + (bucket or "") + (server or "")
+        for char in "[]/\;.,><&*:%=+@!#^()|?^'\"":
+            db_name = db_name.replace(char, "")
         return db_name
 
     def _get_db(self, db_name):
