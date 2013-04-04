@@ -7,9 +7,13 @@ from cbagent.logger import logger
 def post_request(request):
     def wrapper(*args, **kargs):
         url, params = request(*args, **kargs)
-        r = requests.post(url, params)
-        if r.status_code == 500:
-            logger.interrupt("Internal server error: {0}".format(url))
+        try:
+            r = requests.post(url, params)
+        except requests.exceptions.ConnectionError:
+            logger.interrupt("Connection error: {0}".format(url))
+        else:
+            if r.status_code == 500:
+                logger.interrupt("Internal server error: {0}".format(url))
     return wrapper
 
 
