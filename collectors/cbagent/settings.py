@@ -5,6 +5,9 @@ from ConfigParser import ConfigParser
 class DefaultSettings(dict):
 
     def __init__(self):
+        self.cbmonitor_host = "127.0.0.1"
+        self.cbmonitor_port = 8000
+
         self.interval = 10
         self.seriesly_host = "127.0.0.1"
         self.update_metadata = False
@@ -31,6 +34,9 @@ class Settings(DefaultSettings):
 
         config = ConfigParser()
         config.read(args.config)
+
+        self.cbmonitor_host = config.get("cbmonitor", "host")
+        self.cbmonitor_port = config.getint("cbmonitor", "port")
 
         self.interval = config.getint("store", "interval")
         self.seriesly_host = config.get("store", "host")

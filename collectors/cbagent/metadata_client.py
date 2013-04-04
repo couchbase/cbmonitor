@@ -3,9 +3,10 @@ from cbagent.decorators import post_request
 
 class MetadataClient(object):
 
-    def __init__(self, settings, host="127.0.0.1"):
+    def __init__(self, settings):
         self.settings = settings
-        self.base_url = "http://{0}:8000/cbmonitor".format(host)
+        self.base_url = "http://{0}:{1}/cbmonitor"\
+            .format(settings.cbmonitor_host, settings.cbmonitor_port)
 
     @post_request
     def add_cluster(self):
