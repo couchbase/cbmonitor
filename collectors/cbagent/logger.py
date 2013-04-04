@@ -1,5 +1,7 @@
 import logging
 import logging.config
+import sys
+import types
 
 DICT_CONFIG = {
     'version': 1,
@@ -28,3 +30,10 @@ DICT_CONFIG = {
 
 logging.config.dictConfig(DICT_CONFIG)
 logger = logging.getLogger()
+
+
+def error(self, msg, *args, **kwargs):
+    self.error(msg, *args, **kwargs)
+    sys.exit(1)
+
+logger.interrupt = types.MethodType(error, logger)
