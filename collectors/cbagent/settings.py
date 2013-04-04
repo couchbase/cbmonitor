@@ -1,5 +1,7 @@
 from argparse import ArgumentParser
-from ConfigParser import ConfigParser
+from ConfigParser import ConfigParser, NoOptionError
+
+from cbagent.logger import logger
 
 
 class DefaultSettings(dict):
@@ -33,21 +35,30 @@ class Settings(DefaultSettings):
         args = parser.parse_args()
 
         config = ConfigParser()
-        config.read(args.config)
+        try:
+            logger.info("Reading configuration file: {0}".format(args.config))
+            config.read(args.config)
+            logger.info("Configuration file successfully parsed")
+        except Exception as e:
+            logger.interrupt("Failed to parse config file: {0}".format(e))
+        try:
+            self.cbmonitor_host = config.get("cbmonitor", "host")
+            self.cbmonitor_port = config.getint("cbmonitor", "port")
 
-        self.cbmonitor_host = config.get("cbmonitor", "host")
-        self.cbmonitor_port = config.getint("cbmonitor", "port")
+            self.interval = config.getint("store", "interval")
+            self.seriesly_host = config.get("store", "host")
+            self.update_metadata = config.getboolean("store", "update_metadata")
 
-        self.interval = config.getint("store", "interval")
-        self.seriesly_host = config.get("store", "host")
-        self.update_metadata = config.getboolean("store", "update_metadata")
+            self.cluster = config.get("target", "cluster")
+            self.master_node = config.get("target", "master_node")
+            self.rest_username = config.get("target", "rest_username")
+            self.rest_password = config.get("target", "rest_password")
+            self.ssh_username = config.get("target", "ssh_username")
+            self.ssh_password = config.get("target", "ssh_password")
+        except NoOptionError as e:
+            logger.interrupt("Failed to get option from config: {0}".format(e))
 
-        self.cluster = config.get("target", "cluster")
-        self.master_node = config.get("target", "master_node")
-        self.rest_username = config.get("target", "rest_username")
-        self.rest_password = config.get("target", "rest_password")
-        self.ssh_username = config.get("target", "ssh_username")
-        self.ssh_password = config.get("target", "ssh_password")
+        logger.info("Configuration file successfully applied")
 
     def __getitem__(self, item):
         return getattr(self, item, None)
