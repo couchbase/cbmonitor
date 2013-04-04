@@ -6,6 +6,8 @@ from cbagent.stores.seriesly_store import SerieslyStore
 from cbagent.metadata_client import MetadataClient
 from cbagent.decorators import json
 
+from cbagent.logger import logger
+
 
 class Collector(object):
 
@@ -25,8 +27,11 @@ class Collector(object):
         try:
             return requests.get(url=url, auth=self.auth)
         except requests.exceptions.ConnectionError:
-            self._update_nodes()
-            return self._get(path, server, port)
+            if hasattr(self, "nodes"):
+                self._update_nodes()
+                return self._get(path, server, port)
+            else:
+                logger.interrupt("Failed to find at least one cluster node")
 
     def _update_nodes(self):
         """Update list of available nodes and address of master node"""
