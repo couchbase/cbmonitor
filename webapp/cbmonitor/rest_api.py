@@ -75,7 +75,10 @@ def add_cluster(request):
         if form.cleaned_data.get("master_node"):
             collector = NSServer(form.settings)
             collector.update_metadata()
-        form.save()
+        cluster = form.save()
+        for collector_name in models.CollectorName.objects.all():
+            collector = models.Collector(name=collector_name, cluster=cluster)
+            collector.save()
     else:
         raise ValidationError(form)
 

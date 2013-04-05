@@ -624,3 +624,10 @@ class ApiTest(TestHelper):
 
         self.assertEqual("/media/run-1_access-phase_vperf-reb_2.0.0-1976.pdf",
                          self.response.content)
+
+    def test_adding_collectors(self):
+        cluster = self.add_valid_cluster()
+        collector = models.Collector.objects.get(name="ns_server",
+                                                 cluster=cluster)
+        self.assertEqual(collector.interval, 10)
+        self.assertEqual(collector.status, False)
