@@ -32,13 +32,14 @@ def dispatcher(request, path):
         "add_metric_or_event": add_metric_or_event,
         "add_snapshot": add_shapshot,
         "get_snapshots": get_snapshots,
+        "get_collectors": get_collectors,
         "plot": plot,
         "pdf": pdf,
     }.get(path)
     if handler:
         return handler(request)
     else:
-        return HttpResponse(content='Wrong path', status=404)
+        return HttpResponse(content='Wrong path: {0}'.format(path), status=404)
 
 
 class ValidationError(Exception):
@@ -254,6 +255,22 @@ def add_shapshot(request):
 def get_snapshots(request):
     snapshots = [s.name for s in models.Snapshot.objects.all()]
     content = json.dumps(snapshots)
+    return HttpResponse(content)
+
+
+@form_validation
+def get_collectors(request):
+    collectors = []
+
+    form = forms.GetCollectors(request.GET)
+    if form.is_valid():
+        objects = models.Collector.objects.filter(**form.cleaned_data).values()
+        for collector in objects:
+            collectors.append({"name": collector["name_id"],
+                               "interval": collector["interval"],
+                               "enabled": collector["enabled"]})
+
+    content = json.dumps(collectors)
     return HttpResponse(content)
 
 

@@ -631,3 +631,16 @@ class ApiTest(TestHelper):
                                                  cluster=cluster)
         self.assertEqual(collector.interval, 10)
         self.assertEqual(collector.enabled, False)
+
+    @Verifier.valid_json
+    def test_get_collectors(self):
+        cluster = self.add_valid_cluster()
+        params = {"cluster": cluster}
+        request = self.factory.get("/get_collectors", params)
+        self.response = rest_api.dispatcher(request, path="get_collectors")
+
+        # Verify content
+        collectors = json.loads(self.response.content)
+        expected = {"name": "ns_server", "interval": 10, "enabled": False}
+        self.assertIn(expected, collectors)
+        self.assertEqual(len(collectors), 4)
