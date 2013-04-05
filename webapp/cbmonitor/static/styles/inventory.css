@@ -20,6 +20,16 @@
     margin-left: 51%;
     font-size: 93%;
 }
+.collector {
+    position: relative;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.collector-header {
+    position: relative;
+    width: 100%;
+}
 .coll-name {
     position: absolute;
     width: 40%;
@@ -30,12 +40,27 @@
     left: 41%;
     text-align: center;
 }
-.coll-status {
+.coll-enabled {
     position: absolute;
     width: 30%;
     left: 71%;
     text-align: center;
 }
 hr {
-    margin-right: 2%;
+    margin: 20px 10px 0 0;
+}
+.spinner {
+    margin-left: 10px;
+    line-height: 1;
+}
+.ui-spinner {
+    width: 50px;
+    font-size: 93%;
+}
+#apply {
+    display: none;
+    position: absolute;
+    width: 25%;
+    left: 65%;
+    margin-top: 20px;
 }

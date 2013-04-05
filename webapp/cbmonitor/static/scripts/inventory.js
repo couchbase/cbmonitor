@@ -107,6 +107,7 @@ CBMONITOR.Inventory.prototype.configureTree = function() {
             case "cluster":
                 delc.removeClass("ui-state-disabled");
                 adds.addClass("ui-state-disabled");
+                CBMONITOR.inventory.getCollectors(data.rslt.obj.attr("id"));
                 break;
             case "servers":
                 adds.removeClass("ui-state-disabled");
@@ -128,6 +129,60 @@ CBMONITOR.Inventory.prototype.configureTree = function() {
                 break;
             default:
                 break;
+        }
+    });
+};
+
+
+/*
+ * Display cluster collectors
+ */
+CBMONITOR.Inventory.prototype.getCollectors = function(cluster) {
+    "use strict";
+
+    $.ajax({url: "/cbmonitor/get_collectors/", dataType: "json",
+        data: {"cluster": cluster},
+        success: function(collectors){
+            var container = $("#collectors");
+            container.empty();
+
+            collectors.forEach(function(collector) {
+                var id = collector.name.replace(/\s+/g,"_");
+
+                $("<div/>").attr({
+                    "class": "collector",
+                    id: id
+                }).appendTo(container);
+
+                $("<div/>").attr({
+                    "class": "coll-name"
+                }).html(collector.name).appendTo("#" + id);
+                $("<div/>").attr({
+                    "class": "coll-interval",
+                    "id": "interval" + id
+                }).appendTo("#" + id);
+                $("<div/>").attr({
+                    "class": "coll-enabled",
+                    "id": "enabled" + id
+                }).appendTo("#" + id);
+
+                $("</br>").appendTo(container);
+
+                $("<input>").attr({
+                    type: "checkbox",
+                    checked: collector.enabled
+                }).appendTo("#enabled" + id);
+
+                $("<input>").attr({
+                    "id": "spinner" + id,
+                    "class": "spinner",
+                    "value": collector.interval
+                }).appendTo("#interval" + id);
+
+                $("#spinner" + id).spinner({min: 1});
+            });
+
+            $("#apply").css("display", "block");
         }
     });
 };
