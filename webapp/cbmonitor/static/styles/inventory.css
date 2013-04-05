@@ -18,4 +18,24 @@
     width: 35%;
     height: 80%;
     margin-left: 51%;
+    font-size: 93%;
+}
+.coll-name {
+    position: absolute;
+    width: 40%;
+}
+.coll-interval {
+    position: absolute;
+    width: 30%;
+    left: 41%;
+    text-align: center;
+}
+.coll-status {
+    position: absolute;
+    width: 30%;
+    left: 71%;
+    text-align: center;
+}
+hr {
+    margin-right: 2%;
 }
