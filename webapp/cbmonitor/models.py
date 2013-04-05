@@ -124,7 +124,7 @@ class Collector(models.Model):
 
     name = models.ForeignKey("CollectorName")
     interval = models.IntegerField(default=10)
-    status = models.BooleanField(default=False)
+    enabled = models.BooleanField(default=False)
     cluster = models.ForeignKey("Cluster")
 
     def __str__(self):

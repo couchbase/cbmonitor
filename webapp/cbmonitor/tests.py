@@ -630,4 +630,4 @@ class ApiTest(TestHelper):
         collector = models.Collector.objects.get(name="ns_server",
                                                  cluster=cluster)
         self.assertEqual(collector.interval, 10)
-        self.assertEqual(collector.status, False)
+        self.assertEqual(collector.enabled, False)
