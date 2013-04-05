@@ -262,7 +262,7 @@ CBMONITOR.Dialogs.prototype.addNewCluster = function() {
         master_node = $("#master_node"),
         description = $("#description");
 
-    var spinner = new Spinner({width: 4, top: "450px"});
+    var spinner = new Spinner({width: 4, top: "425px"});
     spinner.spin(document.getElementById('spinner'));
 
     $.ajax({
