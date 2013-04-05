@@ -22,6 +22,7 @@ Running webapp
 Assuming that seriesly instance is up and running:
 
     $ ./bin/webapp syncdb
+    $ ./bin/webapp migrate --all
     $ ./bin/webapp runserver
 
 Running collectors via CLI:

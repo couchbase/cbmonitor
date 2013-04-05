@@ -70,7 +70,8 @@ class DjangoHelper(object):
         sys.path.append("webapp")
 
     def syncdb(self):
-        call_command('syncdb', interactive=False)
+        call_command("syncdb", interactive=False)
+        call_command("migrate")
 
     def runserver(self):
         self.server = subprocess.Popen("./bin/webapp runserver --nothreading",

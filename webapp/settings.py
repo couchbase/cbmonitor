@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     'django_coverage',
     "djcelery",
     "kombu.transport.django",
+    "south",
 )
 
 LOGGING = {
