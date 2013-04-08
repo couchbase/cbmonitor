@@ -140,6 +140,8 @@ CBMONITOR.Inventory.prototype.configureTree = function() {
 CBMONITOR.Inventory.prototype.getCollectors = function(cluster) {
     "use strict";
 
+    CBMONITOR.inventory.cnames = [];
+
     $.ajax({url: "/cbmonitor/get_collectors/", dataType: "json",
         data: {"cluster": cluster},
         success: function(collectors){
@@ -148,6 +150,7 @@ CBMONITOR.Inventory.prototype.getCollectors = function(cluster) {
 
             collectors.forEach(function(collector) {
                 var id = collector.name.replace(/\s+/g,"_");
+                CBMONITOR.inventory.cnames.push(collector.name);
 
                 $("<div/>").attr({
                     "class": "collector",
@@ -169,6 +172,7 @@ CBMONITOR.Inventory.prototype.getCollectors = function(cluster) {
                 $("</br>").appendTo(container);
 
                 $("<input>").attr({
+                    id: "checkbox" + id,
                     type: "checkbox",
                     checked: collector.enabled
                 }).appendTo("#enabled" + id);
@@ -187,6 +191,23 @@ CBMONITOR.Inventory.prototype.getCollectors = function(cluster) {
     });
 };
 
+CBMONITOR.Inventory.prototype.bindApplySettings = function() {
+    "use strict";
+
+    $("#apply").bind("click", function() {
+        CBMONITOR.inventory.cnames.forEach(function(cname) {
+            var id = cname.replace(/\s+/g,"_");
+            var collector = {
+                "cluster": $("#tree").jstree('get_selected').attr('id'),
+                "name": cname,
+                "interval": $("#spinner" + id).val(),
+                "enabled": $("#checkbox" + id).is(":checked")
+            };
+            $.ajax({url: "/cbmonitor/update_collectors/", method: "POST",
+                    dataType: "json", data: collector});
+        });
+    });
+};
 
 $(document).ready(function(){
     "use strict";
@@ -194,6 +215,7 @@ $(document).ready(function(){
     CBMONITOR.inventory = new CBMONITOR.Inventory();
     CBMONITOR.inventory.configureButtons();
     CBMONITOR.inventory.configureTree();
+    CBMONITOR.inventory.bindApplySettings();
 
     CBMONITOR.dialogs = new CBMONITOR.Dialogs();
     CBMONITOR.dialogs.configureAddNewCluster();

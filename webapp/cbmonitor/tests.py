@@ -644,3 +644,21 @@ class ApiTest(TestHelper):
         expected = {"name": "ns_server", "interval": 10, "enabled": False}
         self.assertIn(expected, collectors)
         self.assertEqual(len(collectors), 4)
+
+    @Verifier.valid_response
+    def test_udpate_collectors(self):
+        cluster = self.add_valid_cluster()
+
+        params = {"cluster": cluster, "name": "atop", "interval": 7,
+                  "enabled": True}
+
+        request = self.factory.post("/update_collectors", params)
+        self.response = rest_api.dispatcher(request, path="update_collectors")
+
+        # Verify content
+        request = self.factory.get("/get_collectors", params)
+        response = rest_api.dispatcher(request, path="get_collectors")
+        collectors = json.loads(response.content)
+        expected = {"name": "atop", "interval": 7, "enabled": True}
+        self.assertIn(expected, collectors)
+        self.assertEqual(len(collectors), 4)

@@ -33,6 +33,7 @@ def dispatcher(request, path):
         "add_snapshot": add_shapshot,
         "get_snapshots": get_snapshots,
         "get_collectors": get_collectors,
+        "update_collectors": update_collectors,
         "plot": plot,
         "pdf": pdf,
     }.get(path)
@@ -256,6 +257,17 @@ def get_snapshots(request):
     snapshots = [s.name for s in models.Snapshot.objects.all()]
     content = json.dumps(snapshots)
     return HttpResponse(content)
+
+
+@form_validation
+def update_collectors(request):
+    instance = get_object_or_404(models.Collector, name=request.POST["name"],
+                                 cluster=request.POST["cluster"])
+    form = forms.UpdateCollectors(request.POST, instance=instance)
+    if form.is_valid():
+        form.save()
+    else:
+        raise ValidationError(form)
 
 
 @form_validation
