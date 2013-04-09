@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
 from django.db.utils import IntegrityError
-from cbagent.collectors import NSServer
+from cbagent.collectors import Collector
 
 from cbmonitor import models
 from cbmonitor import forms
@@ -75,12 +75,14 @@ def add_cluster(request):
     form = forms.AddClusterForm(request.POST)
     if form.is_valid():
         if form.cleaned_data.get("master_node"):
-            collector = NSServer(form.settings)
-            collector.update_metadata()
+            collector = Collector(form.settings)
+            for bucket in collector._get_buckets():
+                collector.mc.add_bucket(bucket)
+            for node in collector._get_nodes():
+                collector.mc.add_server(node)
         cluster = form.save()
         for collector_name in models.CollectorName.objects.all():
-            collector = models.Collector(name=collector_name, cluster=cluster)
-            collector.save()
+            models.Collector(name=collector_name, cluster=cluster).save()
     else:
         raise ValidationError(form)
 
