@@ -30,6 +30,11 @@ Running collectors via CLI:
 
     $ ./bin/ns_collector collectors/sample.cfg
 
+Running collectors via Celery:
+---------------------------
+
+    $ ./bin/webapp celeryd -B -c 1 -l INFO -s /tmp/celerybeat-schedule
+
 Running tests
 -------------
 
