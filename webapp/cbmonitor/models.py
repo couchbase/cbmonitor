@@ -122,13 +122,16 @@ class CollectorName(models.Model):
 
 class Collector(models.Model):
 
+    class Meta:
+        unique_together = ["name", "cluster"]
+
     name = models.ForeignKey("CollectorName")
     interval = models.IntegerField(default=10)
     enabled = models.BooleanField(default=False)
     cluster = models.ForeignKey("Cluster")
 
     def __str__(self):
-        return self.name
+        return self.name.name
 
     class Admin:
         pass
