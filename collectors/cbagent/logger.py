@@ -1,34 +1,12 @@
 import logging
 import logging.config
+import os
 import sys
 import types
 
-DICT_CONFIG = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'default': {
-            'format': '%(asctime)s %(levelname)s - %(message)s',
-            'datefmt': '[%d/%b/%Y %H:%M:%S]'
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
-        }
-    },
-    'loggers': {
-        '': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': True,
-        }
-    }
-}
+config_file = os.path.join(os.path.dirname(__file__), "logging.conf")
 
-logging.config.dictConfig(DICT_CONFIG)
+logging.config.fileConfig(config_file)
 logger = logging.getLogger()
 
 
