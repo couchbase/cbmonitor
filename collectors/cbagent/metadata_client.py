@@ -1,5 +1,6 @@
+from logger import logger
+
 from cbagent.decorators import post_request
-from cbagent.logger import logger
 
 
 class MetadataClient(object):

@@ -1,7 +1,7 @@
 import requests
 import ujson
 
-from cbagent.logger import logger
+from logger import logger
 
 
 def post_request(request):

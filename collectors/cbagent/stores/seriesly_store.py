@@ -1,8 +1,8 @@
+from logger import logger
 from seriesly import Seriesly
 from seriesly.exceptions import ConnectionError
 
 from cbagent.stores.store import Store
-from cbagent.logger import logger
 
 
 class SerieslyStore(Store):

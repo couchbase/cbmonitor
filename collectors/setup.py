@@ -50,5 +50,6 @@ setup(
         'argparse==1.2.1',
         'eventlet==0.12.1',
         'ujson==1.23',
+        'logger==1.1'
     ],
 )

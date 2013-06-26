@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 from ConfigParser import ConfigParser, NoOptionError
 
-from cbagent.logger import logger
+from logger import logger
 
 
 class DefaultSettings(dict):
