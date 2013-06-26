@@ -1,6 +1,18 @@
+import requests
 from logger import logger
 
-from cbagent.decorators import post_request
+
+def post_request(request):
+    def wrapper(*args, **kargs):
+        url, params = request(*args, **kargs)
+        try:
+            r = requests.post(url, params)
+        except requests.exceptions.ConnectionError:
+            logger.interrupt("Connection error: {0}".format(url))
+        else:
+            if r.status_code == 500:
+                logger.interrupt("Internal server error: {0}".format(url))
+    return wrapper
 
 
 class MetadataClient(object):

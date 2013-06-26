@@ -1,11 +1,11 @@
 import socket
 
 import requests
+import ujson
 from logger import logger
 
 from cbagent.stores import SerieslyStore
 from cbagent.metadata_client import MetadataClient
-from cbagent.decorators import json
 
 
 class Collector(object):
@@ -19,12 +19,11 @@ class Collector(object):
         self.store = SerieslyStore(settings.seriesly_host)
         self.mc = MetadataClient(settings)
 
-    @json
     def _get(self, path, server=None, port=8091):
         """HTTP GET request to Couchbase server with basic authentication"""
         url = "http://{0}:{1}{2}".format(server or self.master_node, port, path)
         try:
-            return requests.get(url=url, auth=self.auth)
+            return ujson.loads(requests.get(url=url, auth=self.auth).text)
         except requests.exceptions.ConnectionError:
             if hasattr(self, "nodes"):
                 self._update_nodes()

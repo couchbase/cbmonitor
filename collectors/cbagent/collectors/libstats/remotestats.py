@@ -20,3 +20,11 @@ def single_node_task(task):
                           password=self.password, warn_only=True):
                 return task(*args, **kargs)
     return wrapper
+
+
+class RemoteStats(object):
+
+    def __init__(self, hosts, user, password):
+        self.hosts = hosts
+        self.user = user
+        self.password = password

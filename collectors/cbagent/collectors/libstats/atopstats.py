@@ -2,12 +2,11 @@ from uuid import uuid4
 
 from fabric.api import run
 
-from cbagent.collectors.libstats.systemstats import SystemStats
-from cbagent.collectors.libstats.decorators import (multi_node_task,
-                                                    single_node_task)
+from cbagent.collectors.libstats.remotestats import (
+    RemoteStats, multi_node_task, single_node_task)
 
 
-class AtopStats(SystemStats):
+class AtopStats(RemoteStats):
 
     def __init__(self, hosts, user, password):
         super(AtopStats, self).__init__(hosts, user, password)
