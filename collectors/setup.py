@@ -23,10 +23,10 @@ setup(
     packages=[
         "cbagent",
         "cbagent.collectors",
-        "cbagent.stores",
         "cbagent.collectors.libstats"
     ],
     py_modules=[
+        "stores",
         "atop_collector",
         "ns_collector",
         "at_collector",

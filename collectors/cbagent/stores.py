@@ -2,10 +2,8 @@ from logger import logger
 from seriesly import Seriesly
 from seriesly.exceptions import ConnectionError
 
-from cbagent.stores.store import Store
 
-
-class SerieslyStore(Store):
+class SerieslyStore(object):
 
     def __init__(self, host):
         self.seriesly = Seriesly(host)

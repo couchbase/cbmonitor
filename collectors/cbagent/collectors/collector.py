@@ -3,7 +3,7 @@ import socket
 import requests
 from logger import logger
 
-from cbagent.stores.seriesly_store import SerieslyStore
+from cbagent.stores import SerieslyStore
 from cbagent.metadata_client import MetadataClient
 from cbagent.decorators import json
 

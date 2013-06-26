@@ -9,7 +9,7 @@ matplotlib.rcParams.update({'font.size': 5})
 matplotlib.rcParams.update({'lines.linewidth': 1})
 from matplotlib.pyplot import figure, grid, close
 
-from cbagent.stores.seriesly_store import SerieslyStore
+from cbagent.stores import SerieslyStore
 from eventlet import GreenPool
 from reportlab.lib.pagesizes import landscape, B4
 from reportlab.platypus import SimpleDocTemplate, Image
