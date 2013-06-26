@@ -44,9 +44,9 @@ setup(
     include_package_data=True,
     install_requires=[
         'cbtestlib==1.0.0',
-        'requests==1.1.0',
-        'seriesly==0.5.1',
-        'fabric==1.5.3',
+        'requests==1.2.0',
+        'seriesly==0.5.2',
+        'fabric==1.6.0',
         'argparse==1.2.1',
         'eventlet==0.12.1',
         'ujson==1.23',
