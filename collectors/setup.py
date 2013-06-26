@@ -30,20 +30,16 @@ setup(
         "atop_collector",
         "ns_collector",
         "at_collector",
-        "latency_collector",
-        "TestInput"
     ],
     entry_points={
         'console_scripts': [
             'ns_collector = ns_collector:main',
             'atop_collector = atop_collector:main',
             'at_collector = at_collector:main',
-            'latency_collector = latency_collector:main',
         ]
     },
     include_package_data=True,
     install_requires=[
-        'cbtestlib==1.0.0',
         'requests==1.2.0',
         'seriesly==0.5.2',
         'fabric==1.6.0',

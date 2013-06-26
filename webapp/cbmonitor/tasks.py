@@ -8,7 +8,7 @@ from celery.signals import worker_process_init
 from celery.task import PeriodicTask
 from celery.utils.log import get_task_logger
 
-from cbagent.collectors import NSServer, Atop, ActiveTasks, Latency
+from cbagent.collectors import NSServer, Atop, ActiveTasks
 from cbagent.settings import Settings
 from cbmonitor import models
 
@@ -33,7 +33,6 @@ class Collector(Thread):
             "ns_server": NSServer,
             "atop": Atop,
             "Active tasks": ActiveTasks,
-            "Latency": Latency,
         }[str(self.db_object)]
 
     def _get_settings(self):

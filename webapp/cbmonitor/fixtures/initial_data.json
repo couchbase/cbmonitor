@@ -47,12 +47,5 @@
         "fields": {
             "name": "Active tasks"
         }
-    },
-    {
-        "model": "cbmonitor.CollectorName",
-        "pk": "Latency",
-        "fields": {
-            "name": "Latency"
-        }
     }
 ]

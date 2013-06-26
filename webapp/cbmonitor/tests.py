@@ -643,7 +643,7 @@ class ApiTest(TestHelper):
         collectors = json.loads(self.response.content)
         expected = {"name": "ns_server", "interval": 10, "enabled": False}
         self.assertIn(expected, collectors)
-        self.assertEqual(len(collectors), 4)
+        self.assertEqual(len(collectors), 3)
 
     @Verifier.valid_response
     def test_udpate_collectors(self):
@@ -661,4 +661,4 @@ class ApiTest(TestHelper):
         collectors = json.loads(response.content)
         expected = {"name": "atop", "interval": 7, "enabled": True}
         self.assertIn(expected, collectors)
-        self.assertEqual(len(collectors), 4)
+        self.assertEqual(len(collectors), 3)
