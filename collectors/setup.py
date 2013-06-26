@@ -22,20 +22,18 @@ setup(
     license="Apache Software License",
     packages=[
         "cbagent",
+        "cbagent.cli",
         "cbagent.collectors",
         "cbagent.collectors.libstats"
     ],
     py_modules=[
         "stores",
-        "atop_collector",
-        "ns_collector",
-        "at_collector",
     ],
     entry_points={
         'console_scripts': [
-            'ns_collector = ns_collector:main',
-            'atop_collector = atop_collector:main',
-            'at_collector = at_collector:main',
+            'ns_collector = cbagent.cli.ns_collector:main',
+            'atop_collector = cbagent.cli.atop_collector:main',
+            'at_collector = cbagent.cli.at_collector:main',
         ]
     },
     include_package_data=True,
