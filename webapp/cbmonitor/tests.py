@@ -4,11 +4,11 @@ import time
 from uuid import uuid4
 from random import randint, choice
 
+from cbmock.helpers import MockHelper
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from cbagent.tests import MockHelper
 
 from cbmonitor import views
 from cbmonitor import rest_api
