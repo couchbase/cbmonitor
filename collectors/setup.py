@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.5.2'
+version = '0.6.0'
 
 setup(
     name='cbagent',
@@ -9,15 +9,15 @@ setup(
     license='Apache Software License',
     packages=[
         'cbagent',
-        'cbagent.cli',
+        'cbagent.cli_wrappers',
         'cbagent.collectors',
         'cbagent.collectors.libstats'
     ],
     entry_points={
         'console_scripts': [
-            'ns_collector = cbagent.cli.ns_collector:main',
-            'atop_collector = cbagent.cli.atop_collector:main',
-            'at_collector = cbagent.cli.at_collector:main',
+            'ns_collector = cbagent.cli_wrappers.ns_collector:main',
+            'atop_collector = cbagent.cli_wrappers.atop_collector:main',
+            'at_collector = cbagent.cli_wrappers.at_collector:main',
         ]
     },
     include_package_data=True,
