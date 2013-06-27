@@ -339,8 +339,8 @@ class ApiTest(TestHelper):
         }
         self.add_item("server", params)
 
-        self.response = self.delete_item("server",
-                                         {"address": params["address"]})
+        self.response = self.delete_item(
+            "server", {"address": params["address"], "cluster": cluster})
 
         # Verify persistence
         self.assertRaises(ObjectDoesNotExist, models.Server.objects.get,

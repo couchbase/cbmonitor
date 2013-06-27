@@ -42,7 +42,7 @@ class DeleteServerForm(forms.ModelForm):
 
     class Meta:
         model = models.Server
-        fields = ("address", )
+        fields = ("cluster", "address")
 
 
 class DeleteBucketForm(forms.ModelForm):

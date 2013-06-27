@@ -421,7 +421,10 @@ CBMONITOR.Dialogs.prototype.deleteItem = function() {
             url = "/cbmonitor/delete_cluster/";
             break;
         case "server":
-            data = {"address": selected_id};
+            data = {
+                "address": selected_id,
+                "cluster": prnt.attr("id")
+            };
             url = "/cbmonitor/delete_server/";
             break;
         case "bucket":

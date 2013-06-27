@@ -118,7 +118,9 @@ def delete_cluster(request):
 
 @form_validation
 def delete_server(request):
-    server = get_object_or_404(models.Server, address=request.POST["address"])
+    cluster = get_object_or_404(models.Cluster, name=request.POST["cluster"])
+    server = get_object_or_404(models.Server, address=request.POST["address"],
+                               cluster=cluster)
 
     form = forms.DeleteServerForm(request.POST, instance=server)
     if form.is_valid():
