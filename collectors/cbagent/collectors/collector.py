@@ -1,4 +1,6 @@
 import socket
+import sys
+import time
 
 import requests
 from logger import logger
@@ -14,6 +16,8 @@ class Collector(object):
         self.master_node = settings.master_node
         self.auth = (settings.rest_username, settings.rest_password)
         self.nodes = list(self._get_nodes())
+
+        self.interval = settings.interval
 
         self.store = SerieslyStore(settings.seriesly_host)
         self.mc = MetadataClient(settings)
@@ -56,8 +60,18 @@ class Collector(object):
         for node in pool["nodes"]:
             yield node["hostname"].split(":")[0]
 
-    def collect(self):
-        raise NotImplementedError
-
     def update_metadata(self):
         raise NotImplementedError
+
+    def sample(self):
+        raise NotImplementedError
+
+    def collect(self):
+        while True:
+            try:
+                self.sample()
+                time.sleep(self.interval)
+            except KeyboardInterrupt:
+                sys.exit()
+            except Exception as e:
+                logger.warn(e)

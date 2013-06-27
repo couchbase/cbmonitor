@@ -53,7 +53,7 @@ class Atop(Collector):
             for node in self._samples:
                 self._samples[node].update(data[node])
 
-    def collect(self):
+    def sample(self):
         self._samples = {}
         self._extend_samples(self.atop.get_process_rss("beam.smp"))
         self._extend_samples(self.atop.get_process_vsize("beam.smp"))

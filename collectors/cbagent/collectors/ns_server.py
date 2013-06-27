@@ -37,8 +37,8 @@ class NSServer(Collector):
         samples = self._get_samples(uri)
         return samples, host, bucket
 
-    def collect(self):
-        """Collect all available stata from ns_server"""
+    def sample(self):
+        """Sample all available stats from ns_server"""
         for stats, host, bucket in self.pool.imap(self._get_stats,
                                                   self._get_stats_uri()):
             self.store.append(stats, self.cluster, host, bucket, "ns_server")
