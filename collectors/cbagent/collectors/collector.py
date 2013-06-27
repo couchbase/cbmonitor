@@ -1,7 +1,6 @@
 import socket
 
 import requests
-import ujson
 from logger import logger
 
 from cbagent.stores import SerieslyStore
@@ -23,7 +22,7 @@ class Collector(object):
         """HTTP GET request to Couchbase server with basic authentication"""
         url = "http://{0}:{1}{2}".format(server or self.master_node, port, path)
         try:
-            return ujson.loads(requests.get(url=url, auth=self.auth).text)
+            return requests.get(url=url, auth=self.auth).json()
         except requests.exceptions.ConnectionError:
             if hasattr(self, "nodes"):
                 self._update_nodes()

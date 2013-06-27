@@ -28,6 +28,5 @@ setup(
         'logger',
         'requests==1.2.0',
         'seriesly',
-        'ujson==1.23',
     ],
 )
