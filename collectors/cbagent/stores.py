@@ -28,8 +28,6 @@ class SerieslyStore(object):
 
     def append(self, data, cluster=None, server=None, bucket=None,
                collector=None):
-            db_name = self.build_dbname(cluster, server, bucket, collector)
-            db = self._get_db(db_name)
-
-            logger.info("Appending data to: {0}".format(db_name))
-            db.append(data)
+        db_name = self.build_dbname(cluster, server, bucket, collector)
+        db = self._get_db(db_name)
+        db.append(data)
