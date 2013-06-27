@@ -99,8 +99,6 @@ INSTALLED_APPS = (
     'cbmonitor',
     'django_coverage',
     "djcelery",
-    "kombu.transport.django",
-    "south",
 )
 
 LOGGING = {
