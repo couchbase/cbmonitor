@@ -65,3 +65,11 @@ class MetadataClient(object):
             if eval(extra_param) is not None:
                 params[extra_param] = eval(extra_param)
         return url, params
+
+    def add_snapshot(self, name, ts_from, ts_to):
+        logger.info("Adding snapshot: {0}".format(name))
+
+        url = self.base_url + "/add_snapshot/"
+        params = {"cluster": self.settings.cluster, "name": name,
+                  "ts_from": ts_from, "ts_to": ts_to}
+        return url, params
