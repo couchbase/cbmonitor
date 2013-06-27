@@ -36,7 +36,6 @@ update_templates: ; \
 run_fcgi: update_templates; \
     killall -q webapp; \
     ./bin/webapp syncdb --noinput; \
-    ./bin/webapp migrate --all; \
     ./bin/webapp runfcgi method=threaded socket=/tmp/cbmonitor.sock; \
     chmod a+rw /tmp/cbmonitor.sock; \
     cp webapp/nginx.template /etc/nginx/sites-available/cbmonitor; \
