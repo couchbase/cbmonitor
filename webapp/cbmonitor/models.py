@@ -19,8 +19,11 @@ class Cluster(models.Model):
 
 class Server(models.Model):
 
+    class Meta:
+        unique_together = ["address", "cluster"]
+
     cluster = models.ForeignKey('Cluster')
-    address = models.CharField(max_length=80, primary_key=True, blank=False)
+    address = models.CharField(max_length=80, blank=False)
     ssh_username = models.CharField(max_length=32, blank=True)
     ssh_password = models.CharField(max_length=64, blank=True)
     ssh_key = models.CharField(max_length=4096, blank=True)

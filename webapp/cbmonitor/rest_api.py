@@ -240,6 +240,7 @@ def add_metric_or_event(request):
     if form.is_valid():
         observable = form.save(commit=False)
         observable.bucket = form.cleaned_data["bucket"]
+        observable.server = form.cleaned_data["server"]
         observable.save()
     else:
         raise ValidationError(form)

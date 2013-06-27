@@ -69,10 +69,11 @@ class GetBucketsForm(forms.ModelForm):
 class GetMetricsAndEvents(forms.ModelForm):
 
     bucket = forms.CharField(max_length=32, required=False)
+    server = forms.CharField(max_length=80, required=False)
 
     class Meta:
         model = models.Observable
-        fields = ("type", "cluster", "server")
+        fields = ("type", "cluster")
 
     def clean(self):
         cleaned_data = super(GetMetricsAndEvents, self).clean()
@@ -85,16 +86,17 @@ class GetMetricsAndEvents(forms.ModelForm):
         }
 
         # Server
-        server = cleaned_data["server"]
-        if server:
+        try:
+            server = models.Server.objects.get(
+                address=cleaned_data["server"], cluster=cluster)
             self.params.update({"server": server})
-        else:
+        except (DoesNotExist, KeyError):
             self.params.update({"server__isnull": True})
 
         # Bucket
         try:
-            bucket = models.Bucket.objects.get(name=cleaned_data["bucket"],
-                                               cluster=cluster)
+            bucket = models.Bucket.objects.get(
+                name=cleaned_data["bucket"], cluster=cluster)
             self.params.update({"bucket": bucket})
         except (DoesNotExist, KeyError):
             self.params.update({"bucket__isnull": True})
@@ -105,21 +107,30 @@ class GetMetricsAndEvents(forms.ModelForm):
 class AddMetricsAndEvents(forms.ModelForm):
 
     bucket = forms.CharField(max_length=32, required=False)
+    server = forms.CharField(max_length=80, required=False)
 
     class Meta:
         model = models.Observable
-        fields = ("name", "type", "cluster", "server", "collector",
-                  "description", "unit")
+        fields = ("name", "type", "cluster", "collector", "description", "unit")
 
     def clean(self):
         cleaned_data = super(AddMetricsAndEvents, self).clean()
 
         try:
             bucket = models.Bucket.objects.get(
-                name=cleaned_data["bucket"], cluster=cleaned_data.get("cluster"))
+                name=cleaned_data["bucket"],
+                cluster=cleaned_data.get("cluster"))
         except (DoesNotExist, KeyError):
             bucket = None
         cleaned_data["bucket"] = bucket
+
+        try:
+            server = models.Server.objects.get(
+                address=cleaned_data["server"],
+                cluster=cleaned_data.get("cluster"))
+        except (DoesNotExist, KeyError):
+            server = None
+        cleaned_data["server"] = server
 
         if cleaned_data["server"] is None:
             try:
@@ -128,7 +139,7 @@ class AddMetricsAndEvents(forms.ModelForm):
                                               server=cleaned_data["server"],
                                               bucket=cleaned_data["bucket"])
                 raise IntegrityError("Null server is not unique")
-            except DoesNotExist:
+            except (DoesNotExist, KeyError):
                 pass
 
         return cleaned_data

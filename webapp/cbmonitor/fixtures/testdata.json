@@ -10,8 +10,9 @@
     },
     {
         "model": "cbmonitor.server",
-        "pk": "ec2-54-242-160-13.compute-1.amazonaws.com",
+        "pk": 1,
         "fields": {
+            "address": "ec2-54-242-160-13.compute-1.amazonaws.com",
             "cluster": "East",
             "description": "",
             "ssh_username": "root",
@@ -37,7 +38,7 @@
             "name": "cache_miss",
             "type": "metric",
             "cluster": "East",
-            "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+            "server": 1,
             "bucket": 1,
             "collector": "ns_server"
         }
@@ -61,7 +62,7 @@
             "name": "Rebalance start",
             "type": "event",
             "cluster": "East",
-            "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+            "server": 1,
             "bucket": 1,
             "collector": "ns_server"
         }

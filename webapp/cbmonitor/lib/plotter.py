@@ -115,9 +115,15 @@ class Plotter(object):
 
     def _extract(self, metric):
         """Extract time series data and metadata"""
-        bucket = str(models.Bucket.objects.get(id=metric["bucket_id"]))
+        if metric["bucket_id"]:
+            bucket = str(models.Bucket.objects.get(id=metric["bucket_id"]))
+        else:
+            bucket = ""
+        if metric["server_id"]:
+            server = str(models.Server.objects.get(id=metric["server_id"]))
+        else:
+            server = ""
         cluster = metric["cluster_id"]
-        server = metric["server_id"]
         name = metric["name"]
         collector = metric["collector"]
 
