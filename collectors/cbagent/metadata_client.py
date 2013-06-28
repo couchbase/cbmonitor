@@ -66,6 +66,7 @@ class MetadataClient(object):
                 params[extra_param] = eval(extra_param)
         return url, params
 
+    @post_request
     def add_snapshot(self, name, ts_from, ts_to):
         logger.info("Adding snapshot: {0}".format(name))
 
