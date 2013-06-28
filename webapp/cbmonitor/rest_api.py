@@ -74,13 +74,13 @@ def form_validation(method):
 def add_cluster(request):
     form = forms.AddClusterForm(request.POST)
     if form.is_valid():
+        cluster = form.save()
         if form.cleaned_data.get("master_node"):
             collector = Collector(form.settings)
             for bucket in collector._get_buckets():
                 collector.mc.add_bucket(bucket)
             for node in collector._get_nodes():
                 collector.mc.add_server(node)
-        cluster = form.save()
         for collector_name in models.CollectorName.objects.all():
             models.Collector(name=collector_name, cluster=cluster).save()
     else:
