@@ -26,26 +26,5 @@
         "fields": {
             "type": "event"
         }
-    },
-    {
-        "model": "cbmonitor.CollectorName",
-        "pk": "ns_server",
-        "fields": {
-            "name": "ns_server"
-        }
-    },
-    {
-        "model": "cbmonitor.CollectorName",
-        "pk": "atop",
-        "fields": {
-            "name": "atop"
-        }
-    },
-    {
-        "model": "cbmonitor.CollectorName",
-        "pk": "Active tasks",
-        "fields": {
-            "name": "Active tasks"
-        }
     }
 ]

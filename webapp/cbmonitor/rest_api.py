@@ -32,8 +32,6 @@ def dispatcher(request, path):
         "add_metric_or_event": add_metric_or_event,
         "add_snapshot": add_shapshot,
         "get_snapshots": get_snapshots,
-        "get_collectors": get_collectors,
-        "update_collectors": update_collectors,
         "plot": plot,
         "pdf": pdf,
     }.get(path)
@@ -74,15 +72,13 @@ def form_validation(method):
 def add_cluster(request):
     form = forms.AddClusterForm(request.POST)
     if form.is_valid():
-        cluster = form.save()
+        form.save()
         if form.cleaned_data.get("master_node"):
             collector = Collector(form.settings)
             for bucket in collector._get_buckets():
                 collector.mc.add_bucket(bucket)
             for node in collector._get_nodes():
                 collector.mc.add_server(node)
-        for collector_name in models.CollectorName.objects.all():
-            models.Collector(name=collector_name, cluster=cluster).save()
     else:
         raise ValidationError(form)
 
@@ -261,33 +257,6 @@ def add_shapshot(request):
 def get_snapshots(request):
     snapshots = [s.name for s in models.Snapshot.objects.all()]
     content = json.dumps(snapshots)
-    return HttpResponse(content)
-
-
-@form_validation
-def update_collectors(request):
-    instance = get_object_or_404(models.Collector, name=request.POST["name"],
-                                 cluster=request.POST["cluster"])
-    form = forms.UpdateCollectors(request.POST, instance=instance)
-    if form.is_valid():
-        form.save()
-    else:
-        raise ValidationError(form)
-
-
-@form_validation
-def get_collectors(request):
-    collectors = []
-
-    form = forms.GetCollectors(request.GET)
-    if form.is_valid():
-        objects = models.Collector.objects.filter(**form.cleaned_data).values()
-        for collector in objects:
-            collectors.append({"name": collector["name_id"],
-                               "interval": collector["interval"],
-                               "enabled": collector["enabled"]})
-
-    content = json.dumps(collectors)
     return HttpResponse(content)
 
 

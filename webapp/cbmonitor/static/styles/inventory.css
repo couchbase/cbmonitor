@@ -3,7 +3,7 @@
     position: absolute;
     width: 35%;
     height: 80%;
-    margin-left: 15%;
+    margin-left: 32.5%;
 }
 .sub-container {
     height: 95%;
@@ -12,39 +12,6 @@
 }
 .inventorybtn {
     width: 24%;
-}
-.collectors-container {
-    position: absolute;
-    width: 35%;
-    height: 80%;
-    margin-left: 51%;
-    font-size: 93%;
-}
-.collector {
-    position: relative;
-    width: 100%;
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-.collector-header {
-    position: relative;
-    width: 100%;
-}
-.coll-name {
-    position: absolute;
-    width: 40%;
-}
-.coll-interval {
-    position: absolute;
-    width: 30%;
-    left: 41%;
-    text-align: center;
-}
-.coll-enabled {
-    position: absolute;
-    width: 30%;
-    left: 71%;
-    text-align: center;
 }
 hr {
     margin: 20px 10px 0 0;

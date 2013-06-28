@@ -112,36 +112,7 @@ class Snapshot(models.Model):
         pass
 
 
-class CollectorName(models.Model):
-
-    name = models.CharField(max_length=128, primary_key=True)
-
-    def __str__(self):
-        return self.name
-
-    class Admin:
-        pass
-
-
-class Collector(models.Model):
-
-    class Meta:
-        unique_together = ["name", "cluster"]
-
-    name = models.ForeignKey("CollectorName")
-    interval = models.IntegerField(default=10)
-    enabled = models.BooleanField(default=False)
-    cluster = models.ForeignKey("Cluster")
-
-    def __str__(self):
-        return self.name.name
-
-    class Admin:
-        pass
-
-
 admin.site.register(Cluster)
 admin.site.register(Server)
 admin.site.register(Bucket)
 admin.site.register(Observable)
-admin.site.register(Collector)

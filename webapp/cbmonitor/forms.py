@@ -156,16 +156,3 @@ class GetSnapshots(forms.ModelForm):
     class Meta:
         model = models.Snapshot
         fields = ("cluster", )
-
-
-class UpdateCollectors(forms.ModelForm):
-
-    class Meta:
-        model = models.Collector
-
-
-class GetCollectors(forms.ModelForm):
-
-    class Meta:
-        model = models.Collector
-        fields = ("cluster", )
