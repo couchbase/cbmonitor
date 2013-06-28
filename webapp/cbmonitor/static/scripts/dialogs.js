@@ -84,7 +84,7 @@ CBMONITOR.Dialogs.prototype.configureAddNewCluster = function() {
                 "class": "btn btn-mini btn-dialog",
                 "click": function() {
                     fields.removeClass("ui-state-error");
-                    that.addNewCluster(fields);
+                    that.addNewCluster();
                 }
             },
             cancel: {
@@ -123,7 +123,7 @@ CBMONITOR.Dialogs.prototype.configureAddNewServer = function() {
                 "class": "btn btn-mini btn-dialog",
                 "click": function() {
                     fields.removeClass("ui-state-error");
-                    that.addNewServer(fields);
+                    that.addNewServer();
                 }
             },
             cancel: {
