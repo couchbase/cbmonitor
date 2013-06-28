@@ -74,7 +74,7 @@ CBMONITOR.Dialogs.prototype.configureAddNewCluster = function() {
 
     $("#dialog_new_cluster").dialog({
         autoOpen: false,
-        height: 525,
+        height: 400,
         width: 350,
         modal: true,
         resizable: false,
@@ -114,7 +114,7 @@ CBMONITOR.Dialogs.prototype.configureAddNewServer = function() {
     $("#dialog_new_server").dialog({
         autoOpen: false,
         resizable: false,
-        height: 550,
+        height: 220,
         width: 350,
         modal: true,
         buttons: {
@@ -152,7 +152,7 @@ CBMONITOR.Dialogs.prototype.configureAddNewBucket = function() {
     $("#dialog_new_bucket").dialog({
         autoOpen: false,
         resizable: false,
-        height: 410,
+        height: 220,
         width: 350,
         modal: true,
         buttons: {
@@ -259,8 +259,7 @@ CBMONITOR.Dialogs.prototype.addNewCluster = function() {
         name = $("#cname"),
         rest_username = $("#rest_username"),
         rest_password = $("#rest_password"),
-        master_node = $("#master_node"),
-        description = $("#description");
+        master_node = $("#master_node");
 
     var spinner = new Spinner({width: 4, top: "425px"});
     spinner.spin(document.getElementById('spinner'));
@@ -271,8 +270,7 @@ CBMONITOR.Dialogs.prototype.addNewCluster = function() {
             "name": name.val(),
             "rest_username": rest_username.val(),
             "rest_password": rest_password.val(),
-            "master_node": master_node.val(),
-            "description": description.val()
+            "master_node": master_node.val()
         },
         success: function(){
             spinner.stop();
@@ -298,22 +296,14 @@ CBMONITOR.Dialogs.prototype.addNewServer = function() {
 
     var that = this,
         jstree = $("#tree"),
-        address = $("#address"),
-        ssh_username = $("#ssh_username"),
-        ssh_password = $("#ssh_password"),
-        ssh_key = $("#ssh_key"),
-        description = $("#description");
+        address = $("#address");
     var cluster = that.getSelectedParent();
 
     $.ajax({
         type: "POST", url: "/cbmonitor/add_server/",
         data: {
             "address": address.val(),
-            "cluster": cluster.attr("id"),
-            "ssh_username": ssh_username.val(),
-            "ssh_password": ssh_password.val(),
-            "ssh_key": ssh_key.val(),
-            "description": description.val()
+            "cluster": cluster.attr("id")
         },
         success: function(){
             jstree.jstree("create", null, "last",
@@ -336,20 +326,14 @@ CBMONITOR.Dialogs.prototype.addNewBucket = function() {
 
     var that = this,
         jstree = $("#tree"),
-        name = $("#bname"),
-        type = $("#bucket_type"),
-        port = $("#port"),
-        password = $("#password");
+        name = $("#bname");
     var cluster = that.getSelectedParent();
 
     $.ajax({
         type: "POST", url: "/cbmonitor/add_bucket/",
         data: {
             "name": name.val(),
-            "cluster": cluster.attr("id"),
-            "type": type.children(".active").attr("id"),
-            "port": port.val(),
-            "password": password.val()
+            "cluster": cluster.attr("id")
         },
         success: function(){
             jstree.jstree("create", null, "last",

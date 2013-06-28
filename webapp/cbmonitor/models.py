@@ -54,7 +54,7 @@ class Bucket(models.Model):
 
     name = models.CharField(max_length=32, default="default")
     cluster = models.ForeignKey("Cluster")
-    type = models.ForeignKey("BucketType")
+    type = models.ForeignKey("BucketType", blank=True, null=True)
     port = models.IntegerField(default=11211, null=True, blank=True)
     password = models.CharField(max_length=64, blank=True)
 
