@@ -10,7 +10,7 @@ from cbagent.collectors import Collector
 
 from cbmonitor import models
 from cbmonitor import forms
-from cbmonitor.lib import Plotter
+from cbmonitor.plotter import Plotter
 
 logger = logging.getLogger(__name__)
 
