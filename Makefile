@@ -26,13 +26,13 @@ test: build pep8 jshint test_webapp;
 update_templates: ; \
     sed -i "s|DEBUG = True|DEBUG = False|" webapp/settings.py; \
     sed -i "s|cbmonitor.db|$(CURDIR)/cbmonitor.db|" webapp/settings.py; \
-    sed -i "s|MAKE_ROOT|"$(CURDIR)"|" webapp/nginx.template
+    sed -i "s|MAKE_ROOT|"$(CURDIR)"|" nginx.template
 
 run_fcgi: update_templates; \
     killall -q webapp; \
     ./bin/webapp syncdb --noinput; \
     ./bin/webapp runfcgi method=threaded socket=/tmp/cbmonitor.sock; \
     chmod a+rw /tmp/cbmonitor.sock; \
-    cp webapp/nginx.template /etc/nginx/sites-available/cbmonitor; \
+    cp nginx.template /etc/nginx/sites-available/cbmonitor; \
     ln -fs /etc/nginx/sites-available/cbmonitor /etc/nginx/sites-enabled/cbmonitor; \
     /etc/init.d/nginx reload
