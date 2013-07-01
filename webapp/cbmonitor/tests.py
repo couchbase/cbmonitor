@@ -4,11 +4,11 @@ import time
 from uuid import uuid4
 from random import randint, choice
 
-from cbmock.helpers import MockHelper
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
+from mock import patch
 
 from cbmonitor import views
 from cbmonitor import rest_api
@@ -169,15 +169,6 @@ class TestHelper(TestCase):
 class ApiTest(TestHelper):
 
     fixtures = ["bucket_type.json", "testdata.json"]
-
-    @classmethod
-    def setUpClass(cls):
-        cls.mock = MockHelper()
-        cls.mock.train_seriesly()
-
-    @classmethod
-    def tearDownClass(cls):
-        del cls.mock
 
     def setUp(self):
         self.factory = RequestFactory()
@@ -607,8 +598,11 @@ class ApiTest(TestHelper):
         expected = json.dumps(["run-1_access-phase_vperf-reb_2.0.0-1976"])
         self.assertEquals(self.response.content, expected)
 
+    @patch('seriesly.core.Database.query', autospec=True)
     @Verifier.valid_json
-    def test_plot(self):
+    def test_plot(self, query_mock):
+        query_mock.return_value = {}
+
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
         request = self.factory.post("/plot", params)
         self.response = rest_api.dispatcher(request, path="plot")
@@ -617,7 +611,10 @@ class ApiTest(TestHelper):
         expected = json.dumps([])
         self.assertEquals(self.response.content, expected)
 
-    def test_pdf(self):
+    @patch('seriesly.core.Database.query', autospec=True)
+    def test_pdf(self, query_mock):
+        query_mock.return_value = {}
+
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
         request = self.factory.post("/pdf", params)
         self.response = rest_api.dispatcher(request, path="pdf")

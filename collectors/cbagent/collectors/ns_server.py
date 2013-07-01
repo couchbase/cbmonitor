@@ -1,6 +1,6 @@
 from eventlet import GreenPool
 
-from cbagent.collectors.collector import Collector
+from cbagent.collectors import Collector
 
 
 class NSServer(Collector):

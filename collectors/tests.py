@@ -1,60 +1,25 @@
-import os
-import signal
-import socket
-import subprocess
-import sys
-import time
+import json
 import unittest
 
-from django.core.management import call_command
-from cbmock.helpers import MockHelper
+from mock import patch
 
 from cbagent.settings import DefaultSettings
 from cbagent.collectors import NSServer
 
 
-class DjangoHelper(object):
+class CollectorMock(NSServer):
 
-    def __init__(self):
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
-        sys.path.append("webapp")
-
-    def syncdb(self):
-        call_command("syncdb", interactive=False)
-
-    def runserver(self):
-        self.server = subprocess.Popen("./bin/webapp runserver --nothreading",
-                                       shell=True, preexec_fn=os.setsid)
-        s = socket.socket()
-        while True:
-            try:
-                s.connect(("127.0.0.1", 8000))
-                break
-            except socket.error:
-                time.sleep(0.1)
-
-    def __del__(self):
-        os.killpg(self.server.pid, signal.SIGTERM)
+    def _get(self, path, *args, **kwargs):
+        fname = 'collectors/fixtures/{0}.json'.format(path.replace('/', '_'))
+        with open(fname) as fh:
+            return json.loads(fh.read())
 
 
+@patch('tests.NSServer', new=CollectorMock)
 class CollectorTest(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        cls.mock = MockHelper()
-        cls.mock.train_seriesly()
-        cls.mock.train_couchbase()
-
-        cls.django = DjangoHelper()
-        cls.django.syncdb()
-        cls.django.runserver()
-
-    @classmethod
-    def tearDownClass(cls):
-        del cls.mock
-        del cls.django
-
-    def test_ns_collector_metadata_update(self):
+    @patch('cbagent.collectors.collector.MetadataClient', autospec=True)
+    def test_ns_collector_update_metadata(self, md_mock):
         settings = DefaultSettings()
         ns_collector = NSServer(settings)
         ns_collector.update_metadata()
