@@ -14,7 +14,7 @@ Dependencies
 General setup
 -------------
 
-    $ make build
+    $ make
 
 Running webapp
 --------------
@@ -32,4 +32,5 @@ Running collectors via CLI:
 Running tests
 -------------
 
+    $ make
     $ make test

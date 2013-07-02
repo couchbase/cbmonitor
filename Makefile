@@ -1,9 +1,9 @@
+build: ; \
+    buildout -t 120 -q
+
 clean: ; \
     rm -fr bin eggs develop-eggs parts .installed.cfg; \
     rm -f `find . -name *.pyc`
-
-build: ; \
-    buildout -t 120 -q
 
 pep8: ; \
     ./bin/pep8 --ignore=E501 webapp
@@ -21,7 +21,7 @@ jshint: ; \
 test_webapp: ; \
     ./bin/webapp test_coverage cbmonitor
 
-test: build pep8 jshint test_webapp;
+test: pep8 jshint test_webapp;
 
 update_templates: ; \
     sed -i "s|DEBUG = True|DEBUG = False|" webapp/settings.py; \
