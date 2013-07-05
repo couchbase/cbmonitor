@@ -33,6 +33,6 @@ run_fcgi: update_templates; \
     ./bin/webapp syncdb --noinput; \
     ./bin/webapp runfcgi method=threaded socket=/tmp/cbmonitor.sock; \
     chmod a+rw /tmp/cbmonitor.sock; \
-    cp nginx.template /etc/nginx/sites-available/cbmonitor; \
-    ln -fs /etc/nginx/sites-available/cbmonitor /etc/nginx/sites-enabled/cbmonitor; \
+    cp nginx.template /etc/nginx/sites-available/cbmonitor.conf; \
+    ln -fs /etc/nginx/sites-available/cbmonitor.conf /etc/nginx/sites-enabled/cbmonitor.conf; \
     /etc/init.d/nginx reload
