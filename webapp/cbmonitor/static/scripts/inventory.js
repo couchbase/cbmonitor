@@ -95,11 +95,6 @@ CBMONITOR.Inventory.prototype.configureTree = function() {
         }
     });
 
-    // Expand all nodes
-    jstree.on("loaded.jstree", function() {
-        jstree.jstree("open_all");
-    });
-
     // Define binding
     jstree.bind("select_node.jstree", function (event, data) {
         var cls = data.rslt.obj.attr("class").split(" ")[0];
