@@ -60,8 +60,8 @@ class Plotter(object):
 
     def _get_data(self, cluster, server, bucket, metric, collector):
         # Query data using metric as key
-        ts_from = timegm(self.snapshot.ts_from.timetuple())
-        ts_to = timegm(self.snapshot.ts_to.timetuple())
+        ts_from = timegm(self.snapshot.ts_from.timetuple()) * 1000
+        ts_to = timegm(self.snapshot.ts_to.timetuple()) * 1000
         group = max((ts_from - ts_to) / 500, 5000)  # min 5 sec; max 500 points
         query_params = {
             "ptr": "/{0}".format(metric), "reducer": "avg",
