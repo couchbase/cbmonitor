@@ -62,7 +62,7 @@ class Plotter(object):
         # Query data using metric as key
         ts_from = timegm(self.snapshot.ts_from.timetuple())
         ts_to = timegm(self.snapshot.ts_to.timetuple())
-        group = max((ts_from - ts_to) / 2, 10000)  # min 10 sec; max 500 points
+        group = max((ts_from - ts_to) / 500, 5000)  # min 5 sec; max 500 points
         query_params = {
             "ptr": "/{0}".format(metric), "reducer": "avg",
             "group": group, "from": ts_from, "to": ts_to
