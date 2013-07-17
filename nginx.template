@@ -7,6 +7,7 @@ server {
 
         fastcgi_pass unix:/tmp/cbmonitor.sock;
         fastcgi_split_path_info ^()(.*)$;
+        fastcgi_read_timeout 600;
     }
     location /static/ {
         alias MAKE_ROOT/webapp/cbmonitor/static/;
