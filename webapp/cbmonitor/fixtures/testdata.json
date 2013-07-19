@@ -47,7 +47,7 @@
         "model": "cbmonitor.observable",
         "pk": null,
         "fields": {
-            "name": "disk_queue",
+            "name": "disk_write_queue",
             "type": "metric",
             "cluster": "East",
             "server": null,

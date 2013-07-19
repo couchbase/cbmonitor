@@ -13,6 +13,7 @@ from mock import patch
 from cbmonitor import views
 from cbmonitor import rest_api
 from cbmonitor import models
+from cbmonitor.reports import views as report_views
 
 uhex = lambda: uuid4().hex
 
@@ -429,10 +430,10 @@ class ApiTest(TestHelper):
             params = {"type": "metric",
                       "cluster": "East",
                       "bucket": "default"}
-            expected = [{"name": "disk_queue", "collector": "ns_server"}]
+            expected = [{"name": "disk_write_queue", "collector": "ns_server"}]
         else:
             expected = [
-                {"name": "disk_queue", "collector": "ns_server"},
+                {"name": "disk_write_queue", "collector": "ns_server"},
                 {"name": params["name"], "collector": params["collector"]}
             ]
         request = self.factory.get("/get_metrics_and_events", params)
@@ -621,3 +622,14 @@ class ApiTest(TestHelper):
 
         self.assertEqual("/media/run-1_access-phase_vperf-reb_2.0.0-1976.pdf",
                          self.response.content)
+
+    @patch('seriesly.core.Database.query', autospec=True)
+    def test_html(self, query_mock):
+        query_mock.return_value = {}
+
+        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
+        request = self.factory.get("reports/base", params)
+        self.response = report_views.base(request)
+
+        expected = '\n<h3>[default] disk_write_queue\n</h3><img src="/media/run-1_access-phase_vperf-reb_2.0.0-1976Eastdefaultdisk_write_queue.png"/>'
+        self.assertEqual(expected, self.response.content)

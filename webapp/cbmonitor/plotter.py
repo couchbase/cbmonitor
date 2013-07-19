@@ -10,14 +10,16 @@ matplotlib.rcParams.update({'lines.linewidth': 1})
 from matplotlib.pyplot import figure, grid, close
 
 from cbagent.stores import SerieslyStore
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from eventlet import GreenPool
 from reportlab.lib.pagesizes import landscape, B4
 from reportlab.platypus import SimpleDocTemplate, Image
 from seriesly import Seriesly
 from seriesly.exceptions import NotExistingDatabase
-from django.conf import settings
 
 from cbmonitor import models
+from cbmonitor.reports.base import BaseReport
 
 
 def savePNG(timestamps, values, title, filename):
@@ -51,7 +53,10 @@ class Plotter(object):
 
     @staticmethod
     def _get_snapshot(snapshot):
-        return models.Snapshot.objects.get(name=snapshot)
+        try:
+            return models.Snapshot.objects.get(name=snapshot)
+        except ObjectDoesNotExist:
+            return
 
     def _get_metrics(self):
         """Get all metrics object for given snapshot"""
@@ -141,6 +146,19 @@ class Plotter(object):
                 return timestamps, values, title, filename, url
         except NotExistingDatabase:
             return
+
+    def html(self, snapshot):
+        self.snapshot = self._get_snapshot(snapshot)
+        if self.snapshot:
+            self.plot()
+            for metric in BaseReport(self.snapshot):
+                title, url, _ = self._generate_PNG_meta(
+                    cluster=metric.cluster.name,
+                    server="",
+                    bucket=metric.bucket,
+                    metric=metric.name
+                )
+                yield [title, url]
 
     def pdf(self, snapshot):
         """"End point of PDF plotter"""
