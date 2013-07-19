@@ -631,5 +631,5 @@ class ApiTest(TestHelper):
         request = self.factory.get("reports/base", params)
         self.response = report_views.base(request)
 
-        expected = '\n<h3>[default] disk_write_queue\n</h3><img src="/media/run-1_access-phase_vperf-reb_2.0.0-1976Eastdefaultdisk_write_queue.png"/>'
-        self.assertEqual(expected, self.response.content)
+        expected = 'src="/media/run-1_access-phase_vperf-reb_2.0.0-1976Eastdefaultdisk_write_queue.png"'
+        self.assertIn(expected, self.response.content)

@@ -1,3 +1,11 @@
-each title, url in charts
-  h3= title
-  img(src="#{ url }")
+!!! 5
+
+html(lang="en")
+    head
+        title cbmonitor
+        include static
+    body
+        div.text-center
+            each title, url in charts
+              h4.text-info.chart-title= title
+              img.text-center(src="#{ url }")
