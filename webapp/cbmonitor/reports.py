@@ -46,3 +46,10 @@ class BaseReport(object):
                     )
                 except ObjectDoesNotExist:
                     continue
+
+
+class FullReport(BaseReport):
+
+    def __iter__(self):
+        return models.Observable.objects.filter(
+            cluster=self.snapshot.cluster, type_id="metric").__iter__()

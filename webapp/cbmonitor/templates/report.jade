@@ -6,6 +6,6 @@ html(lang="en")
         include static
     body
         div.text-center
-            each title, url in charts
+            each title, url in urls
               h4.text-info.chart-title= title
               img.text-center(src="#{ url }")

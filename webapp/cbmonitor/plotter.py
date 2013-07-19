@@ -11,7 +11,6 @@ from matplotlib.pyplot import figure, grid, close
 
 from cbagent.stores import SerieslyStore
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from eventlet import GreenPool
 from reportlab.lib.pagesizes import landscape, B4
 from reportlab.platypus import SimpleDocTemplate, Image
@@ -19,7 +18,6 @@ from seriesly import Seriesly
 from seriesly.exceptions import NotExistingDatabase
 
 from cbmonitor import models
-from cbmonitor.reports.base import BaseReport
 
 
 def savePNG(timestamps, values, title, filename):
@@ -39,7 +37,8 @@ def savePNG(timestamps, values, title, filename):
 
 class Plotter(object):
 
-    def __init__(self):
+    def __init__(self, snapshot):
+        self.snapshot = snapshot
         self.db = Seriesly()
 
         self.urls = list()
@@ -50,18 +49,6 @@ class Plotter(object):
 
     def __del__(self):
         self.mp_pool.close()
-
-    @staticmethod
-    def _get_snapshot(snapshot):
-        try:
-            return models.Snapshot.objects.get(name=snapshot)
-        except ObjectDoesNotExist:
-            return
-
-    def _get_metrics(self):
-        """Get all metrics object for given snapshot"""
-        return models.Observable.objects.filter(cluster=self.snapshot.cluster,
-                                                type_id="metric").values()
 
     def _get_data(self, cluster, server, bucket, metric, collector):
         # Query data using metric as key
@@ -120,17 +107,17 @@ class Plotter(object):
 
     def _extract(self, metric):
         """Extract time series data and metadata"""
-        if metric["bucket_id"]:
-            bucket = str(models.Bucket.objects.get(id=metric["bucket_id"]))
+        if metric.bucket_id:
+            bucket = str(models.Bucket.objects.get(id=metric.bucket_id))
         else:
             bucket = ""
-        if metric["server_id"]:
-            server = str(models.Server.objects.get(id=metric["server_id"]))
+        if metric.server_id:
+            server = str(models.Server.objects.get(id=metric.server_id))
         else:
             server = ""
-        cluster = metric["cluster_id"]
-        name = metric["name"]
-        collector = metric["collector"]
+        cluster = metric.cluster_id
+        name = metric.name
+        collector = metric.collector
 
         title, url, filename = \
             self._generate_PNG_meta(cluster, server, bucket, name)
@@ -147,43 +134,23 @@ class Plotter(object):
         except NotExistingDatabase:
             return
 
-    def html(self, snapshot):
-        self.snapshot = self._get_snapshot(snapshot)
-        if self.snapshot:
-            self.plot()
-            for metric in BaseReport(self.snapshot):
-                title, url, _ = self._generate_PNG_meta(
-                    cluster=metric.cluster.name,
-                    server="",
-                    bucket=metric.bucket,
-                    metric=metric.name
-                )
-                yield [title, url]
-
-    def pdf(self, snapshot):
+    def pdf(self, metrics):
         """"End point of PDF plotter"""
-        self.snapshot = self._get_snapshot(snapshot)
         media_url, media_path = self._generate_PDF_meta()
         if not os.path.exists(media_path):
-            self.plot()
+            self.plot(metrics)
             self._savePDF(media_path)
         return media_url
 
-    def plot(self, snapshot=None):
+    def plot(self, metrics):
         """"End point of PNG plotter"""
-        if snapshot:
-            self.snapshot = self._get_snapshot(snapshot)
-
         apply_results = list()
-        for data in self.eventlet_pool.imap(self._extract, self._get_metrics()):
+        for data in self.eventlet_pool.imap(self._extract, metrics):
             if data:
                 timestamps, values, title, filename, url = data
                 result = self.mp_pool.apply_async(savePNG, data[:4])
                 apply_results.append(result)
                 self.images.append(filename)
                 self.urls.append([title, url])
-
         for result in apply_results:
             result.get()
-
-        return sorted(self.urls)

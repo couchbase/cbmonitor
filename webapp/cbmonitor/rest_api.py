@@ -4,13 +4,14 @@ import logging
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from cbagent.collectors import Collector
 
 from cbmonitor import models
 from cbmonitor import forms
 from cbmonitor.plotter import Plotter
+from cbmonitor.reports import BaseReport, FullReport
 
 logger = logging.getLogger(__name__)
 
@@ -189,7 +190,7 @@ def get_servers(request):
             cluster = models.Cluster.objects.get(name=request.GET["cluster"])
             servers = models.Server.objects.filter(cluster=cluster).values()
             servers = [s["address"] for s in servers]
-        except DoesNotExist:
+        except ObjectDoesNotExist:
             servers = []
     else:
         servers = []
@@ -206,7 +207,7 @@ def get_buckets(request):
             cluster = models.Cluster.objects.get(name=request.GET["cluster"])
             buckets = models.Bucket.objects.filter(cluster=cluster).values()
             buckets = [b["name"] for b in buckets]
-        except DoesNotExist:
+        except ObjectDoesNotExist:
             buckets = []
     else:
         buckets = []
@@ -224,7 +225,7 @@ def get_metrics_and_events(request):
             observables = models.Observable.objects.filter(**form.params).values()
             observables = [{"name": o["name"], "collector": o["collector"]}
                            for o in observables]
-        except DoesNotExist:
+        except ObjectDoesNotExist:
             observables = []
     else:
         observables = []
@@ -260,15 +261,33 @@ def get_snapshots(request):
     return HttpResponse(content)
 
 
+def _get_snapshot(snapshot):
+    try:
+        return models.Snapshot.objects.get(name=snapshot)
+    except ObjectDoesNotExist:
+        return
+
+
 def plot(request):
-    snapshot = request.POST["snapshot"]
-    plotter = Plotter()
-    response = plotter.plot(snapshot)
-    return HttpResponse(content=json.dumps(response))
+    snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
+    plotter = Plotter(snapshot)
+    metrics = FullReport(snapshot)
+    plotter.plot(metrics)
+    urls = sorted(plotter.urls)
+    return HttpResponse(content=json.dumps(urls))
 
 
 def pdf(request):
-    snapshot = request.POST["snapshot"]
-    plotter = Plotter()
-    response = plotter.pdf(snapshot)
-    return HttpResponse(response)
+    snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
+    plotter = Plotter(snapshot)
+    metrics = FullReport(snapshot)
+    url = plotter.pdf(metrics)
+    return HttpResponse(url)
+
+
+def html(request):
+    snapshot = models.Snapshot.objects.get(name=request.GET["snapshot"])
+    plotter = Plotter(snapshot)
+    metrics = BaseReport(snapshot)
+    plotter.plot(metrics)
+    return plotter.urls

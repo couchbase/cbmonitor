@@ -1,5 +1,7 @@
 import datetime
+import glob
 import json
+import os
 import time
 from uuid import uuid4
 from random import randint, choice
@@ -13,7 +15,6 @@ from mock import patch
 from cbmonitor import views
 from cbmonitor import rest_api
 from cbmonitor import models
-from cbmonitor.reports import views as report_views
 
 uhex = lambda: uuid4().hex
 
@@ -602,19 +603,24 @@ class ApiTest(TestHelper):
     @patch('seriesly.core.Database.query', autospec=True)
     @Verifier.valid_json
     def test_plot(self, query_mock):
-        query_mock.return_value = {}
+        query_mock.return_value = {1: [2]}
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
         request = self.factory.post("/plot", params)
         self.response = rest_api.dispatcher(request, path="plot")
 
         # Verify content
-        expected = json.dumps([])
-        self.assertEquals(self.response.content, expected)
+        expected = [
+            "[default] disk_write_queue",
+            "[ec2-54-242-160-13.compute-1.amazonaws.com default] cache_miss"
+        ]
+        titles = [url[0] for url in json.loads(self.response.content)]
+        self.assertEquals(titles, expected)
+        map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
 
     @patch('seriesly.core.Database.query', autospec=True)
     def test_pdf(self, query_mock):
-        query_mock.return_value = {}
+        query_mock.return_value = {1: [2]}
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
         request = self.factory.post("/pdf", params)
@@ -622,14 +628,17 @@ class ApiTest(TestHelper):
 
         self.assertEqual("/media/run-1_access-phase_vperf-reb_2.0.0-1976.pdf",
                          self.response.content)
+        self.assertTrue(os.path.exists("webapp" + self.response.content))
+        map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
+        map(lambda f: os.remove(f), glob.glob("webapp/media/*.pdf"))
 
     @patch('seriesly.core.Database.query', autospec=True)
     def test_html(self, query_mock):
-        query_mock.return_value = {}
+        query_mock.return_value = {1: [2]}
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
-        request = self.factory.get("reports/base", params)
-        self.response = report_views.base(request)
+        request = self.factory.get("/reports/html", params)
+        self.response = views.report(request)
 
         expected = 'src="/media/run-1_access-phase_vperf-reb_2.0.0-1976Eastdefaultdisk_write_queue.png"'
         self.assertIn(expected, self.response.content)
