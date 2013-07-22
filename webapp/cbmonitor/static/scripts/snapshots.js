@@ -18,7 +18,7 @@ CBMONITOR.Snapshots = function () {
     });
 };
 
-CBMONITOR.Snapshots.prototype.getClusters = function () {
+CBMONITOR.Snapshots.prototype.getSnapshots = function () {
     "use strict";
 
     var that = this;
@@ -175,7 +175,7 @@ $(document).ready(function(){
     "use strict";
 
     CBMONITOR.snapshots = new CBMONITOR.Snapshots();
-    CBMONITOR.snapshots.getClusters();
+    CBMONITOR.snapshots.getSnapshots();
     CBMONITOR.snapshots.autoPlot();
 
     CBMONITOR.dialogs = new CBMONITOR.Dialogs();
