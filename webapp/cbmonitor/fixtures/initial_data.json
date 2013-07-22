@@ -26,5 +26,19 @@
         "fields": {
             "type": "event"
         }
+    },
+    {
+        "model": "cbmonitor.ReportType",
+        "pk": "BaseReport",
+        "fields": {
+            "name": "BaseReport"
+        }
+    },
+    {
+        "model": "cbmonitor.ReportType",
+        "pk": "FullReport",
+        "fields": {
+            "name": "FullReport"
+        }
     }
 ]
