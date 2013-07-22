@@ -47,22 +47,37 @@ CBMONITOR.Snapshots.prototype.getSnapshots = function () {
     });
 };
 
+CBMONITOR.Snapshots.prototype.getReportTypes = function () {
+    "use strict";
+
+    var that = this;
+    $.ajax({url: "/cbmonitor/get_report_types/", dataType: "json",
+        success: function(types){
+            types.forEach(function(type) {
+                var o = new Option(type, type);
+                $("#report").append(o);
+            });
+        }
+    });
+};
+
 CBMONITOR.Snapshots.prototype.add = function () {
     "use strict";
 
     $("#add_new_snapshot").dialog("open");
 };
 
-CBMONITOR.Snapshots.prototype.pdf = function (snapshot) {
+CBMONITOR.Snapshots.prototype.pdf = function () {
     "use strict";
 
-    snapshot = $("#snapshot").find(":selected").text();
+    var snapshot = $("#snapshot").find(":selected").text(),
+        report = $("#report").find(":selected").text();
 
     this.spinner.spin(document.getElementById("spinner"));
 
     var that = this;
     $.ajax({url: "/cbmonitor/pdf/", type: "POST",
-        data: {snapshot: snapshot},
+        data: {snapshot: snapshot, report: report},
         success: function(url) {
             that.spinner.stop();
             window.location = url;
@@ -80,6 +95,7 @@ CBMONITOR.Snapshots.prototype.plot = function (snapshot) {
     if (snapshot === undefined) {
         snapshot = $("#snapshot").find(":selected").text();
     }
+    var report = $("#report").find(":selected").text();
 
     this.spinner.spin(document.getElementById("spinner"));
 
@@ -87,7 +103,7 @@ CBMONITOR.Snapshots.prototype.plot = function (snapshot) {
     $(".titles").css("display", "none");
     var that = this;
     $.ajax({url: "/cbmonitor/plot/", dataType: "json", type: "POST",
-        data: {snapshot: snapshot},
+        data: {snapshot: snapshot, report: report},
         success: function(images) {
             that.spinner.stop();
             if (images.length) {
@@ -176,6 +192,7 @@ $(document).ready(function(){
 
     CBMONITOR.snapshots = new CBMONITOR.Snapshots();
     CBMONITOR.snapshots.getSnapshots();
+    CBMONITOR.snapshots.getReportTypes();
     CBMONITOR.snapshots.autoPlot();
 
     CBMONITOR.dialogs = new CBMONITOR.Dialogs();

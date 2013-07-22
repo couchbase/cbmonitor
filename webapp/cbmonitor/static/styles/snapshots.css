@@ -1,15 +1,19 @@
 .snapshot {
-    position:absolute;
-    font-size: 100%;
+    position: absolute;
     left: 50%;
     width: 500px;
-    margin-left: -275px;
+    margin-left: -440px;
+}
+.report {
     position: absolute;
+    left: 50%;
+    width: 250px;
+    margin-left: 75px;
 }
 .btn-add {
     position: relative;
     left: 50%;
-    margin-left: 240px;
+    margin-left: 340px;
 }
 .btn-plot {
     position: relative;
