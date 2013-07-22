@@ -36,6 +36,13 @@
     },
     {
         "model": "cbmonitor.ReportType",
+        "pk": "BaseXdcrReport",
+        "fields": {
+            "name": "BaseXdcrReport"
+        }
+    },
+    {
+        "model": "cbmonitor.ReportType",
         "pk": "FullReport",
         "fields": {
             "name": "FullReport"

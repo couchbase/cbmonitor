@@ -14,9 +14,9 @@ class Report(object):
             raise NotImplementedError("Unknown report type")
 
 
-class BaseReportMeta(type):
+class BaseReport(object):
 
-    METRICS = {
+    metrics = {
         "ns_server": [
             "ops",
             "cmd_get",
@@ -40,21 +40,11 @@ class BaseReportMeta(type):
         ]
     }
 
-    def __new__(cls, name, bases, namespace):
-        metrics = namespace.get("METRICS", {})
-        namespace["METRICS"] = dict(cls.METRICS, **metrics)
-        return super(BaseReportMeta, cls).__new__(cls, name, bases, namespace)
-
-
-class BaseReport(object):
-
-    __metaclass__ = BaseReportMeta
-
     def __init__(self, snapshot):
         self.snapshot = snapshot
 
     def __iter__(self):
-        for collector, metrics in self.METRICS.iteritems():
+        for collector, metrics in self.metrics.iteritems():
             for metric in metrics:
                 try:
                     yield models.Observable.objects.get(
@@ -67,6 +57,32 @@ class BaseReport(object):
                     )
                 except ObjectDoesNotExist:
                     continue
+
+
+class BaseXdcrReport(BaseReport):
+
+    metrics = {
+        "xdcr_lag": [
+            "xdcr_lag",
+            "xdcr_persistence_time",
+            "xdcr_diff",
+        ],
+        "ns_server": [
+            "xdc_ops",
+            "replication_changes_left"
+        ]
+    }
+
+    @classmethod
+    def merge_metrics(cls):
+        base_metrics = super(BaseXdcrReport, cls).metrics
+        for collector in set(base_metrics) & set(cls.metrics):
+            cls.metrics[collector] += base_metrics[collector]
+        cls.metrics = dict(base_metrics, **cls.metrics)
+
+    def __new__(cls, snapshot):
+        cls.merge_metrics()
+        return super(BaseXdcrReport, cls).__new__(cls)
 
 
 class FullReport(BaseReport):
