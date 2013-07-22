@@ -33,6 +33,7 @@ def dispatcher(request, path):
         "add_metric_or_event": add_metric_or_event,
         "add_snapshot": add_shapshot,
         "get_snapshots": get_snapshots,
+        "get_report_types": get_report_types,
         "plot": plot,
         "pdf": pdf,
     }.get(path)
@@ -261,6 +262,12 @@ def get_snapshots(request):
     return HttpResponse(content)
 
 
+def get_report_types(request):
+    types = [t.name for t in models.ReportType.objects.all()]
+    content = json.dumps(types)
+    return HttpResponse(content)
+
+
 def _get_snapshot(snapshot):
     try:
         return models.Snapshot.objects.get(name=snapshot)
@@ -271,7 +278,7 @@ def _get_snapshot(snapshot):
 def plot(request):
     snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
     plotter = Plotter(snapshot)
-    metrics = Report(snapshot, "FullReport")
+    metrics = Report(snapshot, request.POST["report"])
     plotter.plot(metrics)
     urls = sorted(plotter.urls)
     return HttpResponse(content=json.dumps(urls))
@@ -280,7 +287,7 @@ def plot(request):
 def pdf(request):
     snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
     plotter = Plotter(snapshot)
-    metrics = Report(snapshot, "FullReport")
+    metrics = Report(snapshot, request.POST["report"])
     url = plotter.pdf(metrics)
     return HttpResponse(url)
 
@@ -288,6 +295,6 @@ def pdf(request):
 def html(request):
     snapshot = models.Snapshot.objects.get(name=request.GET["snapshot"])
     plotter = Plotter(snapshot)
-    metrics = Report(snapshot, "BaseReport")
+    metrics = Report(snapshot, request.GET["report"])
     plotter.plot(metrics)
     return plotter.urls

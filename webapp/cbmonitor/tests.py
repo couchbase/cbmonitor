@@ -605,7 +605,8 @@ class ApiTest(TestHelper):
     def test_plot(self, query_mock):
         query_mock.return_value = {1: [2]}
 
-        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
+        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
+                  "report": "FullReport"}
         request = self.factory.post("/plot", params)
         self.response = rest_api.dispatcher(request, path="plot")
 
@@ -622,7 +623,8 @@ class ApiTest(TestHelper):
     def test_pdf(self, query_mock):
         query_mock.return_value = {1: [2]}
 
-        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
+        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
+                  "report": "FullReport"}
         request = self.factory.post("/pdf", params)
         self.response = rest_api.dispatcher(request, path="pdf")
 
@@ -636,7 +638,8 @@ class ApiTest(TestHelper):
     def test_html(self, query_mock):
         query_mock.return_value = {1: [2]}
 
-        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
+        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
+                  "report": "BaseReport"}
         request = self.factory.get("/reports/html", params)
         self.response = views.report(request)
 
