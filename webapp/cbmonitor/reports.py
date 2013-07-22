@@ -3,7 +3,18 @@ from django.core.exceptions import ObjectDoesNotExist
 from cbmonitor import models
 
 
-class BaseReport(object):
+class Report(object):
+
+    def __new__(cls, snapshot, report_type):
+        if report_type == "BaseReport":
+            return BaseReport(snapshot)
+        elif report_type == "FullReport":
+            return FullReport(snapshot)
+        else:
+            raise NotImplementedError("Unknown report type")
+
+
+class BaseReportMeta(type):
 
     METRICS = {
         "ns_server": [
@@ -28,6 +39,16 @@ class BaseReport(object):
             "couch_docs_fragmentation",
         ]
     }
+
+    def __new__(cls, name, bases, namespace):
+        metrics = namespace.get("METRICS", {})
+        namespace["METRICS"] = dict(cls.METRICS, **metrics)
+        return super(BaseReportMeta, cls).__new__(cls, name, bases, namespace)
+
+
+class BaseReport(object):
+
+    __metaclass__ = BaseReportMeta
 
     def __init__(self, snapshot):
         self.snapshot = snapshot

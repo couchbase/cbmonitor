@@ -11,7 +11,7 @@ from cbagent.collectors import Collector
 from cbmonitor import models
 from cbmonitor import forms
 from cbmonitor.plotter import Plotter
-from cbmonitor.reports import BaseReport, FullReport
+from cbmonitor.reports import Report
 
 logger = logging.getLogger(__name__)
 
@@ -271,7 +271,7 @@ def _get_snapshot(snapshot):
 def plot(request):
     snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
     plotter = Plotter(snapshot)
-    metrics = FullReport(snapshot)
+    metrics = Report(snapshot, "FullReport")
     plotter.plot(metrics)
     urls = sorted(plotter.urls)
     return HttpResponse(content=json.dumps(urls))
@@ -280,7 +280,7 @@ def plot(request):
 def pdf(request):
     snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
     plotter = Plotter(snapshot)
-    metrics = FullReport(snapshot)
+    metrics = Report(snapshot, "FullReport")
     url = plotter.pdf(metrics)
     return HttpResponse(url)
 
@@ -288,6 +288,6 @@ def pdf(request):
 def html(request):
     snapshot = models.Snapshot.objects.get(name=request.GET["snapshot"])
     plotter = Plotter(snapshot)
-    metrics = BaseReport(snapshot)
+    metrics = Report(snapshot, "BaseReport")
     plotter.plot(metrics)
     return plotter.urls
