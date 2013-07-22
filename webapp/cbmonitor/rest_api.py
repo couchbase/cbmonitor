@@ -267,13 +267,6 @@ def get_report_types(request):
     return HttpResponse(content)
 
 
-def _get_snapshot(snapshot):
-    try:
-        return models.Snapshot.objects.get(name=snapshot)
-    except ObjectDoesNotExist:
-        return
-
-
 def plot(request):
     snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
     plotter = Plotter(snapshot)
