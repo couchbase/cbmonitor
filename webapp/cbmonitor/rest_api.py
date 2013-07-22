@@ -141,7 +141,6 @@ def delete_bucket(request):
 
 
 def get_tree_data(request):
-    """"Generate json data for jstree"""
     response = []
 
     for cluster in models.Cluster.objects.all():
@@ -176,7 +175,6 @@ def get_tree_data(request):
 
 @form_validation
 def get_clusters(request):
-    """Get list of active clusters"""
     clusters = [c.name for c in models.Cluster.objects.all()]
     content = json.dumps(sorted(clusters))
     return HttpResponse(content)
@@ -184,7 +182,6 @@ def get_clusters(request):
 
 @form_validation
 def get_servers(request):
-    """Get list of active servers for given cluster"""
     form = forms.GetServersForm(request.GET)
     if form.is_valid():
         try:
@@ -201,7 +198,6 @@ def get_servers(request):
 
 @form_validation
 def get_buckets(request):
-    """Get list of active buckets for given server"""
     form = forms.GetBucketsForm(request.GET)
     if form.is_valid():
         try:
@@ -218,7 +214,6 @@ def get_buckets(request):
 
 @form_validation
 def get_metrics_and_events(request):
-    """Get list of metrics or events for given cluster, server and bucket"""
     form = forms.GetMetricsAndEvents(request.GET)
 
     if form.is_valid():
@@ -271,6 +266,7 @@ def plot(request):
     snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
     plotter = Plotter(snapshot)
     metrics = Report(snapshot, request.POST["report"])
+
     plotter.plot(metrics)
     urls = sorted(plotter.urls)
     return HttpResponse(content=json.dumps(urls))
@@ -280,6 +276,7 @@ def pdf(request):
     snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
     plotter = Plotter(snapshot)
     metrics = Report(snapshot, request.POST["report"])
+
     url = plotter.pdf(metrics)
     return HttpResponse(url)
 
@@ -288,5 +285,6 @@ def html(request):
     snapshot = models.Snapshot.objects.get(name=request.GET["snapshot"])
     plotter = Plotter(snapshot)
     metrics = Report(snapshot, request.GET["report"])
+
     plotter.plot(metrics)
     return plotter.urls

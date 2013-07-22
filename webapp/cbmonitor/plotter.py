@@ -20,8 +20,8 @@ from seriesly.exceptions import NotExistingDatabase
 from cbmonitor import models
 
 
+# Defined externally in order to be pickled
 def savePNG(timestamps, values, title, filename):
-    """Save chart as PNG file. Defined externally in order to be pickled"""
     fig = figure()
     fig.set_size_inches(4.66, 2.625)
 
@@ -76,7 +76,6 @@ class Plotter(object):
         return timestamps, values
 
     def _generate_PNG_meta(self, cluster, server, bucket, metric):
-        """Generate PNG metadata (filenames, URLs)"""
         metric = metric.replace("/", "_")
         title = "{0}] {1}".format(bucket, metric)  # [server bucket] metric
         if server:
@@ -93,14 +92,12 @@ class Plotter(object):
         return title, media_url, media_path
 
     def _generate_PDF_meta(self):
-        """Generate PDF metadata (filenames, URLs)"""
         filename = self.snapshot.name + ".pdf"
         media_url = settings.MEDIA_URL + filename
         media_path = os.path.join(settings.MEDIA_ROOT, filename)
         return media_url, media_path
 
     def _savePDF(self, media_path):
-        """Save PNG charts as PDF report"""
         pages = [Image(filename) for filename in sorted(self.images)]
         doc = SimpleDocTemplate(media_path, pagesize=landscape(B4))
         doc.build(pages)
@@ -135,7 +132,6 @@ class Plotter(object):
             return
 
     def pdf(self, metrics):
-        """"End point of PDF plotter"""
         media_url, media_path = self._generate_PDF_meta()
         if not os.path.exists(media_path):
             self.plot(metrics)
@@ -143,7 +139,6 @@ class Plotter(object):
         return media_url
 
     def plot(self, metrics):
-        """"End point of PNG plotter"""
         apply_results = list()
         for data in self.eventlet_pool.imap(self._extract, metrics):
             if data:
