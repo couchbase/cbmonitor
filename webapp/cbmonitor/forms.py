@@ -149,10 +149,3 @@ class AddSnapshot(forms.ModelForm):
 
     class Meta:
         model = models.Snapshot
-
-
-class GetSnapshots(forms.ModelForm):
-
-    class Meta:
-        model = models.Snapshot
-        fields = ("cluster", )

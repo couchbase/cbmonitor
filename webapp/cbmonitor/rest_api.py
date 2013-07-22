@@ -255,7 +255,6 @@ def add_shapshot(request):
         raise ValidationError(form)
 
 
-@form_validation
 def get_snapshots(request):
     snapshots = [s.name for s in models.Snapshot.objects.all()]
     content = json.dumps(snapshots)
