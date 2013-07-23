@@ -50,7 +50,6 @@ CBMONITOR.Snapshots.prototype.getSnapshots = function () {
 CBMONITOR.Snapshots.prototype.getReportTypes = function () {
     "use strict";
 
-    var that = this;
     $.ajax({url: "/cbmonitor/get_report_types/", dataType: "json",
         success: function(types){
             types.forEach(function(type) {
@@ -106,6 +105,7 @@ CBMONITOR.Snapshots.prototype.plot = function (snapshot) {
         data: {snapshot: snapshot, report: report},
         success: function(images) {
             that.spinner.stop();
+            $("#titles").empty();
             if (images.length) {
                 $.each(images, function(index, value) {
                     that.addLink(index, value[0]);
