@@ -620,6 +620,23 @@ class ApiTest(TestHelper):
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
 
     @patch('seriesly.core.Database.query', autospec=True)
+    @Verifier.valid_json
+    def test_plot_xdcr(self, query_mock):
+        query_mock.return_value = {1: [2]}
+
+        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
+                  "report": "BaseXdcrReport"}
+        request = self.factory.post("/plot", params)
+        self.response = rest_api.dispatcher(request, path="plot")
+        self.response = rest_api.dispatcher(request, path="plot")
+
+        # Verify content
+        expected = ["[default] disk_write_queue"]
+        titles = [url[0] for url in json.loads(self.response.content)]
+        self.assertEquals(titles, expected)
+        map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
+
+    @patch('seriesly.core.Database.query', autospec=True)
     def test_pdf(self, query_mock):
         query_mock.return_value = {1: [2]}
 

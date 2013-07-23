@@ -63,18 +63,6 @@ class BaseReport(object):
 
 class BaseXdcrReport(BaseReport):
 
-    metrics = {
-        "xdcr_lag": [
-            "xdcr_lag",
-            "xdcr_persistence_time",
-            "xdcr_diff",
-        ],
-        "ns_server": [
-            "xdc_ops",
-            "replication_changes_left"
-        ]
-    }
-
     def merge_metrics(self):
         base_metrics = super(BaseXdcrReport, self).metrics
         for collector in set(base_metrics) & set(self.metrics):
@@ -82,6 +70,17 @@ class BaseXdcrReport(BaseReport):
         self.metrics = dict(base_metrics, **self.metrics)
 
     def __init__(self, *args, **kwargs):
+        self.metrics = {
+            "xdcr_lag": [
+                "xdcr_lag",
+                "xdcr_persistence_time",
+                "xdcr_diff",
+            ],
+            "ns_server": [
+                "xdc_ops",
+                "replication_changes_left"
+            ]
+        }
         self.merge_metrics()
         super(BaseXdcrReport, self).__init__(*args, **kwargs)
 
