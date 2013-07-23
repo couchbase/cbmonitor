@@ -10,6 +10,8 @@ class Report(object):
             return BaseReport(snapshot)
         elif report_type == "FullReport":
             return FullReport(snapshot)
+        elif report_type == "BaseXdcrReport":
+            return BaseXdcrReport(snapshot)
         else:
             raise NotImplementedError("Unknown report type")
 
