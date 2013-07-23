@@ -16,6 +16,6 @@ def tab(request):
 def report(request):
     urls = html(request)
     if urls:
-        return render_to_response("report.jade", {"urls": urls})
+        return render_to_response("snapshots/report.jade", {"urls": urls})
     else:
         raise Http404

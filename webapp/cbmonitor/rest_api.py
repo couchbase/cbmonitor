@@ -287,4 +287,5 @@ def html(request):
     metrics = Report(snapshot, request.GET["report"])
 
     plotter.plot(metrics)
-    return plotter.urls
+    id_from_url = lambda url: url.split("/")[2].split(".")[0]
+    return [(id_from_url(url), title, url) for title, url in plotter.urls]
