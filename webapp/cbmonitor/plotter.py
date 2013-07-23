@@ -21,12 +21,11 @@ from cbmonitor import models
 
 
 # Defined externally in order to be pickled
-def savePNG(timestamps, values, title, filename):
+def savePNG(timestamps, values, filename):
     fig = figure()
     fig.set_size_inches(4.66, 2.625)
 
     ax = fig.add_subplot(1, 1, 1)
-    ax.set_title(title)
     ax.set_xlabel("Time elapsed (sec)")
     grid()
     ax.plot(timestamps, values, '.', markersize=3)
@@ -143,8 +142,9 @@ class Plotter(object):
         for data in self.eventlet_pool.imap(self._extract, metrics):
             if data:
                 timestamps, values, title, filename, url = data
-                result = self.mp_pool.apply_async(savePNG, data[:4])
-                apply_results.append(result)
+                apply_results.append(self.mp_pool.apply_async(
+                    savePNG, args=(timestamps, values, filename)
+                ))
                 self.images.append(filename)
                 self.urls.append([title, url])
         for result in apply_results:
