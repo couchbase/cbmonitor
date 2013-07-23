@@ -75,16 +75,15 @@ class BaseXdcrReport(BaseReport):
         ]
     }
 
-    @classmethod
-    def merge_metrics(cls):
-        base_metrics = super(BaseXdcrReport, cls).metrics
-        for collector in set(base_metrics) & set(cls.metrics):
-            cls.metrics[collector] += base_metrics[collector]
-        cls.metrics = dict(base_metrics, **cls.metrics)
+    def merge_metrics(self):
+        base_metrics = super(BaseXdcrReport, self).metrics
+        for collector in set(base_metrics) & set(self.metrics):
+            self.metrics[collector] += base_metrics[collector]
+        self.metrics = dict(base_metrics, **self.metrics)
 
-    def __new__(cls, snapshot):
-        cls.merge_metrics()
-        return super(BaseXdcrReport, cls).__new__(cls)
+    def __init__(self, *args, **kwargs):
+        self.merge_metrics()
+        super(BaseXdcrReport, self).__init__(*args, **kwargs)
 
 
 class FullReport(BaseReport):
