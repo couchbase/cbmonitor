@@ -1,27 +1,3 @@
-div#dialog_new_cluster.new_item(title="Add new cluster")
-    form
-    fieldset
-        label(for="cname") Name
-        input#cname.text.ui-widget-content.ui-corner-all(type="text", name="name")
-        label(for="master_node") Master node
-        input#master_node.text.ui-widget-content.ui-corner-all(type="text", name="master_node")
-        label(for="rest_username") REST Username
-        input#rest_username.text.ui-widget-content.ui-corner-all(type="text", name="rest_username")
-        label(for="rest_password") REST Password
-        input#rest_password.text.ui-widget-content.ui-corner-all(type="password", name="rest_password")
-
-div#dialog_new_server.new_item(title="Add new server")
-    form
-    fieldset
-        label(for="address") Address
-        input#address.text.ui-widget-content.ui-corner-all(type="text", name="address")
-
-div#dialog_new_bucket.new_item(title="Add new bucket")
-    form
-    fieldset
-        label(for="bname") Name
-        input#bname.text.ui-widget-content.ui-corner-all(type="text", name="name")
-
 div#dialog_delete("")
     div
         span.ui-icon.ui-icon-alert.confirm

@@ -6,19 +6,24 @@ html(lang="en")
         include static
         link(rel="stylesheet", href="/static/css/inventory.css")
         link(rel="stylesheet", href="/static/css/dialogs.css")
-        script(src="/static/js/vendor/jquery.jstree.js")
         script(src="/static/js/inventory.js")
         script(src="/static/js/dialogs.js")
     body
         include navbar
-        div.inventory-container
-            h4 Inventory
-            div#inventory.sub-container
-                button#addc.btn.btn-mini.inventorybtn(value="Add cluster") Add cluster
-                button#renc.btn.btn-mini.inventorybtn(value="Edit") Edit
-                button#delc.btn.btn-mini.inventorybtn(value="Delete") Delete
-                button#adds.btn.btn-mini.inventorybtn(value="Add server") Add server
-                div#tree
-            include dialogs
-
+        table.table-striped.table-bordered.table-condensed.t-inventory
+            tr
+                th.t-data.t-cluster Cluster
+                th.t-data.t-servers Servers
+                th.t-data.t-buckets Buckets
+                th.t-data.t-descr Description
+                th.t-data.t-buttons
+            each cluster, servers, buckets, descr in clusters
+                tr
+                    td.t-data.t-cluster= cluster
+                    td.t-data.t-servers= servers
+                    td.t-data.t-buckets= buckets
+                    td.t-data.t-descr= descr
+                    td.t-data.t-buttons
+                        i.icon-remove(id="#{ cluster }")
+        include dialogs
         div#spinner

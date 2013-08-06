@@ -105,17 +105,13 @@ class BasicTest(TestCase):
 
     def test_index(self):
         request = self.factory.get('/')
-        response = views.tab(request)
+        response = views.index(request)
         self.assertEqual(response.status_code, 200)
 
     def test_inventory(self):
         request = self.factory.get('/inventory/')
-        response = views.tab(request)
+        response = views.inventory(request)
         self.assertEqual(response.status_code, 200)
-
-    def test_not_existing_page(self):
-        request = self.factory.get('/404')
-        self.assertRaises(Http404, views.tab, request)
 
 
 class TestHelper(TestCase):
@@ -353,11 +349,6 @@ class ApiTest(TestHelper):
         # Verify persistence
         self.assertRaises(ObjectDoesNotExist, models.Bucket.objects.get,
                           name=params["name"], cluster=cluster)
-
-    @Verifier.valid_json
-    def test_get_tree_data(self):
-        request = self.factory.get("/get_tree_data")
-        self.response = rest_api.dispatcher(request, path="get_tree_data")
 
     @Verifier.valid_json
     def test_get_clusters(self):

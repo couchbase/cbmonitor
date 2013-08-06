@@ -6,13 +6,26 @@ from cbmonitor.plotter import Plotter
 from cbmonitor.reports import Report
 
 
-def tab(request):
-    path = request.path.replace("/", "") or "charts"
-    if path in ("inventory", "charts"):
-        template = "{0}".format(path) + ".jade"
-        return render_to_response(template, {path: True})
-    else:
-        raise Http404
+def index(request):
+    return render_to_response("charts.jade", {"charts": True})
+
+
+def inventory(request):
+    clusters = []
+
+    for cluster in models.Cluster.objects.all():
+        servers = models.Server.objects.filter(cluster=cluster).values()
+        servers = [s["address"] for s in servers]
+        buckets = models.Bucket.objects.filter(cluster=cluster).values()
+        buckets = [b["name"] for b in buckets]
+        clusters.append((
+            cluster.name,
+            ", ".join(servers),
+            ", ".join(buckets),
+            cluster.description
+        ))
+
+    return render_to_response("inventory.jade", {"clusters": clusters})
 
 
 def get_plotter_and_metrics(params):

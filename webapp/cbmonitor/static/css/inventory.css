@@ -1,33 +1,37 @@
-/* Inventory */
-.inventory-container {
-    position: absolute;
-    width: 35%;
-    height: 80%;
-    margin-left: 32.5%;
+.t-inventory {
+    width: 95%;
+    margin-left: 2.5%;
 }
-.sub-container {
-    height: 95%;
-    overflow-y: scroll;
-    overflow-x: hidden;
+
+.t-data {
+    text-align: left;
+    text-overflow: ellipsis;
+    font-size: 85%;
+    padding-left: 5px;
 }
-.inventorybtn {
-    width: 24%;
+
+.t-cluster {
+    width: 10%;
 }
-hr {
-    margin: 20px 10px 0 0;
-}
-.spinner {
-    margin-left: 10px;
-    line-height: 1;
-}
-.ui-spinner {
-    width: 50px;
-    font-size: 93%;
-}
-#apply {
-    display: none;
-    position: absolute;
+
+.t-servers {
     width: 25%;
-    left: 65%;
-    margin-top: 20px;
+}
+
+.t-buckets {
+    width: 25%;
+}
+
+.t-descr {
+    width: 30%;
+}
+
+.t-buttons {
+    width: 5%;
+    text-align: center;
+    padding-left: 0;
+}
+
+.icon-remove:hover {
+    cursor: pointer;
 }

@@ -23,7 +23,6 @@ def dispatcher(request, path):
         "delete_cluster": delete_cluster,
         "delete_server": delete_server,
         "delete_bucket": delete_bucket,
-        "get_tree_data": get_tree_data,
         "get_clusters": get_clusters,
         "get_servers": get_servers,
         "get_buckets": get_buckets,
@@ -73,9 +72,9 @@ def add_cluster(request):
         form.save()
         if form.cleaned_data.get("master_node"):
             collector = Collector(form.settings)
-            for bucket in collector._get_buckets():
+            for bucket in collector.get_buckets():
                 collector.mc.add_bucket(bucket)
-            for node in collector._get_nodes():
+            for node in collector.get_nodes():
                 collector.mc.add_server(node)
     else:
         raise ValidationError(form)
@@ -134,39 +133,6 @@ def delete_bucket(request):
         bucket.delete()
     else:
         raise ValidationError(form)
-
-
-def get_tree_data(request):
-    response = []
-
-    for cluster in models.Cluster.objects.all():
-        cluster_obj = {
-            "data": cluster.name,
-            "attr": {"class": "cluster", "id": cluster.name},
-            "children": [
-                {"data": "Servers",
-                 "attr": {"class": "servers"},
-                 "children": []},
-                {"data": "Buckets",
-                 "attr": {"class": "buckets"},
-                 "children": []}]
-        }
-        for server in models.Server.objects.filter(cluster=cluster):
-            server_obj = {
-                "data": server.address,
-                "attr": {"class": "server", "id": server.address}
-            }
-            cluster_obj["children"][0]["children"].append(server_obj)
-        for bucket in models.Bucket.objects.filter(cluster=cluster):
-            bucket_obj = {
-                "data": bucket.name,
-                "attr": {"class": "bucket", "id": bucket.name},
-            }
-            cluster_obj["children"][1]["children"].append(bucket_obj)
-
-        response.append(cluster_obj)
-
-    return HttpResponse(content=json.dumps(response))
 
 
 @form_validation
