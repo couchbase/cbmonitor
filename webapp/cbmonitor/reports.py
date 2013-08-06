@@ -5,13 +5,13 @@ from cbmonitor import models
 
 class Report(object):
 
-    def __new__(cls, snapshot, report_type):
+    def __new__(cls, cluster, report_type):
         if report_type == "BaseReport":
-            return BaseReport(snapshot)
+            return BaseReport(cluster)
         elif report_type == "FullReport":
-            return FullReport(snapshot)
+            return FullReport(cluster)
         elif report_type == "BaseXdcrReport":
-            return BaseXdcrReport(snapshot)
+            return BaseXdcrReport(cluster)
         else:
             raise NotImplementedError("Unknown report type")
 
@@ -42,21 +42,22 @@ class BaseReport(object):
         ]
     }
 
-    def __init__(self, snapshot):
-        self.snapshot = snapshot
+    def __init__(self, cluster):
+        self.cluster = cluster
 
     def __iter__(self):
         for collector, metrics in self.metrics.iteritems():
             for metric in metrics:
                 try:
-                    yield models.Observable.objects.get(
-                        cluster=self.snapshot.cluster,
+                    for observable in models.Observable.objects.filter(
+                        cluster=self.cluster,
                         type_id="metric",
                         collector=collector,
                         name=metric,
                         server__isnull=True,
                         bucket__isnull=False,
-                    )
+                    ):
+                        yield observable
                 except ObjectDoesNotExist:
                     continue
 
@@ -89,4 +90,4 @@ class FullReport(BaseReport):
 
     def __iter__(self):
         return models.Observable.objects.filter(
-            cluster=self.snapshot.cluster, type_id="metric").__iter__()
+            cluster=self.cluster, type_id="metric").__iter__()

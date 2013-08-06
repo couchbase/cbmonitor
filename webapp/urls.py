@@ -8,7 +8,8 @@ urlpatterns = patterns(
     'cbmonitor',
     url(r'^$', 'views.tab'),
     url(r'^[a-z_]+/$', 'views.tab'),
-    url(r'^reports/html/', 'views.report'),
+    url(r'^reports/html/', 'views.html_report'),
+    url(r'^reports/pdf/', 'views.pdf_report'),
     url(r'^cbmonitor/(?P<path>[a-z_]+)/$', 'rest_api.dispatcher'),
 )
 urlpatterns += patterns(

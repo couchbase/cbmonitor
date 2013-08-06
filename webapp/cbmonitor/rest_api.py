@@ -10,8 +10,6 @@ from cbagent.collectors import Collector
 
 from cbmonitor import models
 from cbmonitor import forms
-from cbmonitor.plotter import Plotter
-from cbmonitor.reports import Report
 
 logger = logging.getLogger(__name__)
 
@@ -31,11 +29,9 @@ def dispatcher(request, path):
         "get_buckets": get_buckets,
         "get_metrics_and_events": get_metrics_and_events,
         "add_metric_or_event": add_metric_or_event,
-        "add_snapshot": add_shapshot,
+        "add_snapshot": add_snapshot,
         "get_snapshots": get_snapshots,
         "get_report_types": get_report_types,
-        "plot": plot,
-        "pdf": pdf,
     }.get(path)
     if handler:
         return handler(request)
@@ -242,7 +238,7 @@ def add_metric_or_event(request):
 
 
 @form_validation
-def add_shapshot(request):
+def add_snapshot(request):
     form = forms.AddSnapshot(request.POST)
     if form.is_valid():
         form.save()
@@ -251,7 +247,10 @@ def add_shapshot(request):
 
 
 def get_snapshots(request):
-    snapshots = [s.name for s in models.Snapshot.objects.all()]
+    cluster = request.GET["cluster"]
+    snapshots = models.Snapshot.objects.filter(cluster=cluster).values()
+    snapshots = [snapshot["name"] for snapshot in snapshots]
+    snapshots.insert(0, "all_data")
     content = json.dumps(snapshots)
     return HttpResponse(content)
 
@@ -260,32 +259,3 @@ def get_report_types(request):
     types = [t.name for t in models.ReportType.objects.all()]
     content = json.dumps(types)
     return HttpResponse(content)
-
-
-def plot(request):
-    snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
-    plotter = Plotter(snapshot)
-    metrics = Report(snapshot, request.POST["report"])
-
-    plotter.plot(metrics)
-    urls = sorted(plotter.urls)
-    return HttpResponse(content=json.dumps(urls))
-
-
-def pdf(request):
-    snapshot = models.Snapshot.objects.get(name=request.POST["snapshot"])
-    plotter = Plotter(snapshot)
-    metrics = Report(snapshot, request.POST["report"])
-
-    url = plotter.pdf(metrics)
-    return HttpResponse(url)
-
-
-def html(request):
-    snapshot = models.Snapshot.objects.get(name=request.GET["snapshot"])
-    plotter = Plotter(snapshot)
-    metrics = Report(snapshot, request.GET["report"])
-
-    plotter.plot(metrics)
-    id_from_url = lambda url: url.split("/")[2].split(".")[0]
-    return [(id_from_url(url), title, url) for title, url in plotter.urls]

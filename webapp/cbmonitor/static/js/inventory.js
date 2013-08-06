@@ -140,5 +140,4 @@ $(document).ready(function(){
     CBMONITOR.dialogs.configureAddNewServer();
     CBMONITOR.dialogs.configureAddNewBucket();
     CBMONITOR.dialogs.configureDeleteItem();
-
 });

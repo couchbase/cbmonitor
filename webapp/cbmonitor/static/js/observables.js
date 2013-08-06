@@ -34,9 +34,11 @@ CBMONITOR.Observables.prototype.updateClusters = function(type) {
                 var cluster = sel.find(":selected").text();
                 that.updateItems(cluster, type, "server");
                 that.updateItems(cluster, type, "bucket");
+                that.getSnapshots(cluster);
             });
             that.updateItems(clusters[0], type, "server");
             that.updateItems(clusters[0], type, "bucket");
+            that.getSnapshots(clusters[0]);
         }
     });
 };
@@ -98,6 +100,22 @@ CBMONITOR.Observables.prototype.getMetricsAndEvents = function(type) {
                 "appendTo": "#views",
                 "helper": "clone",
                 "cursor": "move"
+            });
+        }
+    });
+};
+
+CBMONITOR.Observables.prototype.getSnapshots = function (cluster) {
+    "use strict";
+
+    $.ajax({url: "/cbmonitor/get_snapshots/", dataType: "json",
+        data: {"cluster": cluster},
+        success: function(snapshots){
+            var sel = $("#snapshot");
+            sel.empty();
+            snapshots.forEach(function(snapshot) {
+                var o = new Option(snapshot, snapshot);
+                sel.append(o);
             });
         }
     });

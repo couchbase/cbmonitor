@@ -45,28 +45,6 @@
     height: 100%;
     left: 30%;
 }
-.charts_panel {
-    position: relative;
-    width: 100%;
-    height: 7%;
-}
-.cpanel_left {
-    top: 20%;
-    position: absolute;
-}
-.cpanel_middle {
-    left: 20%;
-    top: 20%;
-    width: 70px;
-    position: absolute;
-}
-.cpanel_right {
-    position: absolute;
-    width: 70%;
-    left: 30%;
-    top: 20%;
-    text-align: right;
-}
 .chart_view_single {
     width: 100%;
     height: 94%;

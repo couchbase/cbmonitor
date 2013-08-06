@@ -4,18 +4,12 @@ div.navbar
 
         iclass = ""
         cclass = ""
-        sclass = ""
-        if inventory
-            iclass = "active"
+        if charts
+            cclass = "active"
         else
-            if charts
-                cclass = "active"
-            else
-                sclass = "active"
+            iclass = "active"
         ul.nav
-            li(class="#{ iclass }")
-                a(href="/").header-menu Inventory
             li(class="#{ cclass }")
                 a(href="/charts/").header-menu Charts
-            li(class="#{ sclass }")
-                a(href="/snapshots/").header-menu Snapshots
+            li(class="#{ iclass }")
+                a(href="/inventory/").header-menu Inventory

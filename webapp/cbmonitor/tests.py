@@ -108,13 +108,8 @@ class BasicTest(TestCase):
         response = views.tab(request)
         self.assertEqual(response.status_code, 200)
 
-    def test_index(self):
-        request = self.factory.get('/charts')
-        response = views.tab(request)
-        self.assertEqual(response.status_code, 200)
-
-    def test_snapshots(self):
-        request = self.factory.get('/snapshots')
+    def test_inventory(self):
+        request = self.factory.get('/inventory/')
         response = views.tab(request)
         self.assertEqual(response.status_code, 200)
 
@@ -593,72 +588,73 @@ class ApiTest(TestHelper):
 
     @Verifier.valid_json
     def test_get_snapshots(self):
-        request = self.factory.get("/get_snapshots")
+        params = {"cluster": "East"}
+        request = self.factory.get("/get_snapshots", params)
         self.response = rest_api.dispatcher(request, path="get_snapshots")
 
         # Verify content
-        expected = json.dumps(["run-1_access-phase_vperf-reb_2.0.0-1976"])
+        expected = json.dumps(["all_data",
+                               "run-1_access-phase_vperf-reb_2.0.0-1976"])
         self.assertEquals(self.response.content, expected)
 
     @patch('seriesly.core.Database.query', autospec=True)
-    @Verifier.valid_json
     def test_plot(self, query_mock):
         query_mock.return_value = {1: [2]}
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
                   "report": "FullReport"}
-        request = self.factory.post("/plot", params)
-        self.response = rest_api.dispatcher(request, path="plot")
+        response = views.render_png(params)
 
         # Verify content
         expected = [
-            "[default] disk_write_queue",
-            "[ec2-54-242-160-13.compute-1.amazonaws.com default] cache_miss"
+            "[ec2-54-242-160-13.compute-1.amazonaws.com default] cache_miss",
+            "[default] disk_write_queue"
         ]
-        titles = [url[0] for url in json.loads(self.response.content)]
+        titles = [url[1] for url in response]
         self.assertEquals(titles, expected)
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
 
     @patch('seriesly.core.Database.query', autospec=True)
-    @Verifier.valid_json
     def test_plot_xdcr(self, query_mock):
         query_mock.return_value = {1: [2]}
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
                   "report": "BaseXdcrReport"}
-        request = self.factory.post("/plot", params)
-        self.response = rest_api.dispatcher(request, path="plot")
-        self.response = rest_api.dispatcher(request, path="plot")
+        views.render_png(params)
+        response = views.render_png(params)
 
         # Verify content
         expected = ["[default] disk_write_queue"]
-        titles = [url[0] for url in json.loads(self.response.content)]
+
+        titles = [url[1] for url in response]
         self.assertEquals(titles, expected)
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
 
     @patch('seriesly.core.Database.query', autospec=True)
-    def test_pdf(self, query_mock):
+    def test_pdf_report(self, query_mock):
         query_mock.return_value = {1: [2]}
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
                   "report": "FullReport"}
-        request = self.factory.post("/pdf", params)
-        self.response = rest_api.dispatcher(request, path="pdf")
+        request = self.factory.get("/reports/pdf/", params)
+        response = views.pdf_report(request)
 
+        location = response._headers["location"][1]
+        self.assertEqual(302, response.status_code)
         self.assertEqual("/media/run-1_access-phase_vperf-reb_2.0.0-1976.pdf",
-                         self.response.content)
-        self.assertTrue(os.path.exists("webapp" + self.response.content))
+                         location)
+        self.assertTrue(os.path.exists("webapp" + location))
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.pdf"))
 
     @patch('seriesly.core.Database.query', autospec=True)
-    def test_html(self, query_mock):
+    def test_html_report(self, query_mock):
         query_mock.return_value = {1: [2]}
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
                   "report": "BaseReport"}
-        request = self.factory.get("/reports/html", params)
-        self.response = views.report(request)
+        request = self.factory.get("/reports/html/", params)
+        self.response = views.html_report(request)
 
         expected = 'src="/media/run-1_access-phase_vperf-reb_2.0.0-1976Eastdefaultdisk_write_queue.png"'
         self.assertIn(expected, self.response.content)

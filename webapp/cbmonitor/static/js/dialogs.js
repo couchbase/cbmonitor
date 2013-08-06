@@ -185,15 +185,15 @@ CBMONITOR.Dialogs.prototype.configureAddNewSnapshot = function() {
     var that = this,
         fields;
 
-    fields = that.getFields(["name", "cluster", "ts_from", "ts_to"]);
+    fields = that.getFields(["name", "ts_from", "ts_to"]);
     $("#ts_from").datetimepicker({});
     $("#ts_to").datetimepicker({});
 
     $("#add_new_snapshot").dialog({
         autoOpen: false,
         resizable: false,
-        height: 450,
-        width: 360,
+        height: 350,
+        width: 350,
         modal: true,
         buttons: {
             confirm: {
@@ -356,7 +356,6 @@ CBMONITOR.Dialogs.prototype.addNewSnapshot = function() {
 
     var that = this,
         name = $("#name"),
-        cluster = $("#cluster"),
         ts_from = $("#ts_from"),
         ts_to = $("#ts_to");
 
@@ -364,14 +363,12 @@ CBMONITOR.Dialogs.prototype.addNewSnapshot = function() {
         type: "POST", url: "/cbmonitor/add_snapshot/",
         data: {
             "name": name.val(),
-            "cluster": cluster.val(),
+            "cluster": $("#met_cluster").find(":selected").text(),
             "ts_from": ts_from.val(),
             "ts_to": ts_to.val()
         },
         success: function() {
-            CBMONITOR.snapshots.getClusters();
-            $("#plot").removeClass("disabled");
-            $("#pdf").removeClass("disabled");
+            CBMONITOR.observables.updateClusters("metric");
             $("#add_new_snapshot").dialog("close");
         },
         error: function(jqXHR) {
