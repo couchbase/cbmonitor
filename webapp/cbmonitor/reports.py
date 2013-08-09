@@ -98,7 +98,7 @@ class BaseViewsReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
         self.metrics = {
-            "query_latency": [
+            "spring_query_latency": [
                 "latency_query",
             ],
             "ns_server": [
