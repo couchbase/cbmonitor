@@ -4,6 +4,8 @@
 *.log.*
 *.pyc
 .installed.cfg
+.mr.developer.cfg
+src
 bin
 develop-eggs
 eggs

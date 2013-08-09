@@ -2,7 +2,7 @@ build: ; \
     buildout -t 120 -q
 
 clean: ; \
-    rm -fr bin eggs develop-eggs parts .installed.cfg; \
+    rm -fr bin src eggs develop-eggs parts .installed.cfg .mr.developer.cfg; \
     rm -f `find . -name *.pyc`
 
 pep8: ; \
