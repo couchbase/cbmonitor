@@ -27,7 +27,7 @@ SERIESLY.Seriesly.prototype.biuldURL = function(ui) {
     db_name += bucket.length ? bucket.replace(/\./g, "") : "";
     db_name += server.length ? server.replace(/\./g, "") : "";
 
-    return "/seriesly/" + db_name + "/_query?group=10000" +
+    return "/seriesly/" + db_name + "/_query?group=5000" +
         "&ptr=/" + item + "&reducer=avg";
 };
 
