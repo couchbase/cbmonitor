@@ -43,6 +43,13 @@
     },
     {
         "model": "cbmonitor.ReportType",
+        "pk": "BaseViewsReport",
+        "fields": {
+            "name": "BaseViewsReport"
+        }
+    },
+    {
+        "model": "cbmonitor.ReportType",
         "pk": "FullReport",
         "fields": {
             "name": "FullReport"

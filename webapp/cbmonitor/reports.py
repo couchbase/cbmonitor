@@ -12,6 +12,8 @@ class Report(object):
             return FullReport(cluster)
         elif report_type == "BaseXdcrReport":
             return BaseXdcrReport(cluster)
+        elif report_type == "BaseViewsReport":
+            return BaseViewsReport(cluster)
         else:
             raise NotImplementedError("Unknown report type")
 
@@ -84,6 +86,30 @@ class BaseXdcrReport(BaseReport):
         }
         self.merge_metrics()
         super(BaseXdcrReport, self).__init__(*args, **kwargs)
+
+
+class BaseViewsReport(BaseReport):
+
+    def merge_metrics(self):
+        base_metrics = super(BaseViewsReport, self).metrics
+        for collector in set(base_metrics) & set(self.metrics):
+            self.metrics[collector] += base_metrics[collector]
+        self.metrics = dict(base_metrics, **self.metrics)
+
+    def __init__(self, *args, **kwargs):
+        self.metrics = {
+            "query_latency": [
+                "latency_query",
+            ],
+            "ns_server": [
+                "couch_views_ops",
+                "couch_views_data_size",
+                "couch_views_actual_disk_size",
+                "couch_views_fragmentation",
+            ]
+        }
+        self.merge_metrics()
+        super(BaseViewsReport, self).__init__(*args, **kwargs)
 
 
 class FullReport(BaseReport):
