@@ -28,7 +28,15 @@ Assuming that seriesly instance is up and running:
 
     $ ./bin/webapp runserver
 
-Running collectors via CLI:
+Running collectors via CLI
 ---------------------------
 
     $ ./bin/ns_collector sample.cfg
+
+Using custom cbagent
+--------------------
+
+Just update buildout.cfg:
+
+    [sources]
+    cbagent = git https://github.com/couchbaselabs/cbagent.git
