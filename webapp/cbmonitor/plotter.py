@@ -7,7 +7,7 @@ import matplotlib
 matplotlib.use('Agg')
 matplotlib.rcParams.update({'font.size': 5})
 matplotlib.rcParams.update({'lines.linewidth': 1})
-from matplotlib.pyplot import figure, grid, close
+from matplotlib.pyplot import figure, grid, close, ylim
 
 from cbagent.stores import SerieslyStore
 from django.conf import settings
@@ -27,8 +27,13 @@ def savePNG(timestamps, values, filename):
 
     ax = fig.add_subplot(1, 1, 1)
     ax.set_xlabel("Time elapsed (sec)")
+    ax.ticklabel_format(useOffset=False)
+    ax.plot(timestamps, values, marker=".", markersize=3)
+
+    ymin, ymax = ax.get_ylim()
+    ylim(ymin=0, ymax=max(1, ymax * 1.05))
+
     grid()
-    ax.plot(timestamps, values, '.', markersize=3)
 
     fig.savefig(filename, dpi=200)
     close()
@@ -59,7 +64,10 @@ class Plotter(object):
             group = max((ts_from - ts_to) / 500, 5000)  # min 5 sec; max 500 points
             query_params.update({"group": group, "from": ts_from, "to": ts_to})
         db_name = SerieslyStore.build_dbname(cluster, server, bucket, collector)
-        response = self.db[db_name].query(query_params)
+        try:
+            response = self.db[db_name].query(query_params)
+        except NotExistingDatabase:
+            return None, None
 
         # Convert data and generate sorted lists of timestamps and values
         timestamps = list()
@@ -72,7 +80,10 @@ class Plotter(object):
         # Substract first timestamp; convert to seconds
         timestamps = [(key - timestamps[0]) / 1000 for key in timestamps]
 
-        return timestamps, values
+        if set(values) - set([None]):
+            return timestamps, values
+        else:
+            return None, None
 
     def _generate_PNG_meta(self, cluster, server, bucket, metric):
         metric = metric.replace("/", "_")
@@ -101,8 +112,7 @@ class Plotter(object):
         doc = SimpleDocTemplate(media_path, pagesize=landscape(B4))
         doc.build(pages)
 
-    def _extract(self, metric):
-        """Extract time series data and metadata"""
+    def extract_meta(self, metric):
         if metric.bucket_id:
             bucket = str(models.Bucket.objects.get(id=metric.bucket_id))
         else:
@@ -115,6 +125,10 @@ class Plotter(object):
         name = metric.name
         collector = metric.collector
 
+        return cluster, server, bucket, name, collector
+
+    def extract(self, metric):
+        cluster, server, bucket, name, collector = self.extract_meta(metric)
         title, url, filename = \
             self._generate_PNG_meta(cluster, server, bucket, name)
 
@@ -122,13 +136,9 @@ class Plotter(object):
             self.urls.append([title, url])
             self.images.append(filename)
             return
-        try:
-            timestamps, values = self._get_data(cluster, server, bucket, name,
-                                                collector)
-            if set(values) - set([None]):
-                return timestamps, values, title, filename, url
-        except NotExistingDatabase:
-            return
+        timestamps, values = self._get_data(cluster, server, bucket, name,
+                                            collector)
+        return timestamps, values, title, filename, url
 
     def pdf(self, metrics):
         media_url, media_path = self._generate_PDF_meta()
@@ -139,7 +149,7 @@ class Plotter(object):
 
     def plot(self, metrics):
         apply_results = list()
-        for data in self.eventlet_pool.imap(self._extract, metrics):
+        for data in self.eventlet_pool.imap(self.extract, metrics):
             if data:
                 timestamps, values, title, filename, url = data
                 apply_results.append(self.mp_pool.apply_async(
