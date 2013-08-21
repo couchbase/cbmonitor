@@ -9,7 +9,6 @@ urlpatterns = patterns(
     url(r'^$', 'views.index'),
     url(r'^inventory/$', 'views.inventory'),
     url(r'^reports/html/', 'views.html_report'),
-    url(r'^reports/pdf/', 'views.pdf_report'),
     url(r'^cbmonitor/(?P<path>[a-z_]+)/$', 'rest_api.dispatcher'),
 )
 urlpatterns += patterns(

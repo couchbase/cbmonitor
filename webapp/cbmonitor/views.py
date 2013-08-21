@@ -29,29 +29,27 @@ def inventory(request):
 
 
 def get_plotter_and_metrics(params):
-    snapshot = params.get("snapshot")
-    if snapshot == "all_data":
-        snapshot = type("snapshot", (object, ), {"name": "all_data"})()
-        cluster = params["cluster"]
+    snapshots = []
+    if "all_data" in params.getlist("snapshot"):
+        for cluster in params.getlist("cluster"):
+            snapshots.append((
+                type("snapshot", (object, ), {"name": "all_data"})(),
+                cluster
+            ))
     else:
-        snapshot = models.Snapshot.objects.get(name=snapshot)
-        cluster = snapshot.cluster
-    plotter = Plotter(snapshot)
-    metrics = Report(cluster, params["report"])
+        for snapshot in params.getlist("snapshot"):
+            snapshot = models.Snapshot.objects.get(name=snapshot)
+            snapshots.append((snapshot, snapshot.cluster))
+    plotter = Plotter()
+    metrics = Report(snapshots, params["report"])
     return plotter, metrics
 
 
-def render_png(*args, **kwargs):
-    plotter, metrics = get_plotter_and_metrics(*args, **kwargs)
+def render_png(params):
+    plotter, metrics = get_plotter_and_metrics(params)
     plotter.plot(metrics)
     id_from_url = lambda url: url.split("/")[2].split(".")[0]
     return [(id_from_url(url), title, url) for title, url in plotter.urls]
-
-
-def pdf_report(request):
-    plotter, metrics = get_plotter_and_metrics(request.GET)
-    url = plotter.pdf(metrics)
-    return redirect(url)
 
 
 def html_report(request):

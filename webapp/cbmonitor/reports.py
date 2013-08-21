@@ -5,15 +5,15 @@ from cbmonitor import models
 
 class Report(object):
 
-    def __new__(cls, cluster, report_type):
+    def __new__(cls, snapshots, report_type):
         if report_type == "BaseReport":
-            return BaseReport(cluster)
+            return BaseReport(snapshots)
         elif report_type == "FullReport":
-            return FullReport(cluster)
+            return FullReport(snapshots)
         elif report_type == "BaseXdcrReport":
-            return BaseXdcrReport(cluster)
+            return BaseXdcrReport(snapshots)
         elif report_type == "BaseViewsReport":
-            return BaseViewsReport(cluster)
+            return BaseViewsReport(snapshots)
         else:
             raise NotImplementedError("Unknown report type")
 
@@ -44,24 +44,29 @@ class BaseReport(object):
         ]
     }
 
-    def __init__(self, cluster):
-        self.cluster = cluster
+    def __init__(self, snapshots):
+        self.snapshots = snapshots
 
     def __iter__(self):
         for collector, metrics in self.metrics.iteritems():
             for metric in metrics:
-                try:
-                    for observable in models.Observable.objects.filter(
-                        cluster=self.cluster,
-                        type_id="metric",
-                        collector=collector,
-                        name=metric,
-                        server__isnull=True,
-                        bucket__isnull=False,
-                    ):
-                        yield observable
-                except ObjectDoesNotExist:
-                    continue
+                for bucket in models.Bucket.objects.all():
+                    observables = []
+                    for snapshot, cluster in self.snapshots:
+                        try:
+                            observable = models.Observable.objects.get(
+                                cluster=cluster,
+                                type_id="metric",
+                                collector=collector,
+                                name=metric,
+                                server__isnull=True,
+                                bucket=bucket,
+                            )
+                            observables.append((observable, snapshot))
+                        except ObjectDoesNotExist:
+                            continue
+                    if observables:
+                        yield observables
 
 
 class BaseXdcrReport(BaseReport):
@@ -115,5 +120,22 @@ class BaseViewsReport(BaseReport):
 class FullReport(BaseReport):
 
     def __iter__(self):
-        return models.Observable.objects.filter(
-            cluster=self.cluster, type_id="metric").__iter__()
+        observables = []
+        for collector in ("ns_server", "xdcr_lag", "spring_query_latency"):
+            for metric in models.Observable.objects.all():
+                for bucket in models.Bucket.objects.all():
+                    for snapshot, cluster in self.snapshots:
+                        try:
+                            observable = models.Observable.objects.get(
+                                cluster=cluster,
+                                type_id="metric",
+                                collector=collector,
+                                name=metric,
+                                server__isnull=True,
+                                bucket=bucket,
+                            )
+                            observables.append((observable, snapshot))
+                        except ObjectDoesNotExist:
+                            continue
+                        if observables:
+                            yield observables

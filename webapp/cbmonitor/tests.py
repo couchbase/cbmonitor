@@ -6,10 +6,9 @@ import time
 from uuid import uuid4
 from random import randint, choice
 
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.test.client import RequestFactory
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
 from mock import patch
 
 from cbmonitor import views
@@ -589,57 +588,34 @@ class ApiTest(TestHelper):
         self.assertEquals(self.response.content, expected)
 
     @patch('seriesly.core.Database.query', autospec=True)
-    def test_plot(self, query_mock):
+    def test_full_html_report(self, query_mock):
         query_mock.return_value = {1: [2]}
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
                   "report": "FullReport"}
-        response = views.render_png(params)
+        response = Client().get("/reports/html/", params)
 
         # Verify content
-        expected = [
-            "[ec2-54-242-160-13.compute-1.amazonaws.com default] cache_miss",
-            "[default] disk_write_queue"
-        ]
-        titles = [url[1] for url in response]
-        self.assertEquals(titles, expected)
+        expected = 'src="/media/run-1_access-phase_vperf-reb_2.0.0-1976Eastdefaultdisk_write_queue.png"'
+        self.assertIn(expected, response.content)
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
 
     @patch('seriesly.core.Database.query', autospec=True)
-    def test_plot_xdcr(self, query_mock):
+    def test_xdcr_html_report(self, query_mock):
         query_mock.return_value = {1: [2]}
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
                   "report": "BaseXdcrReport"}
-        views.render_png(params)
-        response = views.render_png(params)
+        Client().get("/reports/html/", params)
+        response = Client().get("/reports/html/", params)
 
         # Verify content
-        expected = ["[default] disk_write_queue"]
-
-        titles = [url[1] for url in response]
-        self.assertEquals(titles, expected)
+        expected = 'src="/media/run-1_access-phase_vperf-reb_2.0.0-1976Eastdefaultdisk_write_queue.png"'
+        self.assertIn(expected, response.content)
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
 
     @patch('seriesly.core.Database.query', autospec=True)
-    def test_pdf_report(self, query_mock):
-        query_mock.return_value = {1: [2]}
-
-        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
-                  "report": "FullReport"}
-        request = self.factory.get("/reports/pdf/", params)
-        response = views.pdf_report(request)
-
-        location = response._headers["location"][1]
-        self.assertEqual(302, response.status_code)
-        self.assertEqual("/media/run-1_access-phase_vperf-reb_2.0.0-1976.pdf",
-                         location)
-        self.assertTrue(os.path.exists("webapp" + location))
-        map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
-        map(lambda f: os.remove(f), glob.glob("webapp/media/*.pdf"))
-
-    @patch('seriesly.core.Database.query', autospec=True)
-    def test_html_report(self, query_mock):
+    def test_base_html_report(self, query_mock):
         query_mock.return_value = {1: [2]}
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
@@ -649,3 +625,4 @@ class ApiTest(TestHelper):
 
         expected = 'src="/media/run-1_access-phase_vperf-reb_2.0.0-1976Eastdefaultdisk_write_queue.png"'
         self.assertIn(expected, self.response.content)
+        map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
