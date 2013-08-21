@@ -11,9 +11,10 @@ matplotlib.rcParams.update({"font.size": 5})
 matplotlib.rcParams.update({"lines.linewidth": 0.5})
 matplotlib.rcParams.update({"lines.marker": "."})
 matplotlib.rcParams.update({"lines.markersize": 3})
-matplotlib.rcParams.update({'axes.linewidth': 0.5})
-matplotlib.rcParams.update({'axes.grid': True})
-matplotlib.rcParams.update({'axes.formatter.limits': (-6, 6)})
+matplotlib.rcParams.update({"lines.linestyle": 'None'})
+matplotlib.rcParams.update({"axes.linewidth": 0.5})
+matplotlib.rcParams.update({"axes.grid": True})
+matplotlib.rcParams.update({"axes.formatter.limits": (-6, 6)})
 from matplotlib.pyplot import figure, close, ylim
 
 from cbagent.stores import SerieslyStore
