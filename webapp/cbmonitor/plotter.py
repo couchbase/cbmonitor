@@ -1,6 +1,5 @@
 import os
 import re
-from uuid import uuid4
 from calendar import timegm
 from collections import defaultdict
 from multiprocessing import Pool, cpu_count
