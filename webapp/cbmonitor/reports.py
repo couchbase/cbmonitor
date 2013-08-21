@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 
 from cbmonitor import models
 
@@ -46,13 +47,19 @@ class BaseReport(object):
 
     def __init__(self, snapshots):
         self.snapshots = snapshots
+        clusters = [c for s, c in self.snapshots]
+        self.buckets = models.Bucket.objects.filter(
+            Q(cluster=clusters[0]) | Q(cluster=clusters[0])
+        )
 
     def __iter__(self):
         for collector, metrics in self.metrics.iteritems():
             for metric in metrics:
-                for bucket in models.Bucket.objects.all():
+                for bucket in self.buckets:
                     observables = []
                     for snapshot, cluster in self.snapshots:
+                        _bucket = models.Bucket.objects.get(cluster=cluster,
+                                                            name=bucket.name)
                         try:
                             observable = models.Observable.objects.get(
                                 cluster=cluster,
@@ -60,13 +67,14 @@ class BaseReport(object):
                                 collector=collector,
                                 name=metric,
                                 server__isnull=True,
-                                bucket=bucket,
+                                bucket=_bucket,
                             )
                             observables.append((observable, snapshot))
                         except ObjectDoesNotExist:
-                            continue
+                            pass
                     if observables:
                         yield observables
+                        break
 
 
 class BaseXdcrReport(BaseReport):
@@ -120,10 +128,10 @@ class BaseViewsReport(BaseReport):
 class FullReport(BaseReport):
 
     def __iter__(self):
-        observables = []
         for collector in ("ns_server", "xdcr_lag", "spring_query_latency"):
             for metric in models.Observable.objects.all():
-                for bucket in models.Bucket.objects.all():
+                for bucket in self.buckets:
+                    observables = []
                     for snapshot, cluster in self.snapshots:
                         try:
                             observable = models.Observable.objects.get(
@@ -136,6 +144,7 @@ class FullReport(BaseReport):
                             )
                             observables.append((observable, snapshot))
                         except ObjectDoesNotExist:
-                            continue
-                        if observables:
-                            yield observables
+                            pass
+                    if observables:
+                        yield observables
+                        break
