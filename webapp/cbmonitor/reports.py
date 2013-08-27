@@ -94,8 +94,8 @@ class BaseXdcrReport(BaseReport):
                 "xdcr_diff",
             ],
             "ns_server": [
-                "xdc_ops",
                 "replication_changes_left",
+                "xdc_ops",
                 "ep_num_ops_get_meta",
                 "ep_num_ops_set_meta",
                 "ep_num_ops_del_meta",
