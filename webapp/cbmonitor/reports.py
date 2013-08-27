@@ -94,7 +94,10 @@ class BaseXdcrReport(BaseReport):
             ],
             "ns_server": [
                 "xdc_ops",
-                "replication_changes_left"
+                "replication_changes_left",
+                "ep_num_ops_get_meta",
+                "ep_num_ops_set_meta",
+                "ep_num_ops_del_meta",
             ]
         }
         self.merge_metrics()
