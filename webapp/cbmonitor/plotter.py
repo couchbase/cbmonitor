@@ -133,12 +133,15 @@ class Plotter(object):
                 sub_metric)
             timestamps, values = self.get_data(snapshot, cluster, server,
                                                bucket, name, collector)
-            merge["timestamps"].append(timestamps)
-            merge["values"].append(values)
-            if snapshot.name == "all_data":
-                merge["labels"].append("{0}_{1}".format(cluster, snapshot.name))
-            else:
-                merge["labels"].append(snapshot.name)
+            if timestamps and values:
+                merge["timestamps"].append(timestamps)
+                merge["values"].append(values)
+                if snapshot.name == "all_data":
+                    merge["labels"].append(
+                        "{0}_{1}".format(cluster, snapshot.name)
+                    )
+                else:
+                    merge["labels"].append(snapshot.name)
             merge_cluster += cluster
         title, url, filename = self.generate_PNG_meta(snapshot, merge_cluster,
                                                       server, bucket, name)
