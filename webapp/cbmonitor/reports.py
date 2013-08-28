@@ -49,9 +49,7 @@ class BaseReport(object):
     def __init__(self, snapshots):
         self.snapshots = snapshots
         clusters = [c for s, c in self.snapshots]
-        self.buckets = models.Bucket.objects.filter(
-            Q(cluster=clusters[0]) | Q(cluster=clusters[0])
-        )
+        self.buckets = models.Bucket.objects.filter(cluster=clusters[0])
 
     def __iter__(self):
         for collector, metrics in self.metrics.iteritems():
@@ -59,9 +57,11 @@ class BaseReport(object):
                 for bucket in self.buckets:
                     observables = []
                     for snapshot, cluster in self.snapshots:
-                        _bucket = models.Bucket.objects.get(cluster=cluster,
-                                                            name=bucket.name)
                         try:
+                            _bucket = models.Bucket.objects.get(
+                                cluster=cluster,
+                                name=bucket.name
+                            )
                             observable = models.Observable.objects.get(
                                 cluster=cluster,
                                 type_id="metric",
@@ -75,7 +75,6 @@ class BaseReport(object):
                             pass
                     if observables:
                         yield observables
-                        break
 
 
 class BaseXdcrReport(BaseReport):
@@ -135,28 +134,31 @@ class FullReport(BaseReport):
         super(FullReport, self).__init__(snapshots)
 
         clusters = [c for s, c in self.snapshots]
-        self.metrics = models.Observable.objects.filter(
-            Q(cluster=clusters[0]) | Q(cluster=clusters[0])
-        )
+        metrics = models.Observable.objects.filter(cluster=clusters[0],
+                                                   server__isnull=True)
+        self.metrics = set(metric.name for metric in metrics)
 
     def __iter__(self):
-        for collector in ("ns_server", "xdcr_lag", "spring_query_latency"):
+        for collector in ("ns_server", ):
             for metric in self.metrics:
                 for bucket in self.buckets:
                     observables = []
                     for snapshot, cluster in self.snapshots:
                         try:
+                            _bucket = models.Bucket.objects.get(
+                                cluster=cluster,
+                                name=bucket.name
+                            )
                             observable = models.Observable.objects.get(
                                 cluster=cluster,
                                 type_id="metric",
                                 collector=collector,
                                 name=metric,
                                 server__isnull=True,
-                                bucket=bucket,
+                                bucket=_bucket,
                             )
                             observables.append((observable, snapshot))
                         except ObjectDoesNotExist:
                             pass
                     if observables:
                         yield observables
-                        break
