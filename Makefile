@@ -22,7 +22,7 @@ update_templates: ; \
     sed -i "s|MAKE_ROOT|"$(CURDIR)"|" nginx.template
 
 run_fcgi: update_templates; \
-    killall -q webapp; \
+    killall -9 -q webapp; \
     ./bin/webapp syncdb --noinput; \
     ./bin/webapp runfcgi method=threaded socket=/tmp/cbmonitor.sock; \
     chmod a+rw /tmp/cbmonitor.sock; \
