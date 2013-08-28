@@ -131,9 +131,17 @@ class BaseViewsReport(BaseReport):
 
 class FullReport(BaseReport):
 
+    def __init__(self, snapshots):
+        super(FullReport, self).__init__(snapshots)
+
+        clusters = [c for s, c in self.snapshots]
+        self.metrics = models.Observable.objects.filter(
+            Q(cluster=clusters[0]) | Q(cluster=clusters[0])
+        )
+
     def __iter__(self):
         for collector in ("ns_server", "xdcr_lag", "spring_query_latency"):
-            for metric in models.Observable.objects.all():
+            for metric in self.metrics:
                 for bucket in self.buckets:
                     observables = []
                     for snapshot, cluster in self.snapshots:
