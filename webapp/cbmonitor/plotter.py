@@ -14,6 +14,11 @@ matplotlib.rcParams.update({"lines.linestyle": 'None'})
 matplotlib.rcParams.update({"axes.linewidth": 0.5})
 matplotlib.rcParams.update({"axes.grid": True})
 matplotlib.rcParams.update({"axes.formatter.limits": (-6, 6)})
+matplotlib.rcParams.update({"legend.numpoints": 1})
+matplotlib.rcParams.update({"legend.fancybox": True})
+matplotlib.rcParams.update({"legend.markerscale": 1.5})
+matplotlib.rcParams.update({"legend.loc": 0})
+matplotlib.rcParams.update({"legend.frameon": True})
 from matplotlib.pyplot import figure, close, ylim
 
 from cbagent.stores import SerieslyStore
@@ -35,8 +40,8 @@ def savePNG(filename, timestamps, values, labels):
     ax.ticklabel_format(useOffset=False)
     for i in range(len(timestamps)):
         ax.plot(timestamps[i], values[i], label=labels[i])
-    legend = ax.legend(loc=8, ncol=2)
-    legend.draw_frame(False)
+    legend = ax.legend()
+    legend.get_frame().set_linewidth(0.5)
     ymin, ymax = ax.get_ylim()
     ylim(ymin=0, ymax=max(1, ymax * 1.05))
 
