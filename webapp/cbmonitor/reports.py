@@ -98,6 +98,19 @@ class BaseXdcrReport(BaseReport):
         super(BaseXdcrReport, self).__init__(*args, **kwargs)
 
 
+class BaseKVReport(BaseReport):
+
+    def __init__(self, *args, **kwargs):
+        self.metrics = {
+            "spring_latency": [
+                "latency_set",
+                "latency_get",
+            ],
+        }
+        self.merge_metrics()
+        super(BaseKVReport, self).__init__(*args, **kwargs)
+
+
 class BaseViewsReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
