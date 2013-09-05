@@ -140,7 +140,7 @@ class BaseRebalanceReport(BaseReport):
         super(BaseRebalanceReport, self).__init__(*args, **kwargs)
 
 
-class BaseViewsRebalanceReport(BaseReport):
+class BaseRebalanceViewsReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
         self.metrics = {
@@ -155,10 +155,10 @@ class BaseViewsRebalanceReport(BaseReport):
             ]
         }
         self.merge_metrics()
-        super(BaseViewsRebalanceReport, self).__init__(*args, **kwargs)
+        super(BaseRebalanceViewsReport, self).__init__(*args, **kwargs)
 
 
-class BaseXdcrRebalanceReport(BaseReport):
+class BaseRebalanceXdcrReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
         self.metrics = {
@@ -179,7 +179,7 @@ class BaseXdcrRebalanceReport(BaseReport):
             ]
         }
         self.merge_metrics()
-        super(BaseXdcrRebalanceReport, self).__init__(*args, **kwargs)
+        super(BaseRebalanceXdcrReport, self).__init__(*args, **kwargs)
 
 
 class FullReport(BaseReport):
