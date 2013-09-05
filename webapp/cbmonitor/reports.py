@@ -130,56 +130,37 @@ class BaseViewsReport(BaseReport):
 
 class BaseRebalanceReport(BaseReport):
 
+    def __iter__(self):
+        observables = []
+        for snapshot, cluster in self.snapshots:
+            try:
+                observable = models.Observable.objects.get(
+                    cluster=cluster,
+                    type_id="metric",
+                    collector="active_tasks",
+                    name="rebalance_progress",
+                    server__isnull=True,
+                    bucket__isnull=True,
+                )
+                observables.append((observable, snapshot))
+            except ObjectDoesNotExist:
+                pass
+        if observables:
+            yield observables
+        for observables in super(BaseRebalanceReport, self).__iter__():
+            yield observables
+
+
+class BaseRebalanceViewsReport(BaseRebalanceReport, BaseViewsReport):
+
     def __init__(self, *args, **kwargs):
-        self.metrics = {
-            "active_tasks": [
-                "rebalance_progress",
-            ]
-        }
-        self.merge_metrics()
         super(BaseRebalanceReport, self).__init__(*args, **kwargs)
 
 
-class BaseRebalanceViewsReport(BaseReport):
+class BaseRebalanceXdcrReport(BaseRebalanceReport, BaseXdcrReport):
 
     def __init__(self, *args, **kwargs):
-        self.metrics = {
-            "active_tasks": [
-                "rebalance_progress",
-            ],
-            "ns_server": [
-                "couch_views_ops",
-                "couch_views_data_size",
-                "couch_views_actual_disk_size",
-                "couch_views_fragmentation",
-            ]
-        }
-        self.merge_metrics()
-        super(BaseRebalanceViewsReport, self).__init__(*args, **kwargs)
-
-
-class BaseRebalanceXdcrReport(BaseReport):
-
-    def __init__(self, *args, **kwargs):
-        self.metrics = {
-            "active_tasks": [
-                "rebalance_progress",
-            ],
-            "xdcr_lag": [
-                "xdcr_lag",
-                "xdcr_persistence_time",
-                "xdcr_diff",
-            ],
-            "ns_server": [
-                "replication_changes_left",
-                "xdc_ops",
-                "ep_num_ops_get_meta",
-                "ep_num_ops_set_meta",
-                "ep_num_ops_del_meta",
-            ]
-        }
-        self.merge_metrics()
-        super(BaseRebalanceXdcrReport, self).__init__(*args, **kwargs)
+        super(BaseRebalanceReport, self).__init__(*args, **kwargs)
 
 
 class FullReport(BaseReport):
