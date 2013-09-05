@@ -7,15 +7,9 @@ from cbmonitor import models
 class Report(object):
 
     def __new__(cls, snapshots, report_type):
-        if report_type == "BaseReport":
-            return BaseReport(snapshots)
-        elif report_type == "FullReport":
-            return FullReport(snapshots)
-        elif report_type == "BaseXdcrReport":
-            return BaseXdcrReport(snapshots)
-        elif report_type == "BaseViewsReport":
-            return BaseViewsReport(snapshots)
-        else:
+        try:
+            return eval(report_type)(snapshots)
+        except (NameError, SyntaxError):
             raise NotImplementedError("Unknown report type")
 
 
@@ -51,6 +45,12 @@ class BaseReport(object):
         clusters = [c for s, c in self.snapshots]
         self.buckets = models.Bucket.objects.filter(cluster=clusters[0])
 
+    def merge_metrics(self):
+        base_metrics = BaseReport.metrics
+        for collector in set(base_metrics) & set(self.metrics):
+            self.metrics[collector] += base_metrics[collector]
+        self.metrics = dict(base_metrics, **self.metrics)
+
     def __iter__(self):
         for collector, metrics in self.metrics.iteritems():
             for metric in metrics:
@@ -79,12 +79,6 @@ class BaseReport(object):
 
 class BaseXdcrReport(BaseReport):
 
-    def merge_metrics(self):
-        base_metrics = super(BaseXdcrReport, self).metrics
-        for collector in set(base_metrics) & set(self.metrics):
-            self.metrics[collector] += base_metrics[collector]
-        self.metrics = dict(base_metrics, **self.metrics)
-
     def __init__(self, *args, **kwargs):
         self.metrics = {
             "xdcr_lag": [
@@ -106,12 +100,6 @@ class BaseXdcrReport(BaseReport):
 
 class BaseViewsReport(BaseReport):
 
-    def merge_metrics(self):
-        base_metrics = super(BaseViewsReport, self).metrics
-        for collector in set(base_metrics) & set(self.metrics):
-            self.metrics[collector] += base_metrics[collector]
-        self.metrics = dict(base_metrics, **self.metrics)
-
     def __init__(self, *args, **kwargs):
         self.metrics = {
             "spring_query_latency": [
@@ -126,6 +114,60 @@ class BaseViewsReport(BaseReport):
         }
         self.merge_metrics()
         super(BaseViewsReport, self).__init__(*args, **kwargs)
+
+
+class BaseRebalanceReport(BaseReport):
+
+    def __init__(self, *args, **kwargs):
+        self.metrics = {
+            "active_tasks": [
+                "rebalance_progress",
+            ]
+        }
+        self.merge_metrics()
+        super(BaseRebalanceReport, self).__init__(*args, **kwargs)
+
+
+class BaseViewsRebalanceReport(BaseReport):
+
+    def __init__(self, *args, **kwargs):
+        self.metrics = {
+            "active_tasks": [
+                "rebalance_progress",
+            ],
+            "ns_server": [
+                "couch_views_ops",
+                "couch_views_data_size",
+                "couch_views_actual_disk_size",
+                "couch_views_fragmentation",
+            ]
+        }
+        self.merge_metrics()
+        super(BaseViewsRebalanceReport, self).__init__(*args, **kwargs)
+
+
+class BaseXdcrRebalanceReport(BaseReport):
+
+    def __init__(self, *args, **kwargs):
+        self.metrics = {
+            "active_tasks": [
+                "rebalance_progress",
+            ],
+            "xdcr_lag": [
+                "xdcr_lag",
+                "xdcr_persistence_time",
+                "xdcr_diff",
+            ],
+            "ns_server": [
+                "replication_changes_left",
+                "xdc_ops",
+                "ep_num_ops_get_meta",
+                "ep_num_ops_set_meta",
+                "ep_num_ops_del_meta",
+            ]
+        }
+        self.merge_metrics()
+        super(BaseXdcrRebalanceReport, self).__init__(*args, **kwargs)
 
 
 class FullReport(BaseReport):
