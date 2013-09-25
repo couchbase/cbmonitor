@@ -36,13 +36,22 @@ class BaseReport(object):
             "couch_docs_data_size",
             "couch_docs_actual_disk_size",
             "couch_docs_fragmentation",
+        ],
+        "atop": [
+            "beam.smp_rss",
+            "beam.smp_vsize",
+            "memcached_rss",
+            "memcached_vsize",
+            "beam.smp_cpu",
+            "memcached_cpu"
         ]
     }
 
     def __init__(self, snapshots):
         self.snapshots = snapshots
-        clusters = [c for s, c in self.snapshots]
+        clusters = [cluster for snapshot, cluster in snapshots]
         self.buckets = models.Bucket.objects.filter(cluster=clusters[0])
+        self.servers = models.Server.objects.filter(cluster=clusters[0])
 
     def merge_metrics(self):
         base_metrics = BaseReport.metrics
@@ -74,6 +83,29 @@ class BaseReport(object):
                             pass
                     if observables:
                         yield observables
+            if collector == "atop":
+                for metric in metrics:
+                    for server in self.servers:
+                        observables = []
+                        for snapshot, cluster in self.snapshots:
+                            try:
+                                _server = models.Server.objects.get(
+                                    cluster=cluster,
+                                    address=server.address
+                                )
+                                observable = models.Observable.objects.get(
+                                    cluster=cluster,
+                                    type_id="metric",
+                                    collector=collector,
+                                    name=metric,
+                                    server=_server,
+                                    bucket__isnull=True,
+                                )
+                                observables.append((observable, snapshot))
+                            except ObjectDoesNotExist:
+                                pass
+                        if observables:
+                            yield observables
 
 
 class BaseXdcrReport(BaseReport):
