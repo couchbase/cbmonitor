@@ -14,7 +14,7 @@ jshint: ; \
 test_webapp: ; \
     ./bin/webapp test_coverage cbmonitor
 
-test: pep8 jshint test_webapp;
+test: test_webapp pep8 jshint;
 
 update_templates: ; \
     sed -i "s|DEBUG = True|DEBUG = False|" webapp/settings.py; \
