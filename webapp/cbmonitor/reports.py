@@ -40,8 +40,6 @@ class BaseReport(object):
         "atop": [
             "beam.smp_rss",
             "beam.smp_vsize",
-            "memcached_rss",
-            "memcached_vsize",
             "beam.smp_cpu",
             "memcached_cpu"
         ]
