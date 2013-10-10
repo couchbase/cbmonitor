@@ -36,6 +36,7 @@ class BaseReport(object):
             "couch_docs_data_size",
             "couch_docs_actual_disk_size",
             "couch_docs_fragmentation",
+            "couch_total_disk_size",
         ],
         "atop": [
             "beam.smp_rss",
