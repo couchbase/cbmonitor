@@ -147,6 +147,7 @@ class BaseViewsReport(BaseReport):
         self.metrics = {
             "spring_query_latency": [
                 "latency_query",
+                "latency_tuq",
             ],
             "ns_server": [
                 "couch_views_ops",
