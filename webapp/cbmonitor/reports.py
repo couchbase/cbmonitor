@@ -147,7 +147,6 @@ class BaseViewsReport(BaseReport):
         self.metrics = {
             "spring_query_latency": [
                 "latency_query",
-                "latency_tuq",
             ],
             "ns_server": [
                 "couch_views_ops",
@@ -159,6 +158,23 @@ class BaseViewsReport(BaseReport):
         self.merge_metrics()
         super(BaseViewsReport, self).__init__(*args, **kwargs)
 
+class BaseTuqReport(BaseReport):
+
+    def __init__(self, *args, **kwargs):
+        self.metrics = {
+            "spring_tuq_latency": [
+                "latency_query",
+                "latency_tuq",
+            ],
+            "ns_server": [
+                "couch_views_ops",
+                "couch_views_data_size",
+                "couch_views_actual_disk_size",
+                "couch_views_fragmentation",
+            ]
+        }
+        self.merge_metrics()
+        super(BaseTuqReport, self).__init__(*args, **kwargs)
 
 class BaseRebalanceReport(BaseReport):
 
