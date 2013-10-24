@@ -23,6 +23,7 @@ class BaseReport(object):
             "curr_connections",
             "curr_items",
             "mem_used",
+            "ep_meta_data_memory",
             "vb_active_resident_items_ratio",
             "vb_replica_resident_items_ratio",
             "ep_num_value_ejects",
