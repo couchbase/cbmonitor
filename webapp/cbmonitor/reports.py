@@ -158,6 +158,7 @@ class BaseViewsReport(BaseReport):
         self.merge_metrics()
         super(BaseViewsReport, self).__init__(*args, **kwargs)
 
+
 class BaseTuqReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
@@ -175,6 +176,7 @@ class BaseTuqReport(BaseReport):
         }
         self.merge_metrics()
         super(BaseTuqReport, self).__init__(*args, **kwargs)
+
 
 class BaseRebalanceReport(BaseReport):
 
