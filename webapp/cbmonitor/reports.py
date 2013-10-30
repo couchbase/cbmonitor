@@ -20,6 +20,7 @@ class BaseReport(object):
             "cmd_get",
             "cmd_set",
             "delete_hits",
+            "cas_hits",
             "curr_connections",
             "curr_items",
             "mem_used",
