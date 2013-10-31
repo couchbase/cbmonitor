@@ -15,6 +15,7 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11411',
+        'TIMEOUT': 3600 * 24 * 30 * 6,
         'OPTIONS': {
             'MAX_ENTRIES': 10000,
         }

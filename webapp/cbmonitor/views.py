@@ -53,7 +53,7 @@ def render_png(params):
     return [(id_from_url(url), title, url) for title, url in plotter.urls]
 
 
-@cache_page(0)
+@cache_page()
 def html_report(request):
     urls = render_png(request.GET)
     if urls:
