@@ -1,5 +1,6 @@
 from django.http import Http404
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response
+from django.views.decorators.cache import cache_page
 
 from cbmonitor import models
 from cbmonitor.plotter import Plotter
@@ -52,6 +53,7 @@ def render_png(params):
     return [(id_from_url(url), title, url) for title, url in plotter.urls]
 
 
+@cache_page(0)
 def html_report(request):
     urls = render_png(request.GET)
     if urls:
