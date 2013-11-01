@@ -13,4 +13,6 @@ parts
 *.egg-info
 webapp/media/*.png
 webapp/media/*.pdf
+webapp/media/*.txt
 db
+webapp/cbmonitor/static/admin
