@@ -527,6 +527,19 @@ class ApiTest(TestHelper):
 
         self.response = response
 
+    @Verifier.duplicate
+    def test_add_metric_duplicate_empty_bucket(self):
+        params = {"type": "metric",
+                  "name": uhex(),
+                  "cluster": "East",
+                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
+                  "collector": "ns_server"}
+        request = self.factory.post("/add_metric_or_event", params)
+        rest_api.dispatcher(request, path="add_metric_or_event")
+        response = rest_api.dispatcher(request, path="add_metric_or_event")
+
+        self.response = response
+
     @Verifier.valid_response
     def test_add_event(self):
         params = {"type": "event",

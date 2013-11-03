@@ -132,7 +132,7 @@ class AddMetricsAndEvents(forms.ModelForm):
             server = None
         cleaned_data["server"] = server
 
-        if cleaned_data["server"] is None:
+        if cleaned_data["server"] is None or cleaned_data["bucket"] is None:
             try:
                 models.Observable.objects.get(name=cleaned_data["name"],
                                               cluster=cleaned_data["cluster"],
