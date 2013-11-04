@@ -82,5 +82,12 @@
         "fields": {
             "name": "FullReport"
         }
+    },
+    {
+        "model": "cbmonitor.ReportType",
+        "pk": "SyncGatewayReport",
+        "fields": {
+            "name": "SyncGatewayReport"
+        }
     }
 ]
