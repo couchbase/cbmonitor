@@ -1,15 +1,3 @@
 div.navbar
     div.navbar-inner
         div.brand cbmonitor
-
-        iclass = ""
-        cclass = ""
-        if charts
-            cclass = "active"
-        else
-            iclass = "active"
-        ul.nav
-            li(class="#{ cclass }")
-                a(href="/").header-menu Charts
-            li(class="#{ iclass }")
-                a(href="/inventory/").header-menu Inventory
