@@ -24,7 +24,14 @@ update_templates: ; \
 run_fcgi: update_templates; \
     killall -9 -q webapp; \
     ./bin/webapp syncdb --noinput; \
-    ./bin/webapp runfcgi method=threaded socket=/tmp/cbmonitor.sock; \
+    ./bin/webapp runfcgi \
+        method=prefork \
+        maxchildren=8 \
+        minspare=2 \
+        maxspare=4 \
+        outlog=/tmp/cbmonitor.stdout.log \
+        errlog=/tmp/cbmonitor.stderr.log \
+        socket=/tmp/cbmonitor.sock; \
     chmod a+rw /tmp/cbmonitor.sock; \
     cp nginx.template /etc/nginx/sites-available/cbmonitor.conf; \
     ln -fs /etc/nginx/sites-available/cbmonitor.conf /etc/nginx/sites-enabled/cbmonitor.conf; \
