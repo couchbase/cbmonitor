@@ -25,5 +25,8 @@ html(lang="en")
                     td.t-data.t-descr= descr
                     td.t-data.t-buttons
                         i.icon-remove(id="#{ cluster }")
-        include dialogs
+        div#dialog_delete("")
+            div
+                span.ui-icon.ui-icon-alert.confirm
+                p Are you sure?
         div#spinner
