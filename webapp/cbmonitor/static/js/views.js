@@ -65,10 +65,34 @@ CBMONITOR.Views.prototype.configurePanel = function() {
     $("#view1").button('toggle');
 
     $("#clear_views")
-        .css({
-            width: "100px"
-        }).click(function() {
+        .click(function() {
             CBMONITOR.graphManager.clear();
+        });
+
+    if ($.cookie('ZoomEnabled') === undefined) {
+        $.cookie('ZoomEnabled', true, {expires: 60});
+    }
+
+    if ($.cookie('Lines') === undefined) {
+        $.cookie('Lines', true, {expires: 60});
+    }
+
+    if (!$.cookie('Lines')) {
+        $("#views").toggleClass("dotted");
+    }
+
+    $("#zoom")
+        .attr('checked', $.cookie('ZoomEnabled') === "true")
+        .click(function() {
+            CBMONITOR.graphManager.clear();
+            $.cookie('ZoomEnabled', $.cookie('ZoomEnabled') !== "true", {expires: 60});
+        });
+
+    $("#lines")
+        .attr('checked', $.cookie('Lines') === "true")
+        .click(function() {
+            $("#views").toggleClass("dotted");
+            $.cookie('Lines', $.cookie('Lines') !== "true", {expires: 60});
         });
 
     $("#all").button('toggle');
@@ -81,7 +105,11 @@ CBMONITOR.Views.prototype.enableDroppable = function() {
         activeClass: "ui-state-default",
         hoverClass: "ui-state-hover",
         drop: function(event, ui) {
-            CBMONITOR.graphManager.plot($(this).attr("id"), ui);
+            if ($("#zoom").prop('checked')) {
+                CBMONITOR.graphManager.plot($(this).attr("id"), ui, "lineWithFocus");
+            } else {
+                CBMONITOR.graphManager.plot($(this).attr("id"), ui);
+            }
         }
     });
 };

@@ -13,7 +13,7 @@ CBMONITOR.GraphManager = function() {
     this.metrics = {};
 };
 
-CBMONITOR.GraphManager.prototype.init = function(data) {
+CBMONITOR.GraphManager.prototype.PlotLineWithFocus = function(data) {
     "use strict";
 
     var dataHandler = new CBMONITOR.DataHandler(data),
@@ -21,6 +21,7 @@ CBMONITOR.GraphManager.prototype.init = function(data) {
         container = "#" + this.container + " svg";
 
     var format = d3.time.format("%H:%M:%S");
+
     nv.addGraph(function() {
         var chart = nv.models.lineWithFocusChart().forceY([0]);
 
@@ -32,12 +33,31 @@ CBMONITOR.GraphManager.prototype.init = function(data) {
         d3.select(container)
             .datum(series_data)
             .call(chart);
-
-        return chart;
     });
 };
 
-CBMONITOR.GraphManager.prototype.plot = function(container, ui) {
+CBMONITOR.GraphManager.prototype.PlotLine = function(data) {
+    "use strict";
+
+    var dataHandler = new CBMONITOR.DataHandler(data),
+        series_data = dataHandler.prepareSeries(this.metrics[this.container]),
+        container = "#" + this.container + " svg";
+
+    var format = d3.time.format("%H:%M:%S");
+
+    nv.addGraph(function() {
+        var chart = nv.models.lineChart().forceY([0]);
+
+        chart.xAxis.tickFormat(format);
+        chart.yAxis.tickFormat(d3.format(',.2s'));
+
+        d3.select(container)
+            .datum(series_data)
+            .call(chart);
+    });
+};
+
+CBMONITOR.GraphManager.prototype.plot = function(container, ui, chart_type) {
     "use strict";
 
     var new_metric = ui.draggable.text();
@@ -57,7 +77,11 @@ CBMONITOR.GraphManager.prototype.plot = function(container, ui) {
             this.seriesly.query(this.uis[i])
         );
     }
-    this.init(chart_data);
+    if (chart_type === "lineWithFocus") {
+        this.PlotLineWithFocus(chart_data);
+    } else {
+        this.PlotLine(chart_data);
+    }
 };
 
 CBMONITOR.GraphManager.prototype.clear = function() {

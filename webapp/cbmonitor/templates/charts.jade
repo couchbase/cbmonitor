@@ -46,15 +46,17 @@ html(lang="en")
             div.charts
                 div.charts_panel
                     div.cpanel_left
-                        div.btn-group(data-toggle="buttons-radio")
+                        div.btn-group.views-group(data-toggle="buttons-radio")
                             button#view1.btn.btn-mini.vradio(type="button") 1 view
                             button#view2.btn.btn-mini.vradio(type="button") 2 views
                             button#view4.btn.btn-mini.vradio(type="button") 4 views
-                    div.cpanel_middle
-                        button#clear_views.btn.btn-mini Clear All
+                        button#clear_views.btn.btn-mini Clear Views
+                        input#zoom(type="checkbox").checkbox
+                        span.input-text Zoom
+                        input#lines(type="checkbox").checkbox
+                        span.input-text Lines
                     div.cpanel_right
                         select#snapshot.selector.snaphosts(name="snapshot")
-                        //button#add.btn.btn-mini.btn-panel.btn-add(value="add") +
                         select#report.selector.report(name="report")
                         button#html.btn.btn-mini.btn-panel.btn-html(value="Plot") Export as HTML
                 div#add_new_snapshot.new_item(title="Add new snapshot")
