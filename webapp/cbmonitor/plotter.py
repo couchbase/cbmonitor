@@ -137,9 +137,7 @@ class Plotter(object):
                 merge["timestamps"].append(timestamps)
                 merge["values"].append(values)
                 if snapshot.name == "all_data":
-                    merge["labels"].append(
-                        "{0}_{1}".format(cluster, snapshot.name)
-                    )
+                    merge["labels"].append(cluster)
                 else:
                     merge["labels"].append(snapshot.name)
             merge_cluster += cluster
