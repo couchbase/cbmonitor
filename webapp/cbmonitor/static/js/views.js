@@ -62,40 +62,40 @@ CBMONITOR.Views.prototype.configurePanel = function() {
         CBMONITOR.graphManager.clear();
         that.enableDroppable();
     });
-    $("#view1").button('toggle');
+    $("#view1").button("toggle");
 
     $("#clear_views")
         .click(function() {
             CBMONITOR.graphManager.clear();
         });
 
-    if ($.cookie('ZoomEnabled') === undefined) {
-        $.cookie('ZoomEnabled', true, {expires: 60});
+    if ($.cookie("ZoomEnabled") === undefined) {
+        $.cookie("ZoomEnabled", true, {expires: 60});
     }
 
-    if ($.cookie('Lines') === undefined) {
-        $.cookie('Lines', true, {expires: 60});
+    if ($.cookie("Lines") === undefined) {
+        $.cookie("Lines", true, {expires: 60});
     }
 
-    if (!$.cookie('Lines')) {
+    if ($.cookie("Lines") !== "true") {
         $("#views").toggleClass("dotted");
     }
 
     $("#zoom")
-        .attr('checked', $.cookie('ZoomEnabled') === "true")
+        .attr("checked", $.cookie("ZoomEnabled") === "true")
         .click(function() {
             CBMONITOR.graphManager.clear();
-            $.cookie('ZoomEnabled', $.cookie('ZoomEnabled') !== "true", {expires: 60});
+            $.cookie("ZoomEnabled", $.cookie("ZoomEnabled") !== "true", {expires: 60});
         });
 
     $("#lines")
-        .attr('checked', $.cookie('Lines') === "true")
+        .attr("checked", $.cookie("Lines") === "true")
         .click(function() {
             $("#views").toggleClass("dotted");
-            $.cookie('Lines', $.cookie('Lines') !== "true", {expires: 60});
+            $.cookie("Lines", $.cookie("Lines") !== "true", {expires: 60});
         });
 
-    $("#all").button('toggle');
+    $("#all").button("toggle");
 };
 
 CBMONITOR.Views.prototype.enableDroppable = function() {
