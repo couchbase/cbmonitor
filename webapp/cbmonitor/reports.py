@@ -250,7 +250,7 @@ class FullReport(BaseReport):
                         yield observables
 
 
-class SyncGatewayReport(BaseReport):
+class SyncGatewayReport(BaseViewsReport):
 
     metrics = {
         "sync_gateway": [
@@ -287,3 +287,6 @@ class SyncGatewayReport(BaseReport):
                             pass
                     if observables:
                         yield observables
+
+        for observables in super(SyncGatewayReport, self).__iter__():
+            yield observables
