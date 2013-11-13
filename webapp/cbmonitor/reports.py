@@ -250,18 +250,21 @@ class FullReport(BaseReport):
                         yield observables
 
 
-class SyncGatewayReport(BaseViewsReport):
+class SyncGatewayReport(BaseReport):
 
-    metrics = {
-        "sync_gateway": [
-            "Sys",
-            "Alloc",
-            "HeapAlloc",
-            "HeapObjects",
-            "PauseTotalNs",
-            "NumGC",
-        ],
-    }
+    def __init__(self, *args, **kwargs):
+        self.metrics = {
+            "sync_gateway": [
+                "Sys",
+                "Alloc",
+                "HeapAlloc",
+                "HeapObjects",
+                "PauseTotalNs",
+                "NumGC",
+            ],
+        }
+        self.merge_metrics()
+        super(SyncGatewayReport, self).__init__(*args, **kwargs)
 
     def __iter__(self):
         for collector, metrics in self.metrics.iteritems():
