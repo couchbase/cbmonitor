@@ -58,4 +58,5 @@ LABELS = {
     "HeapObjects": "Total number of allocated objects",
     "PauseTotalNs": "PauseTotalNs",
     "NumGC": "NumGC",
+    "PauseNs": "PauseNs",
 }

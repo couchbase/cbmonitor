@@ -270,6 +270,7 @@ class SyncGatewayReport(BaseReport):
                 "Alloc",
                 "HeapAlloc",
                 "HeapObjects",
+                "PauseNs",
                 "PauseTotalNs",
                 "NumGC",
             ],
