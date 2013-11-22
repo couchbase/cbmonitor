@@ -28,15 +28,18 @@ from seriesly import Seriesly
 from seriesly.exceptions import NotExistingDatabase
 
 from cbmonitor import models
+from cbmonitor.labels import LABELS
 
 
 # Defined externally in order to be pickled
-def savePNG(filename, timestamps, values, labels):
+def savePNG(filename, timestamps, values, ylabel, labels):
     fig = figure()
     fig.set_size_inches(4.66, 2.625)
 
     ax = fig.add_subplot(1, 1, 1)
-    ax.set_xlabel("Time elapsed (sec)")
+    if ylabel:
+        ax.set_ylabel(ylabel)
+    ax.set_xlabel("Time elapsed, sec")
     ax.ticklabel_format(useOffset=False)
     for i in range(len(timestamps)):
         ax.plot(timestamps[i], values[i], label=labels[i])
@@ -153,8 +156,9 @@ class Plotter(object):
             timestamps, values, labels, title, filename, url = data
             if timestamps and values:
                 if not os.path.exists(filename):
+                    ylabel = LABELS.get(title.split()[-1])
                     apply_results.append(self.mp_pool.apply_async(
-                        savePNG, args=(filename, timestamps, values, labels)
+                        savePNG, args=(filename, timestamps, values, ylabel, labels)
                     ))
                 self.urls.append([title, url])
                 self.images.append(filename)
