@@ -56,7 +56,7 @@ LABELS = {
     "Alloc": "Bytes allocated and still in use",
     "HeapAlloc": "Bytes allocated and still in use",
     "HeapObjects": "Total number of allocated objects",
-    "PauseTotalNs": "PauseTotalNs",
-    "NumGC": "NumGC",
-    "PauseNs": "PauseNs",
+    "PauseTotalNs": "Total GC pause time, ns",
+    "PauseNs": "GC pause time, ns",
+    "NumGC": "GC events",
 }
