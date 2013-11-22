@@ -2,6 +2,7 @@ import os
 import re
 from calendar import timegm
 from collections import defaultdict
+from itertools import cycle
 from multiprocessing import Pool, cpu_count
 
 import matplotlib
@@ -31,6 +32,19 @@ from cbmonitor import models
 from cbmonitor.labels import LABELS
 
 
+class Colors(object):
+    COLORS = (
+        '#51A351', '#f89406', '#7D1935', '#4A96AD', '#DE1B1B', '#E9E581',
+        '#A2AB58', '#FFE658', '#118C4E', '#193D4F',
+    )
+
+    def __init__(self):
+        self.cycle = cycle(self.COLORS)
+
+    def next(self):
+        return self.cycle.next()
+
+
 # Defined externally in order to be pickled
 def savePNG(filename, timestamps, values, ylabel, labels):
     fig = figure()
@@ -41,8 +55,9 @@ def savePNG(filename, timestamps, values, ylabel, labels):
         ax.set_ylabel(ylabel)
     ax.set_xlabel("Time elapsed, sec")
     ax.ticklabel_format(useOffset=False)
-    for i in range(len(timestamps)):
-        ax.plot(timestamps[i], values[i], label=labels[i])
+    colors = Colors()
+    for i, timestamp in enumerate(timestamps):
+        ax.plot(timestamp, values[i], label=labels[i], color=colors.next())
     legend = ax.legend()
     legend.get_frame().set_linewidth(0.5)
     ymin, ymax = ax.get_ylim()
