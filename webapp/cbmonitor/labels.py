@@ -9,7 +9,7 @@ LABELS = {
     "curr_items": "Active items",
     "mem_used": "Memory used, bytes",
     "ep_meta_data_memory": "Metadata in RAM, bytes",
-    "vb_active_resident_items_ratio": "Cctive docs resident, %",
+    "vb_active_resident_items_ratio": "Active docs resident, %",
     "vb_replica_resident_items_ratio": "Replica docs resident, %",
     "ep_num_value_ejects": "Ejections per sec",
     "disk_write_queue": "Disk write queue, items",
