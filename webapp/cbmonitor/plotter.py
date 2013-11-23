@@ -62,10 +62,11 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
     ax = fig.add_subplot(1, 1, 1)
     ax.ticklabel_format(useOffset=False)
     if histogram:
-        ax.set_ylabel("Cumulative frequency, %")
+        ax.set_ylabel("Cumulative frequency")
         ax.set_xlabel(ylabel)
         for i, value in enumerate(values):
-            ax.hist(value, linewidth=0, rwidth=0.9, label=labels[i], color=colors.next())
+            ax.hist(value, normed=True, cumulative=True, label=labels[i],
+                    linewidth=0, rwidth=0.9, color=colors.next())
     else:
         ax.set_ylabel(ylabel)
         ax.set_xlabel("Time elapsed, sec")
