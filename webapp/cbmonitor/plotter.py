@@ -1,3 +1,4 @@
+import math
 import os
 import re
 from calendar import timegm
@@ -20,7 +21,7 @@ matplotlib.rcParams.update({"legend.fancybox": True})
 matplotlib.rcParams.update({"legend.markerscale": 1.5})
 matplotlib.rcParams.update({"legend.loc": 0})
 matplotlib.rcParams.update({"legend.frameon": True})
-from matplotlib.pyplot import figure, close, ylim
+from matplotlib.pyplot import figure, close, xlim, ylim
 
 from cbagent.stores import SerieslyStore
 from django.conf import settings
@@ -52,6 +53,16 @@ HISTOGRAMS = (
 )
 
 
+def calc_percentile(data, percentile):
+    k = (len(data) - 1) * percentile
+    f = math.floor(k)
+    c = math.ceil(k)
+    if f == c:
+        return data[int(k)]
+    else:
+        return data[int(f)] * (c - k) + data[int(c)] * (k - f)
+
+
 # Defined externally in order to be pickled
 def save_png(filename, timestamps, values, ylabel, labels, histogram):
     fig = figure()
@@ -61,19 +72,24 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
 
     ax = fig.add_subplot(1, 1, 1)
     ax.ticklabel_format(useOffset=False)
+    ax.set_ylabel(ylabel)
     if histogram:
-        ax.set_ylabel("Cumulative frequency")
-        ax.set_xlabel(ylabel)
-        for i, value in enumerate(values):
-            ax.hist(value, normed=True, cumulative=True, label=labels[i],
-                    linewidth=0, rwidth=0.9, color=colors.next())
+        ax.set_xlabel("Percentile")
+        x = range(1, 100)
+        width = cycle((0.6, 0.4))
+        align = cycle(("edge", "center"))
+        for i, v in enumerate(values):
+            data = sorted(v)
+            y = [calc_percentile(data, percentile / 100.0) for percentile in x]
+            ax.bar(x, y, linewidth=0.0, label=labels[i],
+                   width=width.next(), align=align.next(), color=colors.next())
+            xlim(xmin=0, xmax=100)
     else:
-        ax.set_ylabel(ylabel)
         ax.set_xlabel("Time elapsed, sec")
         for i, timestamp in enumerate(timestamps):
             ax.plot(timestamp, values[i], label=labels[i], color=colors.next())
-        ymin, ymax = ax.get_ylim()
-        ylim(ymin=0, ymax=max(1, ymax * 1.05))
+    ymin, ymax = ax.get_ylim()
+    ylim(ymin=0, ymax=max(1, ymax * 1.05))
     legend = ax.legend()
     legend.get_frame().set_linewidth(0.5)
     fig.savefig(filename, dpi=200)
