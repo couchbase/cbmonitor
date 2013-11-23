@@ -88,8 +88,8 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
         ax.set_xlabel("Time elapsed, sec")
         for i, timestamp in enumerate(timestamps):
             ax.plot(timestamp, values[i], label=labels[i], color=colors.next())
-    ymin, ymax = ax.get_ylim()
-    ylim(ymin=0, ymax=max(1, ymax * 1.05))
+        ymin, ymax = ax.get_ylim()
+        ylim(ymin=0, ymax=max(1, ymax * 1.05))
     legend = ax.legend()
     legend.get_frame().set_linewidth(0.5)
     fig.savefig(filename, dpi=200)
