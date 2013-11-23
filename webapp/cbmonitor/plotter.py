@@ -34,8 +34,8 @@ from cbmonitor.labels import LABELS
 
 class Colors(object):
     COLORS = (
-        '#51A351', '#f89406', '#7D1935', '#4A96AD', '#DE1B1B', '#E9E581',
-        '#A2AB58', '#FFE658', '#118C4E', '#193D4F',
+        "#51A351", "#f89406", "#7D1935", "#4A96AD", "#DE1B1B", "#E9E581",
+        "#A2AB58", "#FFE658", "#118C4E", "#193D4F",
     )
 
     def __init__(self):
@@ -45,24 +45,36 @@ class Colors(object):
         return self.cycle.next()
 
 
+HISTOGRAMS = (
+    "latency_get", "latency_set", "latency_query",
+    "xdcr_lag", "xdcr_persistence_time", "xdcr_diff",
+    "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
+)
+
+
 # Defined externally in order to be pickled
-def savePNG(filename, timestamps, values, ylabel, labels):
+def save_png(filename, timestamps, values, ylabel, labels, histogram):
     fig = figure()
     fig.set_size_inches(4.66, 2.625)
 
-    ax = fig.add_subplot(1, 1, 1)
-    if ylabel:
-        ax.set_ylabel(ylabel)
-    ax.set_xlabel("Time elapsed, sec")
-    ax.ticklabel_format(useOffset=False)
     colors = Colors()
-    for i, timestamp in enumerate(timestamps):
-        ax.plot(timestamp, values[i], label=labels[i], color=colors.next())
+
+    ax = fig.add_subplot(1, 1, 1)
+    ax.ticklabel_format(useOffset=False)
+    if histogram:
+        ax.set_ylabel("Cumulative frequency, %")
+        ax.set_xlabel(ylabel)
+        for i, value in enumerate(values):
+            ax.hist(value, linewidth=0, rwidth=0.9, label=labels[i], color=colors.next())
+    else:
+        ax.set_ylabel(ylabel)
+        ax.set_xlabel("Time elapsed, sec")
+        for i, timestamp in enumerate(timestamps):
+            ax.plot(timestamp, values[i], label=labels[i], color=colors.next())
+        ymin, ymax = ax.get_ylim()
+        ylim(ymin=0, ymax=max(1, ymax * 1.05))
     legend = ax.legend()
     legend.get_frame().set_linewidth(0.5)
-    ymin, ymax = ax.get_ylim()
-    ylim(ymin=0, ymax=max(1, ymax * 1.05))
-
     fig.savefig(filename, dpi=200)
     close()
 
@@ -112,7 +124,7 @@ class Plotter(object):
         else:
             return None, None
 
-    def generate_PNG_meta(self, snapshot, cluster, server, bucket, metric):
+    def generate_png_meta(self, snapshot, cluster, server, bucket, metric):
         metric = metric.replace("/", "_")
         title = "{0}] {1}".format(bucket, metric)  # [server bucket] metric
         if server:
@@ -122,7 +134,7 @@ class Plotter(object):
 
         filename = "".join((snapshot.name, cluster, title))
         filename = re.sub(r"[\[\]/\\:\*\?\"<>\|& ]", "", filename)
-        filename += ".png"
+        filename += "{suffix}.png"
 
         media_url = settings.MEDIA_URL + filename
         media_path = os.path.join(settings.MEDIA_ROOT, filename)
@@ -159,7 +171,7 @@ class Plotter(object):
                 else:
                     merge["labels"].append(snapshot.name)
             merge_cluster += cluster
-        title, url, filename = self.generate_PNG_meta(snapshot, merge_cluster,
+        title, url, filename = self.generate_png_meta(snapshot, merge_cluster,
                                                       server, bucket, name)
 
         return merge["timestamps"], merge["values"], merge["labels"],\
@@ -170,12 +182,20 @@ class Plotter(object):
         for data in self.eventlet_pool.imap(self.extract, metrics):
             timestamps, values, labels, title, filename, url = data
             if timestamps and values:
+                ylabel = LABELS.get(title.split()[-1], title.split()[-1])
+                suffixes = ['']
+                if title.split()[-1] in HISTOGRAMS:
+                    suffixes.append('_histo')
                 if not os.path.exists(filename):
-                    ylabel = LABELS.get(title.split()[-1])
-                    apply_results.append(self.mp_pool.apply_async(
-                        savePNG, args=(filename, timestamps, values, ylabel, labels)
-                    ))
-                self.urls.append([title, url])
-                self.images.append(filename)
+                    for suffix in suffixes:
+                        apply_results.append(self.mp_pool.apply_async(
+                            save_png,
+                            args=(filename.format(suffix=suffix),
+                                  timestamps, values, ylabel, labels,
+                                  bool(suffix))
+                        ))
+                for suffix in suffixes:
+                    self.urls.append([title, url.format(suffix=suffix)])
+                    self.images.append(filename.format(suffix=suffix))
         for result in apply_results:
             result.get()
