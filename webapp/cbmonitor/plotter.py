@@ -21,7 +21,7 @@ matplotlib.rcParams.update({"legend.fancybox": True})
 matplotlib.rcParams.update({"legend.markerscale": 1.5})
 matplotlib.rcParams.update({"legend.loc": 0})
 matplotlib.rcParams.update({"legend.frameon": True})
-from matplotlib.pyplot import figure, close, ylim, xticks
+from matplotlib.pyplot import figure, close, xlim, ylim, xticks
 
 from cbagent.stores import SerieslyStore
 from django.conf import settings
@@ -84,6 +84,7 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
         if histogram == "_lt90":
             percentiles = range(1, 90)
             x = percentiles
+            xlim(0, 90)
         elif histogram == "_gt90":
             percentiles = (90, 95, 97.5, 99, 99.9, 99.99, 99.999)
             x = range(len(percentiles))
@@ -91,6 +92,7 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
         else:
             percentiles = range(1, 100)
             x = percentiles
+            xlim(0, 100)
         for i, v in enumerate(values):
             data = sorted(v)
             y = [calc_percentile(data, p / 100.0) for p in percentiles]
