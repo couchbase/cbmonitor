@@ -21,7 +21,7 @@ matplotlib.rcParams.update({"legend.fancybox": True})
 matplotlib.rcParams.update({"legend.markerscale": 1.5})
 matplotlib.rcParams.update({"legend.loc": 0})
 matplotlib.rcParams.update({"legend.frameon": True})
-from matplotlib.pyplot import figure, close, xlim, ylim
+from matplotlib.pyplot import figure, close, ylim, xticks
 
 from cbagent.stores import SerieslyStore
 from django.conf import settings
@@ -52,6 +52,10 @@ HISTOGRAMS = (
     "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
 )
 
+ZOOM_HISTOGRAMS = (
+    "latency_get", "latency_query",
+)
+
 
 def calc_percentile(data, percentile):
     k = (len(data) - 1) * percentile
@@ -75,15 +79,21 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
     ax.set_ylabel(ylabel)
     if histogram:
         ax.set_xlabel("Percentile")
-        x = range(1, 100)
         width = cycle((0.6, 0.4))
         align = cycle(("edge", "center"))
+        if histogram == "_lt90":
+            x = range(1, 90)
+        elif histogram == "_gt90":
+            ticks = (90, 95, 97.5, 99, 99.9, 99.99, 99.999)
+            x = range(len(ticks))
+            xticks(x, ticks)
+        else:
+            x = range(1, 100)
         for i, v in enumerate(values):
             data = sorted(v)
             y = [calc_percentile(data, percentile / 100.0) for percentile in x]
             ax.bar(x, y, linewidth=0.0, label=labels[i],
                    width=width.next(), align=align.next(), color=colors.next())
-            xlim(xmin=0, xmax=100)
     else:
         ax.set_xlabel("Time elapsed, sec")
         for i, timestamp in enumerate(timestamps):
@@ -202,14 +212,15 @@ class Plotter(object):
                 ylabel = LABELS.get(title.split()[-1], title.split()[-1])
                 suffixes = ['']
                 if title.split()[-1] in HISTOGRAMS:
-                    suffixes.append('_histo')
+                    suffixes += ['_histo']
+                if title.split()[-1] in ZOOM_HISTOGRAMS:
+                    suffixes += ['_lt90', '_gt90']
                 if not os.path.exists(filename):
                     for suffix in suffixes:
                         apply_results.append(self.mp_pool.apply_async(
                             save_png,
                             args=(filename.format(suffix=suffix),
-                                  timestamps, values, ylabel, labels,
-                                  bool(suffix))
+                                  timestamps, values, ylabel, labels, suffix)
                         ))
                 for suffix in suffixes:
                     self.urls.append([title, url.format(suffix=suffix)])
