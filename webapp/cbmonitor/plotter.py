@@ -82,16 +82,18 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
         width = cycle((0.6, 0.4))
         align = cycle(("edge", "center"))
         if histogram == "_lt90":
-            x = range(1, 90)
+            percentiles = range(1, 90)
+            x = percentiles
         elif histogram == "_gt90":
-            ticks = (90, 95, 97.5, 99, 99.9, 99.99, 99.999)
-            x = range(len(ticks))
-            xticks(x, ticks)
+            percentiles = (90, 95, 97.5, 99, 99.9, 99.99, 99.999)
+            x = range(len(percentiles))
+            xticks(x, percentiles)
         else:
-            x = range(1, 100)
+            percentiles = range(1, 100)
+            x = percentiles
         for i, v in enumerate(values):
             data = sorted(v)
-            y = [calc_percentile(data, percentile / 100.0) for percentile in x]
+            y = [calc_percentile(data, p / 100.0) for p in percentiles]
             ax.bar(x, y, linewidth=0.0, label=labels[i],
                    width=width.next(), align=align.next(), color=colors.next())
     else:
