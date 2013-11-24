@@ -44,7 +44,14 @@ class BaseReport(object):
             "beam.smp_rss",
             "beam.smp_cpu",
             "memcached_cpu"
-        ]
+        ],
+        "spring_latency": [
+            "latency_set",
+            "latency_get",
+        ],
+        "spring_query_latency": [
+            "latency_query",
+        ],
     }
 
     def __init__(self, snapshots):
@@ -142,24 +149,13 @@ class BaseXdcrReport(BaseReport):
 
 class BaseKVReport(BaseReport):
 
-    def __init__(self, *args, **kwargs):
-        self.metrics = {
-            "spring_latency": [
-                "latency_set",
-                "latency_get",
-            ],
-        }
-        self.merge_metrics()
-        super(BaseKVReport, self).__init__(*args, **kwargs)
+    pass
 
 
 class BaseViewsReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
         self.metrics = {
-            "spring_query_latency": [
-                "latency_query",
-            ],
             "ns_server": [
                 "couch_views_ops",
                 "couch_views_data_size",
