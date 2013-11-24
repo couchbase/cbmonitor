@@ -69,8 +69,7 @@ def calc_percentile(data, percentile):
 
 # Defined externally in order to be pickled
 def save_png(filename, timestamps, values, ylabel, labels, histogram):
-    fig = figure()
-    fig.set_size_inches(4.66, 2.625)
+    fig = figure(figsize=(4.66, 2.625))
 
     colors = Colors()
 
@@ -106,6 +105,8 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
         ylim(ymin=0, ymax=max(1, ymax * 1.05))
     legend = ax.legend()
     legend.get_frame().set_linewidth(0.5)
+
+    fig.tight_layout()
     fig.savefig(filename, dpi=200)
     close()
 
