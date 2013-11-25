@@ -53,7 +53,7 @@ HISTOGRAMS = (
 )
 
 ZOOM_HISTOGRAMS = (
-    "latency_get", "latency_query",
+    "latency_get", "latency_query", "avg_bg_wait_time",
 )
 
 
