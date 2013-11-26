@@ -28,6 +28,7 @@ class BaseReport(object):
             "vb_active_resident_items_ratio",
             "vb_replica_resident_items_ratio",
             "ep_num_value_ejects",
+            "ep_tmp_oom_errors",
             "disk_write_queue",
             "ep_cache_miss_rate",
             "ep_bg_fetched",
