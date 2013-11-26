@@ -46,6 +46,16 @@ class BaseReport(object):
             "beam.smp_cpu",
             "memcached_cpu"
         ],
+        "iostat": [
+            "data_rbps",
+            "data_wbps",
+            "data_avgqusz",
+            "data_util",
+            "index_rbps",
+            "index_wbps",
+            "index_avgqusz",
+            "index_util",
+        ],
         "spring_latency": [
             "latency_set",
             "latency_get",
@@ -91,7 +101,7 @@ class BaseReport(object):
                             pass
                     if observables:
                         yield observables
-            if collector == "atop":
+            if collector in ("atop", "iostat"):
                 for metric in metrics:
                     for server in self.servers:
                         observables = []

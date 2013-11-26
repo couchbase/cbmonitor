@@ -59,4 +59,12 @@ LABELS = {
     "PauseTotalNs": "Total GC pause time, ns",
     "PauseNs": "GC pause time, ns",
     "NumGC": "GC events",
+    "data_rbps": "Bytes read/sec",
+    "data_wbps": "Bytes written/sec",
+    "data_avgqusz": "The average queue length",
+    "data_util": "Disk bandwidth utilization, %",
+    "index_rbps": "Bytes read/sec",
+    "index_wbps": "Bytes written/sec",
+    "index_avgqusz": "The average queue length",
+    "index_util": "Disk bandwidth utilization, %",
 }
