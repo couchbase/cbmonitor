@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from ordereddict import OrderedDict
 
 from cbmonitor import models
 
@@ -14,7 +15,7 @@ class Report(object):
 
 class BaseReport(object):
 
-    metrics = {
+    metrics = OrderedDict({
         "ns_server": [
             "ops",
             "cmd_get",
@@ -63,7 +64,7 @@ class BaseReport(object):
         "spring_query_latency": [
             "latency_query",
         ],
-    }
+    })
 
     def __init__(self, snapshots):
         self.snapshots = snapshots
@@ -129,7 +130,7 @@ class BaseReport(object):
 class BaseXdcrReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
-        self.metrics = {
+        self.metrics = OrderedDict({
             "xdcr_lag": [
                 "xdcr_lag",
                 "xdcr_persistence_time",
@@ -153,7 +154,7 @@ class BaseXdcrReport(BaseReport):
                 "ep_num_ops_set_meta",
                 "ep_num_ops_del_meta",
             ]
-        }
+        })
         self.merge_metrics()
         super(BaseXdcrReport, self).__init__(*args, **kwargs)
 
@@ -166,14 +167,14 @@ class BaseKVReport(BaseReport):
 class BaseViewsReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
-        self.metrics = {
+        self.metrics = OrderedDict({
             "ns_server": [
                 "couch_views_ops",
                 "couch_views_data_size",
                 "couch_views_actual_disk_size",
                 "couch_views_fragmentation",
             ]
-        }
+        })
         self.merge_metrics()
         super(BaseViewsReport, self).__init__(*args, **kwargs)
 
@@ -181,7 +182,7 @@ class BaseViewsReport(BaseReport):
 class BaseTuqReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
-        self.metrics = {
+        self.metrics = OrderedDict({
             "spring_tuq_latency": [
                 "latency_query",
                 "latency_tuq",
@@ -192,7 +193,7 @@ class BaseTuqReport(BaseReport):
                 "couch_views_actual_disk_size",
                 "couch_views_fragmentation",
             ]
-        }
+        })
         self.merge_metrics()
         super(BaseTuqReport, self).__init__(*args, **kwargs)
 
@@ -271,7 +272,7 @@ class FullReport(BaseReport):
 class SyncGatewayReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
-        self.metrics = {
+        self.metrics = OrderedDict({
             "sync_gateway": [
                 "Sys",
                 "Alloc",
@@ -281,7 +282,7 @@ class SyncGatewayReport(BaseReport):
                 "PauseTotalNs",
                 "NumGC",
             ],
-        }
+        })
         self.merge_metrics()
         super(SyncGatewayReport, self).__init__(*args, **kwargs)
 
