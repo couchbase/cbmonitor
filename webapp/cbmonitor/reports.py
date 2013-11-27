@@ -82,7 +82,6 @@ class BaseReport(object):
 
     def __iter__(self):
         for collector, metrics in self.metrics.iteritems():
-            print collector
             for metric in metrics:
                 for bucket in self.buckets:
                     observables = []
