@@ -16,6 +16,15 @@ class Report(object):
 class BaseReport(object):
 
     metrics = OrderedDict((
+        ("xdcr_lag", []),
+        ("spring_query_latency", [
+            "latency_query",
+        ]),
+        ("spring_latency", [
+            "latency_set",
+            "latency_get",
+        ]),
+        ("sync_gateway", []),
         ("ns_server", [
             "ops",
             "cmd_get",
@@ -56,13 +65,6 @@ class BaseReport(object):
             "index_wbps",
             "index_avgqusz",
             "index_util",
-        ]),
-        ("spring_latency", [
-            "latency_set",
-            "latency_get",
-        ]),
-        ("spring_query_latency", [
-            "latency_query",
         ]),
     ))
 
