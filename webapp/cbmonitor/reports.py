@@ -15,8 +15,8 @@ class Report(object):
 
 class BaseReport(object):
 
-    metrics = OrderedDict({
-        "ns_server": [
+    metrics = OrderedDict((
+        ("ns_server", [
             "ops",
             "cmd_get",
             "cmd_set",
@@ -41,13 +41,13 @@ class BaseReport(object):
             "couch_docs_actual_disk_size",
             "couch_docs_fragmentation",
             "couch_total_disk_size",
-        ],
-        "atop": [
+        ]),
+        ("atop", [
             "beam.smp_rss",
             "beam.smp_cpu",
             "memcached_cpu"
-        ],
-        "iostat": [
+        ]),
+        ("iostat", [
             "data_rbps",
             "data_wbps",
             "data_avgqusz",
@@ -56,15 +56,15 @@ class BaseReport(object):
             "index_wbps",
             "index_avgqusz",
             "index_util",
-        ],
-        "spring_latency": [
+        ]),
+        ("spring_latency", [
             "latency_set",
             "latency_get",
-        ],
-        "spring_query_latency": [
+        ]),
+        ("spring_query_latency", [
             "latency_query",
-        ],
-    })
+        ]),
+    ))
 
     def __init__(self, snapshots):
         self.snapshots = snapshots
@@ -76,10 +76,11 @@ class BaseReport(object):
         base_metrics = BaseReport.metrics
         for collector in set(base_metrics) & set(self.metrics):
             self.metrics[collector] += base_metrics[collector]
-        self.metrics = dict(base_metrics, **self.metrics)
+        self.metrics = OrderedDict(base_metrics, **self.metrics)
 
     def __iter__(self):
         for collector, metrics in self.metrics.iteritems():
+            print collector
             for metric in metrics:
                 for bucket in self.buckets:
                     observables = []
@@ -130,13 +131,13 @@ class BaseReport(object):
 class BaseXdcrReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
-        self.metrics = OrderedDict({
-            "xdcr_lag": [
+        self.metrics = OrderedDict((
+            ("xdcr_lag", [
                 "xdcr_lag",
                 "xdcr_persistence_time",
                 "xdcr_diff",
-            ],
-            "ns_server": [
+            ]),
+            ("ns_server", [
                 "replication_changes_left",
                 "replication_size_rep_queue",
                 "replication_rate_replication",
@@ -153,8 +154,8 @@ class BaseXdcrReport(BaseReport):
                 "ep_num_ops_get_meta",
                 "ep_num_ops_set_meta",
                 "ep_num_ops_del_meta",
-            ]
-        })
+            ]),
+        ))
         self.merge_metrics()
         super(BaseXdcrReport, self).__init__(*args, **kwargs)
 
@@ -167,14 +168,14 @@ class BaseKVReport(BaseReport):
 class BaseViewsReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
-        self.metrics = OrderedDict({
-            "ns_server": [
+        self.metrics = OrderedDict((
+            ("ns_server", [
                 "couch_views_ops",
                 "couch_views_data_size",
                 "couch_views_actual_disk_size",
                 "couch_views_fragmentation",
-            ]
-        })
+            ]),
+        ))
         self.merge_metrics()
         super(BaseViewsReport, self).__init__(*args, **kwargs)
 
@@ -182,18 +183,18 @@ class BaseViewsReport(BaseReport):
 class BaseTuqReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
-        self.metrics = OrderedDict({
-            "spring_tuq_latency": [
+        self.metrics = OrderedDict((
+            ("spring_tuq_latency", [
                 "latency_query",
                 "latency_tuq",
-            ],
-            "ns_server": [
+            ]),
+            ("ns_server", [
                 "couch_views_ops",
                 "couch_views_data_size",
                 "couch_views_actual_disk_size",
                 "couch_views_fragmentation",
-            ]
-        })
+            ]),
+        ))
         self.merge_metrics()
         super(BaseTuqReport, self).__init__(*args, **kwargs)
 
@@ -272,8 +273,8 @@ class FullReport(BaseReport):
 class SyncGatewayReport(BaseReport):
 
     def __init__(self, *args, **kwargs):
-        self.metrics = OrderedDict({
-            "sync_gateway": [
+        self.metrics = OrderedDict((
+            ("sync_gateway", [
                 "Sys",
                 "Alloc",
                 "HeapAlloc",
@@ -281,8 +282,8 @@ class SyncGatewayReport(BaseReport):
                 "PauseNs",
                 "PauseTotalNs",
                 "NumGC",
-            ],
-        })
+            ]),
+        ))
         self.merge_metrics()
         super(SyncGatewayReport, self).__init__(*args, **kwargs)
 
