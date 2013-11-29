@@ -21,7 +21,7 @@ matplotlib.rcParams.update({"legend.fancybox": True})
 matplotlib.rcParams.update({"legend.markerscale": 1.5})
 matplotlib.rcParams.update({"legend.loc": 0})
 matplotlib.rcParams.update({"legend.frameon": True})
-from matplotlib.pyplot import figure, close, xlim, ylim, xticks
+import matplotlib.pyplot as plt
 
 from cbagent.stores import SerieslyStore
 from django.conf import settings
@@ -71,7 +71,7 @@ def calc_percentile(data, percentile):
 
 # Defined externally in order to be pickled
 def save_png(filename, timestamps, values, ylabel, labels, histogram):
-    fig = figure(figsize=(4.66, 2.625))
+    fig = plt.figure(figsize=(4.66, 2.625))
 
     colors = Colors()
 
@@ -85,15 +85,15 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
         if histogram == "_lt90":
             percentiles = range(1, 90)
             x = percentiles
-            xlim(0, 90)
+            plt.xlim(0, 90)
         elif histogram == "_gt90":
             percentiles = (90, 95, 97.5, 99, 99.9, 99.99, 99.999)
             x = range(len(percentiles))
-            xticks(x, percentiles)
+            plt.xticks(x, percentiles)
         else:
             percentiles = range(1, 100)
             x = percentiles
-            xlim(0, 100)
+            plt.xlim(0, 100)
         for i, v in enumerate(values):
             data = sorted(v)
             y = [calc_percentile(data, p / 100.0) for p in percentiles]
@@ -104,13 +104,13 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
         for i, timestamp in enumerate(timestamps):
             ax.plot(timestamp, values[i], label=labels[i], color=colors.next())
         ymin, ymax = ax.get_ylim()
-        ylim(ymin=0, ymax=max(1, ymax * 1.05))
+        plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
     legend = ax.legend()
     legend.get_frame().set_linewidth(0.5)
 
     fig.tight_layout()
     fig.savefig(filename, dpi=200)
-    close()
+    plt.close()
 
 
 class Plotter(object):
