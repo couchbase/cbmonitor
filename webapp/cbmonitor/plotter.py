@@ -58,6 +58,41 @@ ZOOM_HISTOGRAMS = (
     "latency_get", "latency_query", "avg_bg_wait_time",
 )
 
+NON_ZERO_VALUES = (
+    "ops",
+    "cmd_get",
+    "cmd_set",
+    "delete_hits",
+    "cas_hits",
+
+    "disk_write_queue",
+    "ep_cache_miss_rate",
+    "ep_bg_fetched",
+    "avg_bg_wait_time",
+    "avg_disk_commit_time",
+    "avg_disk_update_time",
+
+    "xdc_ops",
+    "ep_num_ops_get_meta",
+    "ep_num_ops_set_meta",
+    "ep_num_ops_del_meta",
+
+    "replication_changes_left",
+    "replication_size_rep_queue",
+    "replication_rate_replication",
+    "replication_bandwidth_usage",
+    "replication_work_time",
+    "replication_commit_time",
+    "replication_active_vbreps",
+    "replication_waiting_vbreps",
+    "replication_num_checkpoints",
+    "replication_num_failedckpts",
+    "replication_meta_latency_wt",
+    "replication_docs_latency_wt",
+
+    "bucket_compaction_progress",
+)
+
 
 def calc_percentile(data, percentile):
     k = (len(data) - 1) * percentile
@@ -153,10 +188,10 @@ class Plotter(object):
         # Substract first timestamp; convert to seconds
         timestamps = [(key - timestamps[0]) / 1000 for key in timestamps]
 
-        if set(values) - set([None]):
-            return timestamps, values
-        else:
+        if set(values) == set([0]) and metric in NON_ZERO_VALUES:
             return None, None
+        else:
+            return timestamps, values
 
     def generate_png_meta(self, snapshot, cluster, server, bucket, metric):
         metric = metric.replace("/", "_")
