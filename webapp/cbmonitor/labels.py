@@ -67,4 +67,5 @@ LABELS = {
     "index_wbps": "Bytes written/sec",
     "index_avgqusz": "The average queue length",
     "index_util": "Disk bandwidth utilization, %",
+    "bucket_compaction_progress": "Compaction progress, %",
 }

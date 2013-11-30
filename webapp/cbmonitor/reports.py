@@ -95,7 +95,7 @@ class BaseReport(object):
                         collector="active_tasks",
                         name="bucket_compaction_progress",
                         server__isnull=True,
-                        bucket__isnull=_bucket,
+                        bucket=_bucket,
                     )
                     observables.append((observable, snapshot))
                 except ObjectDoesNotExist:
