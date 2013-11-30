@@ -30,68 +30,17 @@ from seriesly import Seriesly
 from seriesly.exceptions import NotExistingDatabase
 
 from cbmonitor import models
-from cbmonitor.labels import LABELS
+from cbmonitor.constants import (LABELS, PALETTE,
+                                 HISTOGRAMS, ZOOM_HISTOGRAMS, NON_ZERO_VALUES)
 
 
 class Colors(object):
-    COLORS = (
-        "#51A351", "#f89406", "#7D1935", "#4A96AD", "#DE1B1B", "#E9E581",
-        "#A2AB58", "#FFE658", "#118C4E", "#193D4F",
-    )
 
     def __init__(self):
-        self.cycle = cycle(self.COLORS)
+        self.cycle = cycle(PALETTE)
 
     def next(self):
         return self.cycle.next()
-
-
-HISTOGRAMS = (
-    "latency_get", "latency_set", "latency_query",
-    "xdcr_lag", "xdcr_persistence_time", "xdcr_diff",
-    "replication_changes_left",
-    "replication_meta_latency_wt", "replication_docs_latency_wt",
-    "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
-)
-
-ZOOM_HISTOGRAMS = (
-    "latency_get", "latency_query", "avg_bg_wait_time",
-)
-
-NON_ZERO_VALUES = (
-    "ops",
-    "cmd_get",
-    "cmd_set",
-    "delete_hits",
-    "cas_hits",
-
-    "disk_write_queue",
-    "ep_cache_miss_rate",
-    "ep_bg_fetched",
-    "avg_bg_wait_time",
-    "avg_disk_commit_time",
-    "avg_disk_update_time",
-
-    "xdc_ops",
-    "ep_num_ops_get_meta",
-    "ep_num_ops_set_meta",
-    "ep_num_ops_del_meta",
-
-    "replication_changes_left",
-    "replication_size_rep_queue",
-    "replication_rate_replication",
-    "replication_bandwidth_usage",
-    "replication_work_time",
-    "replication_commit_time",
-    "replication_active_vbreps",
-    "replication_waiting_vbreps",
-    "replication_num_checkpoints",
-    "replication_num_failedckpts",
-    "replication_meta_latency_wt",
-    "replication_docs_latency_wt",
-
-    "bucket_compaction_progress",
-)
 
 
 def calc_percentile(data, percentile):
