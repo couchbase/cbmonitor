@@ -89,8 +89,10 @@ NON_ZERO_VALUES = (
     "delete_hits",
     "cas_hits",
 
+    "ep_tmp_oom_errors",
     "disk_write_queue",
     "ep_cache_miss_rate",
+    "ep_num_value_ejects",
     "ep_bg_fetched",
     "avg_bg_wait_time",
     "avg_disk_commit_time",
