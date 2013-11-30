@@ -148,7 +148,7 @@ class Plotter(object):
         data = dict((k, v[0]) for k, v in response.iteritems())
         for timestamp, value in sorted(data.iteritems()):
             timestamps.append(int(timestamp))
-            values.append(value)
+            values.append(value or 0)
 
         # Substract first timestamp; convert to seconds
         timestamps = [(key - timestamps[0]) / 1000 for key in timestamps]

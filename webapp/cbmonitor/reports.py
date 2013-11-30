@@ -81,6 +81,26 @@ class BaseReport(object):
         self.metrics = OrderedDict(base_metrics, **self.metrics)
 
     def __iter__(self):
+        for bucket in self.buckets:
+            observables = []
+            for snapshot, cluster in self.snapshots:
+                _bucket = models.Bucket.objects.get(
+                    cluster=cluster,
+                    name=bucket.name
+                )
+                try:
+                    observable = models.Observable.objects.get(
+                        cluster=cluster,
+                        type_id="metric",
+                        collector="active_tasks",
+                        name="bucket_compaction_progress",
+                        server__isnull=True,
+                        bucket__isnull=_bucket,
+                    )
+                    observables.append((observable, snapshot))
+                except ObjectDoesNotExist:
+                    pass
+
         for collector, metrics in self.metrics.iteritems():
             for metric in metrics:
                 for bucket in self.buckets:
