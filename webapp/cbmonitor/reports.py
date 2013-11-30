@@ -100,6 +100,8 @@ class BaseReport(object):
                     observables.append((observable, snapshot))
                 except ObjectDoesNotExist:
                     pass
+            if observables:
+                yield observables
 
         for collector, metrics in self.metrics.iteritems():
             for metric in metrics:
