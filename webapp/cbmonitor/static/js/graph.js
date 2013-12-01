@@ -123,10 +123,8 @@ CBMONITOR.DataHandler.prototype.prepareSeries = function(metrics) {
         values = [];
         for(var j = 0, lent = timestamps.length; j < lent; j++) {
             timestamp = timestamps[j];
-            value = parseFloat(this.data[i][timestamp]);
-            if (!isNaN(value)) {
-                values.push({x: timestamp, y: value});
-            }
+            value = parseFloat(this.data[i][timestamp]) || 0;
+            values.push({x: timestamp, y: value});
         }
         series.push({
             key: metrics[i],
