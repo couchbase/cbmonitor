@@ -23,6 +23,7 @@ matplotlib.rcParams.update({"legend.loc": 0})
 matplotlib.rcParams.update({"legend.frameon": True})
 import matplotlib.pyplot as plt
 
+import numpy as np
 from cbagent.stores import SerieslyStore
 from django.conf import settings
 from eventlet import GreenPool
@@ -41,16 +42,6 @@ class Colors(object):
 
     def next(self):
         return self.cycle.next()
-
-
-def calc_percentile(data, percentile):
-    k = (len(data) - 1) * percentile
-    f = math.floor(k)
-    c = math.ceil(k)
-    if f == c:
-        return data[int(k)]
-    else:
-        return data[int(f)] * (c - k) + data[int(c)] * (k - f)
 
 
 # Defined externally in order to be pickled
@@ -80,7 +71,7 @@ def save_png(filename, timestamps, values, ylabel, labels, histogram):
             plt.xlim(0, 100)
         for i, v in enumerate(values):
             data = sorted(v)
-            y = [calc_percentile(data, p / 100.0) for p in percentiles]
+            y = np.percentile(data, percentiles)
             ax.bar(x, y, linewidth=0.0, label=labels[i],
                    width=width.next(), align=align.next(), color=colors.next())
     else:
