@@ -45,7 +45,7 @@ class Colors(object):
 
 
 # Defined externally in order to be pickled
-def save_png(filename, series, ylabel, labels, histogram):
+def save_png(filename, series, ylabel, labels, histogram, rebalances):
     fig = plt.figure(figsize=(4.66, 2.625))
 
     colors = Colors()
@@ -79,6 +79,11 @@ def save_png(filename, series, ylabel, labels, histogram):
             ax.plot(s.index, s.values, label=labels[i], color=colors.next())
         ymin, ymax = ax.get_ylim()
         plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
+
+        colors = Colors()
+        for rebalance_start, rebalance_end in rebalances:
+            plt.axvspan(rebalance_start, rebalance_end,
+                        facecolor=colors.next(), alpha=0.1, linewidth=0.5)
     legend = ax.legend()
     legend.get_frame().set_linewidth(0.5)
 
@@ -101,8 +106,7 @@ class Plotter(object):
     def __del__(self):
         self.mp_pool.close()
 
-    def get_series(self, snapshot, cluster, server, bucket, metric, collector):
-        # Query data using metric as key
+    def query_data(self, snapshot, cluster, server, bucket, metric, collector):
         query_params = {"ptr": "/{0}".format(metric), "reducer": "avg",
                         "group": 5000}
         if snapshot.name != "all_data":
@@ -112,21 +116,9 @@ class Plotter(object):
             query_params.update({"group": group, "from": ts_from, "to": ts_to})
         db_name = SerieslyStore.build_dbname(cluster, server, bucket, collector)
         try:
-            response = self.db[db_name].query(query_params)
+            return self.db[db_name].query(query_params)
         except NotExistingDatabase:
             return None
-
-        # Create time series
-        data = dict((k, v[0]) for k, v in response.iteritems())
-        series = pd.Series(data)
-        series.index = series.index.astype("uint64")
-        series.index = series.index.values - series.index.values.min()
-        series.index = series.index.values / 1000  # ms -> s
-
-        if metric in NON_ZERO_VALUES and (series == 0).all():
-            return None
-        else:
-            return series
 
     def generate_png_meta(self, snapshot, cluster, server, bucket, metric):
         metric = metric.replace("/", "_")
@@ -143,6 +135,18 @@ class Plotter(object):
         media_url = settings.MEDIA_URL + filename
         media_path = os.path.join(settings.MEDIA_ROOT, filename)
         return title, media_url, media_path
+
+    def get_series(self, metric, data):
+        data = dict((k, v[0]) for k, v in data.iteritems())
+        series = pd.Series(data)
+        series.index = series.index.astype("uint64")
+        series.index = series.index.values - series.index.values.min()
+        series.index = series.index.values / 1000  # ms -> s
+
+        if metric in NON_ZERO_VALUES and (series == 0).all():
+            return None
+        else:
+            return series
 
     def extract_meta(self, metric):
         if metric.bucket_id:
@@ -165,22 +169,36 @@ class Plotter(object):
         for sub_metric, snapshot in meta:
             cluster, server, bucket, name, collector = self.extract_meta(
                 sub_metric)
-            series = self.get_series(snapshot, cluster, server, bucket, name,
-                                     collector)
-            if series is not None:
-                merge["series"].append(series)
-                if snapshot.name == "all_data":
-                    merge["labels"].append(cluster)
-                else:
-                    merge["labels"].append(snapshot.name)
+            data = self.query_data(snapshot, cluster, server, bucket, name,
+                                   collector)
+            if data:
+                series = self.get_series(metric=name, data=data)
+                if series is not None:
+                    merge["series"].append(series)
+                    if snapshot.name == "all_data":
+                        merge["labels"].append(cluster)
+                    else:
+                        merge["labels"].append(snapshot.name)
             merge_cluster += cluster
         title, url, filename = self.generate_png_meta(snapshot, merge_cluster,
                                                       server, bucket, name)
 
         return merge["series"], merge["labels"], title, filename, url
 
+    def detect_rebalance(self, observables):
+        rebalances = []
+        if observables[0][0].name == "rebalance_progress":
+            series, _, _, _, _ = self.extract(observables)
+            for s in series:
+                rebalance = s.bfill().drop_duplicates()
+                rebalances.append((rebalance.index[1], rebalance.index[-1]))
+        return rebalances
+
     def plot(self, metrics):
         apply_results = list()
+        metrics = tuple(metrics)
+        rebalances = self.detect_rebalance(metrics[0])
+
         for data in self.eventlet_pool.imap(self.extract, metrics):
             series, labels, title, filename, url = data
             if series:
@@ -195,7 +213,7 @@ class Plotter(object):
                         apply_results.append(self.mp_pool.apply_async(
                             save_png,
                             args=(filename.format(suffix=suffix),
-                                  series, ylabel, labels, suffix)
+                                  series, ylabel, labels, suffix, rebalances)
                         ))
                 for suffix in suffixes:
                     self.urls.append([title, url.format(suffix=suffix)])
