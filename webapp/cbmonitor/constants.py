@@ -17,7 +17,7 @@ LABELS = {
     "ep_bg_fetched": "Disk reads per sec",
     "ep_diskqueue_drain": "Drain rate, items/sec",
     "avg_bg_wait_time": "BgFetcher wait time, us",
-    "avg_disk_commit_time": "Disk commit time",
+    "avg_disk_commit_time": "Disk commit time, s",
     "avg_disk_update_time": "Disk update time, us",
     "couch_docs_data_size": "Docs data size, bytes",
     "couch_docs_actual_disk_size": "Docs total disk size, bytes",
