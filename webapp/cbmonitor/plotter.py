@@ -167,7 +167,7 @@ class Plotter(object):
                 sub_metric)
             series = self.get_series(snapshot, cluster, server, bucket, name,
                                      collector)
-            if series:
+            if series is not None:
                 merge["series"].append(series)
                 if snapshot.name == "all_data":
                     merge["labels"].append(cluster)
