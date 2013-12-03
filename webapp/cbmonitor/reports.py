@@ -32,6 +32,7 @@ class BaseReport(object):
             "delete_hits",
             "cas_hits",
             "curr_connections",
+            "hibernated_waked",
             "curr_items",
             "mem_used",
             "ep_meta_data_memory",

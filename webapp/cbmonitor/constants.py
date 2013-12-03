@@ -6,6 +6,7 @@ LABELS = {
     "delete_hits": "DELETE ops per sec",
     "cas_hits": "CAS ops per sec",
     "curr_connections": "Connections",
+    "hibernated_waked": "Streaming requests wakeups per sec",
     "curr_items": "Active items",
     "mem_used": "Memory used, bytes",
     "ep_meta_data_memory": "Metadata in RAM, bytes",
@@ -88,6 +89,8 @@ NON_ZERO_VALUES = (
     "cmd_set",
     "delete_hits",
     "cas_hits",
+
+    "hibernated_waked",
 
     "ep_tmp_oom_errors",
     "disk_write_queue",
