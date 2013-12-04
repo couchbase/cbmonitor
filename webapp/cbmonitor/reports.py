@@ -16,21 +16,54 @@ class Report(object):
 class BaseReport(object):
 
     metrics = OrderedDict((
-        ("xdcr_lag", []),
+        ("xdcr_lag", [
+            "xdcr_lag",
+            "xdcr_persistence_time",
+            "xdcr_diff",
+        ]),
         ("spring_query_latency", [
             "latency_query",
+        ]),
+        ("spring_tuq_latency", [
+            "latency_query",
+            "latency_tuq",
         ]),
         ("spring_latency", [
             "latency_set",
             "latency_get",
         ]),
-        ("sync_gateway", []),
+        ("sync_gateway", [
+            "Sys",
+            "Alloc",
+            "HeapAlloc",
+            "HeapObjects",
+            "PauseNs",
+            "PauseTotalNs",
+            "NumGC",
+        ]),
         ("ns_server", [
+            "couch_views_ops",
             "ops",
             "cmd_get",
             "cmd_set",
             "delete_hits",
             "cas_hits",
+            "xdc_ops",
+            "ep_num_ops_get_meta",
+            "ep_num_ops_set_meta",
+            "ep_num_ops_del_meta",
+            "replication_changes_left",
+            "replication_size_rep_queue",
+            "replication_rate_replication",
+            "replication_bandwidth_usage",
+            "replication_work_time",
+            "replication_commit_time",
+            "replication_active_vbreps",
+            "replication_waiting_vbreps",
+            "replication_num_checkpoints",
+            "replication_num_failedckpts",
+            "replication_meta_latency_wt",
+            "replication_docs_latency_wt",
             "curr_connections",
             "hibernated_waked",
             "curr_items",
@@ -49,8 +82,11 @@ class BaseReport(object):
             "avg_disk_update_time",
             "couch_docs_data_size",
             "couch_docs_actual_disk_size",
-            "couch_docs_fragmentation",
+            "couch_views_data_size",
+            "couch_views_actual_disk_size",
             "couch_total_disk_size",
+            "couch_docs_fragmentation",
+            "couch_views_fragmentation",
         ]),
         ("atop", [
             "beam.smp_rss",
@@ -154,34 +190,7 @@ class BaseReport(object):
 
 class BaseXdcrReport(BaseReport):
 
-    def __init__(self, *args, **kwargs):
-        self.metrics = OrderedDict((
-            ("xdcr_lag", [
-                "xdcr_lag",
-                "xdcr_persistence_time",
-                "xdcr_diff",
-            ]),
-            ("ns_server", [
-                "replication_changes_left",
-                "replication_size_rep_queue",
-                "replication_rate_replication",
-                "replication_bandwidth_usage",
-                "replication_work_time",
-                "replication_commit_time",
-                "replication_active_vbreps",
-                "replication_waiting_vbreps",
-                "replication_num_checkpoints",
-                "replication_num_failedckpts",
-                "replication_meta_latency_wt",
-                "replication_docs_latency_wt",
-                "xdc_ops",
-                "ep_num_ops_get_meta",
-                "ep_num_ops_set_meta",
-                "ep_num_ops_del_meta",
-            ]),
-        ))
-        self.merge_metrics()
-        super(BaseXdcrReport, self).__init__(*args, **kwargs)
+    pass
 
 
 class BaseKVReport(BaseReport):
@@ -191,36 +200,12 @@ class BaseKVReport(BaseReport):
 
 class BaseViewsReport(BaseReport):
 
-    def __init__(self, *args, **kwargs):
-        self.metrics = OrderedDict((
-            ("ns_server", [
-                "couch_views_ops",
-                "couch_views_data_size",
-                "couch_views_actual_disk_size",
-                "couch_views_fragmentation",
-            ]),
-        ))
-        self.merge_metrics()
-        super(BaseViewsReport, self).__init__(*args, **kwargs)
+    pass
 
 
 class BaseTuqReport(BaseReport):
 
-    def __init__(self, *args, **kwargs):
-        self.metrics = OrderedDict((
-            ("spring_tuq_latency", [
-                "latency_query",
-                "latency_tuq",
-            ]),
-            ("ns_server", [
-                "couch_views_ops",
-                "couch_views_data_size",
-                "couch_views_actual_disk_size",
-                "couch_views_fragmentation",
-            ]),
-        ))
-        self.merge_metrics()
-        super(BaseTuqReport, self).__init__(*args, **kwargs)
+    pass
 
 
 class BaseRebalanceReport(BaseReport):
@@ -246,16 +231,14 @@ class BaseRebalanceReport(BaseReport):
             yield observables
 
 
-class BaseRebalanceViewsReport(BaseRebalanceReport, BaseViewsReport):
+class BaseRebalanceViewsReport(BaseRebalanceReport):
 
-    def __init__(self, *args, **kwargs):
-        super(BaseRebalanceReport, self).__init__(*args, **kwargs)
+    pass
 
 
-class BaseRebalanceXdcrReport(BaseRebalanceReport, BaseXdcrReport):
+class BaseRebalanceXdcrReport(BaseRebalanceReport):
 
-    def __init__(self, *args, **kwargs):
-        super(BaseRebalanceReport, self).__init__(*args, **kwargs)
+    pass
 
 
 class FullReport(BaseReport):
@@ -295,21 +278,6 @@ class FullReport(BaseReport):
 
 
 class SyncGatewayReport(BaseReport):
-
-    def __init__(self, *args, **kwargs):
-        self.metrics = OrderedDict((
-            ("sync_gateway", [
-                "Sys",
-                "Alloc",
-                "HeapAlloc",
-                "HeapObjects",
-                "PauseNs",
-                "PauseTotalNs",
-                "NumGC",
-            ]),
-        ))
-        self.merge_metrics()
-        super(SyncGatewayReport, self).__init__(*args, **kwargs)
 
     def __iter__(self):
         for collector, metrics in self.metrics.iteritems():
