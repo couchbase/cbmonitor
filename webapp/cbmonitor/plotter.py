@@ -190,8 +190,9 @@ class Plotter(object):
         if observables[0][0].name == "rebalance_progress":
             series, _, _, _, _ = self.extract(observables)
             for s in series:
-                rebalance = s.bfill().drop_duplicates()
-                rebalances.append((rebalance.index[1], rebalance.index[-1]))
+                s = s.dropna()
+                rebalance = s[s > 0]
+                rebalances.append((rebalance.index[0], rebalance.index[-1]))
         return rebalances
 
     def plot(self, metrics):
