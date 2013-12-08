@@ -140,8 +140,8 @@ class Plotter(object):
         data = dict((k, v[0]) for k, v in data.iteritems())
         series = pd.Series(data)
         series.index = series.index.astype("uint64")
-        series.index = series.index.values - series.index.values.min()
-        series.index = series.index.values / 1000  # ms -> s
+        series.rename(lambda x: x - series.index.values.min(), inplace=True)
+        series.rename(lambda x: x / 1000, inplace=True)  # ms -> s
 
         if metric in NON_ZERO_VALUES and (series == 0).all():
             return None
