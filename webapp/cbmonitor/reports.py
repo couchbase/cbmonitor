@@ -90,9 +90,11 @@ class BaseReport(object):
             "couch_views_fragmentation",
         ]),
         ("atop", [
+            "sync_gateway_rss",
+            "sync_gateway_cpu",
             "beam.smp_rss",
             "beam.smp_cpu",
-            "memcached_cpu"
+            "memcached_cpu",
         ]),
         ("iostat", [
             "data_rbps",
