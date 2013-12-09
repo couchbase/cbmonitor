@@ -166,7 +166,7 @@ class BaseReport(object):
                             pass
                     if observables:
                         yield observables
-            if collector in ("atop", "iostat"):
+            if collector in ("atop", "iostat", "sync_gateway"):
                 for metric in metrics:
                     for server in self.servers:
                         observables = []
