@@ -39,6 +39,7 @@ class BaseReport(object):
             "HeapObjects",
             "PauseNs",
             "PauseTotalNs",
+            "PausePct",
             "NumGC",
         ]),
         ("ns_server", [
