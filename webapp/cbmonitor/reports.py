@@ -191,26 +191,6 @@ class BaseReport(object):
                             yield observables
 
 
-class BaseXdcrReport(BaseReport):
-
-    pass
-
-
-class BaseKVReport(BaseReport):
-
-    pass
-
-
-class BaseViewsReport(BaseReport):
-
-    pass
-
-
-class BaseTuqReport(BaseReport):
-
-    pass
-
-
 class BaseRebalanceReport(BaseReport):
 
     def __iter__(self):
@@ -232,6 +212,26 @@ class BaseRebalanceReport(BaseReport):
             yield observables
         for observables in super(BaseRebalanceReport, self).__iter__():
             yield observables
+
+
+class BaseXdcrReport(BaseReport):
+
+    pass
+
+
+class BaseKVReport(BaseReport):
+
+    pass
+
+
+class BaseViewsReport(BaseReport):
+
+    pass
+
+
+class BaseTuqReport(BaseReport):
+
+    pass
 
 
 class BaseRebalanceViewsReport(BaseRebalanceReport):

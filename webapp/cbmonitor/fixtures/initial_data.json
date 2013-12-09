@@ -36,58 +36,9 @@
     },
     {
         "model": "cbmonitor.ReportType",
-        "pk": "BaseXdcrReport",
-        "fields": {
-            "name": "BaseXdcrReport"
-        }
-    },
-    {
-        "model": "cbmonitor.ReportType",
-        "pk": "BaseViewsReport",
-        "fields": {
-            "name": "BaseViewsReport"
-        }
-    },
-    {
-        "model": "cbmonitor.ReportType",
-        "pk": "BaseKVReport",
-        "fields": {
-            "name": "BaseKVReport"
-        }
-    },
-    {
-        "model": "cbmonitor.ReportType",
         "pk": "BaseRebalanceReport",
         "fields": {
             "name": "BaseRebalanceReport"
-        }
-    },
-    {
-        "model": "cbmonitor.ReportType",
-        "pk": "BaseRebalanceViewsReport",
-        "fields": {
-            "name": "BaseRebalanceViewsReport"
-        }
-    },
-    {
-        "model": "cbmonitor.ReportType",
-        "pk": "BaseRebalanceXdcrReport",
-        "fields": {
-            "name": "BaseRebalanceXdcrReport"
-        }
-    },
-    {
-        "model": "cbmonitor.ReportType",
-        "pk": "FullReport",
-        "fields": {
-            "name": "FullReport"
-        }
-    },
-    {
-        "model": "cbmonitor.ReportType",
-        "pk": "SyncGatewayReport",
-        "fields": {
-            "name": "SyncGatewayReport"
         }
     }
 ]
