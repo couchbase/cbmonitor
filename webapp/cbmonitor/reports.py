@@ -280,30 +280,4 @@ class FullReport(BaseReport):
 
 class SyncGatewayReport(BaseReport):
 
-    def __iter__(self):
-        for collector, metrics in self.metrics.iteritems():
-            for metric in metrics:
-                for server in self.servers:
-                    observables = []
-                    for snapshot, cluster in self.snapshots:
-                        try:
-                            _server = models.Server.objects.get(
-                                cluster=cluster,
-                                address=server.address
-                            )
-                            observable = models.Observable.objects.get(
-                                cluster=cluster,
-                                type_id="metric",
-                                collector=collector,
-                                name=metric,
-                                server=_server,
-                                bucket__isnull=True,
-                            )
-                            observables.append((observable, snapshot))
-                        except ObjectDoesNotExist:
-                            pass
-                    if observables:
-                        yield observables
-
-        for observables in super(SyncGatewayReport, self).__iter__():
-            yield observables
+    pass
