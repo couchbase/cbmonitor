@@ -602,21 +602,6 @@ class ApiTest(TestHelper):
 
     @patch('seriesly.core.Database.query', autospec=True)
     @patch('seriesly.core.Seriesly.list_dbs', autospec=True)
-    def test_full_html_report(self, list_dbs_mock, query_mock):
-        query_mock.return_value = {1: [2]}
-        list_dbs_mock.return_value = ['ns_serverEastdefault']
-
-        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
-                  "report": "FullReport"}
-        response = Client().get("/reports/html/", params)
-
-        # Verify content
-        expected = 'src="/media/run-1_access-phase_vperf-reb_2.0.0-1976Eastdefaultdisk_write_queue.png"'
-        self.assertIn(expected, response.content)
-        map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
-
-    @patch('seriesly.core.Database.query', autospec=True)
-    @patch('seriesly.core.Seriesly.list_dbs', autospec=True)
     def test_xdcr_html_report(self, list_dbs_mock, query_mock):
         query_mock.return_value = {1: [2]}
         list_dbs_mock.return_value = ['ns_serverEastdefault']

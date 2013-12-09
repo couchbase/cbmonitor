@@ -244,42 +244,6 @@ class BaseRebalanceXdcrReport(BaseRebalanceReport):
     pass
 
 
-class FullReport(BaseReport):
-
-    def __init__(self, snapshots):
-        super(FullReport, self).__init__(snapshots)
-
-        clusters = [c for s, c in self.snapshots]
-        metrics = models.Observable.objects.filter(cluster=clusters[0],
-                                                   server__isnull=True)
-        self.metrics = set(metric.name for metric in metrics)
-
-    def __iter__(self):
-        for collector in ("ns_server", ):
-            for metric in self.metrics:
-                for bucket in self.buckets:
-                    observables = []
-                    for snapshot, cluster in self.snapshots:
-                        try:
-                            _bucket = models.Bucket.objects.get(
-                                cluster=cluster,
-                                name=bucket.name
-                            )
-                            observable = models.Observable.objects.get(
-                                cluster=cluster,
-                                type_id="metric",
-                                collector=collector,
-                                name=metric,
-                                server__isnull=True,
-                                bucket=_bucket,
-                            )
-                            observables.append((observable, snapshot))
-                        except ObjectDoesNotExist:
-                            pass
-                    if observables:
-                        yield observables
-
-
 class SyncGatewayReport(BaseReport):
 
     pass
