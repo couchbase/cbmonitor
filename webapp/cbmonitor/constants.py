@@ -60,7 +60,7 @@ LABELS = {
     "PauseTotalNs": "Total GC pause time, ns",
     "PauseNs": "GC pause time, ns",
     "NumGC": "GC events",
-    "PausePct": "Percentage of total time spent in GC, %",
+    "PausesPct": "Percentage of total time spent in GC, %",
     "data_rbps": "Bytes read/sec",
     "data_wbps": "Bytes written/sec",
     "data_avgqusz": "The average queue length",
