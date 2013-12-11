@@ -7,7 +7,6 @@ admin.autodiscover()
 urlpatterns = patterns(
     'cbmonitor',
     url(r'^$', 'views.index'),
-    url(r'^inventory/$', 'views.inventory'),
     url(r'^reports/html/', 'views.html_report'),
     url(r'^cbmonitor/(?P<path>[a-z_]+)/$', 'rest_api.dispatcher'),
 )
