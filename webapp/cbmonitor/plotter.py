@@ -24,10 +24,10 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 import pandas as pd
+import seriesly
 from cbagent.stores import SerieslyStore
 from django.conf import settings
 from eventlet import GreenPool
-from seriesly import Seriesly
 
 from cbmonitor import models
 from cbmonitor.constants import (LABELS, PALETTE,
@@ -94,7 +94,7 @@ def save_png(filename, series, ylabel, labels, histogram, rebalances):
 class Plotter(object):
 
     def __init__(self):
-        self.db = Seriesly()
+        self.db = seriesly.Seriesly()
         self.all_dbs = self.db.list_dbs()
 
         self.urls = list()
@@ -112,13 +112,16 @@ class Plotter(object):
         if snapshot.name != "all_data":
             ts_from = timegm(snapshot.ts_from.timetuple()) * 1000
             ts_to = timegm(snapshot.ts_to.timetuple()) * 1000
-            group = max((ts_from - ts_to) / 500, 5000)  # min 5 sec; max 500 points
+            group = max((ts_from - ts_to) / 500, 5000)  # min 5s; max 500 points
             query_params.update({"group": group, "from": ts_from, "to": ts_to})
         db_name = SerieslyStore.build_dbname(cluster, server, bucket, collector)
         if db_name in self.all_dbs:
-            return self.db[db_name].query(query_params)
+            try:
+                return self.db[db_name].query(query_params)
+            except seriesly.exceptions.ConnectionError:
+                return
         else:
-            return None
+            return
 
     def generate_png_meta(self, snapshot, cluster, server, bucket, metric):
         metric = metric.replace("/", "_")
