@@ -28,7 +28,6 @@ from cbagent.stores import SerieslyStore
 from django.conf import settings
 from eventlet import GreenPool
 from seriesly import Seriesly
-from seriesly.exceptions import NotExistingDatabase
 
 from cbmonitor import models
 from cbmonitor.constants import (LABELS, PALETTE,
@@ -96,6 +95,7 @@ class Plotter(object):
 
     def __init__(self):
         self.db = Seriesly()
+        self.all_dbs = self.db.list_dbs()
 
         self.urls = list()
         self.images = list()
@@ -115,9 +115,9 @@ class Plotter(object):
             group = max((ts_from - ts_to) / 500, 5000)  # min 5 sec; max 500 points
             query_params.update({"group": group, "from": ts_from, "to": ts_to})
         db_name = SerieslyStore.build_dbname(cluster, server, bucket, collector)
-        try:
+        if db_name in self.all_dbs:
             return self.db[db_name].query(query_params)
-        except NotExistingDatabase:
+        else:
             return None
 
     def generate_png_meta(self, snapshot, cluster, server, bucket, metric):
