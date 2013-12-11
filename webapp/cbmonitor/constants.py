@@ -75,7 +75,6 @@ LABELS = {
 HISTOGRAMS = (
     "latency_get", "latency_set", "latency_query",
     "xdcr_lag", "xdcr_persistence_time", "xdcr_diff",
-    "replication_changes_left",
     "replication_meta_latency_wt", "replication_docs_latency_wt",
     "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
 )
