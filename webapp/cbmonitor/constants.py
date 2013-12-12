@@ -90,6 +90,11 @@ NON_ZERO_VALUES = (
     "delete_hits",
     "cas_hits",
 
+    "couch_views_ops",
+    "couch_views_data_size",
+    "couch_views_actual_disk_size",
+    "couch_views_fragmentation",
+
     "hibernated_waked",
 
     "ep_tmp_oom_errors",
