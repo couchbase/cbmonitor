@@ -28,10 +28,12 @@ import seriesly
 from cbagent.stores import SerieslyStore
 from django.conf import settings
 from eventlet import GreenPool
+from scipy import stats
 
 from cbmonitor import models
 from cbmonitor.constants import (LABELS, PALETTE,
-                                 HISTOGRAMS, ZOOM_HISTOGRAMS, NON_ZERO_VALUES)
+                                 HISTOGRAMS, ZOOM_HISTOGRAMS, NON_ZERO_VALUES,
+                                 KDE)
 
 
 class Colors(object):
@@ -44,23 +46,24 @@ class Colors(object):
 
 
 # Defined externally in order to be pickled
-def save_png(filename, series, ylabel, labels, histogram, rebalances):
+def save_png(filename, series, ylabel, labels, chart_id, rebalances):
     fig = plt.figure(figsize=(4.66, 2.625))
 
     colors = Colors()
 
     ax = fig.add_subplot(1, 1, 1)
     ax.ticklabel_format(useOffset=False)
-    ax.set_ylabel(ylabel)
-    if histogram:
+
+    if chart_id in ("_lt90", "_gt90", "_histo"):
+        ax.set_ylabel(ylabel)
         ax.set_xlabel("Percentile")
         width = cycle((0.6, 0.4))
         align = cycle(("edge", "center"))
-        if histogram == "_lt90":
+        if chart_id == "_lt90":
             percentiles = range(1, 90)
             x = percentiles
             plt.xlim(0, 90)
-        elif histogram == "_gt90":
+        elif chart_id == "_gt90":
             percentiles = (90, 95, 97.5, 99, 99.9, 99.99, 99.999)
             x = range(len(percentiles))
             plt.xticks(x, percentiles)
@@ -72,7 +75,15 @@ def save_png(filename, series, ylabel, labels, histogram, rebalances):
             y = np.percentile(s.values, percentiles)
             ax.bar(x, y, linewidth=0.0, label=labels[i],
                    width=width.next(), align=align.next(), color=colors.next())
+    elif chart_id == "_kde":
+        ax.set_ylabel("Kernel density estimation")
+        ax.set_xlabel(ylabel)
+        for i, s in enumerate(series):
+            x = np.linspace(0, int(s.quantile(0.99)), 200)
+            kde = stats.kde.gaussian_kde(s.values)
+            ax.plot(x, kde(x), label=labels[i], color=colors.next())
     else:
+        ax.set_ylabel(ylabel)
         ax.set_xlabel("Time elapsed, sec")
         for i, s in enumerate(series):
             ax.plot(s.index, s.values, label=labels[i], color=colors.next())
@@ -83,6 +94,7 @@ def save_png(filename, series, ylabel, labels, histogram, rebalances):
         for rebalance_start, rebalance_end in rebalances:
             plt.axvspan(rebalance_start, rebalance_end,
                         facecolor=colors.next(), alpha=0.1, linewidth=0.5)
+
     legend = ax.legend()
     legend.get_frame().set_linewidth(0.5)
 
@@ -145,6 +157,7 @@ class Plotter(object):
         series.index = series.index.astype("uint64")
         series.rename(lambda x: x - series.index.values.min(), inplace=True)
         series.rename(lambda x: x / 1000, inplace=True)  # ms -> s
+        series.dropna()  # otherwise it may break kde
 
         if metric in NON_ZERO_VALUES and (series == 0).all():
             return None
@@ -205,22 +218,27 @@ class Plotter(object):
 
         for data in self.eventlet_pool.imap(self.extract, metrics):
             series, labels, title, filename, url = data
+            metric = title.split()[-1]
             if series:
-                ylabel = LABELS.get(title.split()[-1], title.split()[-1])
-                suffixes = ['']
-                if title.split()[-1] in HISTOGRAMS:
-                    suffixes += ['_histo']
-                if title.split()[-1] in ZOOM_HISTOGRAMS:
-                    suffixes += ['_lt90', '_gt90']
+                ylabel = LABELS.get(metric, metric)
+
+                chart_ids = [""]
+                if metric in HISTOGRAMS:
+                    chart_ids += ["_histo"]
+                if metric in ZOOM_HISTOGRAMS:
+                    chart_ids += ["_lt90", "_gt90"]
+                if metric in KDE:
+                    chart_ids += ["_kde"]
+
                 if not os.path.exists(filename):
-                    for suffix in suffixes:
+                    for chart_id in chart_ids:
                         apply_results.append(self.mp_pool.apply_async(
                             save_png,
-                            args=(filename.format(suffix=suffix),
-                                  series, ylabel, labels, suffix, rebalances)
+                            args=(filename.format(suffix=chart_id),
+                                  series, ylabel, labels, chart_id, rebalances)
                         ))
-                for suffix in suffixes:
-                    self.urls.append([title, url.format(suffix=suffix)])
-                    self.images.append(filename.format(suffix=suffix))
+                for chart_id in chart_ids:
+                    self.urls.append([title, url.format(suffix=chart_id)])
+                    self.images.append(filename.format(suffix=chart_id))
         for result in apply_results:
             result.get()
