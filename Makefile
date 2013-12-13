@@ -40,5 +40,5 @@ runfcgi: update_templates; \
     chmod a+rw /tmp/cbmonitor.sock; \
     cp nginx.template /etc/nginx/sites-available/cbmonitor.conf; \
     ln -fs /etc/nginx/sites-available/cbmonitor.conf /etc/nginx/sites-enabled/cbmonitor.conf; \
-    ln -fs $(CURDIR)/eggs/Django-1.4.*/django/contrib/admin/static/admin $(CURDIR)/webapp/cbmonitor/static/admin; \
+    ln -fs $(CURDIR)/env/lib/python2.7/site-packages/django/contrib/admin/static/admin $(CURDIR)/webapp/cbmonitor/static/admin; \
     /etc/init.d/nginx reload
