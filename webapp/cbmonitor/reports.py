@@ -1,5 +1,6 @@
+from collections import OrderedDict
+
 from django.core.exceptions import ObjectDoesNotExist
-from ordereddict import OrderedDict
 
 from cbmonitor import models
 

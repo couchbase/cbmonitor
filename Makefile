@@ -1,18 +1,19 @@
 build: ; \
-    buildout -t 120 -q
+    virtualenv -p python2.7 env; \
+    ./env/bin/pip install -r requirements.txt
 
 clean: ; \
-    rm -fr bin src eggs develop-eggs parts .installed.cfg .mr.developer.cfg; \
+    rm -fr env; \
     rm -f `find . -name *.pyc`
 
 pep8: ; \
-    ./bin/pep8 --ignore=E501 webapp
+    ./env/bin/pep8 --ignore=E501 webapp
 
 jshint: ; \
     jshint webapp/cbmonitor/static/js/*.js
 
 test_webapp: ; \
-    ./bin/webapp test_coverage cbmonitor
+    ./env/bin/python webapp/manage.py test_coverage cbmonitor
 
 test: test_webapp pep8 jshint;
 
@@ -21,10 +22,14 @@ update_templates: ; \
     sed -i "s|cbmonitor.db|$(CURDIR)/cbmonitor.db|" webapp/settings.py; \
     sed -i "s|MAKE_ROOT|"$(CURDIR)"|" nginx.template
 
-run_fcgi: update_templates; \
+run: ; \
+    ./env/bin/python webapp/manage.py syncdb; \
+    ./env/bin/python webapp/manage.py runserver
+
+runfcgi: update_templates; \
     killall -9 -q webapp; \
-    ./bin/webapp syncdb --noinput; \
-    ./bin/webapp runfcgi \
+    ./env/bin/python webapp/manage.py syncdb --noinput; \
+    ./env/bin/python webapp/manage.py runfcgi \
         method=prefork \
         maxchildren=8 \
         minspare=2 \
