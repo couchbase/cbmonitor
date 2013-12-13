@@ -11,24 +11,6 @@ def index(request):
     return render_to_response("charts.jade", {"charts": True})
 
 
-def inventory(request):
-    clusters = []
-
-    for cluster in models.Cluster.objects.all():
-        servers = models.Server.objects.filter(cluster=cluster).values()
-        servers = [s["address"] for s in servers]
-        buckets = models.Bucket.objects.filter(cluster=cluster).values()
-        buckets = [b["name"] for b in buckets]
-        clusters.append((
-            cluster.name,
-            ", ".join(servers),
-            ", ".join(buckets),
-            cluster.description
-        ))
-
-    return render_to_response("inventory.jade", {"clusters": clusters})
-
-
 def get_plotter_and_metrics(params):
     snapshots = []
     if "all_data" in params.getlist("snapshot"):

@@ -107,11 +107,6 @@ class BasicTest(TestCase):
         response = views.index(request)
         self.assertEqual(response.status_code, 200)
 
-    def test_inventory(self):
-        request = self.factory.get('/inventory/')
-        response = views.inventory(request)
-        self.assertEqual(response.status_code, 200)
-
 
 class TestHelper(TestCase):
 
