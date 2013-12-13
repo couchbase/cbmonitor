@@ -87,6 +87,10 @@ KDE = (
     "latency_query", "latency_get", "latency_set", "xdcr_lag",
 )
 
+SMOOTH_SUBPLOTS = (
+    "latency_query", "latency_get", "latency_set",
+)
+
 NON_ZERO_VALUES = (
     "ops",
     "cmd_get",

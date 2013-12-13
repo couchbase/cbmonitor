@@ -32,8 +32,11 @@ from scipy import stats
 
 from cbmonitor import models
 from cbmonitor.constants import (LABELS, PALETTE,
-                                 HISTOGRAMS, ZOOM_HISTOGRAMS, NON_ZERO_VALUES,
-                                 KDE)
+                                 HISTOGRAMS, ZOOM_HISTOGRAMS,
+                                 NON_ZERO_VALUES,
+                                 KDE,
+                                 SMOOTH_SUBPLOTS,
+                                 )
 
 
 class Colors(object):
@@ -75,6 +78,28 @@ def save_png(filename, series, ylabel, labels, chart_id, rebalances):
             y = np.percentile(s.values, percentiles)
             ax.bar(x, y, linewidth=0.0, label=labels[i],
                    width=width.next(), align=align.next(), color=colors.next())
+    elif chart_id == "_subplot":
+        ax.set_ylabel(ylabel)
+        map(lambda s: s.set_color('none'), ax.spines.values())
+        ax.tick_params(top='off', bottom='off', left='off', right='off',
+                       labelcolor='w')
+        ax.grid(None)
+
+        for i, s in enumerate(series):
+            color = colors.next()
+
+            ax = fig.add_subplot(2, 1, 1)
+            ax.plot(s.index, s.values, label=labels[i], color=color)
+            plt.setp(ax.get_xticklabels(), visible=False)
+            ymin, ymax = ax.get_ylim()
+            plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
+
+            ax = fig.add_subplot(2, 1, 2)
+            rolling_median = pd.rolling_median(s, window=5)
+            ax.plot(s.index, rolling_median, label=labels[i], color=color)
+            ax.set_xlabel("Time elapsed, sec")
+            ymin, ymax = ax.get_ylim()
+            plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
     elif chart_id == "_kde":
         ax.set_ylabel("Kernel density estimation")
         ax.set_xlabel(ylabel)
@@ -229,6 +254,8 @@ class Plotter(object):
                     chart_ids += ["_lt90", "_gt90"]
                 if metric in KDE:
                     chart_ids += ["_kde"]
+                if metric in SMOOTH_SUBPLOTS:
+                    chart_ids[0] = "_subplot"
 
                 if not os.path.exists(filename):
                     for chart_id in chart_ids:
