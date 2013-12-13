@@ -2,7 +2,6 @@ cbmonitor
 ---------
 
 **cbmonitor** is a web application for stats visualization and report generation.
-It also includes set of [cbagent](https://github.com/couchbaselabs/cbagent) collectors so that you can run them via CLI.
 
 ![](docs/charts.png)
 
@@ -27,8 +26,3 @@ Running webapp
 Assuming that seriesly instance is up and running:
 
     $ ./bin/webapp runserver
-
-Running collectors via CLI
----------------------------
-
-    $ ./bin/ns_collector sample.cfg

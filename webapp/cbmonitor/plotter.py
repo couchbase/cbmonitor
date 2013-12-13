@@ -25,7 +25,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seriesly
-from cbagent.stores import SerieslyStore
 from django.conf import settings
 from eventlet import GreenPool
 from scipy import stats
@@ -143,6 +142,13 @@ class Plotter(object):
     def __del__(self):
         self.mp_pool.close()
 
+    @staticmethod
+    def build_dbname(cluster, server, bucket, collector):
+        db_name = (collector or "") + cluster + (bucket or "") + (server or "")
+        for char in "[]/\;.,><&*:%=+@!#^()|?^'\"":
+            db_name = db_name.replace(char, "")
+        return db_name
+
     def query_data(self, snapshot, cluster, server, bucket, metric, collector):
         query_params = {"ptr": "/{0}".format(metric), "reducer": "avg",
                         "group": 5000}
@@ -151,7 +157,7 @@ class Plotter(object):
             ts_to = timegm(snapshot.ts_to.timetuple()) * 1000
             group = max((ts_from - ts_to) / 500, 5000)  # min 5s; max 500 points
             query_params.update({"group": group, "from": ts_from, "to": ts_to})
-        db_name = SerieslyStore.build_dbname(cluster, server, bucket, collector)
+        db_name = self.build_dbname(cluster, server, bucket, collector)
         if db_name in self.all_dbs:
             try:
                 return self.db[db_name].query(query_params)

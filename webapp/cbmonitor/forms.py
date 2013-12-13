@@ -2,7 +2,6 @@ from django import forms
 from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
 from django.db.utils import IntegrityError
 
-from cbagent.settings import Settings
 
 from cbmonitor import models
 
@@ -15,7 +14,6 @@ class AddClusterForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super(AddClusterForm, self).clean()
         cleaned_data["cluster"] = cleaned_data.get("name")
-        self.settings = Settings(cleaned_data)
         return cleaned_data
 
 
