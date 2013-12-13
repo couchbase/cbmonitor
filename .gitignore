@@ -5,14 +5,10 @@
 *.pyc
 .installed.cfg
 .mr.developer.cfg
-src
-bin
-develop-eggs
-eggs
-parts
 *.egg-info
 webapp/media/*.png
 webapp/media/*.pdf
 webapp/media/*.txt
 db
 webapp/cbmonitor/static/admin
+env
