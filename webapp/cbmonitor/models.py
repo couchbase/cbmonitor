@@ -43,17 +43,6 @@ class Bucket(models.Model):
         pass
 
 
-class ObservableType(models.Model):
-
-    type = models.CharField(max_length=6, primary_key=True)
-
-    def __str__(self):
-        return self.type
-
-    class Admin:
-        pass
-
-
 class Observable(models.Model):
 
     class Meta:
