@@ -29,27 +29,6 @@ class AddBucketForm(forms.ModelForm):
         model = models.Bucket
 
 
-class DeleteClusterForm(forms.ModelForm):
-
-    class Meta:
-        model = models.Cluster
-        fields = ("name", )
-
-
-class DeleteServerForm(forms.ModelForm):
-
-    class Meta:
-        model = models.Server
-        fields = ("cluster", "address")
-
-
-class DeleteBucketForm(forms.ModelForm):
-
-    class Meta:
-        model = models.Bucket
-        fields = ("cluster", "name")
-
-
 class GetServersForm(forms.ModelForm):
 
     class Meta:

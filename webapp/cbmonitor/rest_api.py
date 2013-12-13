@@ -19,9 +19,6 @@ def dispatcher(request, path):
         "add_cluster": add_cluster,
         "add_server": add_server,
         "add_bucket": add_bucket,
-        "delete_cluster": delete_cluster,
-        "delete_server": delete_server,
-        "delete_bucket": delete_bucket,
         "get_clusters": get_clusters,
         "get_servers": get_servers,
         "get_buckets": get_buckets,
@@ -87,43 +84,6 @@ def add_bucket(request):
     form = forms.AddBucketForm(request.POST)
     if form.is_valid():
         form.save()
-    else:
-        raise ValidationError(form)
-
-
-@form_validation
-def delete_cluster(request):
-    cluster = get_object_or_404(models.Cluster, name=request.POST["name"])
-
-    form = forms.DeleteClusterForm(request.POST, instance=cluster)
-    if form.is_valid():
-        cluster.delete()
-    else:
-        raise ValidationError(form)
-
-
-@form_validation
-def delete_server(request):
-    cluster = get_object_or_404(models.Cluster, name=request.POST["cluster"])
-    server = get_object_or_404(models.Server, address=request.POST["address"],
-                               cluster=cluster)
-
-    form = forms.DeleteServerForm(request.POST, instance=server)
-    if form.is_valid():
-        server.delete()
-    else:
-        raise ValidationError(form)
-
-
-@form_validation
-def delete_bucket(request):
-    cluster = get_object_or_404(models.Cluster, name=request.POST["cluster"])
-    bucket = get_object_or_404(models.Bucket, name=request.POST["name"],
-                               cluster=cluster)
-
-    form = forms.DeleteBucketForm(request.POST, instance=bucket)
-    if form.is_valid():
-        bucket.delete()
     else:
         raise ValidationError(form)
 

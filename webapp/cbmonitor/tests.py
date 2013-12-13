@@ -146,12 +146,6 @@ class TestHelper(TestCase):
         }
         return self.add_item("bucket", params)
 
-    def delete_item(self, item, params):
-        """Add new cluster/server/bucket"""
-        request = self.factory.post("/delete_" + item, params)
-        response = rest_api.dispatcher(request, path="delete_" + item)
-        return response
-
 
 class ApiTest(TestHelper):
 
@@ -241,62 +235,6 @@ class ApiTest(TestHelper):
             "type": choice(("Couchbase", "Memcached"))
         }
         self.response = self.add_item("bucket", params)
-
-    @Verifier.valid_response
-    def test_remove_cluster(self):
-        """Removing existing cluster"""
-        cluster = self.add_valid_cluster()
-
-        self.response = self.delete_item("cluster", {"name": cluster})
-
-        # Verify persistence
-        self.assertRaises(ObjectDoesNotExist, models.Cluster.objects.get,
-                          name=cluster)
-
-    @Verifier.not_existing
-    def test_remove_cluster_not_existing(self):
-        """Removing not existing cluster"""
-        self.response = self.delete_item("cluster", {"name": uhex()})
-
-    @Verifier.valid_response
-    def test_remove_server(self):
-        """Removing existing cluster"""
-        cluster = self.add_valid_cluster()
-
-        params = {
-            "cluster": cluster, "address": uhex(),
-            "rest_username": uhex(), "rest_password": uhex(),
-            "ssh_username": uhex(), "ssh_password": uhex(), "ssh_key": uhex(),
-            "description": uhex()
-        }
-        self.add_item("server", params)
-
-        self.response = self.delete_item(
-            "server", {"address": params["address"], "cluster": cluster})
-
-        # Verify persistence
-        self.assertRaises(ObjectDoesNotExist, models.Server.objects.get,
-                          address=params["address"])
-
-    @Verifier.valid_response
-    def test_remove_bucket(self):
-        """Removing existing cluster"""
-        cluster = self.add_valid_cluster()
-
-        params = {
-            "name": uhex(), "cluster": cluster,
-            "type": choice(("Couchbase", "Memcached")),
-            "port": randint(1, 65535), "password": uhex()
-        }
-        self.add_item("bucket", params)
-
-        self.response = self.delete_item("bucket",
-                                         {"name": params["name"],
-                                          "cluster": cluster})
-
-        # Verify persistence
-        self.assertRaises(ObjectDoesNotExist, models.Bucket.objects.get,
-                          name=params["name"], cluster=cluster)
 
     @Verifier.valid_json
     def test_get_clusters(self):

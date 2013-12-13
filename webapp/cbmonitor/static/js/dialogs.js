@@ -92,42 +92,6 @@ CBMONITOR.Dialogs.prototype.configureAddNewSnapshot = function() {
     });
 };
 
-CBMONITOR.Dialogs.prototype.configureDeleteCluster = function() {
-    "use strict";
-
-    var that = this;
-    $("#dialog_delete").dialog({
-        autoOpen: false,
-        resizable: false,
-        height: 160,
-        modal: true,
-        buttons: {
-            confirm: {
-                "text": "Delete",
-                "class": "btn btn-mini btn-dialog",
-                "click": function() {
-                    $.ajax({
-                        type: "POST", url: "/cbmonitor/delete_cluster/",
-                        data: {"name": that.to_remove},
-                        success: function(){
-                            location.reload();
-                        }
-                    });
-                }
-            },
-            cancel: {
-                "text": "Cancel",
-                "class": "btn btn-mini btn-dialog",
-                "click": function() {
-                    $(this).dialog("close");
-                }
-            }
-        },
-        create: function () {
-            that.adjustStyles();
-        }
-    });
-};
 
 CBMONITOR.Dialogs.prototype.addNewSnapshot = function() {
     "use strict";
