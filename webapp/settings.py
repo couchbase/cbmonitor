@@ -4,6 +4,8 @@ from os import path
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+ALLOWED_HOSTS = ['cbmonitor.sc.couchbase.com']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
