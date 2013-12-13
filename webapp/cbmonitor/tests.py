@@ -8,7 +8,6 @@ from random import randint, choice
 
 from django.test import TestCase, Client
 from django.test.client import RequestFactory
-from django.core.exceptions import ObjectDoesNotExist
 from mock import patch
 
 from cbmonitor import views
