@@ -10,10 +10,6 @@ var CBMONITOR = CBMONITOR || {};
 CBMONITOR.Snapshots = function () {
     "use strict";
 
-    $("#add").click(function() {
-        $("#add_new_snapshot").dialog("open");
-    });
-
     $("#html").click(function() {
         var data = {
             snapshot: $("#snapshot").find(":selected").text(),
@@ -50,7 +46,4 @@ $(document).ready(function(){
 
     CBMONITOR.snapshots = new CBMONITOR.Snapshots();
     CBMONITOR.snapshots.getReportTypes();
-
-    CBMONITOR.dialogs = new CBMONITOR.Dialogs();
-    CBMONITOR.dialogs.configureAddNewSnapshot();
 });

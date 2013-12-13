@@ -8,11 +8,9 @@ html(lang="en")
         link(rel="stylesheet", href="/static/css/panel.css")
         link(rel="stylesheet", href="/static/css/dialogs.css")
         script(src='/static/js/vendor/jquery-ui-timepicker-addon.js')
-        script(src='/static/js/dialogs.js')
         script(src="/static/js/observables.js")
         script(src="/static/js/views.js")
         script(src="/static/js/graph.js")
-        script(src="/static/js/dialogs.js")
         script(src="/static/js/seriesly.js")
         script(src="/static/js/charts.js")
         script(src="/static/js/snapshots.js")
@@ -49,15 +47,6 @@ html(lang="en")
                         select#snapshot.selector.snaphosts(name="snapshot")
                         select#report.selector.report(name="report")
                         button#html.btn.btn-mini.btn-panel.btn-html(value="Plot") Export as HTML
-                div#add_new_snapshot.new_item(title="Add new snapshot")
-                    form
-                    fieldset
-                        label(for="name") Name
-                        input#name.text.ui-widget-content.ui-corner-all(type="text", name="name")
-                        label(for="ts_from") Start time
-                        input#ts_from.text.ui-widget-content.ui-corner-all(type="text", name="ts_from")
-                        label(for="ts_to") End time
-                        input#ts_to.text.ui-widget-content.ui-corner-all(type="text", name="ts_to")
                 div#views
                     div.chart_view_single#first_view
                         svg
