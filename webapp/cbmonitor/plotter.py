@@ -150,7 +150,7 @@ class Plotter(object):
         return db_name
 
     def query_data(self, snapshot, cluster, server, bucket, metric, collector):
-        query_params = {"ptr": "/{0}".format(metric), "reducer": "avg",
+        query_params = {"ptr": "/{}".format(metric), "reducer": "avg",
                         "group": 5000}
         if snapshot.name != "all_data":
             ts_from = timegm(snapshot.ts_from.timetuple()) * 1000
@@ -168,9 +168,9 @@ class Plotter(object):
 
     def generate_png_meta(self, snapshot, cluster, server, bucket, metric):
         metric = metric.replace("/", "_")
-        title = "{0}] {1}".format(bucket, metric)  # [server bucket] metric
+        title = "{}] {}".format(bucket, metric)  # [server bucket] metric
         if server:
-            title = "[{0} {1}".format(server, title)
+            title = "[{} {}".format(server, title)
         else:
             title = "[" + title
 
@@ -183,7 +183,7 @@ class Plotter(object):
         return title, media_url, media_path
 
     def get_series(self, metric, data):
-        data = dict((k, v[0]) for k, v in data.iteritems())
+        data = {k: v[0] for k, v in data.iteritems()}
         series = pd.Series(data)
         series.index = series.index.astype("uint64")
         series.rename(lambda x: x - series.index.values.min(), inplace=True)

@@ -34,13 +34,13 @@ def dispatcher(request, path):
     if handler:
         return handler(request)
     else:
-        return HttpResponse(content='Wrong path: {0}'.format(path), status=404)
+        return HttpResponse(content='Wrong path: {}'.format(path), status=404)
 
 
 class ValidationError(Exception):
 
     def __init__(self, form):
-        self.error = dict((item[0], item[1][0]) for item in form.errors.items())
+        self.error = {item[0]: item[1][0] for item in form.errors.items()}
 
     def __str__(self):
         return json.dumps(self.error)
