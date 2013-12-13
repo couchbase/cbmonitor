@@ -25,8 +25,8 @@ def dispatcher(request, path):
         "get_clusters": get_clusters,
         "get_servers": get_servers,
         "get_buckets": get_buckets,
-        "get_metrics_and_events": get_metrics_and_events,
-        "add_metric_or_event": add_metric_or_event,
+        "get_metrics": get_metrics,
+        "add_metric": add_metric,
         "add_snapshot": add_snapshot,
         "get_snapshots": get_snapshots,
         "get_report_types": get_report_types,
@@ -168,8 +168,8 @@ def get_buckets(request):
 
 
 @form_validation
-def get_metrics_and_events(request):
-    form = forms.GetMetricsAndEvents(request.GET)
+def get_metrics(request):
+    form = forms.GetMetrics(request.GET)
 
     if form.is_valid():
         try:
@@ -185,8 +185,8 @@ def get_metrics_and_events(request):
 
 
 @form_validation
-def add_metric_or_event(request):
-    form = forms.AddMetricsAndEvents(request.POST)
+def add_metric(request):
+    form = forms.AddMetrics(request.POST)
     if form.is_valid():
         observable = form.save(commit=False)
         observable.bucket = form.cleaned_data["bucket"]

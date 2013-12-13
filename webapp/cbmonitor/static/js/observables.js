@@ -10,17 +10,16 @@ CBMONITOR.Observables = function () {};
 CBMONITOR.Observables.prototype.updateSelectors = function() {
     "use strict";
 
-    this.updateClusters("metric");
-    this.updateClusters("event");
+    this.updateClusters();
 };
 
-CBMONITOR.Observables.prototype.updateClusters = function(type) {
+CBMONITOR.Observables.prototype.updateClusters = function() {
     "use strict";
 
     var that = this;
     $.ajax({url: "/cbmonitor/get_clusters/", dataType: "json",
         success: function(clusters){
-            var sel = (type === "metric") ? $("#met_cluster") : $("#evnt_cluster");
+            var sel = $("#met_cluster");
             sel.empty();
             if (!clusters.length) {
                 var o = new Option("None", "");
@@ -32,25 +31,25 @@ CBMONITOR.Observables.prototype.updateClusters = function(type) {
             });
             sel.change(function() {
                 var cluster = sel.find(":selected").text();
-                that.updateItems(cluster, type, "server");
-                that.updateItems(cluster, type, "bucket");
+                that.updateItems(cluster, "server");
+                that.updateItems(cluster, "bucket");
                 that.getSnapshots(cluster);
             });
-            that.updateItems(clusters[0], type, "server");
-            that.updateItems(clusters[0], type, "bucket");
+            that.updateItems(clusters[0], "server");
+            that.updateItems(clusters[0], "bucket");
             that.getSnapshots(clusters[0]);
         }
     });
 };
 
-CBMONITOR.Observables.prototype.updateItems = function(cluster, type, item) {
+CBMONITOR.Observables.prototype.updateItems = function(cluster, item) {
     "use strict";
 
     var that = this;
     $.ajax({url: "/cbmonitor/get_" + item + "s/", dataType: "json",
         data: {"cluster": cluster},
         success: function(items) {
-            var sel = (type === "metric") ? $("#met_" + item) : $("#evnt_" + item);
+            var sel = $("#met_" + item);
             sel.empty();
             var o = new Option("None", "");
             sel.append(o);
@@ -59,35 +58,32 @@ CBMONITOR.Observables.prototype.updateItems = function(cluster, type, item) {
                 sel.append(o);
             });
             sel.change(function() {
-                that.getMetricsAndEvents(type);
+                that.getMetrics();
             });
-            that.getMetricsAndEvents(type);
+            that.getMetrics();
         }
     });
 };
 
-CBMONITOR.Observables.prototype.getMetricsAndEvents = function(type) {
+CBMONITOR.Observables.prototype.getMetrics = function() {
     "use strict";
 
-    var prefix = (type === "metric")? "met" : "evnt",
-        cluster = $("#" + prefix + "_cluster option:selected").val(),
-        server = $("#" + prefix + "_server option:selected").val(),
-        bucket = $("#" + prefix + "_bucket option:selected").val();
+    var cluster = $("#met_cluster option:selected").val(),
+        server = $("#met_server option:selected").val(),
+        bucket = $("#met_bucket option:selected").val();
     $.ajax({
-        url: "/cbmonitor/get_metrics_and_events/", dataType: "json",
+        url: "/cbmonitor/get_metrics/", dataType: "json",
         data: {
             "cluster": cluster,
             "server": server,
-            "bucket": bucket,
-            "type": type
+            "bucket": bucket
         },
         success: function(items) {
-            var ul = (type === "metric") ? "#metrics_ul" : "#events_ul";
+            var ul = "#metrics_ul";
             $(ul).empty();
             items.forEach(function(item) {
                 $(ul).append(
                     $("<li>").addClass("ui-state-default ui-corner-all")
-                        .attr("type", type)
                         .attr("cluster", cluster)
                         .attr("server", server)
                         .attr("bucket", bucket)

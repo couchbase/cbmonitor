@@ -1,33 +1,5 @@
 [
     {
-        "model": "cbmonitor.BucketType",
-        "pk": "Couchbase",
-        "fields": {
-            "type": "Couchbase"
-        }
-    },
-    {
-        "model": "cbmonitor.BucketType",
-        "pk": "Memcached",
-        "fields": {
-            "type": "Memcached"
-        }
-    },
-    {
-        "model": "cbmonitor.ObservableType",
-        "pk": "metric",
-        "fields": {
-            "type": "metric"
-        }
-    },
-    {
-        "model": "cbmonitor.ObservableType",
-        "pk": "event",
-        "fields": {
-            "type": "event"
-        }
-    },
-    {
         "model": "cbmonitor.ReportType",
         "pk": "BaseReport",
         "fields": {

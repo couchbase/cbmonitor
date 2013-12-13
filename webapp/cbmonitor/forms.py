@@ -64,24 +64,21 @@ class GetBucketsForm(forms.ModelForm):
         fields = ("cluster", )
 
 
-class GetMetricsAndEvents(forms.ModelForm):
+class GetMetrics(forms.ModelForm):
 
     bucket = forms.CharField(max_length=32, required=False)
     server = forms.CharField(max_length=80, required=False)
 
     class Meta:
         model = models.Observable
-        fields = ("type", "cluster")
+        fields = ("cluster", )
 
     def clean(self):
-        cleaned_data = super(GetMetricsAndEvents, self).clean()
+        cleaned_data = super(GetMetrics, self).clean()
 
         # Type and Cluster
         cluster = cleaned_data.get("cluster")
-        self.params = {
-            "type": cleaned_data.get("type"),
-            "cluster": cluster
-        }
+        self.params = {"cluster": cluster}
 
         # Server
         try:
@@ -102,17 +99,17 @@ class GetMetricsAndEvents(forms.ModelForm):
         return cleaned_data
 
 
-class AddMetricsAndEvents(forms.ModelForm):
+class AddMetrics(forms.ModelForm):
 
     bucket = forms.CharField(max_length=32, required=False)
     server = forms.CharField(max_length=80, required=False)
 
     class Meta:
         model = models.Observable
-        fields = ("name", "type", "cluster", "collector", "description", "unit")
+        fields = ("name", "cluster", "collector")
 
     def clean(self):
-        cleaned_data = super(AddMetricsAndEvents, self).clean()
+        cleaned_data = super(AddMetrics, self).clean()
 
         try:
             bucket = models.Bucket.objects.get(

@@ -132,7 +132,6 @@ class BaseReport(object):
                 try:
                     observable = models.Observable.objects.get(
                         cluster=cluster,
-                        type_id="metric",
                         collector="active_tasks",
                         name="bucket_compaction_progress",
                         server__isnull=True,
@@ -156,7 +155,6 @@ class BaseReport(object):
                             )
                             observable = models.Observable.objects.get(
                                 cluster=cluster,
-                                type_id="metric",
                                 collector=collector,
                                 name=metric,
                                 server__isnull=True,
@@ -179,7 +177,6 @@ class BaseReport(object):
                                 )
                                 observable = models.Observable.objects.get(
                                     cluster=cluster,
-                                    type_id="metric",
                                     collector=collector,
                                     name=metric,
                                     server=_server,
@@ -200,7 +197,6 @@ class BaseRebalanceReport(BaseReport):
             try:
                 observable = models.Observable.objects.get(
                     cluster=cluster,
-                    type_id="metric",
                     collector="active_tasks",
                     name="rebalance_progress",
                     server__isnull=True,

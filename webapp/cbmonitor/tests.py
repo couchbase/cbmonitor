@@ -163,41 +163,24 @@ class ApiTest(TestHelper):
     @Verifier.valid_response
     def test_add_cluster(self):
         """Adding new cluster with full set of params"""
-        params = {
-            "name": uhex(), "rest_username": uhex(), "rest_password": uhex(),
-            "description": uhex()
-        }
+        params = {"name": uhex()}
         self.response = self.add_item("cluster", params)
 
         # Verify persistence
         cluster = models.Cluster.objects.get(name=params["name"])
-        self.assertEqual(cluster.description, params["description"])
-
-    @Verifier.valid_response
-    def test_add_cluster_wo_description(self):
-        """Adding new cluster with missing optional params"""
-        params = {
-            "name": uhex(), "rest_username": uhex(), "rest_password": uhex()
-        }
-        self.response = self.add_item("cluster", params)
-
-        # Verify persistence
-        cluster = models.Cluster.objects.get(name=params["name"])
-        self.assertEqual(cluster.description, "")
+        self.assertEqual(cluster.name, params["name"])
 
     @Verifier.duplicate
     def test_add_cluster_duplicate(self):
         """Adding duplicate cluster"""
-        params = {
-            "name": uhex(), "rest_username": uhex(), "rest_password": uhex()
-        }
+        params = {"name": uhex()}
         self.add_item("cluster", params)
         self.response = self.add_item("cluster", params)
 
     @Verifier.missing_parameter
     def test_add_cluster_wo_name(self):
         """Adding new cluster with missing mandatory params"""
-        params = {"description": uhex()}
+        params = {}
         self.response = self.add_item("cluster", params)
 
     @Verifier.missing_parameter
@@ -211,12 +194,7 @@ class ApiTest(TestHelper):
         """Adding new server with full set of params"""
         cluster = self.add_valid_cluster()
 
-        params = {
-            "cluster": cluster, "address": uhex(),
-            "rest_username": uhex(), "rest_password": uhex(),
-            "ssh_username": uhex(), "ssh_password": uhex(), "ssh_key": uhex(),
-            "description": uhex()
-        }
+        params = {"cluster": cluster, "address": uhex()}
         self.response = self.add_item("server", params)
 
         # Verify persistence
@@ -226,25 +204,18 @@ class ApiTest(TestHelper):
     @Verifier.bad_parent
     def test_add_server_to_wrong_cluster(self):
         """Adding new server with wrong cluster parameter"""
-        params = {
-            "cluster": uhex(), "address": uhex(),
-            "rest_username": uhex(), "rest_password": uhex(),
-            "ssh_username": uhex(), "ssh_password": uhex(), "ssh_key": uhex(),
-            "description": uhex()
-        }
+        params = {"cluster": uhex(), "address": uhex()}
 
         self.response = self.add_item("server", params)
 
     @Verifier.valid_response
-    def test_add_server_wo_ssh_credentials(self):
-        """Adding new server w/o SSH password and key"""
+    def test_add_server_with_rest_credentials(self):
+        """Adding new server with redundant params"""
         cluster = self.add_valid_cluster()
 
         params = {
             "cluster": cluster, "address": uhex(),
-            "rest_username": uhex(), "rest_password": uhex(),
-            "ssh_username": uhex(),
-            "description": uhex()
+            "rest_username": uhex(), "rest_password": uhex()
         }
         self.response = self.add_item("server", params)
 
@@ -253,38 +224,21 @@ class ApiTest(TestHelper):
         """Adding new bucket with full set of params"""
         cluster = self.add_valid_cluster()
 
-        params = {
-            "cluster": cluster,
-            "name": uhex(), "type": choice(("Couchbase", "Memcached")),
-            "port": randint(1, 65535), "password": uhex()
-        }
+        params = {"cluster": cluster, "name": uhex()}
         self.response = self.add_item("bucket", params)
 
         # Verify persistence
         bucket = models.Bucket.objects.get(name=params["name"])
         self.assertEqual(bucket.cluster.name, cluster)
 
-    @Verifier.bad_parameter
-    def test_add_bucket_with_wrong_port(self):
-        """Adding new bucket with wrong type of port parameter"""
+    @Verifier.valid_response
+    def test_add_bucket_with_port(self):
+        """Adding new bucket with redundant params"""
         cluster = self.add_valid_cluster()
 
         params = {
-            "cluster": cluster,
-            "name": uhex(), "type": choice(("Couchbase", "Memcached")),
-            "port": uhex(), "password": uhex()
-        }
-        self.response = self.add_item("bucket", params)
-
-    @Verifier.bad_parent
-    def test_add_bucket_with_wrong_type(self):
-        """Adding new bucket with wrong type parameter"""
-        cluster = self.add_valid_cluster()
-
-        params = {
-            "cluster": cluster,
-            "name": uhex(), "type": uhex(),
-            "port": randint(1, 65535), "password": uhex()
+            "cluster": cluster, "name": uhex(),
+            "type": choice(("Couchbase", "Memcached"))
         }
         self.response = self.add_item("bucket", params)
 
@@ -386,8 +340,7 @@ class ApiTest(TestHelper):
     @Verifier.valid_json
     def test_get_metrics(self, params=None):
         if not params:
-            params = {"type": "metric",
-                      "cluster": "East",
+            params = {"cluster": "East",
                       "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                       "bucket": "default",
                       "collector": "ns_server"}
@@ -397,9 +350,9 @@ class ApiTest(TestHelper):
                 {"name": "cache_miss", "collector": "ns_server"},
                 {"name": params["name"], "collector": params["collector"]}
             ]
-        request = self.factory.get("/get_metrics_and_events", params)
+        request = self.factory.get("/get_metrics", params)
         self.response = rest_api.dispatcher(request,
-                                            path="get_metrics_and_events")
+                                            path="get_metrics")
 
         # Verify content
         self.assertEquals(sorted(self.response.content),
@@ -417,30 +370,9 @@ class ApiTest(TestHelper):
                 {"name": "disk_write_queue", "collector": "ns_server"},
                 {"name": params["name"], "collector": params["collector"]}
             ]
-        request = self.factory.get("/get_metrics_and_events", params)
+        request = self.factory.get("/get_metrics", params)
         self.response = rest_api.dispatcher(request,
-                                            path="get_metrics_and_events")
-
-        # Verify content
-        self.assertEquals(sorted(self.response.content),
-                          sorted(json.dumps(expected)))
-
-    @Verifier.valid_json
-    def test_get_events(self, params=None):
-        if not params:
-            params = {"type": "event",
-                      "cluster": "East",
-                      "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                      "bucket": "default"}
-            expected = [{"name": "Rebalance start", "collector": "ns_server"}]
-        else:
-            expected = [
-                {"name": "Rebalance start", "collector": "ns_server"},
-                {"name": params["name"], "collector": params["collector"]}
-            ]
-        request = self.factory.get("/get_metrics_and_events", params)
-        self.response = rest_api.dispatcher(request,
-                                            path="get_metrics_and_events")
+                                            path="get_metrics")
 
         # Verify content
         self.assertEquals(sorted(self.response.content),
@@ -454,8 +386,8 @@ class ApiTest(TestHelper):
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                   "bucket": "default",
                   "collector": "ns_server"}
-        request = self.factory.post("/add_metric_or_event", params)
-        response = rest_api.dispatcher(request, path="add_metric_or_event")
+        request = self.factory.post("/add_metric", params)
+        response = rest_api.dispatcher(request, path="add_metric")
 
         # Verify persistence
         self.test_get_metrics(params)
@@ -471,27 +403,12 @@ class ApiTest(TestHelper):
                   "bucket": "default",
                   "collector": "ns_server",
                   "description": "new metric"}
-        request = self.factory.post("/add_metric_or_event", params)
-        response = rest_api.dispatcher(request, path="add_metric_or_event")
+        request = self.factory.post("/add_metric", params)
+        response = rest_api.dispatcher(request, path="add_metric")
 
         # Verify persistence
         self.test_get_metrics(params)
 
-        self.response = response
-
-    @Verifier.bad_parameter
-    def test_add_metric_with_too_long_unit(self):
-        params = {"type": "metric",
-                  "name": uhex(),
-                  "cluster": "East",
-                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                  "bucket": "default",
-                  "collector": "ns_server",
-                  "unit": uhex()}
-        request = self.factory.post("/add_metric_or_event", params)
-        response = rest_api.dispatcher(request, path="add_metric_or_event")
-
-        # Verify persistence
         self.response = response
 
     @Verifier.valid_response
@@ -501,8 +418,8 @@ class ApiTest(TestHelper):
                   "cluster": "East",
                   "bucket": "default",
                   "collector": "ns_server"}
-        request = self.factory.post("/add_metric_or_event", params)
-        response = rest_api.dispatcher(request, path="add_metric_or_event")
+        request = self.factory.post("/add_metric", params)
+        response = rest_api.dispatcher(request, path="add_metric")
 
         # Verify persistence
         self.test_get_metrics_no_server(params)
@@ -516,9 +433,9 @@ class ApiTest(TestHelper):
                   "cluster": "East",
                   "bucket": "default",
                   "collector": "ns_server"}
-        request = self.factory.post("/add_metric_or_event", params)
-        rest_api.dispatcher(request, path="add_metric_or_event")
-        response = rest_api.dispatcher(request, path="add_metric_or_event")
+        request = self.factory.post("/add_metric", params)
+        rest_api.dispatcher(request, path="add_metric")
+        response = rest_api.dispatcher(request, path="add_metric")
 
         self.response = response
 
@@ -529,38 +446,11 @@ class ApiTest(TestHelper):
                   "cluster": "East",
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                   "collector": "ns_server"}
-        request = self.factory.post("/add_metric_or_event", params)
-        rest_api.dispatcher(request, path="add_metric_or_event")
-        response = rest_api.dispatcher(request, path="add_metric_or_event")
+        request = self.factory.post("/add_metric", params)
+        rest_api.dispatcher(request, path="add_metric")
+        response = rest_api.dispatcher(request, path="add_metric")
 
         self.response = response
-
-    @Verifier.valid_response
-    def test_add_event(self):
-        params = {"type": "event",
-                  "name": uhex(),
-                  "cluster": "East",
-                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                  "bucket": "default",
-                  "collector": "ns_server"}
-        request = self.factory.post("/add_metric_or_event", params)
-        response = rest_api.dispatcher(request, path="add_metric_or_event")
-
-        # Verify persistence
-        self.test_get_events(params)
-
-        self.response = response
-
-    @Verifier.missing_parameter
-    def test_add_event_no_cluster(self):
-        params = {"type": uhex(),
-                  "name": "failover",
-                  "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
-                  "bucket": "default",
-                  "collector": "ns_server"}
-        request = self.factory.post("/add_metric_or_event", params)
-        self.response = rest_api.dispatcher(request,
-                                            path="add_metric_or_event")
 
     @Verifier.valid_response
     def test_add_snapshot(self):
