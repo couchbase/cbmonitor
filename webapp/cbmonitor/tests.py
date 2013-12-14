@@ -1,11 +1,13 @@
-import datetime
 import glob
 import json
 import os
 import time
+from datetime import datetime
 from uuid import uuid4
 from random import randint, choice
 
+from calendar import timegm
+import pytz
 from django.test import TestCase, Client
 from django.test.client import RequestFactory
 from mock import patch
@@ -393,9 +395,26 @@ class ApiTest(TestHelper):
     def test_add_snapshot(self):
         cluster = self.add_valid_cluster()
 
-        ts = datetime.datetime(2000, 1, 1, 0, 0, 0)
+        ts = datetime(2000, 1, 1, 0, 0, 0)
         params = {"cluster": cluster, "name": uhex(),
-                  "ts_from": ts, "ts_to": ts, "description": uhex()}
+                  "ts_from": ts, "ts_to": ts}
+        self.response = self.add_item("snapshot", params)
+
+        # Verify persistence
+        snapshot = models.Snapshot.objects.get(name=params["name"])
+        self.assertEqual(snapshot.cluster.name, cluster)
+
+    @Verifier.valid_response
+    def test_add_cbagent_snapshot(self):
+        cluster = self.add_valid_cluster()
+
+        ts_old = datetime.fromtimestamp(time.time(), tz=pytz.utc)
+        ts_new = datetime.utcnow()
+        self.assertAlmostEqual(timegm(ts_old.timetuple()),
+                               timegm(ts_new.timetuple()), delta=10)
+
+        params = {"cluster": cluster, "name": uhex(),
+                  "ts_from": datetime.utcnow(), "ts_to": datetime.utcnow()}
         self.response = self.add_item("snapshot", params)
 
         # Verify persistence
