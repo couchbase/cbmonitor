@@ -27,7 +27,7 @@ run: ; \
     ./env/bin/python webapp/manage.py runserver
 
 runfcgi: update_templates; \
-    killall -9 -q webapp; \
+    -kill `cat /tmp/cbmonitor.pid` ; \
     ./env/bin/python webapp/manage.py syncdb --noinput; \
     ./env/bin/python webapp/manage.py runfcgi \
         method=prefork \
@@ -36,7 +36,8 @@ runfcgi: update_templates; \
         maxspare=4 \
         outlog=/tmp/cbmonitor.stdout.log \
         errlog=/tmp/cbmonitor.stderr.log \
-        socket=/tmp/cbmonitor.sock; \
+        socket=/tmp/cbmonitor.sock \
+        pidfile=/tmp/cbmonitor.pid; \
     chmod a+rw /tmp/cbmonitor.sock; \
     cp nginx.template /etc/nginx/sites-available/cbmonitor.conf; \
     ln -fs /etc/nginx/sites-available/cbmonitor.conf /etc/nginx/sites-enabled/cbmonitor.conf; \
