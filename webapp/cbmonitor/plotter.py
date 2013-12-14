@@ -29,19 +29,13 @@ from django.conf import settings
 from eventlet import GreenPool
 from scipy import stats
 
-from cbmonitor import models
-from cbmonitor.constants import (LABELS, PALETTE,
-                                 HISTOGRAMS, ZOOM_HISTOGRAMS,
-                                 NON_ZERO_VALUES,
-                                 KDE,
-                                 SMOOTH_SUBPLOTS,
-                                 )
+from cbmonitor import constants, models
 
 
 class Colors(object):
 
     def __init__(self):
-        self.cycle = cycle(PALETTE)
+        self.cycle = cycle(constants.PALETTE)
 
     def next(self):
         return self.cycle.next()
@@ -190,7 +184,7 @@ class Plotter(object):
         series.rename(lambda x: x / 1000, inplace=True)  # ms -> s
         series.dropna()  # otherwise it may break kde
 
-        if metric in NON_ZERO_VALUES and (series == 0).all():
+        if metric in constants.NON_ZERO_VALUES and (series == 0).all():
             return None
         else:
             return series
@@ -251,16 +245,16 @@ class Plotter(object):
             series, labels, title, filename, url = data
             metric = title.split()[-1]
             if series:
-                ylabel = LABELS.get(metric, metric)
+                ylabel = constants.LABELS.get(metric, metric)
 
                 chart_ids = [""]
-                if metric in HISTOGRAMS:
+                if metric in constants.HISTOGRAMS:
                     chart_ids += ["_histo"]
-                if metric in ZOOM_HISTOGRAMS:
+                if metric in constants.ZOOM_HISTOGRAMS:
                     chart_ids += ["_lt90", "_gt90"]
-                if metric in KDE:
+                if metric in constants.KDE:
                     chart_ids += ["_kde"]
-                if metric in SMOOTH_SUBPLOTS:
+                if metric in constants.SMOOTH_SUBPLOTS:
                     chart_ids[0] = "_subplot"
 
                 if not os.path.exists(filename):
