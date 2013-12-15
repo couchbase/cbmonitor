@@ -179,15 +179,13 @@ class Plotter(object):
     def get_series(self, metric, data):
         data = {k: v[0] for k, v in data.iteritems()}
         series = pd.Series(data)
+        series.dropna()  # otherwise it may break kde
+        if metric in constants.NON_ZERO_VALUES and (series == 0).all():
+            return None
         series.index = series.index.astype("uint64")
         series.rename(lambda x: x - series.index.values.min(), inplace=True)
         series.rename(lambda x: x / 1000, inplace=True)  # ms -> s
-        series.dropna()  # otherwise it may break kde
-
-        if metric in constants.NON_ZERO_VALUES and (series == 0).all():
-            return None
-        else:
-            return series
+        return series
 
     def extract_meta(self, metric):
         if metric.bucket_id:
