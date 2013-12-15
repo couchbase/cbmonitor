@@ -27,7 +27,7 @@ run: ; \
     ./env/bin/python webapp/manage.py runserver
 
 runfcgi: update_templates; \
-    -kill `cat /tmp/cbmonitor.pid` ; \
+    kill `cat /tmp/cbmonitor.pid` ; \
     ./env/bin/python webapp/manage.py syncdb --noinput; \
     ./env/bin/python webapp/manage.py runfcgi \
         method=prefork \
