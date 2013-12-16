@@ -1,6 +1,7 @@
 coverage
 django==1.5.5
 django-coverage
+django-debug-toolbar
 django-http-proxy
 eventlet==0.12.1
 flup

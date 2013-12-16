@@ -6,6 +6,8 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['cbmonitor.sc.couchbase.com']
 
+INTERNAL_IPS = ('127.0.0.1',)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -87,6 +89,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -108,6 +111,7 @@ INSTALLED_APPS = (
     'pyjade',
     'cbmonitor',
     'django_coverage',
+    'debug_toolbar',
 )
 
 LOGGING = {
