@@ -282,8 +282,8 @@ class Plotter(object):
 
         for data in self.eventlet_pool.imap(self.extract, metrics):
             series, labels, title, filename, url = data
-            metric = title.split()[-1]
             if series:
+                metric = title.split()[-1]
                 ylabel = constants.LABELS.get(metric, metric)
 
                 chart_ids = [""]
@@ -297,15 +297,15 @@ class Plotter(object):
                     chart_ids[0] = "_subplot"
                     chart_ids += ["_score"]
 
-                if not os.path.exists(filename):
-                    for chart_id in chart_ids:
+                for chart_id in chart_ids:
+                    fname = filename.format(suffix=chart_id)
+                    if not os.path.exists(fname):
                         apply_results.append(self.mp_pool.apply_async(
                             plot_as_png,
-                            args=(filename.format(suffix=chart_id),
-                                  series, labels, ylabel, chart_id, rebalances)
+                            args=(fname, series, labels, ylabel, chart_id,
+                                  rebalances)
                         ))
-                for chart_id in chart_ids:
                     self.urls.append([title, url.format(suffix=chart_id)])
-                    self.images.append(filename.format(suffix=chart_id))
+                    self.images.append(fname)
         for result in apply_results:
             result.get()
