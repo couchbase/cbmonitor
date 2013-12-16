@@ -151,6 +151,9 @@ LOGGING = {
             'handlers': ['request_handler'],
             'level': 'ERROR',
             'propagate': True
+        },
+        'requests': {
+            'level': 'WARNING',
         }
     }
 }
