@@ -48,11 +48,11 @@ class Observable(models.Model):
     class Meta:
         unique_together = ["name", "cluster", "server", "bucket"]
 
-    name = models.CharField(max_length=128)
-    cluster = models.ForeignKey("Cluster")
-    server = models.ForeignKey("Server", null=True, blank=True)
-    bucket = models.ForeignKey("Bucket", null=True, blank=True)
-    collector = models.CharField(max_length=32)
+    name = models.CharField(max_length=128, db_index=True)
+    cluster = models.ForeignKey("Cluster", db_index=True)
+    server = models.ForeignKey("Server", null=True, blank=True, db_index=True)
+    bucket = models.ForeignKey("Bucket", null=True, blank=True, db_index=True)
+    collector = models.CharField(max_length=32, db_index=True)
 
     def __str__(self):
         return self.name
