@@ -144,27 +144,6 @@ class BaseReport(object):
                 yield observables
 
         for collector, metrics in self.metrics.iteritems():
-            for metric in metrics:
-                for bucket in self.buckets:
-                    observables = []
-                    for snapshot, cluster in self.snapshots:
-                        try:
-                            _bucket = models.Bucket.objects.get(
-                                cluster=cluster,
-                                name=bucket.name
-                            )
-                            observable = models.Observable.objects.get(
-                                cluster=cluster,
-                                collector=collector,
-                                name=metric,
-                                server__isnull=True,
-                                bucket=_bucket,
-                            )
-                            observables.append((observable, snapshot))
-                        except ObjectDoesNotExist:
-                            pass
-                    if observables:
-                        yield observables
             if collector in ("atop", "iostat", "sync_gateway"):
                 for metric in metrics:
                     for server in self.servers:
@@ -181,6 +160,28 @@ class BaseReport(object):
                                     name=metric,
                                     server=_server,
                                     bucket__isnull=True,
+                                )
+                                observables.append((observable, snapshot))
+                            except ObjectDoesNotExist:
+                                pass
+                        if observables:
+                            yield observables
+            else:
+                for metric in metrics:
+                    for bucket in self.buckets:
+                        observables = []
+                        for snapshot, cluster in self.snapshots:
+                            try:
+                                _bucket = models.Bucket.objects.get(
+                                    cluster=cluster,
+                                    name=bucket.name
+                                )
+                                observable = models.Observable.objects.get(
+                                    cluster=cluster,
+                                    collector=collector,
+                                    name=metric,
+                                    server__isnull=True,
+                                    bucket=_bucket,
                                 )
                                 observables.append((observable, snapshot))
                             except ObjectDoesNotExist:
