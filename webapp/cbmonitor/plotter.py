@@ -68,7 +68,7 @@ def save_png(filename, series, ylabel, labels, chart_id, rebalances):
             x = percentiles
             plt.xlim(0, 100)
         for i, s in enumerate(series):
-            y = np.percentile(s.values, percentiles)
+            y = np.percentile(s, percentiles)
             ax.bar(x, y, linewidth=0.0, label=labels[i],
                    width=width.next(), align=align.next(), color=colors.next())
     elif chart_id == "_subplot":
@@ -82,7 +82,7 @@ def save_png(filename, series, ylabel, labels, chart_id, rebalances):
             color = colors.next()
 
             ax = fig.add_subplot(2, 1, 1)
-            ax.plot(s.index, s.values, label=labels[i], color=color)
+            ax.plot(s.index, s, label=labels[i], color=color)
             plt.setp(ax.get_xticklabels(), visible=False)
             ymin, ymax = ax.get_ylim()
             plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
@@ -98,13 +98,22 @@ def save_png(filename, series, ylabel, labels, chart_id, rebalances):
         ax.set_xlabel(ylabel)
         for i, s in enumerate(series):
             x = np.linspace(0, int(s.quantile(0.99)), 200)
-            kde = stats.kde.gaussian_kde(s.values)
+            kde = stats.kde.gaussian_kde(s)
             ax.plot(x, kde(x), label=labels[i], color=colors.next())
+    elif chart_id == "_score":
+        ax.set_ylabel("Percentile of score ({})".format(ylabel))
+        ax.set_xlabel("Time elapsed, sec")
+        for i, s in enumerate(series):
+            scoref = lambda x: stats.percentileofscore(x, s.quantile(0.9))
+            rolling_score = pd.rolling_apply(s, min(len(s) / 15, 40), scoref)
+            ax.plot(s.index, rolling_score, label=labels[i],
+                    color=colors.next())
+            plt.ylim(ymin=0, ymax=105)
     else:
         ax.set_ylabel(ylabel)
         ax.set_xlabel("Time elapsed, sec")
         for i, s in enumerate(series):
-            ax.plot(s.index, s.values, label=labels[i], color=colors.next())
+            ax.plot(s.index, s, label=labels[i], color=colors.next())
         ymin, ymax = ax.get_ylim()
         plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
 
@@ -254,6 +263,7 @@ class Plotter(object):
                     chart_ids += ["_kde"]
                 if metric in constants.SMOOTH_SUBPLOTS:
                     chart_ids[0] = "_subplot"
+                    chart_ids += ["_score"]
 
                 if not os.path.exists(filename):
                     for chart_id in chart_ids:
