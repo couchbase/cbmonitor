@@ -42,85 +42,117 @@ class Colors(object):
 
 
 # Defined externally in order to be pickled
-def save_png(filename, series, ylabel, labels, chart_id, rebalances):
-    fig = plt.figure(figsize=(4.66, 2.625))
-
-    colors = Colors()
-
-    ax = fig.add_subplot(1, 1, 1)
+def init_ax(fig, dim=(1, 1, 1)):
+    ax = fig.add_subplot(*dim)
     ax.ticklabel_format(useOffset=False)
+    return ax
 
-    if chart_id in ("_lt90", "_gt90", "_histo"):
+
+def plot_time_series(ax, series, labels, ylabel=None):
+    colors = Colors()
+    if ylabel:
         ax.set_ylabel(ylabel)
-        ax.set_xlabel("Percentile")
-        width = cycle((0.6, 0.4))
-        align = cycle(("edge", "center"))
-        if chart_id == "_lt90":
-            percentiles = range(1, 90)
-            x = percentiles
-            plt.xlim(0, 90)
-        elif chart_id == "_gt90":
-            percentiles = (90, 95, 97.5, 99, 99.9, 99.99, 99.999)
-            x = range(len(percentiles))
-            plt.xticks(x, percentiles)
-        else:
-            percentiles = range(1, 100)
-            x = percentiles
-            plt.xlim(0, 100)
-        for i, s in enumerate(series):
-            y = np.percentile(s, percentiles)
-            ax.bar(x, y, linewidth=0.0, label=labels[i],
-                   width=width.next(), align=align.next(), color=colors.next())
-    elif chart_id == "_subplot":
-        ax.set_ylabel(ylabel)
-        map(lambda s: s.set_color('none'), ax.spines.values())
-        ax.tick_params(top='off', bottom='off', left='off', right='off',
-                       labelcolor='w')
-        ax.grid(None)
+    ax.set_xlabel("Time elapsed, sec")
+    for i, s in enumerate(series):
+        ax.plot(s.index, s, label=labels[i], color=colors.next())
+    ymin, ymax = ax.get_ylim()
+    plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
 
-        for i, s in enumerate(series):
-            color = colors.next()
 
-            ax = fig.add_subplot(2, 1, 1)
-            ax.plot(s.index, s, label=labels[i], color=color)
-            plt.setp(ax.get_xticklabels(), visible=False)
-            ymin, ymax = ax.get_ylim()
-            plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
-
-            ax = fig.add_subplot(2, 1, 2)
-            rolling_median = pd.rolling_median(s, window=5)
-            ax.plot(s.index, rolling_median, label=labels[i], color=color)
-            ax.set_xlabel("Time elapsed, sec")
-            ymin, ymax = ax.get_ylim()
-            plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
-    elif chart_id == "_kde":
-        ax.set_ylabel("Kernel density estimation")
-        ax.set_xlabel(ylabel)
-        for i, s in enumerate(series):
-            x = np.linspace(0, int(s.quantile(0.99)), 200)
-            kde = stats.kde.gaussian_kde(s)
-            ax.plot(x, kde(x), label=labels[i], color=colors.next())
-    elif chart_id == "_score":
-        ax.set_ylabel("Percentile of score ({})".format(ylabel))
-        ax.set_xlabel("Time elapsed, sec")
-        for i, s in enumerate(series):
-            scoref = lambda x: stats.percentileofscore(x, s.quantile(0.9))
-            rolling_score = pd.rolling_apply(s, min(len(s) / 15, 40), scoref)
-            ax.plot(s.index, rolling_score, label=labels[i],
-                    color=colors.next())
-            plt.ylim(ymin=0, ymax=105)
+def plot_percentiles(ax, series, labels, ylabel, chart_id):
+    colors = Colors()
+    ax.set_ylabel(ylabel)
+    ax.set_xlabel("Percentile")
+    width = cycle((0.6, 0.4))
+    align = cycle(("edge", "center"))
+    if chart_id == "_lt90":
+        percentiles = range(1, 90)
+        x = percentiles
+        plt.xlim(0, 90)
+    elif chart_id == "_gt90":
+        percentiles = (90, 95, 97.5, 99, 99.9, 99.99, 99.999)
+        x = range(len(percentiles))
+        plt.xticks(x, percentiles)
     else:
-        ax.set_ylabel(ylabel)
-        ax.set_xlabel("Time elapsed, sec")
-        for i, s in enumerate(series):
-            ax.plot(s.index, s, label=labels[i], color=colors.next())
+        percentiles = range(1, 100)
+        x = percentiles
+        plt.xlim(0, 100)
+    for i, s in enumerate(series):
+        y = np.percentile(s, percentiles)
+        ax.bar(x, y, linewidth=0.0, label=labels[i],
+               width=width.next(), align=align.next(), color=colors.next())
+
+
+def plot_score(ax, series, labels, ylabel):
+    colors = Colors()
+    ax.set_ylabel("Percentile of score ({})".format(ylabel))
+    ax.set_xlabel("Time elapsed, sec")
+    for i, s in enumerate(series):
+        scoref = lambda x: stats.percentileofscore(x, s.quantile(0.9))
+        rolling_score = pd.rolling_apply(s, min(len(s) / 15, 40), scoref)
+        ax.plot(s.index, rolling_score, label=labels[i],
+                color=colors.next())
+        plt.ylim(ymin=0, ymax=105)
+
+
+def plot_kde(ax, series, labels, ylabel):
+    colors = Colors()
+    ax.set_ylabel("Kernel density estimation")
+    ax.set_xlabel(ylabel)
+    for i, s in enumerate(series):
+        x = np.linspace(0, int(s.quantile(0.99)), 200)
+        kde = stats.kde.gaussian_kde(s)
+        ax.plot(x, kde(x), label=labels[i], color=colors.next())
+
+
+def plot_subplot_frame(ax, ylabel):
+    ax.set_ylabel(ylabel)
+    map(lambda s: s.set_color('none'), ax.spines.values())
+    ax.tick_params(top='off', bottom='off', left='off', right='off',
+                   labelcolor='w')
+    ax.grid(None)
+
+
+def plot_rolling_subplot(ax, series, labels):
+    colors = Colors()
+    for i, s in enumerate(series):
+        rolling_median = pd.rolling_median(s, window=5)
+        ax.plot(s.index, rolling_median, label=labels[i], color=colors.next())
         ymin, ymax = ax.get_ylim()
         plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
 
-        colors = Colors()
-        for rebalance_start, rebalance_end in rebalances:
-            plt.axvspan(rebalance_start, rebalance_end,
-                        facecolor=colors.next(), alpha=0.1, linewidth=0.5)
+
+def highlight_rebalance(rebalances):
+    colors = Colors()
+    for rebalance_start, rebalance_end in rebalances:
+        plt.axvspan(rebalance_start, rebalance_end,
+                    facecolor=colors.next(), alpha=0.1, linewidth=0.5)
+
+
+def plot_as_png(filename, series, labels, ylabel, chart_id, rebalances):
+    fig = plt.figure(figsize=(4.66, 2.625))
+    ax = init_ax(fig)
+
+    if chart_id in ("_lt90", "_gt90", "_histo"):
+        plot_percentiles(ax, series, labels, ylabel, chart_id)
+    elif chart_id == "_subplot":
+        plot_subplot_frame(ax, ylabel)
+
+        ax = init_ax(fig, dim=(2, 1, 1))
+        plot_rolling_subplot(ax, series, labels)
+        highlight_rebalance(rebalances)
+
+        ax = init_ax(fig, dim=(2, 1, 2))
+        plot_time_series(ax, series, labels, ylabel=None)
+        highlight_rebalance(rebalances)
+    elif chart_id == "_kde":
+        plot_kde(ax, series, labels, ylabel)
+    elif chart_id == "_score":
+        plot_score(ax, series, labels, ylabel)
+        highlight_rebalance(rebalances)
+    else:
+        plot_time_series(ax, series, labels, ylabel)
+        highlight_rebalance(rebalances)
 
     legend = ax.legend()
     legend.get_frame().set_linewidth(0.5)
@@ -268,9 +300,9 @@ class Plotter(object):
                 if not os.path.exists(filename):
                     for chart_id in chart_ids:
                         apply_results.append(self.mp_pool.apply_async(
-                            save_png,
+                            plot_as_png,
                             args=(filename.format(suffix=chart_id),
-                                  series, ylabel, labels, chart_id, rebalances)
+                                  series, labels, ylabel, chart_id, rebalances)
                         ))
                 for chart_id in chart_ids:
                     self.urls.append([title, url.format(suffix=chart_id)])
