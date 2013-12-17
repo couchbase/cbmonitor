@@ -1,4 +1,4 @@
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict, namedtuple
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -12,6 +12,11 @@ class Report(object):
             return eval(report_type)(snapshots)
         except (NameError, SyntaxError):
             raise NotImplementedError("Unknown report type")
+
+
+Observable = namedtuple(
+    'Observable', ['cluster', 'server', 'bucket', 'name', 'collector']
+)
 
 
 class BaseReport(object):
@@ -42,6 +47,9 @@ class BaseReport(object):
             "PauseTotalNs",
             "PausesPct",
             "NumGC",
+        ]),
+        ("active_tasks", [
+            "bucket_compaction_progress",
         ]),
         ("ns_server", [
             "couch_views_ops",
@@ -115,33 +123,38 @@ class BaseReport(object):
         self.buckets = models.Bucket.objects.filter(cluster=clusters[0])
         self.servers = models.Server.objects.filter(cluster=clusters[0])
 
-    def merge_metrics(self):
-        base_metrics = BaseReport.metrics
-        for collector in set(base_metrics) & set(self.metrics):
-            self.metrics[collector] += base_metrics[collector]
-        self.metrics = OrderedDict(base_metrics, **self.metrics)
+    def get_all_observables(self):
+        all_observables = defaultdict(dict)
+        for snapshot, cluster in self.snapshots:
+            cluster_name = cluster.name
+            for bucket in self.buckets:
+                bucket_name = bucket.name
+                _bucket = models.Bucket.objects.get(cluster=cluster,
+                                                    name=bucket.name)
+                observables = defaultdict(dict)
+                for o in models.Observable.objects.filter(cluster=cluster,
+                                                          bucket=_bucket,
+                                                          server__isnull=True):
+                    observables[o.collector][o.name] = Observable(
+                        cluster_name, "", bucket_name, o.name, o.collector
+                    )
+                all_observables[bucket.name][cluster.name] = observables
+            for server in self.servers:
+                server_address = server.address
+                _server = models.Server.objects.get(cluster=cluster,
+                                                    address=server.address)
+                observables = defaultdict(dict)
+                for o in models.Observable.objects.filter(cluster=cluster,
+                                                          bucket__isnull=True,
+                                                          server=_server):
+                    observables[o.collector][o.name] = Observable(
+                        cluster_name, server_address, "", o.name, o.collector
+                    )
+                all_observables[server.address][cluster.name] = observables
+        return all_observables
 
     def __iter__(self):
-        for bucket in self.buckets:
-            observables = []
-            for snapshot, cluster in self.snapshots:
-                _bucket = models.Bucket.objects.get(
-                    cluster=cluster,
-                    name=bucket.name
-                )
-                try:
-                    observable = models.Observable.objects.get(
-                        cluster=cluster,
-                        collector="active_tasks",
-                        name="bucket_compaction_progress",
-                        server__isnull=True,
-                        bucket=_bucket,
-                    )
-                    observables.append((observable, snapshot))
-                except ObjectDoesNotExist:
-                    pass
-            if observables:
-                yield observables
+        _all = self.get_all_observables()
 
         for collector, metrics in self.metrics.iteritems():
             if collector in ("atop", "iostat", "sync_gateway"):
@@ -149,21 +162,9 @@ class BaseReport(object):
                     for server in self.servers:
                         observables = []
                         for snapshot, cluster in self.snapshots:
-                            try:
-                                _server = models.Server.objects.get(
-                                    cluster=cluster,
-                                    address=server.address
-                                )
-                                observable = models.Observable.objects.get(
-                                    cluster=cluster,
-                                    collector=collector,
-                                    name=metric,
-                                    server=_server,
-                                    bucket__isnull=True,
-                                )
+                            observable = _all[server.address][cluster.name][collector].get(metric)
+                            if observable:
                                 observables.append((observable, snapshot))
-                            except ObjectDoesNotExist:
-                                pass
                         if observables:
                             yield observables
             else:
@@ -171,21 +172,9 @@ class BaseReport(object):
                     for bucket in self.buckets:
                         observables = []
                         for snapshot, cluster in self.snapshots:
-                            try:
-                                _bucket = models.Bucket.objects.get(
-                                    cluster=cluster,
-                                    name=bucket.name
-                                )
-                                observable = models.Observable.objects.get(
-                                    cluster=cluster,
-                                    collector=collector,
-                                    name=metric,
-                                    server__isnull=True,
-                                    bucket=_bucket,
-                                )
+                            observable = _all[bucket.name][cluster.name][collector].get(metric)
+                            if observable:
                                 observables.append((observable, snapshot))
-                            except ObjectDoesNotExist:
-                                pass
                         if observables:
                             yield observables
 
@@ -202,6 +191,9 @@ class BaseRebalanceReport(BaseReport):
                     name="rebalance_progress",
                     server__isnull=True,
                     bucket__isnull=True,
+                )
+                observable = Observable(
+                    cluster.name, "", "", observable.name, observable.collector
                 )
                 observables.append((observable, snapshot))
             except ObjectDoesNotExist:

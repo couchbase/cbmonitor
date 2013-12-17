@@ -29,7 +29,7 @@ from django.conf import settings
 from eventlet import GreenPool
 from scipy import stats
 
-from cbmonitor import constants, models
+from cbmonitor import constants
 
 
 class Colors(object):
@@ -228,40 +228,28 @@ class Plotter(object):
         series.rename(lambda x: x / 1000, inplace=True)  # ms -> s
         return series
 
-    def extract_meta(self, metric):
-        if metric.bucket_id:
-            bucket = str(models.Bucket.objects.get(id=metric.bucket_id))
-        else:
-            bucket = ""
-        if metric.server_id:
-            server = str(models.Server.objects.get(id=metric.server_id))
-        else:
-            server = ""
-        cluster = metric.cluster_id
-        name = metric.name
-        collector = metric.collector
-
-        return cluster, server, bucket, name, collector
-
     def extract(self, meta):
         merge = defaultdict(list)
-        merge_cluster = server = bucket = name = snapshot = ""
-        for sub_metric, snapshot in meta:
-            cluster, server, bucket, name, collector = self.extract_meta(
-                sub_metric)
-            data = self.query_data(snapshot, cluster, server, bucket, name,
-                                   collector)
+        merge_cluster = ""
+        for observable, snapshot in meta:
+            data = self.query_data(snapshot,
+                                   observable.cluster, observable.server,
+                                   observable.bucket,
+                                   observable.name, observable.collector)
             if data:
-                series = self.get_series(metric=name, data=data)
+                series = self.get_series(metric=observable.name, data=data)
                 if series is not None:
                     merge["series"].append(series)
                     if snapshot.name == "all_data":
-                        merge["labels"].append(cluster)
+                        merge["labels"].append(observable.cluster)
                     else:
                         merge["labels"].append(snapshot.name)
-            merge_cluster += cluster
-        title, url, filename = self.generate_png_meta(snapshot, merge_cluster,
-                                                      server, bucket, name)
+            merge_cluster += observable.cluster
+        title, url, filename = self.generate_png_meta(snapshot,
+                                                      merge_cluster,
+                                                      observable.server,
+                                                      observable.bucket,
+                                                      observable.name)
 
         return merge["series"], merge["labels"], title, filename, url
 
