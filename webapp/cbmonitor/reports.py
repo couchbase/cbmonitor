@@ -40,6 +40,10 @@ class BaseReport(object):
             "latency_set",
             "latency_get",
         ]),
+        ("sync_latency", [
+            "gateway_push",
+            "gateway_pull",
+        ]),
         ("sync_gateway", [
             "Sys",
             "Alloc",
@@ -170,7 +174,7 @@ class BaseReport(object):
         _all = self.get_all_observables()
 
         for collector, metrics in self.metrics.iteritems():
-            if collector in ("active_tasks", ):
+            if collector in ("active_tasks", "sync_latency"):
                 for metric in metrics:
                     observables = []
                     for snapshot, cluster in self.snapshots:
