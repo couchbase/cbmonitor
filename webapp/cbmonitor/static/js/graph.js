@@ -23,7 +23,16 @@ CBMONITOR.GraphManager.prototype.PlotLineWithFocus = function(data) {
     var format = d3.time.format("%H:%M:%S");
 
     nv.addGraph(function() {
-        var chart = nv.models.lineWithFocusChart().forceY([0]);
+        var chart = nv.models.lineWithFocusChart().tooltips(false).forceY([0]);
+
+        if (container === "#first_view svg") {
+            chart.tooltipContent(function(key, x, y, e, graph) {
+                return "<h4>" + y + "</h4>";
+            });
+            chart.tooltips(true);
+        } else {
+            chart.tooltips(false);
+        }
 
         chart.xAxis.tickFormat(format);
         chart.x2Axis.tickFormat(format);
@@ -47,6 +56,14 @@ CBMONITOR.GraphManager.prototype.PlotLine = function(data) {
 
     nv.addGraph(function() {
         var chart = nv.models.lineChart().forceY([0]);
+        if (container === "#first_view svg") {
+            chart.tooltipContent(function(key, x, y, e, graph) {
+                return "<h4>" + y + "</h4>";
+            });
+            chart.tooltips(true);
+        } else {
+            chart.tooltips(false);
+        }
 
         chart.xAxis.tickFormat(format);
         chart.yAxis.tickFormat(d3.format(',.2s'));
