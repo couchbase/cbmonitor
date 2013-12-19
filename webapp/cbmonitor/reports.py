@@ -129,17 +129,15 @@ class BaseReport(object):
     def get_all_observables(self):
         all_observables = defaultdict(dict)
         for snapshot, cluster in self.snapshots:
-            cluster_name = cluster.name
-
             # Cluster-wide metrics
             observables = defaultdict(dict)
             for o in models.Observable.objects.filter(cluster=cluster,
                                                       bucket__isnull=True,
                                                       server__isnull=True):
                 observables[o.collector][o.name] = Observable(
-                    cluster_name, "", "", o.name, o.collector
+                    cluster, "", "", o.name, o.collector
                 )
-            all_observables[""][cluster.name] = observables
+            all_observables[""][cluster] = observables
 
             # Per-bucket metrics
             for bucket in self.buckets:
@@ -151,9 +149,9 @@ class BaseReport(object):
                                                           bucket=_bucket,
                                                           server__isnull=True):
                     observables[o.collector][o.name] = Observable(
-                        cluster_name, "", bucket_name, o.name, o.collector
+                        cluster, "", bucket_name, o.name, o.collector
                     )
-                all_observables[bucket.name][cluster.name] = observables
+                all_observables[bucket.name][cluster] = observables
 
             # Per-server metrics
             for server in self.servers:
@@ -165,9 +163,9 @@ class BaseReport(object):
                                                           bucket__isnull=True,
                                                           server=_server):
                     observables[o.collector][o.name] = Observable(
-                        cluster_name, server_address, "", o.name, o.collector
+                        cluster, server_address, "", o.name, o.collector
                     )
-                all_observables[server.address][cluster.name] = observables
+                all_observables[server.address][cluster] = observables
         return all_observables
 
     def __iter__(self):
@@ -178,7 +176,7 @@ class BaseReport(object):
                 for metric in metrics:
                     observables = []
                     for snapshot, cluster in self.snapshots:
-                        observable = _all[""][cluster.name][collector].get(metric)
+                        observable = _all[""][cluster][collector].get(metric)
                         if observable:
                             observables.append((observable, snapshot))
                     if observables:
@@ -188,7 +186,7 @@ class BaseReport(object):
                     for server in self.servers:
                         observables = []
                         for snapshot, cluster in self.snapshots:
-                            observable = _all[server.address][cluster.name][collector].get(metric)
+                            observable = _all[server.address][cluster][collector].get(metric)
                             if observable:
                                 observables.append((observable, snapshot))
                         if observables:
@@ -198,7 +196,7 @@ class BaseReport(object):
                     for bucket in self.buckets:
                         observables = []
                         for snapshot, cluster in self.snapshots:
-                            observable = _all[bucket.name][cluster.name][collector].get(metric)
+                            observable = _all[bucket.name][cluster][collector].get(metric)
                             if observable:
                                 observables.append((observable, snapshot))
                         if observables:
