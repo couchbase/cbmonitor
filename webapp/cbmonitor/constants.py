@@ -61,6 +61,8 @@ LABELS = {
     "PauseNs": "GC pause time, ns",
     "NumGC": "GC events",
     "PausesPct": "Percentage of total time spent in GC, %",
+    "gateway_push": "Single push request to SGW, ms",
+    "gateway_pull": "Single pull request to SGW, ms",
     "data_rbps": "Bytes read/sec",
     "data_wbps": "Bytes written/sec",
     "data_avgqusz": "The average queue length",
