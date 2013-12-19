@@ -1,7 +1,5 @@
 from collections import OrderedDict, defaultdict, namedtuple
 
-from django.core.exceptions import ObjectDoesNotExist
-
 from cbmonitor import models
 
 
@@ -22,6 +20,10 @@ Observable = namedtuple(
 class BaseReport(object):
 
     metrics = OrderedDict((
+        ("active_tasks", [
+            "rebalance_progress",
+            "bucket_compaction_progress",
+        ]),
         ("xdcr_lag", [
             "xdcr_lag",
             "xdcr_persistence_time",
@@ -47,9 +49,6 @@ class BaseReport(object):
             "PauseTotalNs",
             "PausesPct",
             "NumGC",
-        ]),
-        ("active_tasks", [
-            "bucket_compaction_progress",
         ]),
         ("ns_server", [
             "couch_views_ops",
@@ -127,6 +126,18 @@ class BaseReport(object):
         all_observables = defaultdict(dict)
         for snapshot, cluster in self.snapshots:
             cluster_name = cluster.name
+
+            # Cluster-wide metrics
+            observables = defaultdict(dict)
+            for o in models.Observable.objects.filter(cluster=cluster,
+                                                      bucket__isnull=True,
+                                                      server__isnull=True):
+                observables[o.collector][o.name] = Observable(
+                    cluster_name, "", "", o.name, o.collector
+                )
+            all_observables[""][cluster.name] = observables
+
+            # Per-bucket metrics
             for bucket in self.buckets:
                 bucket_name = bucket.name
                 _bucket = models.Bucket.objects.get(cluster=cluster,
@@ -139,6 +150,8 @@ class BaseReport(object):
                         cluster_name, "", bucket_name, o.name, o.collector
                     )
                 all_observables[bucket.name][cluster.name] = observables
+
+            # Per-server metrics
             for server in self.servers:
                 server_address = server.address
                 _server = models.Server.objects.get(cluster=cluster,
@@ -157,6 +170,15 @@ class BaseReport(object):
         _all = self.get_all_observables()
 
         for collector, metrics in self.metrics.iteritems():
+            if collector in ("active_tasks", ):
+                for metric in metrics:
+                    observables = []
+                    for snapshot, cluster in self.snapshots:
+                        observable = _all[""][cluster.name][collector].get(metric)
+                        if observable:
+                            observables.append((observable, snapshot))
+                    if observables:
+                        yield observables
             if collector in ("atop", "iostat", "sync_gateway"):
                 for metric in metrics:
                     for server in self.servers:
@@ -181,27 +203,7 @@ class BaseReport(object):
 
 class BaseRebalanceReport(BaseReport):
 
-    def __iter__(self):
-        observables = []
-        for snapshot, cluster in self.snapshots:
-            try:
-                observable = models.Observable.objects.get(
-                    cluster=cluster,
-                    collector="active_tasks",
-                    name="rebalance_progress",
-                    server__isnull=True,
-                    bucket__isnull=True,
-                )
-                observable = Observable(
-                    cluster.name, "", "", observable.name, observable.collector
-                )
-                observables.append((observable, snapshot))
-            except ObjectDoesNotExist:
-                pass
-        if observables:
-            yield observables
-        for observables in super(BaseRebalanceReport, self).__iter__():
-            yield observables
+    pass
 
 
 class BaseXdcrReport(BaseReport):
