@@ -447,8 +447,7 @@ class ApiTest(TestHelper):
         query_mock.return_value = {1: [2]}
         list_dbs_mock.return_value = ['ns_serverEastdefault']
 
-        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
-                  "report": "BaseXdcrReport"}
+        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
         Client().get("/reports/html/", params)
         response = Client().get("/reports/html/", params)
 
@@ -463,8 +462,7 @@ class ApiTest(TestHelper):
         query_mock.return_value = {1: [2]}
         list_dbs_mock.return_value = ['ns_serverEastdefault']
 
-        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976",
-                  "report": "BaseReport"}
+        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
         request = self.factory.get("/reports/html/", params)
         self.response = views.html_report(request)
 

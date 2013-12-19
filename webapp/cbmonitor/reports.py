@@ -3,21 +3,12 @@ from collections import OrderedDict, defaultdict, namedtuple
 from cbmonitor import models
 
 
-class Report(object):
-
-    def __new__(cls, snapshots, report_type):
-        try:
-            return eval(report_type)(snapshots)
-        except (NameError, SyntaxError):
-            raise NotImplementedError("Unknown report type")
-
-
 Observable = namedtuple(
     'Observable', ['cluster', 'server', 'bucket', 'name', 'collector']
 )
 
 
-class BaseReport(object):
+class Report(object):
 
     metrics = OrderedDict((
         ("active_tasks", [
@@ -201,43 +192,3 @@ class BaseReport(object):
                                 observables.append((observable, snapshot))
                         if observables:
                             yield observables
-
-
-class BaseRebalanceReport(BaseReport):
-
-    pass
-
-
-class BaseXdcrReport(BaseReport):
-
-    pass
-
-
-class BaseKVReport(BaseReport):
-
-    pass
-
-
-class BaseViewsReport(BaseReport):
-
-    pass
-
-
-class BaseTuqReport(BaseReport):
-
-    pass
-
-
-class BaseRebalanceViewsReport(BaseRebalanceReport):
-
-    pass
-
-
-class BaseRebalanceXdcrReport(BaseRebalanceReport):
-
-    pass
-
-
-class SyncGatewayReport(BaseReport):
-
-    pass

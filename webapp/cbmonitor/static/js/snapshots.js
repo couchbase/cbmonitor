@@ -13,8 +13,7 @@ CBMONITOR.Snapshots = function () {
     $("#html").click(function() {
         var data = {
             snapshot: $("#snapshot").find(":selected").text(),
-            cluster: $("#met_cluster").find(":selected").text(),
-            report: $("#report").find(":selected").text()
+            cluster: $("#met_cluster").find(":selected").text()
         };
         var params = [];
         for (var param in data) {
@@ -28,22 +27,8 @@ CBMONITOR.Snapshots = function () {
     });
 };
 
-CBMONITOR.Snapshots.prototype.getReportTypes = function () {
-    "use strict";
-
-    $.ajax({url: "/cbmonitor/get_report_types/", dataType: "json",
-        success: function(types){
-            types.forEach(function(type) {
-                var o = new Option(type, type);
-                $("#report").append(o);
-            });
-        }
-    });
-};
-
 $(document).ready(function(){
     "use strict";
 
     CBMONITOR.snapshots = new CBMONITOR.Snapshots();
-    CBMONITOR.snapshots.getReportTypes();
 });

@@ -75,20 +75,8 @@ class Snapshot(models.Model):
         pass
 
 
-class ReportType(models.Model):
-
-    name = models.CharField(max_length=64, primary_key=True)
-
-    def __str__(self):
-        return self.name
-
-    class Admin:
-        pass
-
-
 admin.site.register(Cluster)
 admin.site.register(Server)
 admin.site.register(Bucket)
 admin.site.register(Observable)
 admin.site.register(Snapshot)
-admin.site.register(ReportType)

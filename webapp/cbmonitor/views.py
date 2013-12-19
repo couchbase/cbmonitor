@@ -24,7 +24,7 @@ def get_plotter_and_metrics(params):
             snapshot = models.Snapshot.objects.get(name=snapshot)
             snapshots.append((snapshot, snapshot.cluster.name))
     plotter = Plotter()
-    metrics = Report(snapshots, params["report"])
+    metrics = Report(snapshots)
     return plotter, metrics
 
 

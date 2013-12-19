@@ -25,7 +25,6 @@ def dispatcher(request, path):
         "add_metric": add_metric,
         "add_snapshot": add_snapshot,
         "get_snapshots": get_snapshots,
-        "get_report_types": get_report_types,
     }.get(path)
     if handler:
         return handler(request)
@@ -170,10 +169,4 @@ def get_snapshots(request):
     snapshots = [snapshot["name"] for snapshot in snapshots]
     snapshots.insert(0, "all_data")
     content = json.dumps(snapshots)
-    return HttpResponse(content)
-
-
-def get_report_types(request):
-    types = [t.name for t in models.ReportType.objects.all()]
-    content = json.dumps(types)
     return HttpResponse(content)
