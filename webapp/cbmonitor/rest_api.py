@@ -144,7 +144,7 @@ def get_metrics(request):
 
 @form_validation
 def add_metric(request):
-    form = forms.AddMetrics(request.POST)
+    form = forms.AddMetric(request.POST)
     if form.is_valid():
         observable = form.save(commit=False)
         observable.bucket = form.cleaned_data["bucket"]

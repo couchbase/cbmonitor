@@ -78,7 +78,7 @@ class GetMetrics(forms.ModelForm):
         return cleaned_data
 
 
-class AddMetrics(forms.ModelForm):
+class AddMetric(forms.ModelForm):
 
     bucket = forms.CharField(max_length=32, required=False)
     server = forms.CharField(max_length=80, required=False)
@@ -88,7 +88,7 @@ class AddMetrics(forms.ModelForm):
         fields = ("name", "cluster", "collector")
 
     def clean(self):
-        cleaned_data = super(AddMetrics, self).clean()
+        cleaned_data = super(AddMetric, self).clean()
 
         try:
             bucket = models.Bucket.objects.get(
@@ -112,7 +112,7 @@ class AddMetrics(forms.ModelForm):
                                               cluster=cleaned_data["cluster"],
                                               server=cleaned_data["server"],
                                               bucket=cleaned_data["bucket"])
-                raise IntegrityError("Null server is not unique")
+                raise IntegrityError("Observable is not unique")
             except (DoesNotExist, KeyError):
                 pass
 
