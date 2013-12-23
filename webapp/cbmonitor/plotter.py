@@ -259,6 +259,8 @@ class Plotter(object):
             series, _, _, _, _ = self.extract(observables)
             for s in series:
                 s = s.dropna()
+                if (s == 0).all():
+                    return []
                 rebalance = s[s > 0]
                 rebalances.append((rebalance.index[0], rebalance.index[-1]))
         return rebalances

@@ -94,6 +94,9 @@ SMOOTH_SUBPLOTS = (
 )
 
 NON_ZERO_VALUES = (
+    "rebalance_progress",
+    "bucket_compaction_progress",
+
     "ops",
     "cmd_get",
     "cmd_set",
