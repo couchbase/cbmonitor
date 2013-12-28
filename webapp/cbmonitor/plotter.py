@@ -228,20 +228,22 @@ class Plotter(object):
         series.rename(lambda x: x / 1000, inplace=True)  # ms -> s
         return series
 
-    def extract(self, meta):
+    def extract(self, observables):
         merge = defaultdict(list)
         merge_cluster = ""
-        for observable, snapshot in meta:
-            data = self.query_data(snapshot,
+        for observable in observables:
+            if not observable:
+                continue
+            data = self.query_data(observable.snapshot,
                                    observable.server, observable.bucket,
                                    observable.name, observable.collector)
             if data:
                 series = self.get_series(metric=observable.name, data=data)
                 if series is not None:
                     merge["series"].append(series)
-                    merge["labels"].append(snapshot.name)
-            merge_cluster += snapshot.cluster.name
-        title, url, filename = self.generate_png_meta(snapshot,
+                    merge["labels"].append(observable.snapshot.name)
+            merge_cluster += observable.snapshot.cluster.name
+        title, url, filename = self.generate_png_meta(observable.snapshot,
                                                       observable.server,
                                                       observable.bucket,
                                                       observable.name)
@@ -250,7 +252,7 @@ class Plotter(object):
 
     def detect_rebalance(self, observables):
         rebalances = []
-        if observables[0][0].name == "rebalance_progress":
+        if observables[0] and observables[0].name == "rebalance_progress":
             series, _, _, _, _ = self.extract(observables)
             for s in series:
                 s = s.dropna()
@@ -260,12 +262,11 @@ class Plotter(object):
                 rebalances.append((rebalance.index[0], rebalance.index[-1]))
         return rebalances
 
-    def plot(self, metrics):
+    def plot(self, observables):
         apply_results = list()
-        metrics = tuple(metrics)
-        rebalances = self.detect_rebalance(metrics[0])
+        rebalances = self.detect_rebalance(observables[0])
 
-        for data in self.eventlet_pool.imap(self.extract, metrics):
+        for data in self.eventlet_pool.imap(self.extract, observables):
             series, labels, title, filename, url = data
             if series:
                 metric = title.split()[-1]

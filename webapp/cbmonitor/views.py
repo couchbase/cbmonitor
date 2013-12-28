@@ -11,7 +11,7 @@ def index(request):
     return render_to_response("charts.jade", {"charts": True})
 
 
-def get_metrics(params):
+def get_observables(params):
     snapshots = []
     if "all_data" in params.getlist("snapshot"):
         for cluster in params.getlist("cluster"):
@@ -22,13 +22,14 @@ def get_metrics(params):
         for snapshot in params.getlist("snapshot"):
             snapshot = models.Snapshot.objects.get(name=snapshot)
             snapshots.append(snapshot)
-    return Report(snapshots)
+    return tuple(Report(snapshots))
 
 
 def render_png(params):
-    metrics = get_metrics(params)
+    observables = get_observables(params)
     plotter = Plotter()
-    plotter.plot(metrics)
+    plotter.plot(observables)
+
     id_from_url = lambda url: url.split("/")[2].split(".")[0]
     return [(id_from_url(url), title, url) for title, url in plotter.urls]
 

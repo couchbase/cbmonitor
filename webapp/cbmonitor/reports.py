@@ -4,7 +4,7 @@ from cbmonitor import models
 
 
 Observable = namedtuple(
-    'Observable', ['server', 'bucket', 'name', 'collector']
+    'Observable', ['snapshot', 'server', 'bucket', 'name', 'collector']
 )
 
 
@@ -125,7 +125,7 @@ class Report(object):
                                                       bucket__isnull=True,
                                                       server__isnull=True):
                 observables[o.collector][o.name] = Observable(
-                    "", "", o.name, o.collector
+                    snapshot, "", "", o.name, o.collector
                 )
             all_observables[""][snapshot.cluster] = observables
 
@@ -139,7 +139,7 @@ class Report(object):
                                                           bucket=_bucket,
                                                           server__isnull=True):
                     observables[o.collector][o.name] = Observable(
-                        "", bucket_name, o.name, o.collector
+                        snapshot, "", bucket_name, o.name, o.collector
                     )
                 all_observables[bucket.name][snapshot.cluster] = observables
 
@@ -153,7 +153,7 @@ class Report(object):
                                                           bucket__isnull=True,
                                                           server=_server):
                     observables[o.collector][o.name] = Observable(
-                        server_address, "", o.name, o.collector
+                        snapshot, server_address, "", o.name, o.collector
                     )
                 all_observables[server.address][snapshot.cluster] = observables
         return all_observables
@@ -167,9 +167,8 @@ class Report(object):
                     observables = []
                     for snapshot in self.snapshots:
                         observable = _all[""][snapshot.cluster][collector].get(metric)
-                        if observable:
-                            observables.append((observable, snapshot))
-                    if observables:
+                        observables.append(observable)
+                    if set(observables) != {None}:
                         yield observables
             if collector in ("atop", "iostat", "sync_gateway"):
                 for metric in metrics:
@@ -177,9 +176,8 @@ class Report(object):
                         observables = []
                         for snapshot in self.snapshots:
                             observable = _all[server.address][snapshot.cluster][collector].get(metric)
-                            if observable:
-                                observables.append((observable, snapshot))
-                        if observables:
+                            observables.append(observable)
+                        if set(observables) != {None}:
                             yield observables
             else:
                 for metric in metrics:
@@ -187,7 +185,6 @@ class Report(object):
                         observables = []
                         for snapshot in self.snapshots:
                             observable = _all[bucket.name][snapshot.cluster][collector].get(metric)
-                            if observable:
-                                observables.append((observable, snapshot))
-                        if observables:
+                            observables.append(observable)
+                        if set(observables) != {None}:
                             yield observables
