@@ -15,14 +15,13 @@ def get_metrics(params):
     snapshots = []
     if "all_data" in params.getlist("snapshot"):
         for cluster in params.getlist("cluster"):
-            snapshots.append((
-                type("snapshot", (object, ), {"name": "all_data"})(),
-                cluster
-            ))
+            cluster = models.Cluster(name=cluster)
+            snapshot = models.Snapshot(name=cluster.name, cluster=cluster)
+            snapshots.append(snapshot)
     else:
         for snapshot in params.getlist("snapshot"):
             snapshot = models.Snapshot.objects.get(name=snapshot)
-            snapshots.append((snapshot, snapshot.cluster.name))
+            snapshots.append(snapshot)
     return Report(snapshots)
 
 

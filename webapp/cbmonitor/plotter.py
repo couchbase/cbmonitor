@@ -184,15 +184,15 @@ class Plotter(object):
             db_name = db_name.replace(char, "")
         return db_name
 
-    def query_data(self, snapshot, cluster, server, bucket, metric, collector):
+    def query_data(self, snapshot, server, bucket, metric, collector):
         query_params = {"ptr": "/{}".format(metric), "reducer": "avg",
                         "group": 5000}
-        if snapshot.name != "all_data":
+        if snapshot.ts_from and snapshot.ts_to:
             ts_from = timegm(snapshot.ts_from.timetuple()) * 1000
             ts_to = timegm(snapshot.ts_to.timetuple()) * 1000
             group = max((ts_from - ts_to) / 500, 5000)  # min 5s; max 500 points
             query_params.update({"group": group, "from": ts_from, "to": ts_to})
-        db_name = self.build_dbname(cluster, server, bucket, collector)
+        db_name = self.build_dbname(snapshot.cluster.name, server, bucket, collector)
         if db_name in self.all_dbs:
             try:
                 return self.db[db_name].query(query_params)
@@ -201,7 +201,7 @@ class Plotter(object):
         else:
             return
 
-    def generate_png_meta(self, snapshot, cluster, server, bucket, metric):
+    def generate_png_meta(self, snapshot, server, bucket, metric):
         metric = metric.replace("/", "_")
         title = "{}] {}".format(bucket, metric)  # [server bucket] metric
         if server:
@@ -209,7 +209,7 @@ class Plotter(object):
         else:
             title = "[" + title
 
-        filename = "".join((snapshot.name, cluster, title))
+        filename = "".join((snapshot.name, snapshot.cluster.name, title))
         filename = re.sub(r"[\[\]/\\:\*\?\"<>\|& ]", "", filename)
         filename += "{suffix}.png"
 
@@ -233,20 +233,15 @@ class Plotter(object):
         merge_cluster = ""
         for observable, snapshot in meta:
             data = self.query_data(snapshot,
-                                   observable.cluster, observable.server,
-                                   observable.bucket,
+                                   observable.server, observable.bucket,
                                    observable.name, observable.collector)
             if data:
                 series = self.get_series(metric=observable.name, data=data)
                 if series is not None:
                     merge["series"].append(series)
-                    if snapshot.name == "all_data":
-                        merge["labels"].append(observable.cluster)
-                    else:
-                        merge["labels"].append(snapshot.name)
-            merge_cluster += observable.cluster
+                    merge["labels"].append(snapshot.name)
+            merge_cluster += snapshot.cluster.name
         title, url, filename = self.generate_png_meta(snapshot,
-                                                      merge_cluster,
                                                       observable.server,
                                                       observable.bucket,
                                                       observable.name)

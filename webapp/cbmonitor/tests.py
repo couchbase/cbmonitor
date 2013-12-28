@@ -469,3 +469,17 @@ class ApiTest(TestHelper):
         expected = 'src="/media/run-1_access-phase_vperf-reb_2.0.0-1976Eastdefaultdisk_write_queue.png"'
         self.assertIn(expected, self.response.content)
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
+
+    @patch('seriesly.core.Database.query', autospec=True)
+    @patch('seriesly.core.Seriesly.list_dbs', autospec=True)
+    def test_all_data_html_report(self, list_dbs_mock, query_mock):
+        query_mock.return_value = {1: [2]}
+        list_dbs_mock.return_value = ['ns_serverEastdefault']
+
+        params = {"snapshot": "all_data", "cluster": "East"}
+        request = self.factory.get("/reports/html/", params)
+        self.response = views.html_report(request)
+
+        expected = 'src="/media/EastEastdefaultdisk_write_queue.png"'
+        self.assertIn(expected, self.response.content)
+        map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))

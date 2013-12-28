@@ -4,7 +4,7 @@ from cbmonitor import models
 
 
 Observable = namedtuple(
-    'Observable', ['cluster', 'server', 'bucket', 'name', 'collector']
+    'Observable', ['server', 'bucket', 'name', 'collector']
 )
 
 
@@ -113,50 +113,49 @@ class Report(object):
 
     def __init__(self, snapshots):
         self.snapshots = snapshots
-        clusters = [cluster for snapshot, cluster in snapshots]
-        self.buckets = models.Bucket.objects.filter(cluster=clusters[0])
-        self.servers = models.Server.objects.filter(cluster=clusters[0])
+        self.buckets = models.Bucket.objects.filter(cluster=snapshots[0].cluster)
+        self.servers = models.Server.objects.filter(cluster=snapshots[0].cluster)
 
     def get_all_observables(self):
         all_observables = defaultdict(dict)
-        for snapshot, cluster in self.snapshots:
+        for snapshot in self.snapshots:
             # Cluster-wide metrics
             observables = defaultdict(dict)
-            for o in models.Observable.objects.filter(cluster=cluster,
+            for o in models.Observable.objects.filter(cluster=snapshot.cluster,
                                                       bucket__isnull=True,
                                                       server__isnull=True):
                 observables[o.collector][o.name] = Observable(
-                    cluster, "", "", o.name, o.collector
+                    "", "", o.name, o.collector
                 )
-            all_observables[""][cluster] = observables
+            all_observables[""][snapshot.cluster] = observables
 
             # Per-bucket metrics
             for bucket in self.buckets:
                 bucket_name = bucket.name
-                _bucket = models.Bucket.objects.get(cluster=cluster,
+                _bucket = models.Bucket.objects.get(cluster=snapshot.cluster,
                                                     name=bucket.name)
                 observables = defaultdict(dict)
-                for o in models.Observable.objects.filter(cluster=cluster,
+                for o in models.Observable.objects.filter(cluster=snapshot.cluster,
                                                           bucket=_bucket,
                                                           server__isnull=True):
                     observables[o.collector][o.name] = Observable(
-                        cluster, "", bucket_name, o.name, o.collector
+                        "", bucket_name, o.name, o.collector
                     )
-                all_observables[bucket.name][cluster] = observables
+                all_observables[bucket.name][snapshot.cluster] = observables
 
             # Per-server metrics
             for server in self.servers:
                 server_address = server.address
-                _server = models.Server.objects.get(cluster=cluster,
+                _server = models.Server.objects.get(cluster=snapshot.cluster,
                                                     address=server.address)
                 observables = defaultdict(dict)
-                for o in models.Observable.objects.filter(cluster=cluster,
+                for o in models.Observable.objects.filter(cluster=snapshot.cluster,
                                                           bucket__isnull=True,
                                                           server=_server):
                     observables[o.collector][o.name] = Observable(
-                        cluster, server_address, "", o.name, o.collector
+                        server_address, "", o.name, o.collector
                     )
-                all_observables[server.address][cluster] = observables
+                all_observables[server.address][snapshot.cluster] = observables
         return all_observables
 
     def __iter__(self):
@@ -166,8 +165,8 @@ class Report(object):
             if collector in ("active_tasks", "sync_latency"):
                 for metric in metrics:
                     observables = []
-                    for snapshot, cluster in self.snapshots:
-                        observable = _all[""][cluster][collector].get(metric)
+                    for snapshot in self.snapshots:
+                        observable = _all[""][snapshot.cluster][collector].get(metric)
                         if observable:
                             observables.append((observable, snapshot))
                     if observables:
@@ -176,8 +175,8 @@ class Report(object):
                 for metric in metrics:
                     for server in self.servers:
                         observables = []
-                        for snapshot, cluster in self.snapshots:
-                            observable = _all[server.address][cluster][collector].get(metric)
+                        for snapshot in self.snapshots:
+                            observable = _all[server.address][snapshot.cluster][collector].get(metric)
                             if observable:
                                 observables.append((observable, snapshot))
                         if observables:
@@ -186,8 +185,8 @@ class Report(object):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables = []
-                        for snapshot, cluster in self.snapshots:
-                            observable = _all[bucket.name][cluster][collector].get(metric)
+                        for snapshot in self.snapshots:
+                            observable = _all[bucket.name][snapshot.cluster][collector].get(metric)
                             if observable:
                                 observables.append((observable, snapshot))
                         if observables:
