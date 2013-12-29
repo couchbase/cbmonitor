@@ -22,7 +22,7 @@ def get_observables(params):
         for snapshot in params.getlist("snapshot"):
             snapshot = models.Snapshot.objects.get(name=snapshot)
             snapshots.append(snapshot)
-    return tuple(Report(snapshots))
+    return Report(snapshots)()
 
 
 def render_png(params):

@@ -10,7 +10,16 @@ Observable = namedtuple(
 
 class Report(object):
 
-    metrics = OrderedDict((
+    """Provide all existing observables that meet following requirements:
+    -- observable is in predefined dict of metrics (cls.METRICS)
+    -- observable belongs to snapshot (input parameter)
+
+    It supports arbitrary number of snapshots, each element includes a list of
+    observables, one observable per snapshot. Yield is skipped in case of full
+    snapshot mismatch (none of snapshot has corresponding observable object).
+    """
+
+    METRICS = OrderedDict((
         ("active_tasks", [
             "rebalance_progress",
             "bucket_compaction_progress",
@@ -112,11 +121,30 @@ class Report(object):
     ))
 
     def __init__(self, snapshots):
+        """As part of initialization prefetch list of buckets and servers in
+        order to reduce number of SQL queries. Also store list of snapshots.
+        """
         self.snapshots = snapshots
         self.buckets = models.Bucket.objects.filter(cluster=snapshots[0].cluster)
         self.servers = models.Server.objects.filter(cluster=snapshots[0].cluster)
 
     def get_all_observables(self):
+        """Get all stored in database Observable objects that match provided
+        snapshots. There are three expensive queries per snapshot:
+        -- get all cluster-wide metrics
+        -- get all per-bucket metrics
+        -- get all per-server metrics
+
+        That was the only obvious way to achieve O(n) time complexity.
+
+        all_observables is the nested dictionary where every object is may be
+        queried as:
+            all_observables[bucket/server][cluster][name][collector]
+
+        It's allowed to use "" for bucket names and server addresses.
+
+        Every model object is converted to extended named tuple.
+        """
         all_observables = defaultdict(dict)
         for snapshot in self.snapshots:
             # Cluster-wide metrics
@@ -158,33 +186,35 @@ class Report(object):
                 all_observables[server.address][snapshot.cluster] = observables
         return all_observables
 
-    def __iter__(self):
+    def __call__(self):
+        """Primary class method that return tuple with valid Observable objects
+        """
         _all = self.get_all_observables()
+        observables = []
 
-        for collector, metrics in self.metrics.iteritems():
+        for collector, metrics in self.METRICS.iteritems():
+            # Cluster-wide metrics
             if collector in ("active_tasks", "sync_latency"):
                 for metric in metrics:
-                    observables = []
-                    for snapshot in self.snapshots:
-                        observable = _all[""][snapshot.cluster][collector].get(metric)
-                        observables.append(observable)
-                    if set(observables) != {None}:
-                        yield observables
-            if collector in ("atop", "iostat", "sync_gateway"):
+                    observables.append([
+                        _all[""][snapshot.cluster][collector].get(metric)
+                        for snapshot in self.snapshots
+                    ])
+            # Per-server metrics
+            elif collector in ("atop", "iostat", "sync_gateway"):
                 for metric in metrics:
                     for server in self.servers:
-                        observables = []
-                        for snapshot in self.snapshots:
-                            observable = _all[server.address][snapshot.cluster][collector].get(metric)
-                            observables.append(observable)
-                        if set(observables) != {None}:
-                            yield observables
+                        observables.append([
+                            _all[server.address][snapshot.cluster][collector].get(metric)
+                            for snapshot in self.snapshots
+                        ])
+            # Per-bucket metrics
             else:
                 for metric in metrics:
                     for bucket in self.buckets:
-                        observables = []
-                        for snapshot in self.snapshots:
-                            observable = _all[bucket.name][snapshot.cluster][collector].get(metric)
-                            observables.append(observable)
-                        if set(observables) != {None}:
-                            yield observables
+                        observables.append([
+                            _all[bucket.name][snapshot.cluster][collector].get(metric)
+                            for snapshot in self.snapshots
+                        ])
+        # Skip full mismatch and return tuple with Observable objects
+        return tuple(_ for _ in observables if set(_) != {None})
