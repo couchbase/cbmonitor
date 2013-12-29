@@ -274,7 +274,7 @@ class Plotter(object):
         return merge["series"], merge["labels"], title, filename, url
 
     def detect_rebalance(self, observables):
-        """Check first observable object which is expected to rebalance
+        """Check first observable object which is expected to be rebalance
         progress characteristic."""
         rebalances = []
         if observables[0] and observables[0].name == "rebalance_progress":
