@@ -220,7 +220,7 @@ class Plotter(object):
         else:
             return
 
-    def generate_png_meta(self, snapshot, server, bucket, metric):
+    def generate_png_meta(self, snapshot, cluster, server, bucket, metric):
         """Generate output filenames and URLs based on object attributes."""
         metric = metric.replace("/", "_")
         title = "{}] {}".format(bucket, metric)  # [server bucket] metric
@@ -229,7 +229,7 @@ class Plotter(object):
         else:
             title = "[" + title
 
-        filename = "".join((snapshot.name, snapshot.cluster.name, title))
+        filename = "".join((snapshot.name, cluster, title))
         filename = re.sub(r"[\[\]/\\:\*\?\"<>\|& ]", "", filename)
         filename += "{suffix}.png"
 
@@ -266,6 +266,7 @@ class Plotter(object):
                     merge["labels"].append(observable.snapshot.name)
             merge_cluster += observable.snapshot.cluster.name
         title, url, filename = self.generate_png_meta(observable.snapshot,
+                                                      merge_cluster,
                                                       observable.server,
                                                       observable.bucket,
                                                       observable.name)
