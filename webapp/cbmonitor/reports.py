@@ -125,8 +125,18 @@ class Report(object):
         order to reduce number of SQL queries. Also store list of snapshots.
         """
         self.snapshots = snapshots
-        self.buckets = models.Bucket.objects.filter(cluster=snapshots[0].cluster)
-        self.servers = models.Server.objects.filter(cluster=snapshots[0].cluster)
+
+        self.buckets = set()
+        self.servers = set()
+        for snapshot in snapshots:
+            buckets = {
+                b.name for b in models.Bucket.objects.filter(cluster=snapshot.cluster)
+            }
+            self.buckets = self.buckets and buckets & self.buckets or buckets
+            servers = {
+                s.address for s in models.Server.objects.filter(cluster=snapshot.cluster)
+            }
+            self.servers = self.servers and servers & self.servers or servers
 
     def get_all_observables(self):
         """Get all stored in database Observable objects that match provided
@@ -159,31 +169,29 @@ class Report(object):
 
             # Per-bucket metrics
             for bucket in self.buckets:
-                bucket_name = bucket.name
                 _bucket = models.Bucket.objects.get(cluster=snapshot.cluster,
-                                                    name=bucket.name)
+                                                    name=bucket)
                 observables = defaultdict(dict)
                 for o in models.Observable.objects.filter(cluster=snapshot.cluster,
                                                           bucket=_bucket,
                                                           server__isnull=True):
                     observables[o.collector][o.name] = Observable(
-                        snapshot, "", bucket_name, o.name, o.collector
+                        snapshot, "", bucket, o.name, o.collector
                     )
-                all_observables[bucket.name][snapshot.cluster] = observables
+                all_observables[bucket][snapshot.cluster] = observables
 
             # Per-server metrics
             for server in self.servers:
-                server_address = server.address
                 _server = models.Server.objects.get(cluster=snapshot.cluster,
-                                                    address=server.address)
+                                                    address=server)
                 observables = defaultdict(dict)
                 for o in models.Observable.objects.filter(cluster=snapshot.cluster,
                                                           bucket__isnull=True,
                                                           server=_server):
                     observables[o.collector][o.name] = Observable(
-                        snapshot, server_address, "", o.name, o.collector
+                        snapshot, server, "", o.name, o.collector
                     )
-                all_observables[server.address][snapshot.cluster] = observables
+                all_observables[server][snapshot.cluster] = observables
         return all_observables
 
     def __call__(self):
@@ -205,7 +213,7 @@ class Report(object):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
-                            _all[server.address][snapshot.cluster][collector].get(metric)
+                            _all[server][snapshot.cluster][collector].get(metric)
                             for snapshot in self.snapshots
                         ])
             # Per-bucket metrics
@@ -213,7 +221,7 @@ class Report(object):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables.append([
-                            _all[bucket.name][snapshot.cluster][collector].get(metric)
+                            _all[bucket][snapshot.cluster][collector].get(metric)
                             for snapshot in self.snapshots
                         ])
         # Skip full mismatch and return tuple with Observable objects
