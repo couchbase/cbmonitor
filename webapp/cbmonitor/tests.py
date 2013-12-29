@@ -6,8 +6,8 @@ from datetime import datetime
 from uuid import uuid4
 from random import randint, choice
 
-from calendar import timegm
 import pytz
+from calendar import timegm
 from django.test import TestCase, Client
 from django.test.client import RequestFactory
 from mock import patch
@@ -483,3 +483,9 @@ class ApiTest(TestHelper):
         expected = 'src="/media/EastEastdefaultdisk_write_queue.png"'
         self.assertIn(expected, self.response.content)
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
+
+    def test_not_existing_snapshot(self):
+        params = {"snapshot": "test"}
+        request = self.factory.get("/reports/html/", params)
+        response = views.html_report(request)
+        self.assertEqual(response.status_code, 400)
