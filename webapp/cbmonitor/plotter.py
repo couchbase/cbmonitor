@@ -32,41 +32,32 @@ from scipy import stats
 from cbmonitor import constants
 
 
-class Colors(object):
-
-    def __init__(self):
-        self.cycle = cycle(constants.PALETTE)
-
-    def next(self):
-        return self.cycle.next()
-
-
-def plot_as_png(filename, series, labels, ylabel, chart_id, rebalances):
+def plot_as_png(filename, series, labels, colors, ylabel, chart_id, rebalances):
     """Primary routine that serves as plot selector. The function and all
     sub-functions are defined externally in order to be pickled."""
     fig = plt.figure(figsize=(4.66, 2.625))
     ax = init_ax(fig)
 
     if chart_id in ("_lt90", "_gt90", "_histo"):
-        plot_percentiles(ax, series, labels, ylabel, chart_id)
+        plot_percentiles(ax, series, labels, colors, ylabel, chart_id)
     elif chart_id == "_subplot":
         plot_subplot_frame(ax, ylabel)
 
         ax = init_ax(fig, dim=(2, 1, 1))
-        plot_rolling_subplot(ax, series, labels)
-        highlight_rebalance(rebalances)
+        plot_rolling_subplot(ax, series, labels, colors)
+        highlight_rebalance(rebalances, colors)
 
         ax = init_ax(fig, dim=(2, 1, 2))
-        plot_time_series(ax, series, labels, ylabel=None)
-        highlight_rebalance(rebalances)
+        plot_time_series(ax, series, labels, colors, ylabel=None)
+        highlight_rebalance(rebalances, colors)
     elif chart_id == "_kde":
-        plot_kde(ax, series, labels, ylabel)
+        plot_kde(ax, series, labels, colors, ylabel)
     elif chart_id == "_score":
-        plot_score(ax, series, labels, ylabel)
-        highlight_rebalance(rebalances)
+        plot_score(ax, series, labels, colors, ylabel)
+        highlight_rebalance(rebalances, colors)
     else:
-        plot_time_series(ax, series, labels, ylabel)
-        highlight_rebalance(rebalances)
+        plot_time_series(ax, series, labels, colors, ylabel)
+        highlight_rebalance(rebalances, colors)
 
     legend = ax.legend()
     legend.get_frame().set_linewidth(0.5)
@@ -83,25 +74,23 @@ def init_ax(fig, dim=(1, 1, 1)):
     return ax
 
 
-def plot_time_series(ax, series, labels, ylabel=None):
+def plot_time_series(ax, series, labels, colors, ylabel=None):
     """Simple time series plot or sub-plot."""
-    colors = Colors()
     if ylabel:
         ax.set_ylabel(ylabel)
     ax.set_xlabel("Time elapsed, sec")
-    for i, s in enumerate(series):
-        ax.plot(s.index, s, label=labels[i], color=colors.next())
+    for s, label, color in zip(series, labels, colors):
+        ax.plot(s.index, s, label=label, color=color)
     ymin, ymax = ax.get_ylim()
     plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
 
 
-def plot_percentiles(ax, series, labels, ylabel, chart_id):
+def plot_percentiles(ax, series, labels, colors, ylabel, chart_id):
     """Bar plot with 3 possible percentile ranges and sub-ranges:
     -- 1 to 99 (linear)
     -- 1 to 89 (linear)
     -- 90 to 99.999 (non-linear, pre-defined)
     """
-    colors = Colors()
     ax.set_ylabel(ylabel)
     ax.set_xlabel("Percentile")
     width = cycle((0.6, 0.4))
@@ -118,35 +107,32 @@ def plot_percentiles(ax, series, labels, ylabel, chart_id):
         percentiles = range(1, 100)
         x = percentiles
         plt.xlim(0, 100)
-    for i, s in enumerate(series):
+    for s, label, color in zip(series, labels, colors):
         y = np.percentile(s, percentiles)
-        ax.bar(x, y, linewidth=0.0, label=labels[i],
-               width=width.next(), align=align.next(), color=colors.next())
+        ax.bar(x, y, linewidth=0.0, label=label,
+               width=width.next(), align=align.next(), color=color)
 
 
-def plot_score(ax, series, labels, ylabel):
+def plot_score(ax, series, labels, colors, ylabel):
     """Score plot where score is calculated as 90th percentile. Quite useful
     for trends and dips analysis."""
-    colors = Colors()
     ax.set_ylabel("Percentile of score ({})".format(ylabel))
     ax.set_xlabel("Time elapsed, sec")
-    for i, s in enumerate(series):
+    for s, label, color in zip(series, labels, colors):
         scoref = lambda x: stats.percentileofscore(x, s.quantile(0.9))
         rolling_score = pd.rolling_apply(s, min(len(s) / 15, 40), scoref)
-        ax.plot(s.index, rolling_score, label=labels[i],
-                color=colors.next())
+        ax.plot(s.index, rolling_score, label=label, color=color)
         plt.ylim(ymin=0, ymax=105)
 
 
-def plot_kde(ax, series, labels, ylabel):
+def plot_kde(ax, series, labels, colors, ylabel):
     """KDE plot for values less than 99th percentile."""
-    colors = Colors()
     ax.set_ylabel("Kernel density estimation")
     ax.set_xlabel(ylabel)
-    for i, s in enumerate(series):
+    for s, label, color in zip(series, labels, colors):
         x = np.linspace(0, int(s.quantile(0.99)), 200)
         kde = stats.kde.gaussian_kde(s)
-        ax.plot(x, kde(x), label=labels[i], color=colors.next())
+        ax.plot(x, kde(x), label=label, color=color)
 
 
 def plot_subplot_frame(ax, ylabel):
@@ -158,22 +144,30 @@ def plot_subplot_frame(ax, ylabel):
     ax.grid(None)
 
 
-def plot_rolling_subplot(ax, series, labels):
+def plot_rolling_subplot(ax, series, labels, colors):
     """Subplot with smoothed values (using moving median)."""
-    colors = Colors()
-    for i, s in enumerate(series):
+    for s, label, color in zip(series, labels, colors):
         rolling_median = pd.rolling_median(s, window=5)
-        ax.plot(s.index, rolling_median, label=labels[i], color=colors.next())
+        ax.plot(s.index, rolling_median, label=label, color=color)
         ymin, ymax = ax.get_ylim()
         plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
 
 
-def highlight_rebalance(rebalances):
-    """Transparent span that highlights rebalance start and end."""
-    colors = Colors()
-    for rebalance_start, rebalance_end in rebalances:
-        plt.axvspan(rebalance_start, rebalance_end,
-                    facecolor=colors.next(), alpha=0.1, linewidth=0.5)
+def highlight_rebalance(rebalances, colors):
+    """Transparent span that highlights rebalance start and end. Makes sense
+    only for similar reports (e.g., rebalance+views vs. rebalance+views).
+    Otherwise disorder in colors may happen."""
+    for (start, end), color in zip(rebalances, colors):
+        plt.axvspan(start, end, facecolor=color, alpha=0.1, linewidth=0.5)
+
+
+class Colors(object):
+
+    def __init__(self):
+        self.cycle = cycle(constants.PALETTE)
+
+    def next(self):
+        return self.cycle.next()
 
 
 class Plotter(object):
@@ -229,7 +223,7 @@ class Plotter(object):
         else:
             title = "[" + title
 
-        filename = "".join((snapshot.name, cluster, title))
+        filename = "".join((snapshot, cluster, title))
         filename = re.sub(r"[\[\]/\\:\*\?\"<>\|& ]", "", filename)
         filename += "{suffix}.png"
 
@@ -252,33 +246,42 @@ class Plotter(object):
     def extract(self, observables):
         """Top-level abstraction for data and metadata extraction."""
         merge = defaultdict(list)
-        merge_cluster = ""
+        colors = Colors()
         for observable in observables:
-            if not observable:
-                continue
-            data = self.query_data(observable.snapshot,
-                                   observable.server, observable.bucket,
-                                   observable.name, observable.collector)
-            if data:
-                series = self.get_series(metric=observable.name, data=data)
-                if series is not None:
-                    merge["series"].append(series)
-                    merge["labels"].append(observable.snapshot.name)
-            merge_cluster += observable.snapshot.cluster.name
-        title, url, filename = self.generate_png_meta(observable.snapshot,
-                                                      merge_cluster,
-                                                      observable.server,
-                                                      observable.bucket,
-                                                      observable.name)
+            color = colors.next()
+            if observable:
+                data = self.query_data(observable.snapshot,
+                                       observable.server,
+                                       observable.bucket,
+                                       observable.name,
+                                       observable.collector)
+                if data:
+                    series = self.get_series(metric=observable.name, data=data)
+                    if series is not None:
+                        merge["series"].append(series)
+                        merge["labels"].append(observable.snapshot.name)
+                        merge["colors"].append(color)
 
-        return merge["series"], merge["labels"], title, filename, url
+                        merge["cluster"].append(observable.snapshot.cluster.name)
+                        merge["snapshot"].append(observable.snapshot.name)
+                        merge["server"] = observable.server
+                        merge["bucket"] = observable.bucket
+                        merge["name"] = observable.name
+
+        title, url, fname = self.generate_png_meta("".join(merge["snapshot"]),
+                                                   "".join(merge["cluster"]),
+                                                   merge.get("server", ""),
+                                                   merge.get("bucket", ""),
+                                                   merge.get("name", ""))
+
+        return merge["series"], merge["labels"], merge["colors"], title, fname, url
 
     def detect_rebalance(self, observables):
         """Check first observable object which is expected to be rebalance
         progress characteristic."""
         rebalances = []
         if observables[0] and observables[0].name == "rebalance_progress":
-            series, _, _, _, _ = self.extract(observables)
+            series, _, _, _, _, _ = self.extract(observables)
             for s in series:
                 s = s.dropna()
                 if (s == 0).all():
@@ -295,7 +298,7 @@ class Plotter(object):
 
         # Asynchronously extract data
         for data in self.eventlet_pool.imap(self.extract, observables):
-            series, labels, title, filename, url = data
+            series, labels, colors, title, filename, url = data
             if series:
                 metric = title.split()[-1]
                 ylabel = constants.LABELS.get(metric, metric)
@@ -316,7 +319,8 @@ class Plotter(object):
                     if not os.path.exists(fname):
                         apply_results.append(self.mp_pool.apply_async(
                             plot_as_png,
-                            args=(fname, series, labels, ylabel, chart_id,
+                            args=(fname,
+                                  series, labels, colors, ylabel, chart_id,
                                   rebalances)
                         ))
                     self.urls.append([title, url.format(suffix=chart_id)])
