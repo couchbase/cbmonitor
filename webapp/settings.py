@@ -4,7 +4,7 @@ from os import path
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['cbmonitor.sc.couchbase.com']
+ALLOWED_HOSTS = ('cbmonitor.sc.couchbase.com', '127.0.0.1')
 
 INTERNAL_IPS = ('127.0.0.1',)
 
