@@ -126,17 +126,23 @@ class Report(object):
         """
         self.snapshots = snapshots
 
-        self.buckets = set()
-        self.servers = set()
+        self.buckets = ()
+        self.servers = ()
         for snapshot in snapshots:
             buckets = {
                 b.name for b in models.Bucket.objects.filter(cluster=snapshot.cluster)
             }
-            self.buckets = self.buckets and buckets & self.buckets or buckets
+            if self.buckets == ():
+                self.buckets = buckets
+            else:
+                self.buckets = buckets & self.buckets
             servers = {
                 s.address for s in models.Server.objects.filter(cluster=snapshot.cluster)
             }
-            self.servers = self.servers and servers & self.servers or servers
+            if self.servers == ():
+                self.servers = servers
+            else:
+                self.servers = servers & self.servers
 
     def get_all_observables(self):
         """Get all stored in database Observable objects that match provided
