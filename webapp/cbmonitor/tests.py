@@ -13,7 +13,6 @@ from django.test.client import RequestFactory
 from mock import patch
 
 from cbmonitor import views
-from cbmonitor import rest_api
 from cbmonitor import models
 
 uhex = lambda: uuid4().hex
@@ -104,7 +103,7 @@ class BasicTest(TestCase):
         self.factory = RequestFactory()
 
     def test_index(self):
-        request = self.factory.get('/')
+        request = self.factory.get("/")
         response = views.index(request)
         self.assertEqual(response.status_code, 200)
 
@@ -114,7 +113,7 @@ class TestHelper(TestCase):
     def add_item(self, item, params):
         """Add new cluster/server/bucket"""
         request = self.factory.post("/add_" + item, params)
-        response = rest_api.dispatcher(request, path="add_" + item)
+        response = eval("views.add_" + item)(request)
         return response
 
     def add_valid_cluster(self):
@@ -240,7 +239,7 @@ class ApiTest(TestHelper):
     @Verifier.valid_json
     def test_get_clusters(self):
         request = self.factory.get("/get_clusters")
-        self.response = rest_api.dispatcher(request, path="get_clusters")
+        self.response = views.get_clusters(request)
 
         # Verify content
         self.assertEquals(self.response.content, json.dumps(["East"]))
@@ -249,7 +248,7 @@ class ApiTest(TestHelper):
     def test_get_servers(self):
         params = {"cluster": "East"}
         request = self.factory.get("/get_servers", params)
-        self.response = rest_api.dispatcher(request, path="get_servers")
+        self.response = views.get_servers(request)
 
         # Verify content
         expected = json.dumps(["ec2-54-242-160-13.compute-1.amazonaws.com"])
@@ -258,19 +257,19 @@ class ApiTest(TestHelper):
     @Verifier.empty_array
     def test_get_servers_with_missing_param(self):
         request = self.factory.get("/get_servers")
-        self.response = rest_api.dispatcher(request, path="get_servers")
+        self.response = views.get_servers(request)
 
     @Verifier.empty_array
     def test_get_servers_wrong_param(self):
         params = {"cluster": "West"}
         request = self.factory.get("/get_servers", params)
-        self.response = rest_api.dispatcher(request, path="get_servers")
+        self.response = views.get_servers(request)
 
     @Verifier.valid_json
     def test_get_buckets(self):
         params = {"cluster": "East"}
         request = self.factory.get("/get_buckets", params)
-        self.response = rest_api.dispatcher(request, path="get_buckets")
+        self.response = views.get_buckets(request)
 
         # Verify content
         expected = json.dumps(["default"])
@@ -290,8 +289,7 @@ class ApiTest(TestHelper):
                 {"name": params["name"], "collector": params["collector"]}
             ]
         request = self.factory.get("/get_metrics", params)
-        self.response = rest_api.dispatcher(request,
-                                            path="get_metrics")
+        self.response = views.get_metrics(request)
 
         # Verify content
         self.assertEquals(sorted(self.response.content),
@@ -310,8 +308,7 @@ class ApiTest(TestHelper):
                 {"name": params["name"], "collector": params["collector"]}
             ]
         request = self.factory.get("/get_metrics", params)
-        self.response = rest_api.dispatcher(request,
-                                            path="get_metrics")
+        self.response = views.get_metrics(request)
 
         # Verify content
         self.assertEquals(sorted(self.response.content),
@@ -326,7 +323,7 @@ class ApiTest(TestHelper):
                   "bucket": "default",
                   "collector": "ns_server"}
         request = self.factory.post("/add_metric", params)
-        response = rest_api.dispatcher(request, path="add_metric")
+        response = views.add_metric(request)
 
         # Verify persistence
         self.test_get_metrics(params)
@@ -343,7 +340,7 @@ class ApiTest(TestHelper):
                   "collector": "ns_server",
                   "description": "new metric"}
         request = self.factory.post("/add_metric", params)
-        response = rest_api.dispatcher(request, path="add_metric")
+        response = views.add_metric(request)
 
         # Verify persistence
         self.test_get_metrics(params)
@@ -358,7 +355,7 @@ class ApiTest(TestHelper):
                   "bucket": "default",
                   "collector": "ns_server"}
         request = self.factory.post("/add_metric", params)
-        response = rest_api.dispatcher(request, path="add_metric")
+        response = views.add_metric(request)
 
         # Verify persistence
         self.test_get_metrics_no_server(params)
@@ -373,8 +370,8 @@ class ApiTest(TestHelper):
                   "bucket": "default",
                   "collector": "ns_server"}
         request = self.factory.post("/add_metric", params)
-        rest_api.dispatcher(request, path="add_metric")
-        response = rest_api.dispatcher(request, path="add_metric")
+        views.add_metric(request)
+        response = views.add_metric(request)
 
         self.response = response
 
@@ -386,8 +383,8 @@ class ApiTest(TestHelper):
                   "server": "ec2-54-242-160-13.compute-1.amazonaws.com",
                   "collector": "ns_server"}
         request = self.factory.post("/add_metric", params)
-        rest_api.dispatcher(request, path="add_metric")
-        response = rest_api.dispatcher(request, path="add_metric")
+        views.add_metric(request)
+        response = views.add_metric(request)
 
         self.response = response
 
@@ -434,18 +431,18 @@ class ApiTest(TestHelper):
     def test_get_snapshots(self):
         params = {"cluster": "East"}
         request = self.factory.get("/get_snapshots", params)
-        self.response = rest_api.dispatcher(request, path="get_snapshots")
+        self.response = views.get_snapshots(request)
 
         # Verify content
         expected = json.dumps(["all_data",
                                "run-1_access-phase_vperf-reb_2.0.0-1976"])
         self.assertEquals(self.response.content, expected)
 
-    @patch('seriesly.core.Database.query', autospec=True)
-    @patch('seriesly.core.Seriesly.list_dbs', autospec=True)
+    @patch("seriesly.core.Database.query", autospec=True)
+    @patch("seriesly.core.Seriesly.list_dbs", autospec=True)
     def test_xdcr_html_report(self, list_dbs_mock, query_mock):
         query_mock.return_value = {1: [2]}
-        list_dbs_mock.return_value = ['ns_serverEastdefault']
+        list_dbs_mock.return_value = ["ns_serverEastdefault"]
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
         Client().get("/reports/html/", params)
@@ -456,11 +453,11 @@ class ApiTest(TestHelper):
         self.assertIn(expected, response.content)
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
 
-    @patch('seriesly.core.Database.query', autospec=True)
-    @patch('seriesly.core.Seriesly.list_dbs', autospec=True)
+    @patch("seriesly.core.Database.query", autospec=True)
+    @patch("seriesly.core.Seriesly.list_dbs", autospec=True)
     def test_base_html_report(self, list_dbs_mock, query_mock):
         query_mock.return_value = {1: [2]}
-        list_dbs_mock.return_value = ['ns_serverEastdefault']
+        list_dbs_mock.return_value = ["ns_serverEastdefault"]
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
         request = self.factory.get("/reports/html/", params)
@@ -470,11 +467,11 @@ class ApiTest(TestHelper):
         self.assertIn(expected, self.response.content)
         map(lambda f: os.remove(f), glob.glob("webapp/media/*.png"))
 
-    @patch('seriesly.core.Database.query', autospec=True)
-    @patch('seriesly.core.Seriesly.list_dbs', autospec=True)
+    @patch("seriesly.core.Database.query", autospec=True)
+    @patch("seriesly.core.Seriesly.list_dbs", autospec=True)
     def test_all_data_html_report(self, list_dbs_mock, query_mock):
         query_mock.return_value = {1: [2]}
-        list_dbs_mock.return_value = ['ns_serverEastdefault']
+        list_dbs_mock.return_value = ["ns_serverEastdefault"]
 
         params = {"snapshot": "all_data", "cluster": "East"}
         request = self.factory.get("/reports/html/", params)

@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib import admin
+from django.db import models
 
 
 class Cluster(models.Model):
@@ -18,7 +18,7 @@ class Server(models.Model):
     class Meta:
         unique_together = ["address", "cluster"]
 
-    cluster = models.ForeignKey('Cluster')
+    cluster = models.ForeignKey("Cluster")
     address = models.CharField(max_length=80, blank=False)
 
     def __str__(self):

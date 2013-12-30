@@ -4,7 +4,7 @@ from cbmonitor import models
 
 
 Observable = namedtuple(
-    'Observable', ['snapshot', 'server', 'bucket', 'name', 'collector']
+    "Observable", ["snapshot", "server", "bucket", "name", "collector"]
 )
 
 

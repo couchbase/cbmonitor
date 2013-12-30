@@ -1,5 +1,5 @@
 from django import forms
-from django.core.exceptions import ObjectDoesNotExist as DoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 
 
@@ -64,7 +64,7 @@ class GetMetrics(forms.ModelForm):
             server = models.Server.objects.get(
                 address=cleaned_data["server"], cluster=cluster)
             self.params.update({"server": server})
-        except (DoesNotExist, KeyError):
+        except (ObjectDoesNotExist, KeyError):
             self.params.update({"server__isnull": True})
 
         # Bucket
@@ -72,7 +72,7 @@ class GetMetrics(forms.ModelForm):
             bucket = models.Bucket.objects.get(
                 name=cleaned_data["bucket"], cluster=cluster)
             self.params.update({"bucket": bucket})
-        except (DoesNotExist, KeyError):
+        except (ObjectDoesNotExist, KeyError):
             self.params.update({"bucket__isnull": True})
 
         return cleaned_data
@@ -94,7 +94,7 @@ class AddMetric(forms.ModelForm):
             bucket = models.Bucket.objects.get(
                 name=cleaned_data["bucket"],
                 cluster=cleaned_data.get("cluster"))
-        except (DoesNotExist, KeyError):
+        except (ObjectDoesNotExist, KeyError):
             bucket = None
         cleaned_data["bucket"] = bucket
 
@@ -102,7 +102,7 @@ class AddMetric(forms.ModelForm):
             server = models.Server.objects.get(
                 address=cleaned_data["server"],
                 cluster=cleaned_data.get("cluster"))
-        except (DoesNotExist, KeyError):
+        except (ObjectDoesNotExist, KeyError):
             server = None
         cleaned_data["server"] = server
 
@@ -113,7 +113,7 @@ class AddMetric(forms.ModelForm):
                                               server=cleaned_data["server"],
                                               bucket=cleaned_data["bucket"])
                 raise IntegrityError("Observable is not unique")
-            except (DoesNotExist, KeyError):
+            except (ObjectDoesNotExist, KeyError):
                 pass
 
         return cleaned_data

@@ -3,11 +3,17 @@
 html(lang="en")
     head
         title cbmonitor
-        include static
+        link(rel="stylesheet", href="/static/css/vendor/bootstrap.css")
+        link(rel="stylesheet", href="/static/css/vendor/smoothness/jquery-ui-1.10.1.custom.min.css")
+        link(rel="stylesheet", href="/static/css/main.css")
+        link(rel="stylesheet", href="/static/css/vendor/nv.d3.css")
         link(rel="stylesheet", href="/static/css/charts.css")
         link(rel="stylesheet", href="/static/css/panel.css")
         link(rel="stylesheet", href="/static/css/dialogs.css")
-        script(src='/static/js/vendor/jquery-ui-timepicker-addon.js')
+        script(src="/static/js/vendor/jquery-1.9.1.min.js")
+        script(src="/static/js/vendor/jquery-ui-1.10.1.custom.min.js")
+        script(src="/static/js/vendor/jquery.cookie.js")
+        script(src='/static/js/vendor/bootstrap.min.js')
         script(src="/static/js/observables.js")
         script(src="/static/js/views.js")
         script(src="/static/js/graph.js")
@@ -17,7 +23,9 @@ html(lang="en")
         script(src='/static/js/vendor/d3.v2.js')
         script(src='/static/js/vendor/nv.d3.js')
     body
-        include navbar
+        div.navbar
+            div.navbar-inner
+                div.brand cbmonitor
         div.main
             div.sources
                 div#accordion
@@ -49,4 +57,3 @@ html(lang="en")
                 div#views
                     div.chart_view_single#first_view
                         svg
-        div#spinner
