@@ -170,22 +170,13 @@ class Colors(object):
         return self.cycle.next()
 
 
-class Plotter(object):
+class SerieslyHandler(object):
 
-    """Plotter helper that reads data from seriesly database and generates
-    handy charts with url/filesystem meta information."""
+    """Simple handler for data stored in seriesly database."""
 
     def __init__(self):
         self.db = seriesly.Seriesly()
         self.all_dbs = self.db.list_dbs()
-
-        self.urls = list()  # The only thing that caller (view) needs
-
-        self.eventlet_pool = GreenPool()  # for seriesly requests
-        self.mp_pool = Pool(cpu_count())  # for plotting
-
-    def __del__(self):
-        self.mp_pool.close()
 
     @staticmethod
     def build_dbname(cluster, server, bucket, collector):
@@ -195,24 +186,43 @@ class Plotter(object):
             db_name = db_name.replace(char, "")
         return db_name
 
-    def query_data(self, snapshot, server, bucket, metric, collector):
+    def query_data(self, observable):
         """Read data from seriesly database. Use snapshot time range if
         possible."""
-        query_params = {"ptr": "/{}".format(metric), "reducer": "avg",
+        query_params = {"ptr": "/{}".format(observable.name), "reducer": "avg",
                         "group": 5000}
-        if snapshot.ts_from and snapshot.ts_to:
-            ts_from = timegm(snapshot.ts_from.timetuple()) * 1000
-            ts_to = timegm(snapshot.ts_to.timetuple()) * 1000
+        if observable.snapshot.ts_from and observable.snapshot.ts_to:
+            ts_from = timegm(observable.snapshot.ts_from.timetuple()) * 1000
+            ts_to = timegm(observable.snapshot.ts_to.timetuple()) * 1000
             group = max((ts_from - ts_to) / 500, 5000)  # min 5s; max 500 points
             query_params.update({"group": group, "from": ts_from, "to": ts_to})
-        db_name = self.build_dbname(snapshot.cluster.name, server, bucket, collector)
+        db_name = self.build_dbname(observable.snapshot.cluster.name,
+                                    observable.server, observable.bucket,
+                                    observable.collector)
         if db_name in self.all_dbs:
             try:
-                return self.db[db_name].query(query_params)
+                raw_data = self.db[db_name].query(query_params)
+                return {k: v[0] for k, v in raw_data.items()}
             except seriesly.exceptions.ConnectionError:
                 return
         else:
             return
+
+
+class Plotter(object):
+
+    """Plotter helper that reads data from seriesly database and generates
+    handy charts with url/filesystem meta information."""
+
+    def __init__(self):
+        self.urls = list()  # The only thing that caller (view) needs
+
+        self.seriesly = SerieslyHandler()
+        self.eventlet_pool = GreenPool()  # for seriesly requests
+        self.mp_pool = Pool(cpu_count())  # for plotting
+
+    def __del__(self):
+        self.mp_pool.close()
 
     def generate_png_meta(self, snapshot, cluster, server, bucket, metric):
         """Generate output filenames and URLs based on object attributes."""
@@ -233,7 +243,6 @@ class Plotter(object):
 
     def get_series(self, metric, data):
         """Convert raw data to Pandas time series."""
-        data = {k: v[0] for k, v in data.iteritems()}
         series = pd.Series(data)
         series.dropna()  # otherwise it may break kde
         if metric in constants.NON_ZERO_VALUES and (series == 0).all():
@@ -243,18 +252,14 @@ class Plotter(object):
         series.rename(lambda x: x / 1000, inplace=True)  # ms -> s
         return series
 
-    def extract(self, observables):
+    def extract(self, observables, skip_df=False):
         """Top-level abstraction for data and metadata extraction."""
         merge = defaultdict(list)
         colors = Colors()
         for observable in observables:
             color = colors.next()
             if observable:
-                data = self.query_data(observable.snapshot,
-                                       observable.server,
-                                       observable.bucket,
-                                       observable.name,
-                                       observable.collector)
+                data = self.seriesly.query_data(observable)
                 if data:
                     series = self.get_series(metric=observable.name, data=data)
                     if series is not None:
@@ -281,7 +286,7 @@ class Plotter(object):
         progress characteristic."""
         rebalances = []
         if observables[0] and observables[0].name == "rebalance_progress":
-            series, _, _, _, _, _ = self.extract(observables)
+            series, _, _, _, _, _ = self.extract(observables, skip_df=True)
             for s in series:
                 s = s.dropna()
                 if (s == 0).all():
