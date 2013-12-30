@@ -9,6 +9,7 @@ from django.views.decorators.cache import cache_page
 
 from cbmonitor import forms
 from cbmonitor import models
+from cbmonitor.analyzer import Analyzer
 from cbmonitor.plotter import Plotter
 
 logger = logging.getLogger(__name__)
@@ -188,4 +189,12 @@ def get_snapshots(request):
     snapshots = [snapshot["name"] for snapshot in snapshots]
     snapshots.insert(0, "all_data")
     content = json.dumps(snapshots)
+    return HttpResponse(content)
+
+
+def get_corr_matrix(request):
+    snapshots = parse_snapshots(request)
+    analyzer = Analyzer()
+    columns, corr_matrix = analyzer.corr(snapshots)
+    content = json.dumps({"columns": columns, "matrix": corr_matrix})
     return HttpResponse(content)

@@ -6,6 +6,7 @@ from datetime import datetime
 from uuid import uuid4
 from random import randint, choice
 
+import numpy as np
 import pytz
 from calendar import timegm
 from django.test import TestCase, Client
@@ -486,3 +487,18 @@ class ApiTest(TestHelper):
         request = self.factory.get("/reports/html/", params)
         response = views.html_report(request)
         self.assertEqual(response.status_code, 400)
+
+    @Verifier.valid_json
+    @patch("seriesly.core.Database.query", autospec=True)
+    @patch("seriesly.core.Seriesly.list_dbs", autospec=True)
+    def test_get_corr_matrix(self, list_dbs_mock, query_mock):
+        query_mock.return_value = {1: [2]}
+        list_dbs_mock.return_value = ["ns_serverEastdefault"]
+
+        params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
+        request = self.factory.get("/get_corr_matrix/", params)
+        self.response = views.get_corr_matrix(request)
+
+        expected = {"columns": ["[default] disk_write_queue"],
+                    "matrix": [[np.nan]]}
+        self.assertEqual(self.response.content, json.dumps(expected))
