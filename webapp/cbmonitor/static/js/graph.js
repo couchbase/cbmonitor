@@ -20,7 +20,9 @@ CBMONITOR.GraphManager.prototype.PlotLineWithFocus = function(data) {
         series_data = dataHandler.prepareSeries(this.metrics[this.container]),
         container = "#" + this.container + " svg";
 
-    var format = d3.time.format("%H:%M:%S");
+    var format = function(d) {
+        return d3.time.format("%H:%M:%S")(new Date(d));
+    };
 
     nv.addGraph(function() {
         var chart = nv.models.lineWithFocusChart().tooltips(false).forceY([0]);
@@ -52,7 +54,9 @@ CBMONITOR.GraphManager.prototype.PlotLine = function(data) {
         series_data = dataHandler.prepareSeries(this.metrics[this.container]),
         container = "#" + this.container + " svg";
 
-    var format = d3.time.format("%H:%M:%S");
+    var format = function(d) {
+        return d3.time.format("%H:%M:%S")(new Date(d));
+    };
 
     nv.addGraph(function() {
         var chart = nv.models.lineChart().forceY([0]);
