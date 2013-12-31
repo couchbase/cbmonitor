@@ -192,6 +192,7 @@ def get_snapshots(request):
     return HttpResponse(content)
 
 
+@cache_page()
 def get_corr_matrix(request):
     snapshots = parse_snapshots(request)
     analyzer = Analyzer()
