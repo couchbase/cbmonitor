@@ -1,5 +1,5 @@
 /*jshint jquery: true, browser: true*/
-/*global d3: true*/
+/*global d3: true, Spinner: true*/
 
 function drawBase(actualSize) {
     "use strict";
@@ -9,7 +9,10 @@ function drawBase(actualSize) {
     });
 
     d3.select("svg").append("rect").attr({
-        height: actualSize, width: actualSize, fill: "#51a351"
+        height: actualSize,
+        width: actualSize,
+        fill: "#51a351",
+        stroke: 'white'
     });
 }
 
@@ -32,23 +35,7 @@ function drawRectangles(matrix, columns, rectSize, actualSize) {
         .append('g').selectAll('rect')
             .data(function(d) { return d; })
             .enter()
-            .append('rect').attr({
-                x: function(corr, i) {
-                    return scaleLinear(i + 0.5) - 0.5 * scaleSqrt(Math.abs(corr));
-                },
-                y: function(corr, i, j) {
-                    return scaleLinear(j + 0.5) - 0.5 * scaleSqrt(Math.abs(corr));
-                },
-                fill: function(corr) {
-                    return (corr > 0)? "white" : "#f89406";
-                },
-                height: function(corr) {
-                    return scaleSqrt(Math.abs(corr));
-                },
-                width: function(corr) {
-                    return scaleSqrt(Math.abs(corr));
-                }
-            })
+            .append('rect')
             .on("mouseover", function(d, i, j) {
                 var xPos = cursorOffset + rectSize * (i + 1) - actualSize / 2;
                 var yPos = cursorOffset + rectSize * (j + 1);
@@ -68,8 +55,51 @@ function drawRectangles(matrix, columns, rectSize, actualSize) {
             })
             .on("mouseout", function() {
                 d3.select("#tooltip").classed("hidden", true);
+            })
+            .transition()
+            .duration(1000)
+            .ease('linear')
+            .each('start', function() {
+                d3.select(this).attr({
+                    fill: '#51a351',
+                    height: 0,
+                    width: 0
+                });
+            })
+            .attr({
+                x: function(corr, i) {
+                    return scaleLinear(i + 0.5) - 0.5 * scaleSqrt(Math.abs(corr));
+                },
+                y: function(corr, i, j) {
+                    return scaleLinear(j + 0.5) - 0.5 * scaleSqrt(Math.abs(corr));
+                },
+                fill: function(corr) {
+                    return (corr > 0)? "white" : "#f89406";
+                },
+                height: function(corr) {
+                    return scaleSqrt(Math.abs(corr));
+                },
+                width: function(corr) {
+                    return scaleSqrt(Math.abs(corr));
+                }
             });
 
+}
+
+function startSpinner(maxSize) {
+    "use strict";
+
+    var spinner = new Spinner({
+        lines: 7,
+        length: 5,
+        width: 10,
+        radius: 30,
+        corners: 0.5,
+        color: 'white',
+        top: maxSize / 2 - 100
+    }).spin(document.getElementById('spinner'));
+
+    return spinner;
 }
 
 $(document).ready(function(){
@@ -77,10 +107,13 @@ $(document).ready(function(){
 
     var maxSize = screen.availHeight * 0.95;
 
+    var spinner = startSpinner(maxSize);
+
     var snapshot = $("meta[property='snapshot']")[0].getAttribute("value"),
         url = "/reports/get_corr_matrix/?snapshot=" + snapshot;
 
     d3.xhr(url, "json", function(xhr) {
+        spinner.stop();
         var data = JSON.parse(xhr.response),
             matrix = data.matrix,
             columns = data.columns,
