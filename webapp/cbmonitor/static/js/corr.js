@@ -75,7 +75,7 @@ function drawRectangles(matrix, columns, rectSize, actualSize) {
 $(document).ready(function(){
     "use strict";
 
-    var maxSize = 650;
+    var maxSize = screen.availHeight * 0.95;
 
     var snapshot = $("meta[property='snapshot']")[0].getAttribute("value"),
         url = "/reports/get_corr_matrix/?snapshot=" + snapshot;
