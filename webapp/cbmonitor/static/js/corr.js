@@ -17,7 +17,9 @@ function drawRectangles(matrix, columns, rectSize, actualSize) {
     "use strict";
 
     var cursorOffset = 10,
-        scaleSqrt = d3.scale.sqrt()
+        digitsAfterPoint = 4;
+
+    var scaleSqrt = d3.scale.sqrt()
                             .domain([0, 1])
                             .range([0, rectSize]),
         scaleLinear = d3.scale.linear()
@@ -37,8 +39,8 @@ function drawRectangles(matrix, columns, rectSize, actualSize) {
                 y: function(corr, i, j) {
                     return scaleLinear(j + 0.5) - 0.5 * scaleSqrt(Math.abs(corr));
                 },
-                fill: function(d, i, j) {
-                    return (d > 0)? "white" : "#f89406";
+                fill: function(corr) {
+                    return (corr > 0)? "white" : "#f89406";
                 },
                 height: function(corr) {
                     return scaleSqrt(Math.abs(corr));
@@ -55,7 +57,7 @@ function drawRectangles(matrix, columns, rectSize, actualSize) {
                     .style("left", xPos + "px")
                     .style("top", yPos + "px")
                     .select("#corr")
-                    .text(d.toFixed(4));
+                    .text(d.toFixed(digitsAfterPoint));
                 d3.select("#tooltip")
                     .select("#x")
                     .text(columns[i]);
