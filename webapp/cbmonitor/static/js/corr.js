@@ -13,7 +13,7 @@ function drawBase(shape) {
     });
 
     d3.select("svg").append("rect").attr({
-        height: actualSize, width: actualSize, fill: "#808080"
+        height: actualSize, width: actualSize, fill: "#51a351"
     });
 
     return rectSize;
@@ -49,7 +49,7 @@ $(document).ready(function(){
                         return rectSize * (j + 0.5 * (1 - weight));
                     },
                     fill: function(d, i, j) {
-                        return (d > 0)? "white" : "black";
+                        return (d > 0)? "white" : "#f89406";
                     },
                     height: function(corr) {
                         return Math.sqrt(Math.abs(corr)) * rectSize;
@@ -57,6 +57,26 @@ $(document).ready(function(){
                     width: function(corr) {
                         return Math.sqrt(Math.abs(corr)) * rectSize;
                     }
+                })
+                .on("mouseover", function(d, i, j) {
+                    var xPosition = rectSize * (i + 1) - 310;
+                    var yPosition = rectSize * (j + 1) + 10;
+
+                    d3.select("#tooltip")
+                        .style("left", xPosition + "px")
+                        .style("top", yPosition + "px")
+                        .select("#corr")
+                        .text(d.toFixed(4));
+                    d3.select("#tooltip")
+                        .select("#x")
+                        .text(columns[i]);
+                    d3.select("#tooltip")
+                        .select("#y")
+                        .text(columns[j]);
+                    d3.select("#tooltip").classed("hidden", false);
+                })
+                .on("mouseout", function() {
+                    d3.select("#tooltip").classed("hidden", true);
                 });
     });
 });

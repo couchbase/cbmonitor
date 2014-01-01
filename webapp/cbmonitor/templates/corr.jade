@@ -9,4 +9,13 @@ html(lang="en")
         script(src='/static/js/vendor/d3.v3-3.3.13.min.js')
         script(src='/static/js/corr.js')
     body
-       div#chart
+        div#chart
+            div#tooltip.hidden
+                p
+                    strong
+                        span#x
+                p
+                    strong
+                        span#y
+                p
+                    span#corr
