@@ -496,7 +496,7 @@ class ApiTest(TestHelper):
         list_dbs_mock.return_value = ["ns_serverEastdefault"]
 
         params = {"snapshot": "run-1_access-phase_vperf-reb_2.0.0-1976"}
-        request = self.factory.get("/get_corr_matrix/", params)
+        request = self.factory.get("/reports/get_corr_matrix/", params)
         self.response = views.get_corr_matrix(request)
 
         expected = {"columns": ["[default] disk_write_queue"],

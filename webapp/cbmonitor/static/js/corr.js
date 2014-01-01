@@ -23,7 +23,7 @@ $(document).ready(function(){
     "use strict";
 
     var snapshot = $("meta[property='snapshot']")[0].getAttribute("value"),
-        url = "/cbmonitor/get_corr_matrix/?snapshot=" + snapshot;
+        url = "/reports/get_corr_matrix/?snapshot=" + snapshot;
 
     d3.xhr(url, "json", function(xhr) {
         var data = JSON.parse(xhr.response),

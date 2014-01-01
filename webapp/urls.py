@@ -23,7 +23,6 @@ def restful_dispatcher(request, path):
         "add_metric": views.add_metric,
         "add_snapshot": views.add_snapshot,
         "get_snapshots": views.get_snapshots,
-        "get_corr_matrix": views.get_corr_matrix,
     }.get(path)
     if handler:
         return handler(request)
@@ -34,6 +33,7 @@ urlpatterns = patterns(
     "",
     url(r"^$", "cbmonitor.views.index"),
     url(r"^favicon\.ico$", RedirectView.as_view(url="/static/favicon.ico")),
+    url(r"^reports/get_corr_matrix/", "cbmonitor.views.get_corr_matrix"),
     url(r"^reports/corr/", "cbmonitor.views.corr_matrix"),
     url(r"^reports/html/", "cbmonitor.views.html_report"),
     url(r"^cbmonitor/(?P<path>[a-z_]+)/$", restful_dispatcher),
