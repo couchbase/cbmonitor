@@ -32,6 +32,12 @@ $(document).ready(function(){
             shape = matrix.length;
 
         var rectSize = drawBase(shape);
+        var scaleSqrt = d3.scale.sqrt()
+                                .domain([0, 1])
+                                .range([0, rectSize]);
+        var scaleLinear = d3.scale.linear()
+                                  .domain([0, 1])
+                                  .range([0, rectSize]);
 
         d3.select("svg").selectAll('g')
             .data(matrix)
@@ -40,22 +46,20 @@ $(document).ready(function(){
                 .data(function(d) { return d; })
                 .enter()
                 .append('rect').attr({
-                    x: function(corr, i, j) {
-                        var weight = Math.sqrt(Math.abs(corr));
-                        return rectSize * (i + 0.5 * (1 - weight));
+                    x: function(corr, i) {
+                        return scaleLinear(i + 0.5) - 0.5 * scaleSqrt(Math.abs(corr));
                     },
                     y: function(corr, i, j) {
-                        var weight = Math.sqrt(Math.abs(corr));
-                        return rectSize * (j + 0.5 * (1 - weight));
+                        return scaleLinear(j + 0.5) - 0.5 * scaleSqrt(Math.abs(corr));
                     },
                     fill: function(d, i, j) {
                         return (d > 0)? "white" : "#f89406";
                     },
                     height: function(corr) {
-                        return Math.sqrt(Math.abs(corr)) * rectSize;
+                        return scaleSqrt(Math.abs(corr));
                     },
                     width: function(corr) {
-                        return Math.sqrt(Math.abs(corr)) * rectSize;
+                        return scaleSqrt(Math.abs(corr));
                     }
                 })
                 .on("mouseover", function(d, i, j) {
