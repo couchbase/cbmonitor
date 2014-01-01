@@ -20,6 +20,12 @@ def index(request):
     return render_to_response("interactive.jade")
 
 
+def corr_matrix(request):
+    """Interactive correlation matrix"""
+    snapshot = request.GET.get("snapshot")
+    return render_to_response("corr.jade", {"snapshot": snapshot})
+
+
 @cache_page()
 def html_report(request):
     """Static HTML reports with PNG charts"""

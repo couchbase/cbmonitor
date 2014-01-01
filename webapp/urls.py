@@ -34,6 +34,7 @@ urlpatterns = patterns(
     "",
     url(r"^$", "cbmonitor.views.index"),
     url(r"^favicon\.ico$", RedirectView.as_view(url="/static/favicon.ico")),
+    url(r"^reports/corr/", "cbmonitor.views.corr_matrix"),
     url(r"^reports/html/", "cbmonitor.views.html_report"),
     url(r"^cbmonitor/(?P<path>[a-z_]+)/$", restful_dispatcher),
     url(r"^seriesly/(?P<url>.*)$", "httpproxy.views.proxy"),
