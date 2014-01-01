@@ -41,4 +41,4 @@ class Analyzer(object):
     def corr(self, snapshots):
         observables = Report(snapshots)()
         df = self.create_data_frame(observables)
-        return df.columns.values.tolist(), df.corr().values.tolist()
+        return df.columns.values.tolist(), df.corr().fillna(0).values.tolist()

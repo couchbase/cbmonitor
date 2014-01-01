@@ -6,7 +6,6 @@ from datetime import datetime
 from uuid import uuid4
 from random import randint, choice
 
-import numpy as np
 import pytz
 from calendar import timegm
 from django.test import TestCase, Client
@@ -500,5 +499,5 @@ class ApiTest(TestHelper):
         self.response = views.get_corr_matrix(request)
 
         expected = {"columns": ["[default] disk_write_queue"],
-                    "matrix": [[np.nan]]}
+                    "matrix": [[0.0]]}
         self.assertEqual(self.response.content, json.dumps(expected))
