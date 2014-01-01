@@ -28,6 +28,7 @@ class Analyzer(object):
                         s = pd.Series(raw_data)
                         if observable.name in NON_ZERO_VALUES and (s == 0).all():
                             continue
+                        s = pd.rolling_median(s, window=5)
                         title = self.generate_title(observable)
                         yield title, s
 
