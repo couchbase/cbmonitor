@@ -185,22 +185,26 @@ class Plotter(object):
     def __del__(self):
         self.mp_pool.close()
 
-    def generate_png_meta(self, snapshot, cluster, server, bucket, metric):
-        """Generate output filenames and URLs based on object attributes."""
-        metric = metric.replace("/", "_")
-        title = "{}] {}".format(bucket, metric)  # [server bucket] metric
-        if server:
-            title = "[{} {}".format(server, title)
+    @staticmethod
+    def generate_title(observable):
+        """[server/bucket] metric"""
+        metric = observable.name.replace("/", "_")
+        if observable.bucket:
+            return "[{}] {}".format(observable.bucket, metric)
+        elif observable.server:
+            return "[{}] {}".format(observable.server, metric)
         else:
-            title = "[" + title
+            return metric
 
+    def generate_png_meta(self, snapshot, cluster, title):
+        """Generate output filenames and URLs based on object attributes."""
         filename = "".join((snapshot, cluster, title))
         filename = re.sub(r"[\[\]/\\:\*\?\"<>\|& ]", "", filename)
         filename += "{suffix}.png"
 
         media_url = settings.MEDIA_URL + filename
         media_path = os.path.join(settings.MEDIA_ROOT, filename)
-        return title, media_url, media_path
+        return media_url, media_path
 
     def get_series(self, metric, data):
         """Convert raw data to Pandas time series."""
@@ -216,6 +220,7 @@ class Plotter(object):
     def extract(self, observables, skip_df=False):
         """Top-level abstraction for data and metadata extraction."""
         merge = defaultdict(list)
+        title = ""
         colors = Colors()
         for observable in observables:
             color = colors.next()
@@ -227,18 +232,13 @@ class Plotter(object):
                         merge["series"].append(series)
                         merge["labels"].append(observable.snapshot.name)
                         merge["colors"].append(color)
+                        merge["clusters"].append(observable.snapshot.cluster.name)
+                        merge["snapshots"].append(observable.snapshot.name)
+                        title = self.generate_title(observable)
 
-                        merge["cluster"].append(observable.snapshot.cluster.name)
-                        merge["snapshot"].append(observable.snapshot.name)
-                        merge["server"] = observable.server
-                        merge["bucket"] = observable.bucket
-                        merge["name"] = observable.name
-
-        title, url, fname = self.generate_png_meta("".join(merge["snapshot"]),
-                                                   "".join(merge["cluster"]),
-                                                   merge.get("server", ""),
-                                                   merge.get("bucket", ""),
-                                                   merge.get("name", ""))
+        url, fname = self.generate_png_meta("".join(merge["snapshots"]),
+                                            "".join(merge["clusters"]),
+                                            title)
 
         return merge["series"], merge["labels"], merge["colors"], title, fname, url
 

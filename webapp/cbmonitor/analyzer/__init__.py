@@ -1,6 +1,7 @@
 import pandas as pd
 
 from cbmonitor.helpers import SerieslyHandler
+from cbmonitor.plotter import Plotter
 from cbmonitor.plotter.constants import NON_ZERO_VALUES
 from cbmonitor.plotter.reports import Report
 
@@ -9,15 +10,6 @@ class Analyzer(object):
 
     def __init__(self):
         self.seriesly = SerieslyHandler()
-
-    def generate_title(self, observable):
-        metric = observable.name.replace("/", "_")
-        title = "{}] {}".format(observable.bucket, metric)
-        if observable.server:
-            title = "[{} {}".format(observable.server, title)
-        else:
-            title = "[" + title
-        return title
 
     def get_time_series(self, observables):
         for ol in observables:
@@ -29,7 +21,7 @@ class Analyzer(object):
                         if observable.name in NON_ZERO_VALUES and (s == 0).all():
                             continue
                         s = pd.rolling_median(s, window=5)
-                        title = self.generate_title(observable)
+                        title = Plotter.generate_title(observable)
                         yield title, s
 
     def create_data_frame(self, observables):
