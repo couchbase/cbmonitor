@@ -2,7 +2,6 @@ import pandas as pd
 
 from cbmonitor.helpers import SerieslyHandler
 from cbmonitor.plotter import Plotter
-from cbmonitor.plotter.constants import NON_ZERO_VALUES
 from cbmonitor.plotter.reports import Report
 
 
@@ -18,7 +17,7 @@ class Analyzer(object):
                     raw_data = self.seriesly.query_data(observable)
                     if raw_data:
                         s = pd.Series(raw_data)
-                        if observable.name in NON_ZERO_VALUES and (s == 0).all():
+                        if len(s.unique()) == 1:
                             continue
                         s = pd.rolling_median(s, window=5)
                         title = Plotter.generate_title(observable)

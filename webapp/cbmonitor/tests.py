@@ -502,6 +502,5 @@ class ApiTest(TestHelper):
         request = self.factory.get("/reports/get_corr_matrix/", params)
         self.response = views.get_corr_matrix(request)
 
-        expected = {"columns": ["[default] disk_write_queue"],
-                    "matrix": [[0.0]]}
+        expected = {"columns": [], "matrix": []}
         self.assertEqual(self.response.content, json.dumps(expected))
