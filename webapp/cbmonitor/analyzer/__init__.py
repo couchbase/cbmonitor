@@ -19,7 +19,7 @@ class Analyzer(object):
                         s = pd.Series(raw_data)
                         if len(s.unique()) == 1:
                             continue
-                        s = pd.rolling_median(s, window=5)
+                        s = pd.rolling_median(s, window=3)
                         title = Plotter.generate_title(observable)
                         yield title, s
 
