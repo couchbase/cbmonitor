@@ -107,6 +107,7 @@ NON_ZERO_VALUES = (
     "couch_views_data_size",
     "couch_views_actual_disk_size",
     "couch_views_fragmentation",
+    "couch_docs_fragmentation",
 
     "hibernated_waked",
 
