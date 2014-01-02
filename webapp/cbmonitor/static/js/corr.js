@@ -22,12 +22,9 @@ function drawRectangles(matrix, columns, rectSize, actualSize) {
     var cursorOffset = 10,
         digitsAfterPoint = 4;
 
-    var scaleSqrt = d3.scale.sqrt()
-                            .domain([0, 1])
-                            .range([0, rectSize]),
-        scaleLinear = d3.scale.linear()
-                              .domain([0, 1])
-                              .range([0, rectSize]);
+    var scale = d3.scale.linear()
+                        .domain([0, 1])
+                        .range([0, rectSize]);
 
     d3.select("svg").selectAll('g')
         .data(matrix)
@@ -68,19 +65,19 @@ function drawRectangles(matrix, columns, rectSize, actualSize) {
             })
             .attr({
                 x: function(corr, i) {
-                    return scaleLinear(i + 0.5) - 0.5 * scaleSqrt(Math.abs(corr));
+                    return scale(i + 0.5 * (1 - Math.abs(corr)));
                 },
                 y: function(corr, i, j) {
-                    return scaleLinear(j + 0.5) - 0.5 * scaleSqrt(Math.abs(corr));
+                    return scale(j + 0.5 * (1 - Math.abs(corr)));
                 },
                 fill: function(corr) {
                     return (corr > 0)? "white" : "#f89406";
                 },
                 height: function(corr) {
-                    return scaleSqrt(Math.abs(corr));
+                    return scale(Math.abs(corr));
                 },
                 width: function(corr) {
-                    return scaleSqrt(Math.abs(corr));
+                    return scale(Math.abs(corr));
                 }
             });
 
