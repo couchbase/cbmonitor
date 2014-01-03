@@ -20,6 +20,11 @@ def index(request):
     return render_to_response("interactive.jade")
 
 
+def insight(request):
+    """Insight UI"""
+    return render_to_response("insight.jade")
+
+
 def corr_matrix(request):
     """Interactive correlation matrix"""
     snapshot = request.GET.get("snapshot")

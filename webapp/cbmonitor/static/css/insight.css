@@ -1,0 +1,31 @@
+#main {
+    margin: 0 auto;
+    width: 1250px;
+    height: 600px;
+}
+
+.selector {
+    width: 900px;
+    position: absolute;
+    height: 28px;
+    text-overflow: ellipsis;
+    padding-top: 2px;
+}
+
+#chart {
+    width: 900px;
+    height: 550px;
+}
+
+#ordinate {
+    height: 30px;
+    width: 900px;
+}
+
+#inputs {
+    position: relative;
+    width: 330px;
+    height: 550px;
+    top: -552px;
+    left: 910px;
+}
