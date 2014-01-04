@@ -245,7 +245,9 @@ def get_insight_options(request):
 def get_insight_data(request):
     insight = request.GET["insight"]
     abscissa = request.GET["abscissa"]
-    inputs = json.loads(request.GET.get("inputs"))
+    inputs = json.loads(request.GET["inputs"])
+    inputs.pop(abscissa)
+
     cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
 
     data = {}

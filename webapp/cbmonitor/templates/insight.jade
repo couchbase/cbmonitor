@@ -5,6 +5,7 @@ html(lang="en")
         link(rel="stylesheet", href="/static/css/vendor/bootstrap.css")
         link(rel="stylesheet", href="/static/css/main.css")
         link(rel="stylesheet", href="/static/css/insight.css")
+        script(src="/static/js/vendor/jquery-1.9.1.min.js")
         script(src='/static/js/vendor/bootstrap.min.js')
         script(src='/static/js/vendor/angular-1.2.7.min.js')
         script(src='/static/js/insight.js')
@@ -15,12 +16,14 @@ html(lang="en")
 
         div#main(ng-app="insight", ng-controller="Insights")
             div#ordinate
-                select#ordinate.selector()
-                    option(ng-repeat="insight in insights") [[insight.name]]
+                select#ordinate.selector(ng-model="selectedInsight",
+                                         ng-options="insight.name for insight in insights",
+                                         ng-change="getOptions()")
             div#chart
             div#inputs
                 div(ng-repeat="input in inputs")
                     span [[input.title]]
-                    select.input_selector
-                        option(ng-repeat="option in input.options") [[option]]
-                    br
+                    select.input_selector(ng-model="currentOptions[input.title]",
+                                          ng-options="option for option in input.options",
+                                          ng-init="currentOptions[input.title] = input.options[0]",
+                                          ng-change="updateData(input.title, currentOptions[input.title], this)")
