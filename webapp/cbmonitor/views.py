@@ -235,8 +235,24 @@ def get_insight_options(request):
     for _input, values in data.items():
         options.append({
             "title": _input,
-            "options": list(values) + ["Use as abscissa", "Vary by"],
+            "options": list(values) + ["Use as abscissa"],
         })
 
     content = json.dumps(options)
+    return HttpResponse(content)
+
+
+def get_insight_data(request):
+    insight = request.GET["insight"]
+    abscissa = request.GET["abscissa"]
+    inputs = json.loads(request.GET.get("inputs"))
+    cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
+
+    data = {}
+    for row in cb.query("experiments", "experiments_by_name", key=insight):
+        row_inputs = row.value["inputs"]
+        if dict(row_inputs, **inputs) == row.value["inputs"]:
+            data[row_inputs[abscissa]] = row.value["value"]
+
+    content = json.dumps(data)
     return HttpResponse(content)

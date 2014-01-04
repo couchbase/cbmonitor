@@ -25,6 +25,7 @@ def restful_dispatcher(request, path):
         "get_snapshots": views.get_snapshots,
         "get_insight_defaults": views.get_insight_defaults,
         "get_insight_options": views.get_insight_options,
+        "get_insight_data": views.get_insight_data,
     }.get(path)
     if handler:
         return handler(request)
