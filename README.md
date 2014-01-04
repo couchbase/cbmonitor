@@ -10,6 +10,7 @@ Prerequisites
 
 * Python 2.7
 * virtualenv
+* libcouchbase
 * [seriesly](https://github.com/dustin/seriesly)
 
 Initial setup

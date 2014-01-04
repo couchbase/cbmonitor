@@ -23,6 +23,8 @@ def restful_dispatcher(request, path):
         "add_metric": views.add_metric,
         "add_snapshot": views.add_snapshot,
         "get_snapshots": views.get_snapshots,
+        "get_insight_defaults": views.get_insight_defaults,
+        "get_insight_options": views.get_insight_options,
     }.get(path)
     if handler:
         return handler(request)

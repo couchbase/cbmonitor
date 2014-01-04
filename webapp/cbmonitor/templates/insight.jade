@@ -6,13 +6,21 @@ html(lang="en")
         link(rel="stylesheet", href="/static/css/main.css")
         link(rel="stylesheet", href="/static/css/insight.css")
         script(src='/static/js/vendor/bootstrap.min.js')
+        script(src='/static/js/vendor/angular-1.2.7.min.js')
+        script(src='/static/js/insight.js')
     body
         div.navbar
             div.navbar-inner
                 div.brand Insight
 
-        div#main
+        div#main(ng-app="insight", ng-controller="Insights")
             div#ordinate
-                select#ordinate.selector(name="ordinate")
+                select#ordinate.selector()
+                    option(ng-repeat="insight in insights") [[insight.name]]
             div#chart
             div#inputs
+                div(ng-repeat="input in inputs")
+                    span [[input.title]]
+                    select.input_selector
+                        option(ng-repeat="option in input.options") [[option]]
+                    br

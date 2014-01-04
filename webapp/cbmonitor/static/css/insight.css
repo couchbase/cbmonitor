@@ -12,6 +12,13 @@
     padding-top: 2px;
 }
 
+.input_selector {
+    width: 340px;
+    height: 28px;
+    text-overflow: ellipsis;
+    padding-top: 2px;
+}
+
 #chart {
     width: 900px;
     height: 550px;

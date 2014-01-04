@@ -1,6 +1,9 @@
 import json
 import logging
+from collections import defaultdict
 
+from couchbase import Couchbase
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, Http404
@@ -209,4 +212,31 @@ def get_corr_matrix(request):
     analyzer = Analyzer()
     columns, corr_matrix = analyzer.corr(snapshots)
     content = json.dumps({"columns": columns, "matrix": corr_matrix})
+    return HttpResponse(content)
+
+
+def get_insight_defaults(request):
+    cb = Couchbase.connect(bucket="exp_defaults", **settings.COUCHBASE_SERVER)
+    defaults = [row.value for row in cb.query("exp_defaults", "all")]
+    content = json.dumps(defaults)
+    return HttpResponse(content)
+
+
+def get_insight_options(request):
+    insight = request.GET['insight']
+    cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
+
+    data = defaultdict(set)
+    for row in cb.query("experiments", "experiments_by_name", key=insight):
+        for _input, value in row.value["inputs"].items():
+            data[_input].add(value)
+
+    options = []
+    for _input, values in data.items():
+        options.append({
+            "title": _input,
+            "options": list(values) + ["Use as abscissa", "Vary by"],
+        })
+
+    content = json.dumps(options)
     return HttpResponse(content)

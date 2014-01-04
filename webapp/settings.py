@@ -18,6 +18,12 @@ DATABASES = {
     }
 }
 
+COUCHBASE_SERVER = {
+    "host": "127.0.0.1",
+    "port": 8091,
+    "password": "password",
+}
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
