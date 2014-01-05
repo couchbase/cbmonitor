@@ -20,8 +20,9 @@
 }
 
 #chart {
+    margin-top: 2px;
     width: 900px;
-    height: 550px;
+    height: 548px;
 }
 
 #ordinate {
@@ -35,4 +36,15 @@
     height: 550px;
     top: -552px;
     left: 910px;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #cccccc;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 12px;
 }

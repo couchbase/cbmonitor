@@ -250,11 +250,11 @@ def get_insight_data(request):
 
     cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
 
-    data = {}
+    data = []
     for row in cb.query("experiments", "experiments_by_name", key=insight):
         row_inputs = row.value["inputs"]
         if dict(row_inputs, **inputs) == row.value["inputs"]:
-            data[row_inputs[abscissa]] = row.value["value"]
+            data.append((row_inputs[abscissa], row.value["value"]))
 
     content = json.dumps(data)
     return HttpResponse(content)
