@@ -113,6 +113,7 @@ NON_ZERO_VALUES = (
 
     "ep_tmp_oom_errors",
     "disk_write_queue",
+    "ep_diskqueue_drain",
     "ep_cache_miss_rate",
     "ep_num_value_ejects",
     "ep_bg_fetched",
@@ -139,6 +140,15 @@ NON_ZERO_VALUES = (
     "replication_docs_latency_wt",
 
     "bucket_compaction_progress",
+
+    "data_rbps",
+    "data_wbps",
+    "data_avgqusz",
+    "data_util",
+    "index_rbps",
+    "index_wbps",
+    "index_avgqusz",
+    "index_util",
 )
 
 PALETTE = (
