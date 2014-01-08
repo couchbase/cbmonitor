@@ -255,6 +255,7 @@ def get_insight_data(request):
         row_inputs = row.value["inputs"]
         if dict(row_inputs, **inputs) == row.value["inputs"]:
             data.append((row_inputs[abscissa], row.value["value"]))
+    data.sort(key=lambda xy: xy[0])
 
     content = json.dumps(data)
     return HttpResponse(content)
