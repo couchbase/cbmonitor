@@ -10,12 +10,31 @@ angular.module("insight", [])
     }]);
 
 
+var INSIGHT = INSIGHT || {};
+
+INSIGHT.palette = [
+    "#f89406",
+    "#51A351",
+    "#7D1935",
+    "#4A96AD",
+    "#DE1B1B",
+    "#E9E581",
+    "#A2AB58",
+    "#FFE658",
+    "#118C4E",
+    "#193D4F"
+];
+
+INSIGHT.height = 548;
+INSIGHT.width = 900;
+
 function Insights($scope, $http) {
     "use strict";
 
     $scope.getOptions = function() {
         $scope.inputs = [];
         $scope.abscissa = null;
+        $scope.vary_by = null;
         $scope.customInputs = {};
         $scope.currentOptions = {};
 
@@ -33,9 +52,11 @@ function Insights($scope, $http) {
             "abscissa": $scope.abscissa,
             "inputs": JSON.stringify($scope.currentOptions)
         };
+        if ($scope.vary_by !== null ) {
+            params.vary_by = $scope.vary_by;
+        }
         $http({method: "GET", url: "/cbmonitor/get_insight_data/", params: params})
         .success(function(data) {
-            $scope.data = data;
             resetCharts();
             drawScatterPlot(data);
         });
@@ -44,13 +65,24 @@ function Insights($scope, $http) {
     $scope.updateData = function(title, value, option) {
         if (value === "Use as abscissa") {
             if ($scope.abscissa !== null && $scope.abscissa !== title) {
-                $scope.currentOptions[$scope.abscissa] = $scope.resetTo;
+                $scope.currentOptions[$scope.abscissa] = $scope.resetAbscissaTo;
             }
             $scope.abscissa = title;
-            $scope.resetTo = $scope.inputs[option.$index].options[0];
+            $scope.resetAbscissaTo = $scope.inputs[option.$index].options[0];
         } else if ($scope.abscissa === title) {
             $scope.abscissa = null;
         }
+
+        if (value === "Vary by") {
+            if ($scope.vary_by !== null && $scope.vary_by !== title) {
+                $scope.currentOptions[$scope.vary_by] = $scope.resetVaryByTo;
+            }
+            $scope.vary_by = title;
+            $scope.resetVaryByTo = $scope.inputs[option.$index].options[0];
+        } else if ($scope.vary_by === title) {
+            $scope.vary_by = null;
+        }
+
         if ($scope.abscissa !== null) {
             $scope.getData();
         } else {
@@ -66,15 +98,15 @@ function Insights($scope, $http) {
 }
 
 
-function drawBase(height, width) {
+function drawBase() {
     "use strict";
 
     d3.select("#chart").append("svg").attr({
-        height: height, width: width
+        height: INSIGHT.height, width: INSIGHT.width
     });
 
     d3.select("svg").append("rect").attr({
-        height: height, width: width,
+        height: INSIGHT.height, width: INSIGHT.width,
         rx: 5, ry: 5,
         fill: "white",
         stroke: "#cccccc"
@@ -82,18 +114,18 @@ function drawBase(height, width) {
 }
 
 
-function drawDataPoints(circles, xScale, yScale) {
+function drawDataPoints(circles, xScale, yScale, seqid) {
     "use strict";
 
     circles
         .append("circle")
         .on("mouseover", function() {
             d3.select(this).transition().duration(200)
-                .attr({ r: 8 });
+                .attr({ r: 9 });
         })
         .on("mouseout", function() {
             d3.select(this).transition().duration(200)
-                .attr({ r: 5 });
+                .attr({ r: 6 });
         })
         .transition().duration(500).ease("linear").each("start", function() {
             d3.select(this).attr({ fill: "white", stroke: "white" });
@@ -101,7 +133,8 @@ function drawDataPoints(circles, xScale, yScale) {
         .attr({
             cx: function(d) { return xScale(d[0]); },
             cy: function(d) { return yScale(d[1]); },
-            r: 5, stroke: "#f89406", "stroke-width": 3
+            r: 6,
+            stroke: INSIGHT.palette[seqid], "stroke-width": 3, "fill-opacity": 0.0
         });
 }
 
@@ -123,11 +156,10 @@ function drawLines(lines, xScale, yScale) {
 }
 
 
-function drawAxes(xScale, yScale, xTickValues, yTickValues) {
+function drawAxes(xScale, yScale, xTickValues) {
     "use strict";
 
-    var height = 548,
-        smallPadding = 40,
+    var smallPadding = 40,
         largePadding = 70,
         areaPadding = 10;
 
@@ -138,13 +170,13 @@ function drawAxes(xScale, yScale, xTickValues, yTickValues) {
 
     d3.select("svg").append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(0, " + (height - smallPadding + areaPadding) + ")")
+        .attr("transform", "translate(0, " + (INSIGHT.height - smallPadding + areaPadding) + ")")
         .call(xAxis);
 
     var yAxis = d3.svg.axis()
                       .scale(yScale)
                       .orient("left")
-                      .tickValues(yTickValues);
+                      .ticks(5);
     d3.select("svg").append("g")
         .attr("class", "axis")
         .attr("transform", "translate(" + (largePadding - areaPadding) + ", 0)")
@@ -164,45 +196,55 @@ function resetCharts() {
 function drawScatterPlot(data) {
     "use strict";
 
-    var height = 548,
-        width = 900,
-        smallPadding = 40,
+    /******************************** MIN MAX *********************************/
+    var xMin = Number.MAX_VALUE,
+        xMax = Number.MIN_VALUE,
+        yMax = Number.MIN_VALUE;
+
+    Object.keys(data).forEach(function(key) {
+        xMin = Math.min(xMin, d3.min(data[key], function(d) { return d[0]; }));
+        xMax = Math.max(xMax, d3.max(data[key], function(d) { return d[0]; }));
+        yMax = Math.max(yMax, d3.max(data[key], function(d) { return d[1]; }));
+
+    });
+    /********************************* SCALES *********************************/
+    var smallPadding = 40,
         largePadding = 70;
-
-    var xMax = d3.max(data, function(d) { return d[0]; });
-    var xMin = d3.min(data, function(d) { return d[0]; });
-    var yMax = d3.max(data, function(d) { return d[1]; });
-
     var yScale = d3.scale.linear()
                          .domain([0, yMax])
-                         .range([height - smallPadding, smallPadding]);
+                         .range([INSIGHT.height - smallPadding, smallPadding]);
     var xScale = d3.scale.linear()
                          .domain([xMin, xMax])
-                         .range([largePadding, width - smallPadding]);
-
-    var circles = d3.select("svg").selectAll("circle")
-                                  .data(data)
-                                  .enter();
-    drawDataPoints(circles, xScale, yScale);
-
+                         .range([largePadding, INSIGHT.width - smallPadding]);
+    /******************************* BOUNDARIES *******************************/
     var linesXY = [[xMax, yMax, xMax, 0], [xMax, yMax, xMin, yMax]];
     var lines = d3.select("svg").selectAll("line")
                                 .data(linesXY)
                                 .enter();
     drawLines(lines, xScale, yScale);
-
-    var xTickValues = [],
-        yTickValues = [];
-    for (var i=0, l=data.length; i < l; i++) {
-        xTickValues.push(data[i][0]);
-        yTickValues.push(data[i][1]);
-    }
-    drawAxes(xScale, yScale, xTickValues, yTickValues);
+    /****************************** DATA POINTS *******************************/
+    var seqid = 0;
+    var circles = d3.select("svg").selectAll("circle");
+    Object.keys(data).forEach(function(key) {
+        drawDataPoints(circles.data(data[key]).enter(), xScale, yScale, seqid);
+        seqid++;
+    });
+    /***************************** AXES and TICKS *****************************/
+    var xTickValues = [];
+    Object.keys(data).forEach(function(key) {
+        for (var i=0, l=data[key].length; i < l; i++) {
+            if (xTickValues.indexOf(data[key][i][0] === -1)) {
+                xTickValues.push(data[key][i][0]);
+            }
+        }
+    });
+    drawAxes(xScale, yScale, xTickValues);
+    /**************************************************************************/
 }
 
 
 $(document).ready(function(){
     "use strict";
 
-    drawBase(548, 900);
+    drawBase();
 });

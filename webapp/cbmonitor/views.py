@@ -1,6 +1,6 @@
 import json
 import logging
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 from couchbase import Couchbase
 from django.conf import settings
@@ -235,7 +235,7 @@ def get_insight_options(request):
     for _input, values in data.items():
         options.append({
             "title": _input,
-            "options": list(values) + ["Use as abscissa"],
+            "options": list(values) + ["Vary by", "Use as abscissa"],
         })
 
     content = json.dumps(options)
@@ -245,17 +245,23 @@ def get_insight_options(request):
 def get_insight_data(request):
     insight = request.GET["insight"]
     abscissa = request.GET["abscissa"]
+    vary_by = request.GET.get("vary_by")
     inputs = json.loads(request.GET["inputs"])
     inputs.pop(abscissa)
+    if vary_by:
+        inputs.pop(vary_by)
 
     cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
 
-    data = []
+    data = defaultdict(list)
     for row in cb.query("experiments", "experiments_by_name", key=insight):
-        row_inputs = row.value["inputs"]
-        if dict(row_inputs, **inputs) == row.value["inputs"]:
-            data.append((row_inputs[abscissa], row.value["value"]))
-    data.sort(key=lambda xy: xy[0])
+        value = row.value
+        if dict(value["inputs"], **inputs) == value["inputs"]:
+            key = value["inputs"].get(vary_by)
+            data[key].append((value["inputs"][abscissa], value["value"]))
+    for k, v in data.items():
+        v.sort(key=lambda xy: xy[0])
+    data = OrderedDict(sorted(data.items()))
 
     content = json.dumps(data)
     return HttpResponse(content)
