@@ -106,24 +106,7 @@ function drawDataPoints(circles, xScale, yScale) {
 }
 
 
-function drawXLines(lines, xScale, yScale, xMin) {
-    "use strict";
-
-    lines.append("line")
-        .transition().duration(500).ease("linear").each("start", function() {
-            d3.select(this).attr({ stroke: "white" });
-        })
-        .attr({
-            x1: function(d) { return xScale(xMin); },
-            y1: function(d) { return yScale(d[1]); },
-            x2: function(d) { return xScale(d[0]); },
-            y2: function(d) { return yScale(d[1]); },
-            stroke: "#f89406", "stroke-dasharray": "5, 5", "stroke-width": 0.5
-        });
-}
-
-
-function drawYLines(lines, xScale, yScale) {
+function drawLines(lines, xScale, yScale) {
     "use strict";
 
     lines.append("line")
@@ -132,10 +115,10 @@ function drawYLines(lines, xScale, yScale) {
         })
         .attr({
             x1: function(d) { return xScale(d[0]); },
-            y1: function(d) { return yScale(0); },
-            x2: function(d) { return xScale(d[0]); },
-            y2: function(d) { return yScale(d[1]); },
-            stroke: "#f89406", "stroke-dasharray": "5, 5", "stroke-width": 0.5
+            y1: function(d) { return yScale(d[1]); },
+            x2: function(d) { return xScale(d[2]); },
+            y2: function(d) { return yScale(d[3]); },
+            stroke: "#cccccc", "stroke-dasharray": "5, 5", "stroke-width": 1
         });
 }
 
@@ -202,11 +185,11 @@ function drawScatterPlot(data) {
                                   .enter();
     drawDataPoints(circles, xScale, yScale);
 
+    var linesXY = [[xMax, yMax, xMax, 0], [xMax, yMax, xMin, yMax]];
     var lines = d3.select("svg").selectAll("line")
-                                .data(data)
+                                .data(linesXY)
                                 .enter();
-    drawXLines(lines, xScale, yScale, xMin);
-    drawYLines(lines, xScale, yScale);
+    drawLines(lines, xScale, yScale);
 
     var xTickValues = [],
         yTickValues = [];
