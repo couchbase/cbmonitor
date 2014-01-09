@@ -151,7 +151,7 @@ function drawLines(lines, xScale, yScale) {
             y1: function(d) { return yScale(d[1]); },
             x2: function(d) { return xScale(d[2]); },
             y2: function(d) { return yScale(d[3]); },
-            stroke: "#cccccc", "stroke-dasharray": "5, 5", "stroke-width": 1
+            stroke: "#cccccc", "shape-rendering": "crispEdges"
         });
 }
 
@@ -216,8 +216,24 @@ function drawScatterPlot(data) {
     var xScale = d3.scale.linear()
                          .domain([xMin, xMax])
                          .range([largePadding, INSIGHT.width - smallPadding]);
-    /******************************* BOUNDARIES *******************************/
-    var linesXY = [[xMax, yMax, xMax, 0], [xMax, yMax, xMin, yMax]];
+    /********************************** TICKS *********************************/
+    var yTickValues = yScale.ticks(5);
+    var xTickValues = [];
+    Object.keys(data).forEach(function(key) {
+        for (var i=0, l=data[key].length; i < l; i++) {
+            if (xTickValues.indexOf(data[key][i][0] === -1)) {
+                xTickValues.push(data[key][i][0]);
+            }
+        }
+    });
+    /********************************** GRID **********************************/
+    var linesXY = [[xMax, yMax, xMin, yMax]];
+    for (var i=0, l=xTickValues.length; i<l; i++) {
+        linesXY.push([xTickValues[i], 0, xTickValues[i], yMax]);
+    }
+    for (i=0, l=yTickValues.length; i<l; i++) {
+        linesXY.push([xMin, yTickValues[i], xMax, yTickValues[i]]);
+    }
     var lines = d3.select("svg").selectAll("line")
                                 .data(linesXY)
                                 .enter();
@@ -229,15 +245,7 @@ function drawScatterPlot(data) {
         drawDataPoints(circles.data(data[key]).enter(), xScale, yScale, seqid);
         seqid++;
     });
-    /***************************** AXES and TICKS *****************************/
-    var xTickValues = [];
-    Object.keys(data).forEach(function(key) {
-        for (var i=0, l=data[key].length; i < l; i++) {
-            if (xTickValues.indexOf(data[key][i][0] === -1)) {
-                xTickValues.push(data[key][i][0]);
-            }
-        }
-    });
+    /********************************** AXES **********************************/
     drawAxes(xScale, yScale, xTickValues);
     /**************************************************************************/
 }
