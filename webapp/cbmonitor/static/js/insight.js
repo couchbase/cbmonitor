@@ -121,11 +121,11 @@ function drawDataPoints(circles, xScale, yScale, seqid) {
         .append("circle")
         .on("mouseover", function() {
             d3.select(this).transition().duration(200)
-                .attr({ r: 9 });
+                .attr({ r: 7 });
         })
         .on("mouseout", function() {
             d3.select(this).transition().duration(200)
-                .attr({ r: 6 });
+                .attr({ r: 5 });
         })
         .transition().duration(500).ease("linear").each("start", function() {
             d3.select(this).attr({ fill: "white", stroke: "white" });
@@ -133,11 +133,27 @@ function drawDataPoints(circles, xScale, yScale, seqid) {
         .attr({
             cx: function(d) { return xScale(d[0]); },
             cy: function(d) { return yScale(d[1]); },
-            r: 6,
-            stroke: INSIGHT.palette[seqid], "stroke-width": 3, "fill-opacity": 0.0
+            r: 5,
+            stroke: INSIGHT.palette[seqid], "stroke-width": 3
         });
 }
 
+function drawSplines(data, xScale, yScale, seqid) {
+    "use strict";
+
+    var line = d3.svg.line()
+        .x(function(d) { return xScale(d[0]); })
+        .y(function(d) { return yScale(d[1]); })
+        .interpolate("cardinal");
+
+    d3.select("svg")
+        .append("path")
+        .attr({
+            "d": line(data),
+            stroke: INSIGHT.palette[seqid], "stroke-width": 2,
+            "fill-opacity": 0.0
+        });
+}
 
 function drawLines(lines, xScale, yScale) {
     "use strict";
@@ -190,6 +206,7 @@ function resetCharts() {
     d3.selectAll("circle").remove();
     d3.selectAll("line").remove();
     d3.selectAll("g").remove();
+    d3.selectAll("path").remove();
 }
 
 
@@ -242,6 +259,7 @@ function drawScatterPlot(data) {
     var seqid = 0;
     var circles = d3.select("svg").selectAll("circle");
     Object.keys(data).forEach(function(key) {
+        drawSplines(data[key], xScale, yScale, seqid);
         drawDataPoints(circles.data(data[key]).enter(), xScale, yScale, seqid);
         seqid++;
     });
