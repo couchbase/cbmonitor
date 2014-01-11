@@ -10,23 +10,27 @@ angular.module("insight", [])
     }]);
 
 
-var INSIGHT = INSIGHT || {};
+var INSIGHT = {
+    height: 548,
+    width: 900,
+    smallPadding: 40,
+    largePadding: 70,
+    fontHeight: 14,
+    fontWidth: 9,
+    palette: [
+        "#f89406",
+        "#51A351",
+        "#7D1935",
+        "#4A96AD",
+        "#DE1B1B",
+        "#E9E581",
+        "#A2AB58",
+        "#FFE658",
+        "#118C4E",
+        "#193D4F"
+    ]
+};
 
-INSIGHT.palette = [
-    "#f89406",
-    "#51A351",
-    "#7D1935",
-    "#4A96AD",
-    "#DE1B1B",
-    "#E9E581",
-    "#A2AB58",
-    "#FFE658",
-    "#118C4E",
-    "#193D4F"
-];
-
-INSIGHT.height = 548;
-INSIGHT.width = 900;
 
 function Insights($scope, $http) {
     "use strict";
@@ -58,7 +62,7 @@ function Insights($scope, $http) {
         $http({method: "GET", url: "/cbmonitor/get_insight_data/", params: params})
         .success(function(data) {
             resetCharts();
-            drawScatterPlot(data);
+            drawScatterPlot(data, $scope.vary_by);
         });
     };
 
@@ -138,6 +142,7 @@ function drawDataPoints(circles, xScale, yScale, seqid) {
         });
 }
 
+
 function drawSplines(data, xScale, yScale, seqid) {
     "use strict";
 
@@ -154,6 +159,7 @@ function drawSplines(data, xScale, yScale, seqid) {
             "fill-opacity": 0.0
         });
 }
+
 
 function drawLines(lines, xScale, yScale) {
     "use strict";
@@ -175,9 +181,7 @@ function drawLines(lines, xScale, yScale) {
 function drawAxes(xScale, yScale, xTickValues) {
     "use strict";
 
-    var smallPadding = 40,
-        largePadding = 70,
-        areaPadding = 10;
+    var areaPadding = 10;
 
     var xAxis = d3.svg.axis()
                       .scale(xScale)
@@ -186,7 +190,7 @@ function drawAxes(xScale, yScale, xTickValues) {
 
     d3.select("svg").append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(0, " + (INSIGHT.height - smallPadding + areaPadding) + ")")
+        .attr("transform", "translate(0, " + (INSIGHT.height - INSIGHT.smallPadding + areaPadding) + ")")
         .call(xAxis);
 
     var yAxis = d3.svg.axis()
@@ -195,8 +199,44 @@ function drawAxes(xScale, yScale, xTickValues) {
                       .ticks(5);
     d3.select("svg").append("g")
         .attr("class", "axis")
-        .attr("transform", "translate(" + (largePadding - areaPadding) + ", 0)")
+        .attr("transform", "translate(" + (INSIGHT.largePadding - areaPadding) + ", 0)")
         .call(yAxis);
+}
+
+
+function drawLegendTitle(title, width) {
+    "use strict";
+
+    d3.select("svg").append("text")
+        .transition().duration(500).ease("linear").each("start", function() {
+            d3.select(this).attr({ fill: "white" });
+        })
+        .text(title + ":")
+        .attr({
+            x: INSIGHT.largePadding + 5,
+            y: (INSIGHT.smallPadding + INSIGHT.fontHeight) / 2,
+            "font-size": INSIGHT.fontHeight,
+            fill: "black"
+        });
+
+}
+
+
+function drawLegend(legend, legendPadding, legendInterval) {
+    "use strict";
+
+    legend.append("text")
+        .transition().duration(500).ease("linear").each("start", function() {
+            d3.select(this).attr({ fill: "white" });
+        })
+        .text(function(d) { return d; })
+        .attr({
+            x: function(d, i) { return INSIGHT.largePadding + legendPadding + i * legendInterval; },
+            y: (INSIGHT.smallPadding + INSIGHT.fontHeight) / 2,
+            "font-size": INSIGHT.fontHeight,
+            "font-weight": "bold",
+            fill: function(d, i) { return INSIGHT.palette[i]; }
+        });
 }
 
 
@@ -207,10 +247,11 @@ function resetCharts() {
     d3.selectAll("line").remove();
     d3.selectAll("g").remove();
     d3.selectAll("path").remove();
+    d3.selectAll("text").remove();
 }
 
 
-function drawScatterPlot(data) {
+function drawScatterPlot(data, vary_by) {
     "use strict";
 
     /******************************** MIN MAX *********************************/
@@ -225,14 +266,12 @@ function drawScatterPlot(data) {
 
     });
     /********************************* SCALES *********************************/
-    var smallPadding = 40,
-        largePadding = 70;
     var yScale = d3.scale.linear()
                          .domain([0, yMax])
-                         .range([INSIGHT.height - smallPadding, smallPadding]);
+                         .range([INSIGHT.height - INSIGHT.smallPadding, INSIGHT.smallPadding]);
     var xScale = d3.scale.linear()
                          .domain([xMin, xMax])
-                         .range([largePadding, INSIGHT.width - smallPadding]);
+                         .range([INSIGHT.largePadding, INSIGHT.width - INSIGHT.smallPadding]);
     /********************************** TICKS *********************************/
     var yTickValues = yScale.ticks(5);
     var xTickValues = [];
@@ -256,13 +295,24 @@ function drawScatterPlot(data) {
                                 .enter();
     drawLines(lines, xScale, yScale);
     /****************************** DATA POINTS *******************************/
-    var seqid = 0;
-    var circles = d3.select("svg").selectAll("circle");
+    var circles = d3.select("svg").selectAll("circle"),
+        seqid = 0,
+        legendInterval = 0;
     Object.keys(data).forEach(function(key) {
         drawSplines(data[key], xScale, yScale, seqid);
         drawDataPoints(circles.data(data[key]).enter(), xScale, yScale, seqid);
+
+        legendInterval = Math.max((key.length + 1) * INSIGHT.fontWidth, legendInterval);
         seqid++;
     });
+    if (vary_by !== null) {
+        var legend = d3.select("svg").selectAll("text"),
+            legendPadding = (vary_by.length + 1) * INSIGHT.fontWidth,
+            width = legendPadding + legendInterval * (Object.keys(data).length);
+        drawLegendTitle(vary_by, width);
+        drawLegend(legend.data(Object.keys(data)).enter(), legendPadding, legendInterval);
+    }
+
     /********************************** AXES **********************************/
     drawAxes(xScale, yScale, xTickValues);
     /**************************************************************************/
