@@ -153,6 +153,9 @@ function drawSplines(data, xScale, yScale, seqid) {
 
     d3.select("svg")
         .append("path")
+        .transition().duration(500).ease("linear").each("start", function() {
+            d3.select(this).attr({ stroke: "white" });
+        })
         .attr({
             "d": line(data),
             stroke: INSIGHT.palette[seqid], "stroke-width": 2,
