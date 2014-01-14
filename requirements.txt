@@ -1,4 +1,4 @@
-couchbase==1.1.0
+couchbase==1.2.0
 coverage
 django==1.5.5
 django-coverage
