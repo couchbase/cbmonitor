@@ -217,7 +217,9 @@ def get_corr_matrix(request):
 
 def get_insight_defaults(request):
     cb = Couchbase.connect(bucket="exp_defaults", **settings.COUCHBASE_SERVER)
-    defaults = [row.value for row in cb.query("exp_defaults", "all")]
+    defaults = [
+        row.value for row in cb.query("exp_defaults", "all", stale=False)
+    ]
     content = json.dumps(defaults)
     return HttpResponse(content)
 
@@ -227,7 +229,7 @@ def get_insight_options(request):
     cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
 
     data = defaultdict(set)
-    for row in cb.query("experiments", "experiments_by_name", key=insight):
+    for row in cb.query("experiments", "experiments_by_name", key=insight, stale=False):
         for _input, value in row.value["inputs"].items():
             data[_input].add(value)
 
@@ -254,7 +256,7 @@ def get_insight_data(request):
     cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
 
     data = defaultdict(list)
-    for row in cb.query("experiments", "experiments_by_name", key=insight):
+    for row in cb.query("experiments", "experiments_by_name", key=insight, stale=False):
         value = row.value
         if dict(value["inputs"], **inputs) == value["inputs"]:
             key = value["inputs"].get(vary_by)
