@@ -151,15 +151,36 @@ function drawSplines(data, xScale, yScale, seqid) {
         .y(function(d) { return yScale(d[1]); })
         .interpolate("cardinal");
 
+    var focus = d3.select("svg").append("g")
+        .attr("class", "focus")
+        .style("display", "none");
+
+    focus.append("text")
+        .attr({
+            dx: "15px", dy: "25px",
+            fill: INSIGHT.palette[seqid]
+        });
+
     d3.select("svg")
         .append("path")
+        .on("mouseover", function() { focus.style("display", null); })
+        .on("mouseout", function() { focus.style("display", "none"); })
+        .on("mousemove", function(d, i, j) {
+            var x = d3.mouse(this)[0],
+                y = d3.mouse(this)[1];
+            var formatValue = d3.format(".1f"),
+                value = formatValue(yScale.invert(y));
+            focus.attr("transform", "translate(" + x + "," + y + ")");
+            focus.select("text").text(value);
+        })
         .transition().duration(500).ease("linear").each("start", function() {
             d3.select(this).attr({ stroke: "white" });
         })
         .attr({
             "d": line(data),
             stroke: INSIGHT.palette[seqid], "stroke-width": 2,
-            "fill-opacity": 0.0
+            "fill-opacity": 0.0,
+            "pointer-events": "stroke"
         });
 }
 
@@ -207,10 +228,10 @@ function drawAxes(xScale, yScale, xTickValues) {
 }
 
 
-function drawLegendTitle(title, width) {
+function drawLegendTitle(title) {
     "use strict";
 
-    d3.select("svg").append("text")
+    d3.select("svg").append("g").append("text")
         .transition().duration(500).ease("linear").each("start", function() {
             d3.select(this).attr({ fill: "white" });
         })
@@ -309,10 +330,9 @@ function drawScatterPlot(data, vary_by) {
         seqid++;
     });
     if (vary_by !== null) {
-        var legend = d3.select("svg").selectAll("text"),
-            legendPadding = (vary_by.length + 1) * INSIGHT.fontWidth,
-            width = legendPadding + legendInterval * (Object.keys(data).length);
-        drawLegendTitle(vary_by, width);
+        var legend = d3.select("svg").append("g").selectAll("text"),
+            legendPadding = (vary_by.length + 1) * INSIGHT.fontWidth;
+        drawLegendTitle(vary_by);
         drawLegend(legend.data(Object.keys(data)).enter(), legendPadding, legendInterval);
     }
 
