@@ -53,6 +53,7 @@ LABELS = {
     "latency_set": "SET ops latency, ms",
     "latency_get": "GET ops latency, ms",
     "latency_query": "Query latency, ms",
+    "latency_observe": "OBSERVE latency, ms",
     "Sys": "Bytes obtained from system",
     "Alloc": "Bytes allocated and still in use",
     "HeapAlloc": "Bytes allocated and still in use",
@@ -75,7 +76,7 @@ LABELS = {
 }
 
 HISTOGRAMS = (
-    "latency_get", "latency_set", "latency_query",
+    "latency_get", "latency_set", "latency_query", "latency_observe",
     "xdcr_lag", "xdcr_persistence_time", "xdcr_diff",
     "replication_meta_latency_wt", "replication_docs_latency_wt",
     "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",

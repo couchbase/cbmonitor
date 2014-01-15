@@ -36,6 +36,9 @@ class Report(object):
             "latency_query",
             "latency_tuq",
         ]),
+        ("observe", [
+            "latency_observe",
+        ]),
         ("spring_latency", [
             "latency_set",
             "latency_get",
