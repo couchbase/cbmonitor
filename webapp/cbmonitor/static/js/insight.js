@@ -16,7 +16,7 @@ var INSIGHT = {
     smallPadding: 40,
     largePadding: 70,
     fontHeight: 14,
-    fontWidth: 9,
+    fontWidth: 10,
     palette: [
         "#f89406",
         "#51A351",
