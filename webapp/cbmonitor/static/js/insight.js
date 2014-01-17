@@ -289,13 +289,20 @@ function drawScatterPlot(data, vary_by) {
         yMax = Math.max(yMax, d3.max(data[key], function(d) { return d[1]; }));
 
     });
+
     /********************************* SCALES *********************************/
     var yScale = d3.scale.linear()
                          .domain([0, yMax])
                          .range([INSIGHT.height - INSIGHT.smallPadding, INSIGHT.smallPadding]);
-    var xScale = d3.scale.linear()
+    var xScale;
+    if (isNaN(xMin) || isNaN(xMax)) {
+        xScale = d3.scale.ordinal()
+                         .range([INSIGHT.largePadding, INSIGHT.width - INSIGHT.smallPadding]);
+    } else {
+        xScale = d3.scale.linear()
                          .domain([xMin, xMax])
                          .range([INSIGHT.largePadding, INSIGHT.width - INSIGHT.smallPadding]);
+    }
     /********************************** TICKS *********************************/
     var yTickValues = yScale.ticks(5);
     var xTickValues = [];
