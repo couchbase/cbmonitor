@@ -62,7 +62,11 @@ function Insights($scope, $http) {
         $http({method: "GET", url: "/cbmonitor/get_insight_data/", params: params})
         .success(function(data) {
             resetCharts();
-            drawScatterPlot(data, $scope.vary_by);
+            if ($.isEmptyObject(data)) {
+                drawWarning();
+            } else {
+                drawScatterPlot(data, $scope.vary_by);
+            }
         });
     };
 
@@ -260,6 +264,18 @@ function drawLegend(legend, legendPadding, legendInterval) {
             "font-size": INSIGHT.fontHeight,
             "font-weight": "bold",
             fill: function(d, i) { return INSIGHT.palette[i]; }
+        });
+}
+
+
+function drawWarning() {
+    "use strict";
+
+    d3.select("svg").append("text")
+        .text("No data")
+        .attr({
+            x: INSIGHT.width / 2 - 50, y: INSIGHT.height / 2,
+            class: "warning"
         });
 }
 

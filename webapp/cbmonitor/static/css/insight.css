@@ -54,3 +54,8 @@
     font-size: 14px;
     font-weight: bold;
 }
+
+.warning {
+    font-size: 40px;
+    fill: #cccccc;
+}
