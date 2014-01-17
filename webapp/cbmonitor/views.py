@@ -235,10 +235,10 @@ def get_insight_options(request):
 
     options = []
     for _input, values in data.items():
-        options.append({
-            "title": _input,
-            "options": list(values) + ["Vary by", "Use as abscissa"],
-        })
+        values = sorted(values)
+        if len(values) > 1:
+            values += ["Vary by", "Use as abscissa"]
+        options.append({"title": _input, "options": values})
 
     content = json.dumps(options)
     return HttpResponse(content)
