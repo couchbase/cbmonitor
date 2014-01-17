@@ -224,11 +224,18 @@ def get_insight_defaults(request):
     return HttpResponse(content)
 
 
+def get_defaults(insight):
+    cb = Couchbase.connect(bucket="exp_defaults", **settings.COUCHBASE_SERVER)
+    return cb.get(insight).value["defaults"]
+
+
 def get_insight_options(request):
     insight = request.GET['insight']
-    cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
 
-    data = defaultdict(set)
+    defaults = get_defaults(insight)
+    data = {k: {v} for k, v in defaults.items()}
+
+    cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
     for row in cb.query("experiments", "experiments_by_name", key=insight, stale=False):
         for _input, value in row.value["inputs"].items():
             data[_input].add(value)
@@ -252,15 +259,17 @@ def get_insight_data(request):
     inputs.pop(abscissa)
     if vary_by:
         inputs.pop(vary_by)
+    defaults = get_defaults(insight)
 
     cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
 
     data = defaultdict(list)
     for row in cb.query("experiments", "experiments_by_name", key=insight, stale=False):
         value = row.value
-        if dict(value["inputs"], **inputs) == value["inputs"]:
+        value_inputs = dict(defaults, **value["inputs"])
+        if dict(value_inputs, **inputs) == value_inputs:
             key = value["inputs"].get(vary_by)
-            data[key].append((value["inputs"][abscissa], value["value"]))
+            data[key].append((value_inputs[abscissa], value["value"]))
     for k, v in data.items():
         v.sort(key=lambda xy: xy[0])
     data = OrderedDict(sorted(data.items()))
