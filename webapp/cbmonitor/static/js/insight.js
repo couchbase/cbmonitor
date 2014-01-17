@@ -67,7 +67,7 @@ function Insights($scope, $http) {
     };
 
     $scope.updateData = function(title, value, option) {
-        if (value === "Use as abscissa") {
+        if (value === "As X-axis") {
             if ($scope.abscissa !== null && $scope.abscissa !== title) {
                 $scope.currentOptions[$scope.abscissa] = $scope.resetAbscissaTo;
             }

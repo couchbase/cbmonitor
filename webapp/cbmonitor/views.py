@@ -244,7 +244,7 @@ def get_insight_options(request):
     for _input, values in data.items():
         values = sorted(values)
         if len(values) > 1:
-            values += ["Vary by", "Use as abscissa"]
+            values += ["Vary by", "As X-axis"]
         options.append({"title": _input, "options": values})
 
     content = json.dumps(options)
