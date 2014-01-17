@@ -224,15 +224,15 @@ def get_insight_defaults(request):
     return HttpResponse(content)
 
 
-def get_defaults(insight):
+def get_default_inputs(insight):
     cb = Couchbase.connect(bucket="exp_defaults", **settings.COUCHBASE_SERVER)
-    return cb.get(insight).value["defaults"]
+    return cb.get(insight).value["inputs"]
 
 
 def get_insight_options(request):
     insight = request.GET['insight']
 
-    defaults = get_defaults(insight)
+    defaults = get_default_inputs(insight)
     data = {k: {v} for k, v in defaults.items()}
 
     cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
@@ -259,7 +259,7 @@ def get_insight_data(request):
     inputs.pop(abscissa)
     if vary_by:
         inputs.pop(vary_by)
-    defaults = get_defaults(insight)
+    defaults = get_default_inputs(insight)
 
     cb = Couchbase.connect(bucket="experiments", **settings.COUCHBASE_SERVER)
 
