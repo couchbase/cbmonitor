@@ -73,6 +73,10 @@ LABELS = {
     "index_avgqusz": "The average queue length",
     "index_util": "Disk bandwidth utilization, %",
     "bucket_compaction_progress": "Compaction progress, %",
+    "total_bytes_per_sec": "Total bytes/sec",
+    "total_packets_per_sec": "Total packets/sec",
+    "ESTABLISHED": "Connections in ESTABLISHED state",
+    "TIME_WAIT": "Connections in TIME_WAIT state",
 }
 
 HISTOGRAMS = (

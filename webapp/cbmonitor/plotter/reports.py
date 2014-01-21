@@ -121,6 +121,12 @@ class Report(object):
             "index_avgqusz",
             "index_util",
         ]),
+        ("net", [
+            "total_bytes_per_sec",
+            "total_packets_per_sec",
+            "ESTABLISHED",
+            "TIME_WAIT",
+        ]),
     ))
 
     def __init__(self, snapshots):
@@ -218,7 +224,7 @@ class Report(object):
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
-            elif collector in ("atop", "iostat", "sync_gateway"):
+            elif collector in ("atop", "iostat", "net", "sync_gateway"):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
