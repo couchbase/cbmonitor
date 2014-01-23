@@ -6,11 +6,7 @@
 var SERIESLY = SERIESLY || {};
 
 
-SERIESLY.Seriesly = function(db_name) {
-    "use strict";
-
-    this.db_name = db_name;
-};
+SERIESLY.Seriesly = function() {};
 
 
 SERIESLY.Seriesly.prototype.biuldURL = function(ui) {

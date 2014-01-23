@@ -9,7 +9,7 @@ var CBMONITOR = CBMONITOR || {};
 CBMONITOR.GraphManager = function() {
     "use strict";
 
-    this.seriesly = new SERIESLY.Seriesly("cbmonitor");
+    this.seriesly = new SERIESLY.Seriesly();
     this.metrics = {};
 };
 
