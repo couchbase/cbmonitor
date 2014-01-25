@@ -7,13 +7,10 @@
 var CBMONITOR = CBMONITOR || {};
 
 /*
- * Modal dialogs for adding/removing clusters, servers, buckets
+ * Panel with radio buttons related to chart views
  */
 CBMONITOR.Views = function () {};
 
-/*
- * Panel with radio buttons related to chart views
- */
 CBMONITOR.Views.prototype.configurePanel = function() {
     "use strict";
 

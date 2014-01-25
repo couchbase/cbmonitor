@@ -1,15 +1,11 @@
 /*jshint jquery: true, browser: true*/
-/*global d3: true, nv: true, SERIESLY: true*/
+/*global d3: true, nv: true*/
 
-/*
- * Name space
- */
 var CBMONITOR = CBMONITOR || {};
 
 CBMONITOR.GraphManager = function() {
     "use strict";
 
-    this.seriesly = new SERIESLY.Seriesly();
     this.metrics = {};
 };
 
@@ -78,6 +74,26 @@ CBMONITOR.GraphManager.prototype.PlotLine = function(data) {
     });
 };
 
+CBMONITOR.GraphManager.prototype.query = function(ui) {
+    "use strict";
+
+    var chart_data,
+        data = {
+            cluster: ui.draggable.attr("cluster"),
+            server: ui.draggable.attr("server"),
+            bucket: ui.draggable.attr("bucket"),
+            collector: ui.draggable.attr("collector"),
+            name: ui.draggable.text()
+        };
+
+    $.ajax({url: "/seriesly/", dataType: "json", async: false, data: data,
+        success: function(data) {
+            chart_data = data;
+        }
+    });
+    return chart_data;
+};
+
 CBMONITOR.GraphManager.prototype.plot = function(container, ui, chart_type) {
     "use strict";
 
@@ -95,7 +111,7 @@ CBMONITOR.GraphManager.prototype.plot = function(container, ui, chart_type) {
     var chart_data = [];
     for(var i = 0, l = this.uis.length; i < l; i++) {
         chart_data.push(
-            this.seriesly.query(this.uis[i])
+            this.query(this.uis[i])
         );
     }
     if (chart_type === "lineWithFocus") {

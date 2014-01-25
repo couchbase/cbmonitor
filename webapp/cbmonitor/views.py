@@ -13,6 +13,7 @@ from django.views.decorators.cache import cache_page
 from cbmonitor import forms
 from cbmonitor import models
 from cbmonitor.analyzer import Analyzer
+from cbmonitor.helpers import SerieslyHandler
 from cbmonitor.plotter import Plotter
 
 logger = logging.getLogger(__name__)
@@ -273,6 +274,20 @@ def get_insight_data(request):
     for k, v in data.items():
         v.sort(key=lambda xy: xy[0])
     data = OrderedDict(sorted(data.items()))
+
+    content = json.dumps(data)
+    return HttpResponse(content)
+
+
+def seriesly_proxy(request):
+    sh = SerieslyHandler()
+    db_name = sh.build_dbname(
+        cluster=request.GET["cluster"],
+        server=request.GET.get("server"),
+        bucket=request.GET.get("bucket"),
+        collector=request.GET.get("collector"),
+    )
+    data = sh.query_raw_data(db_name, name=request.GET["name"])
 
     content = json.dumps(data)
     return HttpResponse(content)

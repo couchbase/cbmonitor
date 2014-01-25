@@ -41,7 +41,7 @@ urlpatterns = patterns(
     url(r"^reports/corr/", "cbmonitor.views.corr_matrix"),
     url(r"^reports/html/", "cbmonitor.views.html_report"),
     url(r"^cbmonitor/(?P<path>[a-z_]+)/$", restful_dispatcher),
-    url(r"^seriesly/(?P<url>.*)$", "httpproxy.views.proxy"),
+    url(r"^seriesly/", "cbmonitor.views.seriesly_proxy"),
     url(r"^admin/doc/", include("django.contrib.admindocs.urls")),
     url(r"^admin/", include(admin.site.urls)),
 )

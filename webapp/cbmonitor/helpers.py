@@ -40,3 +40,13 @@ class SerieslyHandler(object):
                 return
         else:
             return
+
+    def query_raw_data(self, db_name, name):
+        params = {"ptr": "/{}".format(name), "reducer": "avg", "group": 5000}
+        if db_name in self.all_dbs:
+            try:
+                return self.db[db_name].query(params)
+            except seriesly.exceptions.ConnectionError:
+                return {}
+        else:
+            return {}

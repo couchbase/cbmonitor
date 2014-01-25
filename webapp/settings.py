@@ -116,7 +116,6 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
     "django.contrib.admin",
     "django.contrib.admindocs",
-    "httpproxy",
     "pyjade",
     "cbmonitor",
     "django_coverage",
@@ -170,7 +169,3 @@ LOGGING = {
         }
     }
 }
-
-# Proxy settings
-PROXY_DOMAIN = "localhost"
-PROXY_PORT = 3133
