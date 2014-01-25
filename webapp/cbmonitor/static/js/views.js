@@ -1,9 +1,6 @@
 /*jshint jquery: true, browser: true*/
 /*global Spinner: true*/
 
-/*
- * Name space
- */
 var CBMONITOR = CBMONITOR || {};
 
 /*

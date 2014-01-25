@@ -1,20 +1,6 @@
 /*jshint jquery: true, browser: true*/
 
-/*
- * Name space
- */
 var CBMONITOR = CBMONITOR || {};
-
-/*
- * Accordion with clusters/metrics/events
- */
-CBMONITOR.configureAccordion = function() {
-    "use strict";
-
-    $("#accordion").accordion({
-        heightStyle: "fill"
-    });
-};
 
 $(document).ready(function(){
     "use strict";
@@ -29,4 +15,6 @@ $(document).ready(function(){
     CBMONITOR.views = new CBMONITOR.Views();
     CBMONITOR.views.configurePanel();
     CBMONITOR.views.enableDroppable();
+
+    CBMONITOR.snapshots = new CBMONITOR.Snapshots();
 });

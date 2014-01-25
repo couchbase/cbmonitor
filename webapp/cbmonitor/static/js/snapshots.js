@@ -26,9 +26,3 @@ CBMONITOR.Snapshots = function () {
         window.open("/reports/html/?" + params.join("&"), '_blank');
     });
 };
-
-$(document).ready(function(){
-    "use strict";
-
-    CBMONITOR.snapshots = new CBMONITOR.Snapshots();
-});

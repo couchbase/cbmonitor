@@ -1,9 +1,18 @@
 /*jshint jquery: true, browser: true*/
 
-/*
- * Name space
- */
 var CBMONITOR = CBMONITOR || {};
+
+
+/*
+ * Accordion with clusters/metrics/events
+ */
+CBMONITOR.configureAccordion = function() {
+    "use strict";
+
+    $("#accordion").accordion({
+        heightStyle: "fill"
+    });
+};
 
 CBMONITOR.Observables = function () {};
 
