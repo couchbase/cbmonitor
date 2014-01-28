@@ -129,16 +129,48 @@ function drawBase() {
 }
 
 
+function addFocus(seqid) {
+    "use strict";
+
+    var focus = d3.select("svg").append("g")
+                                .attr("class", "focus")
+                                .style("display", "none");
+    focus.append("text").attr({
+        dx: "15px", dy: "25px",
+        fill: INSIGHT.palette[seqid]
+    });
+    return focus;
+}
+
+
+function showFocus(focus, obj, yScale) {
+    "use strict";
+
+    var x = d3.mouse(obj)[0],
+        y = d3.mouse(obj)[1],
+        formatValue = d3.format(".1f"),
+        value = formatValue(yScale.invert(y));
+    focus
+        .style("display", null)
+        .attr("transform", "translate(" + x + "," + y + ")")
+        .select("text").text(value);
+}
+
+
 function drawDataPoints(circles, xScale, yScale, seqid) {
     "use strict";
+
+    var focus = addFocus(seqid);
 
     circles
         .append("circle")
         .on("mouseover", function() {
+            showFocus(focus, this, yScale);
             d3.select(this).transition().duration(200)
                 .attr({ r: 7 });
         })
         .on("mouseout", function() {
+            focus.style("display", "none");
             d3.select(this).transition().duration(200)
                 .attr({ r: 5 });
         })
@@ -162,28 +194,12 @@ function drawSplines(data, xScale, yScale, seqid) {
         .y(function(d) { return yScale(d[1]); })
         .interpolate("cardinal");
 
-    var focus = d3.select("svg").append("g")
-        .attr("class", "focus")
-        .style("display", "none");
-
-    focus.append("text")
-        .attr({
-            dx: "15px", dy: "25px",
-            fill: INSIGHT.palette[seqid]
-        });
+    var focus = addFocus(seqid);
 
     d3.select("svg")
         .append("path")
-        .on("mouseover", function() { focus.style("display", null); })
+        .on("mouseover", function() { showFocus(focus, this, yScale); })
         .on("mouseout", function() { focus.style("display", "none"); })
-        .on("mousemove", function(d, i, j) {
-            var x = d3.mouse(this)[0],
-                y = d3.mouse(this)[1];
-            var formatValue = d3.format(".1f"),
-                value = formatValue(yScale.invert(y));
-            focus.attr("transform", "translate(" + x + "," + y + ")");
-            focus.select("text").text(value);
-        })
         .transition().duration(500).ease("linear").each("start", function() {
             d3.select(this).attr({ stroke: "white" });
         })
