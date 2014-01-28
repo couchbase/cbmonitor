@@ -101,6 +101,13 @@ function Insights($scope, $http) {
     $http.get("/cbmonitor/get_insight_defaults/").success(function(insights) {
         $scope.insights = insights;
         $scope.selectedInsight = insights[0];
+        var query = window.location.search.split("=");
+        for (var i=0, l=insights.length; i < l; i++) {
+            if (insights[i].id === query[query.length - 1]) {
+                $scope.selectedInsight = insights[i];
+                break;
+            }
+        }
         $scope.getOptions();
     });
 }
