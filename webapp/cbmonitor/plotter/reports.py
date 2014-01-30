@@ -224,7 +224,7 @@ class Report(object):
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
-            elif collector in ("atop", "iostat", "net", "sync_gateway"):
+            if collector in ("atop", "iostat", "net", "sync_gateway"):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
@@ -232,7 +232,9 @@ class Report(object):
                             for snapshot in self.snapshots
                         ])
             # Per-bucket metrics
-            else:
+            if collector in ("active_tasks", "ns_server",
+                             "spring_latency", "spring_query_latency",
+                             "xdcr_lag", "observe"):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables.append([
