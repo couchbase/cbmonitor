@@ -143,13 +143,15 @@ function addFocus(seqid) {
 }
 
 
-function showFocus(focus, obj, yScale) {
+function showFocus(focus, obj, yScale, value) {
     "use strict";
 
     var x = d3.mouse(obj)[0],
         y = d3.mouse(obj)[1],
-        formatValue = d3.format(".1f"),
+        formatValue = d3.format(".1f");
+    if (value === undefined) {
         value = formatValue(yScale.invert(y));
+    }
     focus
         .style("display", null)
         .attr("transform", "translate(" + x + "," + y + ")")
@@ -164,8 +166,8 @@ function drawDataPoints(circles, xScale, yScale, seqid) {
 
     circles
         .append("circle")
-        .on("mouseover", function() {
-            showFocus(focus, this, yScale);
+        .on("mouseover", function(d) {
+            showFocus(focus, this, yScale, d[1]);
             d3.select(this).transition().duration(200)
                 .attr({ r: 7 });
         })
