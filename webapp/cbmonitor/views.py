@@ -269,7 +269,7 @@ def get_insight_data(request):
         value = row.value
         value_inputs = dict(defaults, **value["inputs"])
         if dict(value_inputs, **inputs) == value_inputs:
-            key = value["inputs"].get(vary_by)
+            key = value["inputs"].get(vary_by, defaults.get(vary_by))
             data[key].append((value_inputs[abscissa], value["value"]))
     for k, v in data.items():
         v.sort(key=lambda xy: xy[0])
