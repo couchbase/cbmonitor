@@ -154,6 +154,8 @@ NON_ZERO_VALUES = (
     "index_wbps",
     "index_avgqusz",
     "index_util",
+
+    "TIME_WAIT",
 )
 
 PALETTE = (
