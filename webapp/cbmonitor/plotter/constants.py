@@ -73,8 +73,10 @@ LABELS = {
     "index_avgqusz": "The average queue length",
     "index_util": "Disk bandwidth utilization, %",
     "bucket_compaction_progress": "Compaction progress, %",
-    "total_bytes_per_sec": "Total bytes/sec",
-    "total_packets_per_sec": "Total packets/sec",
+    "in_bytes_per_sec": "Incoming bytes/sec",
+    "out_bytes_per_sec": "Outgoing bytes/sec",
+    "in_packets_per_sec": "Incoming packets/sec",
+    "out_packets_per_sec": "Outgoing packets/sec",
     "ESTABLISHED": "Connections in ESTABLISHED state",
     "TIME_WAIT": "Connections in TIME_WAIT state",
 }
