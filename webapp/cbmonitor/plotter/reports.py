@@ -122,8 +122,10 @@ class Report(object):
             "index_util",
         ]),
         ("net", [
-            "total_bytes_per_sec",
-            "total_packets_per_sec",
+            "in_bytes_per_sec",
+            "out_bytes_per_sec",
+            "in_packets_per_sec",
+            "out_packets_per_sec",
             "ESTABLISHED",
             "TIME_WAIT",
         ]),
