@@ -21,6 +21,7 @@ def restful_dispatcher(request, path):
         "get_buckets": views.get_buckets,
         "get_metrics": views.get_metrics,
         "add_metric": views.add_metric,
+        "delete_cluster": views.delete_cluster,
         "add_snapshot": views.add_snapshot,
         "get_snapshots": views.get_snapshots,
         "get_insight_defaults": views.get_insight_defaults,

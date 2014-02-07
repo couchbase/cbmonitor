@@ -122,6 +122,12 @@ def add_bucket(request):
         raise ValidationError(form)
 
 
+@validation
+def delete_cluster(request):
+    cluster = models.Cluster.objects.get(name=request.POST["name"])
+    cluster.delete()
+
+
 def get_clusters(request):
     clusters = [c.name for c in models.Cluster.objects.all()]
     content = json.dumps(sorted(clusters))
