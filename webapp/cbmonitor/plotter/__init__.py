@@ -349,20 +349,22 @@ class Comparator(Plotter):
     def compare(self, snapshots):
         """Return a list with metric/confidence pairs or None if snapshots are
         not comparable"""
-        observables = Report(snapshots)()
-
         diffs = []
         invalid_counter = 0
+
         # Asynchronously extract data
-        for data in self.eventlet_pool.imap(self.extract, observables[1:10]):
-            series, labels, colors, title, filename, url = data
-            if series:
+        for data in self.eventlet_pool.imap(self.extract, Report(snapshots)()):
+            series, _, _, title, _, _ = data
+            if len(series) == 2:
                 diff = self.estimate_diff(*series)
                 if diff != - 1:
                     metric = title.split()[-1]
-                    ylabel = constants.LABELS.get(metric, metric)
+                    label = constants.LABELS.get(metric, metric)
 
-                    diffs.append((ylabel, diff))
+                    diffs.append((
+                        '{} ({})'.format(label, metric),
+                        diff
+                    ))
 
                     invalid_counter -= 1
                 else:
