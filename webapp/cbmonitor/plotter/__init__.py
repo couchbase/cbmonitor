@@ -178,9 +178,10 @@ class Plotter(object):
     def __init__(self):
         self.urls = list()  # The only thing that caller (view) needs
 
-        self.seriesly = SerieslyHandler()
         self.eventlet_pool = GreenPool()  # for seriesly requests
         self.mp_pool = Pool(cpu_count())  # for plotting
+
+        self.seriesly = SerieslyHandler()
 
     def __del__(self):
         self.mp_pool.close()
