@@ -14,7 +14,7 @@ from cbmonitor import forms
 from cbmonitor import models
 from cbmonitor.analyzer import Analyzer
 from cbmonitor.helpers import SerieslyHandler
-from cbmonitor.plotter import Plotter
+from cbmonitor.plotter import Plotter, Comparator
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +66,18 @@ def parse_snapshots(request):
             snapshot = models.Snapshot.objects.get(name=snapshot)
             snapshots.append(snapshot)
     return snapshots
+
+
+def compare_snapshots(request):
+    baseline = models.Snapshot.objects.get(name=request.GET["baseline"])
+    target = models.Snapshot.objects.get(name=request.GET["target"])
+
+    comparator = Comparator()
+    diffs = comparator.compare((baseline, target))
+    if diffs:
+        return HttpResponse(json.dumps(diffs))
+    else:
+        return HttpResponse("Too large mismatch", status=400)
 
 
 class ValidationError(Exception):
@@ -131,6 +143,12 @@ def delete_cluster(request):
 def get_clusters(request):
     clusters = [c.name for c in models.Cluster.objects.all()]
     content = json.dumps(sorted(clusters))
+    return HttpResponse(content)
+
+
+def get_all_snapshots(request):
+    snapshots = [s.name for s in models.Snapshot.objects.all()]
+    content = json.dumps(sorted(snapshots))
     return HttpResponse(content)
 
 

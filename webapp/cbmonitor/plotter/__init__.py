@@ -295,3 +295,77 @@ class Plotter(object):
         # Plot all charts in parallel
         for result in apply_results:
             result.get()
+
+
+class Comparator(Plotter):
+
+    ALLOWED_NOISE = 0.1  # 10%
+    MAX_CONFIDENCE = 7.0
+    MIN_DATA_POINTS = 50
+    MAX_SIZE_DIFF = 1.25  # 25%
+
+    def estimate_diff(self, s1, s2):
+        l1 = float(len(s1))
+        l2 = float(len(s2))
+
+        # Don't estimate time series that have huge difference in number of
+        # elements
+        if max(l1, l2) / min(l1, l2) > self.MAX_SIZE_DIFF:
+            return -1
+
+        # Don't estimate very small time series
+        if min(l1, l2) < self.MIN_DATA_POINTS:
+            return -1
+
+        # Heuristic coefficient
+        confidence = 0.0
+
+        # Compare correlation coefficient
+        if s1.corr(s2) < 0.9:
+            confidence += 1.0
+        # Compare mean values
+        diff = abs(s1.mean() - s2.mean())
+        if diff > self.ALLOWED_NOISE * s1.mean():
+            confidence += 1.0
+        # Compare 4 different percentiles
+        for q in (0.5, 0.75, 0.9, 0.95):
+            diff = abs(s1.quantile(q) - s2.quantile(q))
+            if diff > self.ALLOWED_NOISE * s1.quantile(q):
+                confidence += 0.5
+        # Compare maximum values
+        diff = abs(s1.max() - s2.max())
+        if diff > self.ALLOWED_NOISE * s1.max():
+            confidence += 1.0
+
+        # Primary trend comparison
+        t1 = pd.rolling_median(s1, window=5)
+        t2 = pd.rolling_median(s1, window=5)
+        if abs((t1 - t2).mean()) > self.ALLOWED_NOISE * t1.mean():
+            confidence += 2.0
+
+        # Return confidence as rounded percentage value
+        return round(100 * confidence / self.MAX_CONFIDENCE)
+
+    def compare(self, snapshots):
+        """Return a list with metric/confidence pairs or None if snapshots are
+        not comparable"""
+        observables = Report(snapshots)()
+
+        diffs = []
+        invalid_counter = 0
+        # Asynchronously extract data
+        for data in self.eventlet_pool.imap(self.extract, observables[1:10]):
+            series, labels, colors, title, filename, url = data
+            if series:
+                diff = self.estimate_diff(*series)
+                if diff != - 1:
+                    metric = title.split()[-1]
+                    ylabel = constants.LABELS.get(metric, metric)
+
+                    diffs.append((ylabel, diff))
+
+                    invalid_counter -= 1
+                else:
+                    invalid_counter += 1
+        if invalid_counter < 0:
+            return diffs
