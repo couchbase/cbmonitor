@@ -23,7 +23,10 @@ html(lang="en")
                                          ng-options="snapshot for snapshot in snapshots")
                 button.btn.cmp-btn(ng-click="compareSnapshots()") Compare
             div.diffs
+                div.url(ng-if="url.length")
+                    a(ng-if="url.length", href="[[url]]", target="_blank") < HTML report >
+                p.info(ng-if="info") [[info]]
                 p.error(ng-if="error") [[error]]
-                p.title(ng-if="diffs") There seems to be a difference:
+                p.title(ng-if="diffs.length ") There seems to be a difference:
                 p.diff(ng-repeat="diff in diffs") -- [[diff]]
                 div#spinner

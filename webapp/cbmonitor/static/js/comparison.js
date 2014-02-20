@@ -13,7 +13,7 @@ angular.module("comparison", [])
 function startSpinner() {
     "use strict";
 
-    var spinner = new Spinner({
+    return new Spinner({
         lines: 10,
         length: 10,
         width: 6,
@@ -22,46 +22,62 @@ function startSpinner() {
         color: "#777",
         top: 20
     }).spin(document.getElementById("spinner"));
-
-    return spinner;
 }
 
 function Comparison($scope, $http) {
     "use strict";
 
     $scope.compareSnapshots = function() {
-        var params = {
-            baseline: $scope.selectedBaseline,
-            target: $scope.selectedTarget
-        };
         $scope.diffs = [];
-        var maxSize = screen.availHeight * 0.95;
-        var spinner = startSpinner(maxSize);
+        $scope.error = null;
+        $scope.info = null;
+        $scope.url = null;
 
-        $http({method: 'GET', url: '/reports/compare/', params: params})
-            .success(function(data) {
-                for (var i = 0, l = data.length; i < l; i++) {
-                    if (data[i][1] > 50) {
-                        $scope.diffs.push(data[i][0]);
-                    }
-                }
-                spinner.stop();
-                $scope.diffs = data;
-                $scope.error = null;
+        var spinner = startSpinner();
 
+        var url = '/reports/html/?snapshot=' + $scope.selectedBaseline +
+            '&snapshot=' + $scope.selectedTarget;
+
+        $http.get(url)
+            .success(function() {
+                $scope.url = url;
+
+                var params = {
+                    baseline: $scope.selectedBaseline,
+                    target: $scope.selectedTarget
+                };
+
+                $http({method: 'GET', url: '/reports/compare/', params: params})
+                    .success(function(data) {
+                        spinner.stop();
+                        for (var i = 0, l = data.length; i < l; i++) {
+                            if (data[i][1] > 50) {
+                                $scope.diffs.push(data[i][0]);
+                            }
+                        }
+                        if ($scope.diffs.length === 0) {
+                            $scope.info = "No difference";
+                        }
+                    })
+                    .error(function(err, code) {
+                        spinner.stop();
+                        if (code === 400) {
+                            $scope.error = err;
+                        }
+                        else {
+                            $scope.error = "Something went wrong";
+                        }
+                    });
             })
-            .error(function(err, code) {
+            .error(function() {
                 spinner.stop();
-                if (code === 400) {
-                    $scope.error = err;
-                }
-                else {
-                    $scope.error = "Something went wrong";
-                }
+                $scope.error = "Something went wrong";
             });
     };
 
+    $scope.url = null;
     $scope.error = null;
+    $scope.info = null;
     $scope.diffs = [];
 
     $http.get("/cbmonitor/get_all_snapshots/").success(function(snapshots) {

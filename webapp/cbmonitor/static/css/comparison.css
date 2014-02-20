@@ -46,3 +46,16 @@
     font-size: 20px;
     color: #d9534f;
 }
+
+.info {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #f89406;
+}
+
+.url {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    font-size: 24px;
+    font-weight: bold;
+}
