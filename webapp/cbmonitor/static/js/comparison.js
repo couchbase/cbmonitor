@@ -51,7 +51,7 @@ function Comparison($scope, $http) {
                     .success(function(data) {
                         spinner.stop();
                         for (var i = 0, l = data.length; i < l; i++) {
-                            if (data[i][1] > 50) {
+                            if (data[i][1] > 50 && $scope.diffs.indexOf(data[i][0]) === -1) {
                                 $scope.diffs.push(data[i][0]);
                             }
                         }
