@@ -29,6 +29,11 @@ def insight(request):
     return render_to_response("insight.jade")
 
 
+def comparison(request):
+    """Snapshot Comparison"""
+    return render_to_response("comparison.jade")
+
+
 def corr_matrix(request):
     """Interactive correlation matrix"""
     snapshot = request.GET.get("snapshot")
@@ -68,6 +73,7 @@ def parse_snapshots(request):
     return snapshots
 
 
+@cache_page()
 def compare_snapshots(request):
     baseline = models.Snapshot.objects.get(name=request.GET["baseline"])
     target = models.Snapshot.objects.get(name=request.GET["target"])
@@ -77,7 +83,7 @@ def compare_snapshots(request):
     if diffs:
         return HttpResponse(json.dumps(diffs))
     else:
-        return HttpResponse("Too large mismatch", status=400)
+        return HttpResponse("Too large mismatch or missing data", status=400)
 
 
 class ValidationError(Exception):

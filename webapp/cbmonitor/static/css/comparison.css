@@ -1,0 +1,48 @@
+#main {
+    text-align: center;
+}
+
+.selector {
+    width: 400px;
+    height: 28px;
+    text-overflow: ellipsis;
+    padding-top: 2px;
+}
+
+.vs {
+    vertical-align: text-bottom;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.cmp-btn {
+    margin-left: 10px;
+    margin-bottom: -1px;
+    vertical-align: text-bottom;
+    height: 28px;
+    padding-top: 2px;
+    width: 150px;
+}
+
+.diffs {
+    width: 600px;
+}
+
+.diff {
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.title {
+    font-size: 16px;
+    margin-top: 10px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.error {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #d9534f;
+}

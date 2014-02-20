@@ -39,6 +39,7 @@ urlpatterns = patterns(
     url(r"^$", "cbmonitor.views.index"),
     url(r"^favicon\.ico$", RedirectView.as_view(url="/static/favicon.ico")),
     url(r"^insight/", "cbmonitor.views.insight"),
+    url(r"^comparison/", "cbmonitor.views.comparison"),
     url(r"^reports/get_corr_matrix/", "cbmonitor.views.get_corr_matrix"),
     url(r"^reports/corr/", "cbmonitor.views.corr_matrix"),
     url(r"^reports/html/", "cbmonitor.views.html_report"),
