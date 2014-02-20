@@ -28,5 +28,5 @@ html(lang="en")
                 p.info(ng-if="info") [[info]]
                 p.error(ng-if="error") [[error]]
                 p.title(ng-if="diffs.length ") There seems to be a difference:
-                p.diff(ng-repeat="diff in diffs") -- [[diff]]
+                p.diff(ng-repeat="diff in diffs track by $index") -- [[diff]]
                 div#spinner
