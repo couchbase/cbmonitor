@@ -9,6 +9,16 @@
     padding-top: 2px;
 }
 
+.filter {
+    width: 390px;
+    height: 22px;
+    text-overflow: ellipsis;
+    color: #555555;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    padding-left: 10px;
+}
+
 .vs {
     vertical-align: text-bottom;
     margin-left: 10px;
@@ -16,12 +26,13 @@
 }
 
 .cmp-btn {
+    margin-top: 10px;
     margin-left: 10px;
     margin-bottom: -1px;
     vertical-align: text-bottom;
     height: 28px;
     padding-top: 2px;
-    width: 150px;
+    width: 200px;
 }
 
 .diffs {

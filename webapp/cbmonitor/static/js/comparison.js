@@ -27,6 +27,26 @@ function startSpinner() {
 function Comparison($scope, $http) {
     "use strict";
 
+    $scope.filter = function(userInput, baseline) {
+        var filtered = null;
+        for (var i = 0, l = $scope.snapshots.length; i < l; i++) {
+            if ($scope.snapshots[i].indexOf(userInput) !== -1) {
+                filtered = $scope.snapshots[i];
+                break;
+            }
+        }
+        if (filtered !== null) {
+            $("#compare").attr("disabled", false);
+            if (baseline) {
+                $scope.selectedBaseline = filtered;
+            } else {
+                $scope.selectedTarget = filtered;
+            }
+        } else {
+            $("#compare").attr("disabled", true);
+        }
+    };
+
     $scope.compareSnapshots = function() {
         $scope.diffs = [];
         $scope.error = null;

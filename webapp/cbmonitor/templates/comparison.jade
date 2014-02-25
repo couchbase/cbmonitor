@@ -16,12 +16,19 @@ html(lang="en")
                 div.brand Snapshot Comparison
         div#main(ng-app="comparison", ng-controller="Comparison")
             div
-                select#baseline.selector(ng-model="selectedBaseline",
-                                         ng-options="snapshot for snapshot in snapshots")
+                select.selector(ng-model="selectedBaseline",
+                                ng-options="snapshot for snapshot in snapshots | filter:userBaseline")
                 span.vs vs.
-                select#baseline.selector(ng-model="selectedTarget",
-                                         ng-options="snapshot for snapshot in snapshots")
-                button.btn.cmp-btn(ng-click="compareSnapshots()") Compare
+                select.selector(ng-model="selectedTarget",
+                                ng-options="snapshot for snapshot in snapshots | filter:userTarget")
+            div
+                input.filter(ng-model="userBaseline",
+                             ng-change="filter(userBaseline, true)")
+                span.vs &nbsp;&nbsp;&nbsp;
+                input.filter(ng-model="userTarget",
+                             ng-change="filter(userTarget, false)")
+            div
+                button#compare.btn.cmp-btn(ng-click="compareSnapshots()") Compare
             div.diffs
                 div.url(ng-if="url.length")
                     a(ng-if="url.length", href="[[url]]", target="_blank") < HTML report >
