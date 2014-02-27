@@ -47,6 +47,7 @@ LABELS = {
     "cpu_utilization_rate": "CPU utilization across all cores on this cluster",
     "beam.smp_rss": "beam.smp resident set size, bytes",
     "beam.smp_cpu": "beam.smp CPU utilization, %",
+    "memcached_rss": "memcached resident set size, bytes",
     "memcached_cpu": "memcached CPU utilization, %",
     "xdcr_lag": "Total XDCR lag (from memory to memory), ms",
     "xdcr_persistence_time": "Observe latency, ms",

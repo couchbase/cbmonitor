@@ -110,6 +110,7 @@ class Report(object):
             "sync_gateway_cpu",
             "beam.smp_rss",
             "beam.smp_cpu",
+            "memcached_rss",
             "memcached_cpu",
         ]),
         ("iostat", [
