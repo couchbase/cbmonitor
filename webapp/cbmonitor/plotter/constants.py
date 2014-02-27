@@ -44,6 +44,7 @@ LABELS = {
     "couch_views_data_size": "Views data size, bytes",
     "couch_views_actual_disk_size": "Views total disk size, bytes",
     "couch_views_fragmentation": "Views fragmentation, %",
+    "cpu_utilization_rate": "CPU utilization across all cores on this cluster",
     "beam.smp_rss": "beam.smp resident set size, bytes",
     "beam.smp_cpu": "beam.smp CPU utilization, %",
     "memcached_cpu": "memcached CPU utilization, %",

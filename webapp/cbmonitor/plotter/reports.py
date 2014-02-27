@@ -103,6 +103,7 @@ class Report(object):
             "couch_total_disk_size",
             "couch_docs_fragmentation",
             "couch_views_fragmentation",
+            "cpu_utilization_rate",
         ]),
         ("atop", [
             "sync_gateway_rss",
