@@ -81,7 +81,6 @@ class Report(object):
             "replication_meta_latency_wt",
             "replication_docs_latency_wt",
             "curr_connections",
-            "hibernated_waked",
             "curr_items",
             "mem_used",
             "ep_meta_data_memory",
