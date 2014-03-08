@@ -7,7 +7,9 @@ class SerieslyHandler(object):
 
     """Simple handler for data stored in seriesly database."""
 
-    GROUP_INTERVAL = 1000  # 1 sec
+    MIN_GROUP_INTERVAL = 1000  # 1 sec
+    MAX_GROUP_INTERVAL = 5000  # 5 secs
+    GROUPING_THRESHOLD = 14400  # start grouping when snapshot is longer than 4h
 
     def __init__(self):
         self.db = seriesly.Seriesly()
@@ -25,11 +27,15 @@ class SerieslyHandler(object):
         """Read data from seriesly database. Use snapshot time range if
         possible."""
         query_params = {"ptr": "/{}".format(observable.name), "reducer": "avg",
-                        "group": self.GROUP_INTERVAL}
+                        "group": self.MIN_GROUP_INTERVAL}
         if observable.snapshot.ts_from and observable.snapshot.ts_to:
             ts_from = timegm(observable.snapshot.ts_from.timetuple()) * 1000
             ts_to = timegm(observable.snapshot.ts_to.timetuple()) * 1000
-            query_params.update({"from": ts_from, "to": ts_to})
+            if ts_from - ts_to > self.GROUPING_THRESHOLD:
+                group = self.MAX_GROUP_INTERVAL
+            else:
+                group = self.MIN_GROUP_INTERVAL
+            query_params.update({"from": ts_from, "to": ts_to, "group": group})
         db_name = self.build_dbname(observable.snapshot.cluster.name,
                                     observable.server, observable.bucket,
                                     observable.collector)
