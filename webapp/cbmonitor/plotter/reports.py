@@ -97,6 +97,7 @@ class Report(object):
             "couch_docs_fragmentation",
             "couch_views_fragmentation",
             "cpu_utilization_rate",
+            "swap_used",
         ]),
         ("atop", [
             "sync_gateway_rss",
