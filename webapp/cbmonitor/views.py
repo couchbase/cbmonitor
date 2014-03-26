@@ -11,7 +11,7 @@ from django.db.utils import IntegrityError
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.views.decorators.cache import cache_page
-from moveit import flow
+from moveit import flow, moveit
 
 from cbmonitor import forms
 from cbmonitor import models
@@ -261,6 +261,7 @@ def get_movements(request):
     filename = request.GET["filename"]
     file_path = os.path.join(settings.MEDIA_ROOT, filename)
     raw_data = flow.read_data(file_path)
+    data = moveit.parse_events(data=raw_data)
 
     for bucket, events in raw_data.items():
         movements, src_nodes, concurrency_per_dest, movements_per_dest, \
@@ -274,20 +275,26 @@ def get_movements(request):
 
                 for vbucket, ((sts, src_node), (ets, _)) in movements[node].items():
                     if src_node == node:
-                        bars[vbucket] = (0, 0, "white")
+                        bars[vbucket] = (0, 0, "white", None)
                     else:
                         start = sts - min_ts
                         duration = ets - sts
                         bar_color = PALETTE[src_nodes.index(src_node)]
                         offset = next(mv_iter)
-                        bars[vbucket] = (start, duration, offset, bar_color)
+
+                        hotspots = moveit.find_hot_spots(data[bucket][vbucket],
+                                                         duration,
+                                                         threshold=0)
+
+                        bars[vbucket] = (start, duration, offset, bar_color,
+                                         tuple(hotspots))
 
         keys = ("movements", "src_nodes", "concurrency_per_dest",
                 "movements_per_dest", "max_ts", "min_ts")
-        data = dict(zip(keys, flow.parse_events(events)))
-        data["bars"] = bars
+        output = dict(zip(keys, flow.parse_events(events)))
+        output["bars"] = bars
 
-        content = json.dumps(data)
+        content = json.dumps(output)
         return HttpResponse(content)  # only the first bucket
 
 

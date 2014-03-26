@@ -8,8 +8,9 @@ var MVMNTS = {
     placeholder: 40,
     min_bar_h: 20,
     grid_width: 100,
-    legend_w: 150,
+    legend_w: 170,
     node_w: 135,
+    tooltip_margin: 50,
     palette: [
         "#51A351",
         "#F89406",
@@ -27,6 +28,16 @@ var MVMNTS = {
 
 function drawBase() {
     "use strict";
+
+    d3.select("body")
+        .on("keydown", function() {
+            if (d3.event.which === 27) {
+                d3.select("#tooltip").classed("hidden", true);
+            }
+        })
+        .on("click", function() {
+            d3.select("#tooltip").classed("hidden", true);
+        });
 
     d3.select("#chart")
         .append("svg")
@@ -195,6 +206,26 @@ function drawMovements(data, large_span_height) {
             })
             .enter()
             .append("rect")
+            .on("click", function(vbucket) {
+                var profiles = data.bars[vbucket][4],
+                    hotspots = $("#hotspots");
+                hotspots.empty();
+                for (var i = 0; i < profiles.length; i++) {
+                    var ratio = profiles[i][2].toFixed(2);
+                    hotspots.append(
+                        "<tr>" +
+                            "<td class='hotspot'>" + profiles[i][0] + " -> " + profiles[i][1] + "</td>" +
+                            "<td class='value'>" + ratio + "</td>" +
+                            "<td class='bar' style='background: -webkit-linear-gradient(left, #D9534F "+ ratio +"%, #FFFFFF 1%)'></td>" +
+                        "</tr>"
+                    );
+                }
+                var header = "vbucket: " + vbucket + ", total time: " + data.bars[vbucket][1].toFixed(1) + " seconds";
+                d3.select("#tooltip").select("#header").text(header);
+                d3.select("#tooltip").style("top", MVMNTS.tooltip_margin + "px");
+                d3.select("#tooltip").classed("hidden", false);
+                d3.event.stopPropagation();
+            })
             .attr({
                 x: function(vbucket) {
                     return scale(data.bars[vbucket][0]) + MVMNTS.placeholder;
@@ -224,9 +255,7 @@ function drawMovements(data, large_span_height) {
                 },
                 stroke: "black",
                 "shape-rendering": "crispEdges"
-            })
-            .append("title")
-            .text(function(vbucket) { return vbucket; });
+            });
 }
 
 
@@ -275,7 +304,7 @@ function drawLegend(rebalance_t) {
             y: 15,
             "font-size": 14
         })
-        .text("Total duration: " + rebalance_t +" min");
+        .text("Total duration: " + rebalance_t.toFixed(1) +" min");
 }
 
 
@@ -291,7 +320,7 @@ $(document).ready(function(){
         var num_large_spans = Object.keys(data.movements_per_dest).length,
             num_small_spans = data.src_nodes.length - num_large_spans,
             large_span_h = (MVMNTS.max_h - num_small_spans * MVMNTS.min_bar_h) / num_large_spans,
-            rebalance_t = Math.round(10 * (data.max_ts - data.min_ts) / 60) / 10;
+            rebalance_t = (data.max_ts - data.min_ts) / 60;
 
         drawBase();
         drawGrid();
