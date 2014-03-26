@@ -1,6 +1,8 @@
 import json
 import logging
+import os
 from collections import defaultdict, OrderedDict
+from itertools import cycle
 
 from couchbase import Couchbase
 from django.conf import settings
@@ -9,12 +11,14 @@ from django.db.utils import IntegrityError
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.views.decorators.cache import cache_page
+from moveit import flow
 
 from cbmonitor import forms
 from cbmonitor import models
 from cbmonitor.analyzer import Analyzer
 from cbmonitor.helpers import SerieslyHandler
 from cbmonitor.plotter import Plotter, Comparator
+from cbmonitor.plotter.constants import PALETTE
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +42,12 @@ def corr_matrix(request):
     """Interactive correlation matrix"""
     snapshot = request.GET.get("snapshot")
     return render_to_response("corr.jade", {"snapshot": snapshot})
+
+
+def movements(request):
+    """Interactive rebalance flow"""
+    filename = request.GET.get("filename")
+    return render_to_response("movements.jade", {"filename": filename})
 
 
 @cache_page()
@@ -244,6 +254,41 @@ def get_corr_matrix(request):
     columns, corr_matrix = analyzer.corr(snapshots)
     content = json.dumps({"columns": columns, "matrix": corr_matrix})
     return HttpResponse(content)
+
+
+@cache_page()
+def get_movements(request):
+    filename = request.GET["filename"]
+    file_path = os.path.join(settings.MEDIA_ROOT, filename)
+    raw_data = flow.read_data(file_path)
+
+    for bucket, events in raw_data.items():
+        movements, src_nodes, concurrency_per_dest, movements_per_dest, \
+            max_ts, min_ts = flow.parse_events(events)
+
+        bars = dict()
+        for idx, node in enumerate(sorted(src_nodes)):
+            if node in movements_per_dest:
+                concurrency = concurrency_per_dest[node]
+                mv_iter = cycle(range(concurrency))
+
+                for vbucket, ((sts, src_node), (ets, _)) in movements[node].items():
+                    if src_node == node:
+                        bars[vbucket] = (0, 0, "white")
+                    else:
+                        start = sts - min_ts
+                        duration = ets - sts
+                        bar_color = PALETTE[src_nodes.index(src_node)]
+                        offset = next(mv_iter)
+                        bars[vbucket] = (start, duration, offset, bar_color)
+
+        keys = ("movements", "src_nodes", "concurrency_per_dest",
+                "movements_per_dest", "max_ts", "min_ts")
+        data = dict(zip(keys, flow.parse_events(events)))
+        data["bars"] = bars
+
+        content = json.dumps(data)
+        return HttpResponse(content)  # only the first bucket
 
 
 def get_insight_defaults(request):
