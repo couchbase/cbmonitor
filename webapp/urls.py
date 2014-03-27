@@ -18,6 +18,7 @@ def restful_dispatcher(request, path):
         "add_bucket": views.add_bucket,
         "add_metric": views.add_metric,
         "add_snapshot": views.add_snapshot,
+        "add_master_events": views.add_master_events,
         "get_clusters": views.get_clusters,
         "get_all_snapshots": views.get_all_snapshots,
         "get_servers": views.get_servers,

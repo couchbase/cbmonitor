@@ -238,6 +238,14 @@ def add_snapshot(request):
         raise ValidationError(form)
 
 
+def add_master_events(request):
+    master_events = request.POST["master_events"]
+    filename = request.POST["filename"]
+    file_path = os.path.join(settings.MEDIA_ROOT, filename)
+    with open(file_path) as fh:
+        fh.write(master_events)
+
+
 def get_snapshots(request):
     cluster = request.GET["cluster"]
     snapshots = models.Snapshot.objects.filter(cluster=cluster).values()
