@@ -244,6 +244,7 @@ def add_master_events(request):
     file_path = os.path.join(settings.MEDIA_ROOT, filename)
     with open(file_path, "w") as fh:
         fh.write(master_events)
+    return HttpResponse(content="Success")
 
 
 def get_snapshots(request):
