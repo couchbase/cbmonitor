@@ -6,8 +6,8 @@ clean: ; \
     rm -fr env; \
     rm -f `find . -name *.pyc`
 
-pep8: ; \
-    ./env/bin/pep8 --ignore=E501 webapp
+flake8: ; \
+    ./env/bin/flake8 --ignore=E501 webapp
 
 jshint: ; \
     jshint webapp/cbmonitor/static/js/*.js
@@ -15,7 +15,7 @@ jshint: ; \
 test_webapp: ; \
     ./env/bin/python webapp/manage.py test_coverage cbmonitor
 
-test: test_webapp pep8 jshint;
+test: test_webapp flake8 jshint;
 
 update_templates: ; \
     sed -i "s|DEBUG = True|DEBUG = False|" webapp/settings.py; \
