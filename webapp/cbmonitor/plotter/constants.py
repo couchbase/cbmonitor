@@ -50,6 +50,8 @@ LABELS = {
     "beam.smp_cpu": "beam.smp CPU utilization, %",
     "memcached_rss": "memcached resident set size, bytes",
     "memcached_cpu": "memcached CPU utilization, %",
+    "sync_gateway_rss": "Sync Gateway resident set size, bytes",
+    "sync_gateway_cpu": "Sync Gateway CPU utilization, %",
     "xdcr_lag": "Total XDCR lag (from memory to memory), ms",
     "xdcr_persistence_time": "Observe latency, ms",
     "xdcr_diff": "Replication lag, ms",
