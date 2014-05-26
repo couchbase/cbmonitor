@@ -8,9 +8,11 @@ cbmonitor
 Prerequisites
 -------------
 
-* Python 2.7
+* Python 2.7 (including headers)
 * virtualenv
 * libcouchbase
+* libfreetype-devel (or equivalent)
+* libatlas-devel (or equivalent)
 * [seriesly](https://github.com/dustin/seriesly)
 
 Initial setup
