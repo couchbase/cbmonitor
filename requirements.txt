@@ -2,7 +2,7 @@ couchbase==1.2.0
 coverage
 django==1.5.5
 django-coverage
-django-debug-toolbar
+django-debug-toolbar==1.2
 eventlet==0.12.1
 flup
 logger
