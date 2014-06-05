@@ -72,6 +72,7 @@ class Report(object):
             "replication_rate_replication",
             "replication_bandwidth_usage",
             "replication_active_vbreps",
+            "replication_waiting_vbreps",
             "replication_num_failedckpts",
             "replication_docs_latency_wt",
             "curr_connections",
