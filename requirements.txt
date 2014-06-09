@@ -1,3 +1,4 @@
+git+https://github.com/couchbaselabs/cbagent.git#egg=cbagent
 couchbase==1.2.0
 coverage
 django==1.5.5
