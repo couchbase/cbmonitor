@@ -24,7 +24,7 @@ update_templates: ; \
 
 run: ; \
     ./env/bin/python webapp/manage.py syncdb; \
-    ./env/bin/python webapp/manage.py runserver
+    ./env/bin/python webapp/manage.py runserver 0.0.0.0:8000
 
 runfcgi: update_templates; \
     kill `cat /tmp/cbmonitor.pid` ; \
