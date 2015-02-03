@@ -83,7 +83,6 @@ class Report(object):
             "vb_replica_resident_items_ratio",
             "ep_num_value_ejects",
             "ep_tmp_oom_errors",
-            "ep_upr_replica_items_remaining",
             "ep_dcp_replica_items_remaining",
             "disk_write_queue",
             "ep_cache_miss_rate",
