@@ -14,6 +14,7 @@ LABELS = {
     "vb_replica_resident_items_ratio": "Replica docs resident, %",
     "ep_num_value_ejects": "Ejections per sec",
     "ep_dcp_replica_items_remaining": "DCP replication backlog",
+    "ep_dcp_other_items_remaining": "DCP clients backlog",
     "disk_write_queue": "Disk write queue, items",
     "ep_cache_miss_rate": "Cache miss ratio, %",
     "ep_bg_fetched": "Disk reads per sec",
