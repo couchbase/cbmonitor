@@ -88,6 +88,24 @@ LABELS = {
     "out_packets_per_sec": "Outgoing packets/sec",
     "ESTABLISHED": "Connections in ESTABLISHED state",
     "TIME_WAIT": "Connections in TIME_WAIT state",
+    "query_avg_req_time": "Average processing time for N1QL",
+    "query_avg_svc_time": "Average servicing time for N1QL",
+    "query_avg_response_size": "Average response time for N1QL",
+    "query_avg_result_count": "Average result count for N1QL",
+    "query_active_requests": "N1QL avtive requests",
+    "query_errors": "N1QL errors",
+    "query_queued_requests": "N1QL queued requests",
+    "query_request_time": "N1QL request times",
+    "query_requests": "Query raw latency",
+    "query_requests_1000ms": "Query latency above 1000ms",
+    "query_requests_250ms": "Query latency above 250ms",
+    "query_requests_5000ms": "Query latency above 5000ms",
+    "query_requests_500ms": "Query latency above 500ms",
+    "query_result_count": "N1QL result count",
+    "query_result_size": "N1QL result size",
+    "query_selects": "N1QL selects per second",
+    "query_service_time": "N1QL service times",
+    "query_warnings": "N1QL warnings",
 }
 
 HISTOGRAMS = (
@@ -95,6 +113,7 @@ HISTOGRAMS = (
     "xdcr_lag", "xdcr_persistence_time", "xdcr_diff",
     "replication_meta_latency_wt", "replication_docs_latency_wt",
     "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
+    "query_requests",
 )
 
 ZOOM_HISTOGRAMS = (

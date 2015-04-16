@@ -104,6 +104,26 @@ class Report(object):
             "cpu_utilization_rate",
             "swap_used",
         ]),
+        ("n1ql_stats", [
+            "query_avg_req_time",
+            "query_avg_svc_time",
+            "query_avg_response_size",
+            "query_avg_result_count",
+            "query_active_requests",
+            "query_errors",
+            "query_queued_requests",
+            "query_request_time",
+            "query_requests",
+            "query_requests_1000ms",
+            "query_requests_250ms",
+            "query_requests_5000ms",
+            "query_requests_500ms",
+            "query_result_count",
+            "query_result_size",
+            "query_selects",
+            "query_service_time",
+            "query_warnings",
+        ]),
         ("atop", [
             "sync_gateway_rss",
             "sync_gateway_cpu",
@@ -237,7 +257,7 @@ class Report(object):
             # Per-bucket metrics
             if collector in ("active_tasks", "ns_server",
                              "spring_latency", "spring_query_latency",
-                             "xdcr_lag", "observe"):
+                             "xdcr_lag", "observe", "n1ql_stats"):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables.append([
