@@ -240,14 +240,14 @@ class Report(object):
 
         for collector, metrics in self.METRICS.iteritems():
             # Cluster-wide metrics
-            if collector in ("active_tasks", "sync_latency"):
+            if collector in ("active_tasks", "sync_latency", "n1ql_stats"):
                 for metric in metrics:
                     observables.append([
                         _all[""][snapshot.cluster][collector].get(metric)
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
-            if collector in ("atop", "iostat", "net", "sync_gateway", "n1ql_stats"):
+            if collector in ("atop", "iostat", "net", "sync_gateway"):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
