@@ -38,7 +38,7 @@ def plot_as_png(filename, series, labels, colors, ylabel, chart_id, rebalances):
     fig = plt.figure(figsize=(4.66, 2.625))
     ax = init_ax(fig)
 
-    if chart_id in ("_lt90", "_gt90", "_histo"):
+    if chart_id in ("_lt90", "_gt80", "_histo"):
         plot_percentiles(ax, series, labels, colors, ylabel, chart_id)
     elif chart_id == "_subplot":
         plot_subplot_frame(ax, ylabel)
@@ -89,7 +89,7 @@ def plot_percentiles(ax, series, labels, colors, ylabel, chart_id):
     """Bar plot with 3 possible percentile ranges and sub-ranges:
     -- 1 to 99 (linear)
     -- 1 to 89 (linear)
-    -- 90 to 99.999 (non-linear, pre-defined)
+    -- 80 to 99.999 (non-linear, pre-defined)
     """
     ax.set_ylabel(ylabel)
     ax.set_xlabel("Percentile")
@@ -99,8 +99,8 @@ def plot_percentiles(ax, series, labels, colors, ylabel, chart_id):
         percentiles = range(1, 90)
         x = percentiles
         plt.xlim(0, 90)
-    elif chart_id == "_gt90":
-        percentiles = (90, 95, 97.5, 99, 99.9, 99.99, 99.999)
+    elif chart_id == "_gt80":
+        percentiles = (80, 85, 90, 95, 97.5, 99, 99.9, 99.99, 99.999)
         x = range(len(percentiles))
         plt.xticks(x, percentiles)
     else:
@@ -275,7 +275,7 @@ class Plotter(object):
                 if metric in constants.HISTOGRAMS:
                     chart_ids += ["_histo"]
                 if metric in constants.ZOOM_HISTOGRAMS:
-                    chart_ids += ["_lt90", "_gt90"]
+                    chart_ids += ["_lt90", "_gt80"]
                 if metric in constants.KDE:
                     chart_ids += ["_kde"]
                 if metric in constants.SMOOTH_SUBPLOTS:
