@@ -88,6 +88,16 @@ LABELS = {
     "out_packets_per_sec": "Outgoing packets/sec",
     "ESTABLISHED": "Connections in ESTABLISHED state",
     "TIME_WAIT": "Connections in TIME_WAIT state",
+    "index_num_rows_returned": "Number of rows returned by 2i",
+    "index_scan_bytes_read": "Bytes read by 2i scans",
+    "index_num_requests": "Number of 2i requests",
+    "index_num_docs_indexed": "Number of documents indexed in 2i",
+    "index_num_docs_pending": "Number of remaining documents to be indexed",
+    "index_fragmentation": "fragmentation in secondary indexing",
+    "index_data_size": "2i data size",
+    "index_disk_size": "2i size on disk",
+    "index_total_scan_duration": "total time spent by 2i on scans",
+    "index_items_count": "number of items in 2i",
     "query_avg_req_time": "Average processing time for N1QL",
     "query_avg_svc_time": "Average servicing time for N1QL",
     "query_avg_response_size": "Average response time for N1QL",
@@ -113,7 +123,7 @@ HISTOGRAMS = (
     "xdcr_lag", "xdcr_persistence_time", "xdcr_diff",
     "replication_meta_latency_wt", "replication_docs_latency_wt",
     "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
-    "query_requests",
+    "query_requests", "index_num_requests",
 )
 
 ZOOM_HISTOGRAMS = (

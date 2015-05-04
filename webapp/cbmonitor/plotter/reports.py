@@ -124,6 +124,18 @@ class Report(object):
             "query_service_time",
             "query_warnings",
         ]),
+        ("secondary_stats", [
+            "index_num_rows_returned",
+            "index_scan_bytes_read",
+            "index_num_requests",
+            "index_num_docs_indexed",
+            "index_num_docs_pending",
+            "index_fragmentation",
+            "index_data_size",
+            "index_disk_size",
+            "index_total_scan_duration",
+            "index_items_count",
+        ]),
         ("atop", [
             "sync_gateway_rss",
             "sync_gateway_cpu",
@@ -257,7 +269,7 @@ class Report(object):
             # Per-bucket metrics
             if collector in ("active_tasks", "ns_server",
                              "spring_latency", "spring_query_latency",
-                             "xdcr_lag", "observe"):
+                             "xdcr_lag", "observe", "secondary_stats"):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables.append([
