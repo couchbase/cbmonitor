@@ -143,6 +143,8 @@ class Report(object):
             "beam.smp_cpu",
             "memcached_rss",
             "memcached_cpu",
+            "indexer_rss",
+            "indexer_cpu",
         ]),
         ("iostat", [
             "data_rbps",
