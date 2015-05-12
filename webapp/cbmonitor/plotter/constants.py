@@ -56,6 +56,8 @@ LABELS = {
     "memcached_cpu": "memcached CPU utilization, %",
     "indexer_rss": "indexer resident set size, bytes",
     "indexer_cpu": "indexer CPU utilization, %",
+    "projector_rss": "projector resident set size, bytes",
+    "projector_cpu": "projector CPU utilization, %",
     "sync_gateway_rss": "Sync Gateway resident set size, bytes",
     "sync_gateway_cpu": "Sync Gateway CPU utilization, %",
     "xdcr_lag": "Total XDCR lag (from memory to memory), ms",

@@ -145,6 +145,8 @@ class Report(object):
             "memcached_cpu",
             "indexer_rss",
             "indexer_cpu",
+            "projector_rss",
+            "projector_cpu",
         ]),
         ("iostat", [
             "data_rbps",
