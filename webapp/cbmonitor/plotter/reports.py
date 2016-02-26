@@ -161,6 +161,10 @@ class Report(object):
             "index_wbps",
             "index_avgqusz",
             "index_util",
+            "backup_rbps",
+            "backup_wbps",
+            "backup_avgqusz",
+            "backup_util",
         ]),
         ("net", [
             "in_bytes_per_sec",
