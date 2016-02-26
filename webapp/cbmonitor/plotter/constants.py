@@ -60,6 +60,8 @@ LABELS = {
     "projector_cpu": "projector CPU utilization, %",
     "cbq-engine_rss": "query resident set size, bytes",
     "cbq-engine_cpu": "query CPU utilization, %",
+    "backup_rss": "backup resident set size, bytes",
+    "backup_cpu": "backup CPU utilization, %",
     "sync_gateway_rss": "Sync Gateway resident set size, bytes",
     "sync_gateway_cpu": "Sync Gateway CPU utilization, %",
     "xdcr_lag": "Total XDCR lag (from memory to memory), ms",

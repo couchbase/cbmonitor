@@ -149,6 +149,8 @@ class Report(object):
             "projector_cpu",
             "cbq-engine_rss",
             "cbq-engine_cpu",
+            "backup_rss",
+            "backup_cpu",
         ]),
         ("iostat", [
             "data_rbps",
