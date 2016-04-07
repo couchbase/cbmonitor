@@ -39,6 +39,9 @@ class Report(object):
         ("observe", [
             "latency_observe",
         ]),
+        ("fts_latency", [
+            "latency_get",
+        ]),
         ("spring_latency", [
             "latency_set",
             "latency_get",
@@ -104,6 +107,10 @@ class Report(object):
             "cpu_utilization_rate",
             "swap_used",
         ]),
+        ("fts_stats", [
+            "cbft_index_disk_size",
+            "cbft_index_num_docs_indexed",
+        ]),
         ("n1ql_stats", [
             "query_avg_req_time",
             "query_avg_svc_time",
@@ -151,6 +158,8 @@ class Report(object):
             "cbq-engine_cpu",
             "backup_rss",
             "backup_cpu",
+            "cbft_rss",
+            "cbft_cpu",
         ]),
         ("iostat", [
             "data_rbps",
@@ -264,7 +273,7 @@ class Report(object):
 
         for collector, metrics in self.METRICS.iteritems():
             # Cluster-wide metrics
-            if collector in ("active_tasks", "sync_latency", "n1ql_stats"):
+            if collector in ("active_tasks", "sync_latency", "n1ql_stats", "fts_stats"):
                 for metric in metrics:
                     observables.append([
                         _all[""][snapshot.cluster][collector].get(metric)
@@ -280,7 +289,7 @@ class Report(object):
                         ])
             # Per-bucket metrics
             if collector in ("active_tasks", "ns_server",
-                             "spring_latency", "spring_query_latency",
+                             "spring_latency", "fts_latency", "spring_query_latency",
                              "xdcr_lag", "observe", "secondary_stats"):
                 for metric in metrics:
                     for bucket in self.buckets:

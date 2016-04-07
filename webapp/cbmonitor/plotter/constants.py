@@ -60,6 +60,8 @@ LABELS = {
     "projector_cpu": "projector CPU utilization, %",
     "cbq-engine_rss": "query resident set size, bytes",
     "cbq-engine_cpu": "query CPU utilization, %",
+    "cbft_rss": "query resident set size, bytes",
+    "cbft_cpu": "cbft CPU utilization, %",
     "backup_rss": "backup resident set size, bytes",
     "backup_cpu": "backup CPU utilization, %",
     "sync_gateway_rss": "Sync Gateway resident set size, bytes",
@@ -128,6 +130,8 @@ LABELS = {
     "query_selects": "N1QL selects per second",
     "query_service_time": "N1QL service times",
     "query_warnings": "N1QL warnings",
+    "cbft_index_disk_size": "FTS index size on disk",
+    "cbft_index_num_docs_indexed" : "FTS indexing rate"
 }
 
 HISTOGRAMS = (
@@ -135,7 +139,8 @@ HISTOGRAMS = (
     "xdcr_lag", "xdcr_persistence_time", "xdcr_diff",
     "replication_meta_latency_wt", "replication_docs_latency_wt",
     "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
-    "query_requests", "index_num_requests",
+    "query_requests", "index_num_requests", "cbft_index_num_docs_indexed",
+    "cbft_index_disk_size",
 )
 
 ZOOM_HISTOGRAMS = (
