@@ -110,6 +110,13 @@ class Report(object):
         ("fts_stats", [
             "cbft_index_disk_size",
             "cbft_index_num_docs_indexed",
+            "cbft_bytes_used_ram",
+            "cbft_cpu_gc",
+        ]),
+        ("fts_query_stats", [
+            'cbft_query_slow',
+            'cbft_query_timeout',
+            'cbft_query_error',
         ]),
         ("n1ql_stats", [
             "query_avg_req_time",
@@ -273,7 +280,7 @@ class Report(object):
 
         for collector, metrics in self.METRICS.iteritems():
             # Cluster-wide metrics
-            if collector in ("active_tasks", "sync_latency", "n1ql_stats", "fts_stats"):
+            if collector in ("active_tasks", "sync_latency", "n1ql_stats", "fts_stats", "fts_query_stats"):
                 for metric in metrics:
                     observables.append([
                         _all[""][snapshot.cluster][collector].get(metric)
