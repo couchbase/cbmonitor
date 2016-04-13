@@ -112,11 +112,15 @@ class Report(object):
             "cbft_index_num_docs_indexed",
             "cbft_bytes_used_ram",
             "cbft_cpu_gc",
+            "cbft_batch_merge_count",
+            "cbft_total_gc",
+            "cbft_num_bytes_live_data",
         ]),
         ("fts_query_stats", [
             "cbft_query_slow",
             "cbft_query_timeout",
             "cbft_query_error",
+            "cbft_total_term_searchers",
         ]),
         ("n1ql_stats", [
             "query_avg_req_time",

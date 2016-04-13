@@ -133,10 +133,14 @@ LABELS = {
     "cbft_index_disk_size": "FTS index size on disk in GB ",
     "cbft_index_num_docs_indexed": "FTS indexing rate",
     "cbft_bytes_used_ram": "FTS ram used by cbft process",
-    "cbft_cpu_gc": "FTS garbage collectoion",
+    "cbft_cpu_gc": "FTS garbage collection CPU usage",
     "cbft_query_slow": "FTS slow query",
     "cbft_query_timeout": "FTS timeout query",
     "cbft_query_error": "FTS error query",
+    "cbft_batch_merge_count":"FTS batch merge_count ",
+    "cbft_total_gc" : "FTS garbage collector count",
+    "cbft_num_bytes_live_data": "FTS live data size",
+    "cbft_total_term_searchers": "FTS total term search ",
 }
 
 HISTOGRAMS = (
@@ -145,7 +149,7 @@ HISTOGRAMS = (
     "replication_meta_latency_wt", "replication_docs_latency_wt",
     "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
     "query_requests", "index_num_requests", "cbft_index_num_docs_indexed",
-    "cbft_index_disk_size", "cbft_bytes_used_ram",
+    "cbft_index_disk_size", "cbft_bytes_used_ram", "cbft_total_term_searchers",
 )
 
 ZOOM_HISTOGRAMS = (
