@@ -146,7 +146,6 @@ HISTOGRAMS = (
     "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
     "query_requests", "index_num_requests", "cbft_index_num_docs_indexed",
     "cbft_index_disk_size", "cbft_bytes_used_ram",
-    "cbft_index_disk_size",
 )
 
 ZOOM_HISTOGRAMS = (
