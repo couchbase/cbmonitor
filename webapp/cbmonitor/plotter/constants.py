@@ -130,10 +130,10 @@ LABELS = {
     "query_selects": "N1QL selects per second",
     "query_service_time": "N1QL service times",
     "query_warnings": "N1QL warnings",
-    "cbft_index_disk_size": "FTS index size on disk in GB ",
-    "cbft_index_num_docs_indexed": "FTS indexing rate",
-    "cbft_bytes_used_ram": "FTS ram used by cbft process",
-    "cbft_cpu_gc": "FTS garbage collection CPU usage",
+    "cbft_num_bytes_used_disk": "FTS index size on disk in GB ",
+    "cbft_doc_count": "FTS indexing rate",
+    "cbft_num_bytes_used_ram": "FTS ram used by cbft process",
+    "cbft_pct_cpu_gc": "FTS garbage collection CPU usage",
     "cbft_query_slow": "FTS slow query",
     "cbft_query_timeout": "FTS timeout query",
     "cbft_query_error": "FTS error query",
@@ -148,8 +148,8 @@ HISTOGRAMS = (
     "xdcr_lag", "xdcr_persistence_time", "xdcr_diff",
     "replication_meta_latency_wt", "replication_docs_latency_wt",
     "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
-    "query_requests", "index_num_requests", "cbft_index_num_docs_indexed",
-    "cbft_index_disk_size", "cbft_bytes_used_ram", "cbft_total_term_searchers",
+    "query_requests", "index_num_requests",
+
 )
 
 ZOOM_HISTOGRAMS = (
