@@ -60,8 +60,8 @@ LABELS = {
     "projector_cpu": "projector CPU utilization, %",
     "cbq-engine_rss": "query resident set size, bytes",
     "cbq-engine_cpu": "query CPU utilization, %",
-    "cbft_rss": "query resident set size, bytes",
-    "cbft_cpu": "cbft CPU utilization, %",
+    "cbft_rss": "FTS resident set size, bytes",
+    "cbft_cpu": "FTS CPU utilization, %",
     "backup_rss": "backup resident set size, bytes",
     "backup_cpu": "backup CPU utilization, %",
     "sync_gateway_rss": "Sync Gateway resident set size, bytes",
@@ -141,6 +141,7 @@ LABELS = {
     "cbft_total_gc" : "FTS garbage collector count",
     "cbft_num_bytes_live_data": "FTS live data size",
     "cbft_total_term_searchers": "FTS total term search ",
+    "cbft_query_total" : "FTS total queries",
 }
 
 HISTOGRAMS = (
