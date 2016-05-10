@@ -40,7 +40,7 @@ class Report(object):
             "latency_observe",
         ]),
         ("fts_latency", [
-            "latency_get",
+            "cbft_latency_get",
         ]),
         ("spring_latency", [
             "latency_set",
@@ -121,6 +121,9 @@ class Report(object):
             "cbft_query_timeout",
             "cbft_query_error",
             "cbft_total_term_searchers",
+            "cbft_query_total",
+            "cbft_total_bytes_query_results",
+            "cbft_writer_execute_batch_count",
         ]),
         ("n1ql_stats", [
             "query_avg_req_time",

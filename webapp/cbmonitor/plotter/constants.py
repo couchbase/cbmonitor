@@ -142,6 +142,9 @@ LABELS = {
     "cbft_num_bytes_live_data": "FTS live data size",
     "cbft_total_term_searchers": "FTS total term search ",
     "cbft_query_total" : "FTS total queries",
+    "cbft_total_bytes_query_results": "FTS total query bytes",
+    "cbft_writer_execute_batch_count": "FTS writer batch count",
+    "cbft_latency_get": "FTS latency in ms"
 }
 
 HISTOGRAMS = (
@@ -149,12 +152,12 @@ HISTOGRAMS = (
     "xdcr_lag", "xdcr_persistence_time", "xdcr_diff",
     "replication_meta_latency_wt", "replication_docs_latency_wt",
     "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
-    "query_requests", "index_num_requests",
+    "query_requests", "index_num_requests", "cbft_latency_get"
 
 )
 
 ZOOM_HISTOGRAMS = (
-    "latency_get", "latency_set", "latency_query", "avg_bg_wait_time",
+    "latency_get", "latency_set", "latency_query", "avg_bg_wait_time", "cbft_latency_get"
 )
 
 KDE = (
