@@ -7,7 +7,7 @@ clean: ; \
     rm -f `find . -name *.pyc`
 
 flake8: ; \
-    ./env/bin/flake8 --ignore=E501 webapp
+    ./env/bin/flake8 --ignore=E402,E501,E731 webapp
 
 jshint: ; \
     jshint webapp/cbmonitor/static/js/*.js
