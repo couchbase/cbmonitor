@@ -161,11 +161,11 @@ ZOOM_HISTOGRAMS = (
 )
 
 KDE = (
-    "latency_query", "latency_get", "latency_set", "xdcr_lag",
+    "latency_query", "latency_get", "latency_set", "xdcr_lag", "cbft_latency_get"
 )
 
 SMOOTH_SUBPLOTS = (
-    "latency_query", "latency_get", "latency_set",
+    "latency_query", "latency_get", "latency_set", "cbft_latency_get"
 )
 
 NON_ZERO_VALUES = (
