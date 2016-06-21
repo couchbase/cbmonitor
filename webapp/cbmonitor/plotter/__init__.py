@@ -17,7 +17,7 @@ matplotlib.rcParams.update({"axes.formatter.limits": (-6, 6)})
 matplotlib.rcParams.update({"legend.numpoints": 1})
 matplotlib.rcParams.update({"legend.fancybox": True})
 matplotlib.rcParams.update({"legend.markerscale": 1.5})
-matplotlib.rcParams.update({"legend.loc": 0})
+matplotlib.rcParams.update({"legend.loc": "best"})
 matplotlib.rcParams.update({"legend.frameon": True})
 import matplotlib.pyplot as plt
 
