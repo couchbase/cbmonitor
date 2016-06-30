@@ -41,6 +41,7 @@ class Report(object):
         ]),
         ("fts_latency", [
             "cbft_latency_get",
+            "elastic_latency_get",
         ]),
         ("spring_latency", [
             "latency_set",
