@@ -39,6 +39,10 @@ class Report(object):
         ("observe", [
             "latency_observe",
         ]),
+        ("durability", [
+            "latency_persist_to",
+            "latency_replicate_to",
+        ]),
         ("fts_latency", [
             "cbft_latency_get",
             "elastic_latency_get",
@@ -305,7 +309,8 @@ class Report(object):
             # Per-bucket metrics
             if collector in ("active_tasks", "ns_server",
                              "spring_latency", "spring_query_latency",
-                             "xdcr_lag", "observe", "secondary_stats"):
+                             "durability", "observe",  "xdcr_lag",
+                             "secondary_stats"):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables.append([
