@@ -147,7 +147,14 @@ LABELS = {
     "cbft_total_bytes_query_results": "FTS total query bytes",
     "cbft_writer_execute_batch_count": "FTS writer batch count",
     "cbft_latency_get": "FTS latency in ms",
-    "elastic_latency_get": "ElasticSearch latency in ms"
+    "elastic_latency_get": "ElasticSearch latency in ms",
+    "cbft_total_bytes_indexed": "FTS total index size",
+    "cbft_num_recs_to_persist": "FTS number of records in queue",
+    "elastic_cache_hit": "Elasticsearch query cache hit",
+    "elastic_cache_size": "Elasticsearch query cache size",
+    "elastic_filter_cache_size": "Elasticsearch filter cache size",
+    "elastic_active_search": "Elasticsearch active search",
+    "elastic_query_total": "Elasticsearch total query",
 }
 
 HISTOGRAMS = (

@@ -46,6 +46,11 @@ class Report(object):
         ("fts_latency", [
             "cbft_latency_get",
             "elastic_latency_get",
+            "elastic_cache_hit",
+            "elastic_cache_size",
+            "elastic_filter_cache_size",
+            "elastic_active_search",
+            "elastic_query_total"
         ]),
         ("spring_latency", [
             "latency_set",
@@ -120,6 +125,8 @@ class Report(object):
             "cbft_batch_merge_count",
             "cbft_total_gc",
             "cbft_num_bytes_live_data",
+            "cbft_total_bytes_indexed",
+            "cbft_num_recs_to_persist",
         ]),
         ("fts_query_stats", [
             "cbft_query_slow",
