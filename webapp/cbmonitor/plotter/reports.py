@@ -169,6 +169,16 @@ class Report(object):
             "index_total_scan_duration",
             "index_items_count",
         ]),
+        ("secondary_debugstats", [
+            "num_connections",
+            "memory_used_storage",
+            "memory_used_queue",
+        ]),
+        ("secondary_debugstats_bucket", [
+            "mutation_queue_size",
+            "num_nonalign_ts",
+            "ts_queue_size",
+        ]),
         ("atop", [
             "sync_gateway_rss",
             "sync_gateway_cpu",
@@ -299,7 +309,8 @@ class Report(object):
 
         for collector, metrics in self.METRICS.iteritems():
             # Cluster-wide metrics
-            if collector in ("active_tasks", "sync_latency", "n1ql_stats", "fts_stats", "fts_query_stats", "fts_latency",):
+            if collector in ("active_tasks", "sync_latency", "n1ql_stats",
+                             "fts_stats", "fts_query_stats", "fts_latency","secondary_debugstats",):
                 for metric in metrics:
                     observables.append([
                         _all[""][snapshot.cluster][collector].get(metric)
@@ -317,7 +328,7 @@ class Report(object):
             if collector in ("active_tasks", "ns_server",
                              "spring_latency", "spring_query_latency",
                              "durability", "observe",  "xdcr_lag",
-                             "secondary_stats"):
+                             "secondary_stats", "secondary_debugstats_bucket"):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables.append([
