@@ -64,8 +64,6 @@ LABELS = {
     "cbft_cpu": "FTS CPU utilization, %",
     "backup_rss": "backup resident set size, bytes",
     "backup_cpu": "backup CPU utilization, %",
-    "sync_gateway_rss": "Sync Gateway resident set size, bytes",
-    "sync_gateway_cpu": "Sync Gateway CPU utilization, %",
     "xdcr_lag": "Total XDCR lag (from memory to memory), ms",
     "xdcr_persistence_time": "Observe latency, ms",
     "xdcr_diff": "Replication lag, ms",
@@ -75,16 +73,6 @@ LABELS = {
     "latency_observe": "OBSERVE latency, ms",
     "latency_persist_to": "persistTo=1 latency, ms",
     "latency_replicate_to": "replicateTo=1 latency, ms",
-    "Sys": "Bytes obtained from system",
-    "Alloc": "Bytes allocated and still in use",
-    "HeapAlloc": "Bytes allocated and still in use",
-    "HeapObjects": "Total number of allocated objects",
-    "PauseTotalNs": "Total GC pause time, ns",
-    "PauseNs": "GC pause time, ns",
-    "NumGC": "GC events",
-    "PausesPct": "Percentage of total time spent in GC, %",
-    "gateway_push": "Single push request to SGW, ms",
-    "gateway_pull": "Single pull request to SGW, ms",
     "data_rbps": "Bytes read/sec",
     "data_wbps": "Bytes written/sec",
     "data_avgqusz": "The average queue length",
@@ -120,24 +108,19 @@ LABELS = {
     "mutation_queue_size": "Mutation queue size, index node",
     "num_nonalign_ts": "Non align ts, index node",
     "ts_queue_size": "ts queue size, index node",
+    "query_requests": "Number of N1QL requests processed per sec",
+    "query_selects": "Number of N1QL selects processed per sec",
     "query_avg_req_time": "Average processing time for N1QL",
     "query_avg_svc_time": "Average servicing time for N1QL",
     "query_avg_response_size": "Average response time for N1QL",
     "query_avg_result_count": "Average result count for N1QL",
-    "query_active_requests": "N1QL avtive requests",
-    "query_errors": "N1QL errors",
-    "query_queued_requests": "N1QL queued requests",
-    "query_request_time": "N1QL request times",
-    "query_requests": "Query raw latency",
-    "query_requests_1000ms": "Query latency above 1000ms",
-    "query_requests_250ms": "Query latency above 250ms",
-    "query_requests_5000ms": "Query latency above 5000ms",
-    "query_requests_500ms": "Query latency above 500ms",
-    "query_result_count": "N1QL result count",
-    "query_result_size": "N1QL result size",
-    "query_selects": "N1QL selects per second",
-    "query_service_time": "N1QL service times",
-    "query_warnings": "N1QL warnings",
+    "query_errors": "Number of N1QL errors returned per sec",
+    "query_warnings": "Number of N1QL errors returned per sec",
+    "query_requests_250ms": "Number of queries that take longer than 250ms per sec",
+    "query_requests_500ms": "Number of queries that take longer than 500ms per sec",
+    "query_requests_1000ms": "Number of queries that take longer than 1000ms per sec",
+    "query_requests_5000ms": "Number of queries that take longer than 5000ms per sec",
+    "query_invalid_requests": "Number of requests for unsupported endpoints per sec",
     "cbft_num_bytes_used_disk": "FTS index size on disk in GB ",
     "cbft_doc_count": "FTS indexing rate",
     "cbft_num_bytes_used_ram": "FTS ram used by cbft process",
@@ -164,27 +147,49 @@ LABELS = {
 }
 
 HISTOGRAMS = (
-    "latency_get", "latency_set", "latency_query", "latency_observe",
-    "latency_persist_to", "latency_replicate_to",
-    "xdcr_lag", "xdcr_persistence_time", "xdcr_diff",
-    "replication_meta_latency_wt", "replication_docs_latency_wt",
-    "avg_bg_wait_time", "avg_disk_commit_time", "avg_disk_update_time",
-    "query_requests", "index_num_requests", "cbft_latency_get", "elastic_latency_get"
-
+    "latency_get",
+    "latency_set",
+    "latency_query",
+    "latency_observe",
+    "latency_persist_to",
+    "latency_replicate_to",
+    "xdcr_lag",
+    "xdcr_persistence_time",
+    "xdcr_diff",
+    "replication_meta_latency_wt",
+    "replication_docs_latency_wt",
+    "avg_bg_wait_time",
+    "avg_disk_commit_time",
+    "avg_disk_update_time",
+    "query_avg_req_time",
+    "query_service_time",
+    "cbft_latency_get",
+    "elastic_latency_get",
 )
 
 ZOOM_HISTOGRAMS = (
-    "latency_get", "latency_set", "latency_query", "avg_bg_wait_time", "cbft_latency_get",
-    "elastic_latency_get"
+    "latency_get",
+    "latency_set",
+    "latency_query",
+    "avg_bg_wait_time",
+    "cbft_latency_get",
+    "elastic_latency_get",
 )
 
 KDE = (
-    "latency_query", "latency_get", "latency_set", "xdcr_lag", "cbft_latency_get",
-    "elastic_latency_get"
+    "latency_query",
+    "latency_get",
+    "latency_set",
+    "xdcr_lag",
+    "cbft_latency_get",
+    "elastic_latency_get",
 )
 
 SMOOTH_SUBPLOTS = (
-    "latency_query", "latency_get", "latency_set", "cbft_latency_get",
+    "latency_query",
+    "latency_get",
+    "latency_set",
+    "cbft_latency_get",
     "elastic_latency_get"
 )
 
@@ -234,7 +239,13 @@ NON_ZERO_VALUES = (
     "replication_meta_latency_wt",
     "replication_docs_latency_wt",
 
-    "bucket_compaction_progress",
+    "query_errors",
+    "query_warnings",
+    "query_requests_250ms",
+    "query_requests_500ms",
+    "query_requests_1000ms",
+    "query_requests_5000ms",
+    "query_invalid_requests",
 
     "swap_used",
 
