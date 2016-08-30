@@ -162,7 +162,7 @@ HISTOGRAMS = (
     "avg_disk_commit_time",
     "avg_disk_update_time",
     "query_avg_req_time",
-    "query_service_time",
+    "query_avg_svc_time",
     "cbft_latency_get",
     "elastic_latency_get",
 )
