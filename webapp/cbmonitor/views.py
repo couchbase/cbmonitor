@@ -149,6 +149,14 @@ def add_bucket(request):
     else:
         raise ValidationError(form)
 
+@validation
+def add_index(request):
+    form = forms.AddIndexForm(request.POST)
+    if form.is_valid():
+        form.save()
+    else:
+        raise ValidationError(form)
+
 
 @validation
 def delete_cluster(request):
@@ -199,6 +207,20 @@ def get_buckets(request):
     content = json.dumps(sorted(buckets))
     return HttpResponse(content)
 
+@validation
+def get_indexes(request):
+    form = forms.GetIndexForm(request.GET)
+    if form.is_valid():
+        try:
+            cluster = models.Cluster.objects.get(name=request.GET["cluster"])
+            indexes = models.Index.objects.filter(cluster=cluster).values()
+            indexes = [i["name"] for i in indexes]
+        except ObjectDoesNotExist:
+            indexes = []
+    else:
+        indexes = []
+    content = json.dumps(sorted(indexes))
+    return HttpResponse(content)
 
 @validation
 def get_metrics(request):
@@ -223,6 +245,7 @@ def add_metric(request):
     if form.is_valid():
         observable = form.save(commit=False)
         observable.bucket = form.cleaned_data["bucket"]
+        observable.index = form.cleaned_data["index"]
         observable.server = form.cleaned_data["server"]
         observable.save()
     else:
@@ -376,6 +399,7 @@ def seriesly_proxy(request):
         cluster=request.GET["cluster"],
         server=request.GET.get("server"),
         bucket=request.GET.get("bucket"),
+        index=request.GET.get("index"),
         collector=request.GET.get("collector"),
     )
     data = sh.query_raw_data(db_name, name=request.GET["name"])

@@ -16,9 +16,9 @@ class SerieslyHandler(object):
         self.all_dbs = self.db.list_dbs()
 
     @staticmethod
-    def build_dbname(cluster, server, bucket, collector):
+    def build_dbname(cluster, server, bucket, index, collector):
         """Each seriesly db name is built from observable object attributes."""
-        db_name = (collector or "") + cluster + (bucket or "") + (server or "")
+        db_name = (collector or "") + cluster + (bucket or "") + (index or "") + (server or "")
         for char in "[]/\;.,><&*:%=+@!#^()|?^'\"":
             db_name = db_name.replace(char, "")
         return db_name
@@ -38,7 +38,7 @@ class SerieslyHandler(object):
             query_params.update({"from": ts_from, "to": ts_to, "group": group})
         db_name = self.build_dbname(observable.snapshot.cluster.name,
                                     observable.server, observable.bucket,
-                                    observable.collector)
+                                    observable.index, observable.collector)
         if db_name in self.all_dbs:
             try:
                 raw_data = self.db[db_name].query(query_params)

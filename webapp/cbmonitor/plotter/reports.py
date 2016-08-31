@@ -4,7 +4,7 @@ from cbmonitor import models
 
 
 Observable = namedtuple(
-    "Observable", ["snapshot", "server", "bucket", "name", "collector"]
+    "Observable", ["snapshot", "server", "bucket", "index", "name", "collector"]
 )
 
 
@@ -68,6 +68,8 @@ class Report(object):
             "latency_get",
         ]),
         ("ns_server", [
+            "ep_dcp_2i_items_sent",
+            "ep_dcp_2i_items_remaining",
             "couch_views_ops",
             "ops",
             "cmd_get",
@@ -156,6 +158,16 @@ class Report(object):
             "num_nonalign_ts",
             "ts_queue_size",
         ]),
+        ("secondary_debugstats_index", [
+            "avg_scan_latency",
+            "avg_ts_interval",
+            "num_completed_requests",
+            "avg_ts_items_count",
+            "num_compactions",
+            "num_rows_returned",
+            "flush_queue_size",
+            "avg_scan_wait_latency"
+        ]),
         ("atop", [
             "sync_gateway_rss",
             "sync_gateway_cpu",
@@ -206,6 +218,7 @@ class Report(object):
 
         self.buckets = ()
         self.servers = ()
+        self.indexes = ()
         for snapshot in snapshots:
             buckets = {
                 b.name for b in models.Bucket.objects.filter(cluster=snapshot.cluster)
@@ -214,6 +227,17 @@ class Report(object):
                 self.buckets = buckets
             else:
                 self.buckets = buckets & self.buckets
+            print "Buckets: {}".format(buckets)
+
+            indexes = {
+                i.name for i in models.Index.objects.filter(cluster=snapshot.cluster)
+            }
+            if self.indexes == ():
+                self.indexes = indexes
+            else:
+                self.indexes = indexes & self.indexes
+            print "Indexes: {}".format(indexes)
+
             servers = {
                 s.address for s in models.Server.objects.filter(cluster=snapshot.cluster)
             }
@@ -221,19 +245,21 @@ class Report(object):
                 self.servers = servers
             else:
                 self.servers = servers & self.servers
+            print "Servers: {}".format(servers)
 
     def get_all_observables(self):
         """Get all stored in database Observable objects that match provided
         snapshots. There are three expensive queries per snapshot:
         -- get all cluster-wide metrics
         -- get all per-bucket metrics
+        -- get all per-index metrics
         -- get all per-server metrics
 
         That was the only obvious way to achieve O(n) time complexity.
 
         all_observables is the nested dictionary where every object is may be
         queried as:
-            all_observables[bucket/server][cluster][name][collector]
+            all_observables[bucket/server/index][cluster][name][collector]
 
         It's allowed to use "" for bucket names and server addresses.
 
@@ -245,9 +271,11 @@ class Report(object):
             observables = defaultdict(dict)
             for o in models.Observable.objects.filter(cluster=snapshot.cluster,
                                                       bucket__isnull=True,
-                                                      server__isnull=True):
+                                                      server__isnull=True,
+                                                      index__isnull=True):
+
                 observables[o.collector][o.name] = Observable(
-                    snapshot, "", "", o.name, o.collector
+                    snapshot, "", "", "", o.name, o.collector
                 )
             all_observables[""][snapshot.cluster] = observables
 
@@ -258,11 +286,26 @@ class Report(object):
                 observables = defaultdict(dict)
                 for o in models.Observable.objects.filter(cluster=snapshot.cluster,
                                                           bucket=_bucket,
-                                                          server__isnull=True):
+                                                          server__isnull=True,
+                                                          index__isnull=True):
                     observables[o.collector][o.name] = Observable(
-                        snapshot, "", bucket, o.name, o.collector
+                        snapshot, "", bucket, "", o.name, o.collector
                     )
                 all_observables[bucket][snapshot.cluster] = observables
+
+            # Per-index metrics
+            for index in self.indexes:
+                _index = models.Index.objects.get(cluster=snapshot.cluster,
+                                                    name=index)
+                observables = defaultdict(dict)
+                for o in models.Observable.objects.filter(cluster=snapshot.cluster,
+                                                          bucket__isnull=True,
+                                                          server__isnull=True,
+                                                          index=_index):
+                    observables[o.collector][o.name] = Observable(
+                        snapshot, "", "", index, o.name, o.collector
+                    )
+                all_observables[index][snapshot.cluster] = observables
 
             # Per-server metrics
             for server in self.servers:
@@ -271,9 +314,10 @@ class Report(object):
                 observables = defaultdict(dict)
                 for o in models.Observable.objects.filter(cluster=snapshot.cluster,
                                                           bucket__isnull=True,
-                                                          server=_server):
+                                                          server=_server,
+                                                          index__isnull=True):
                     observables[o.collector][o.name] = Observable(
-                        snapshot, server, "", o.name, o.collector
+                        snapshot, server, "", "", o.name, o.collector
                     )
                 all_observables[server][snapshot.cluster] = observables
         return all_observables
@@ -282,6 +326,7 @@ class Report(object):
         """Primary class method that return tuple with valid Observable objects
         """
         _all = self.get_all_observables()
+
         observables = []
 
         for collector, metrics in self.METRICS.iteritems():
@@ -311,6 +356,14 @@ class Report(object):
                         observables.append([
                             _all[bucket][snapshot.cluster][collector].get(metric)
                             for snapshot in self.snapshots
+                        ])
+            # Per-index metrics
+            if collector in ("secondary_debugstats_index",):
+                for metric in metrics:
+                    for index in self.indexes:
+                        observables.append([
+                               _all[index][snapshot.cluster][collector].get(metric)
+                               for snapshot in self.snapshots
                         ])
         # Skip full mismatch and return tuple with Observable objects
         return tuple(_ for _ in observables if set(_) != {None})

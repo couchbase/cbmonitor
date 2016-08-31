@@ -43,15 +43,32 @@ class Bucket(models.Model):
         pass
 
 
+class Index(models.Model):
+
+    class Meta:
+        unique_together = ["name", "cluster"]
+
+    name = models.CharField(max_length=32, default="idx")
+    cluster = models.ForeignKey("Cluster")
+
+    def __str__(self):
+        return self.name
+
+    class Admin:
+        pass
+
+
+
 class Observable(models.Model):
 
     class Meta:
-        unique_together = ["name", "cluster", "server", "bucket"]
+        unique_together = ["name", "cluster", "server", "bucket", "index"]
 
     name = models.CharField(max_length=128)
     cluster = models.ForeignKey("Cluster")
     server = models.ForeignKey("Server", null=True, blank=True)
     bucket = models.ForeignKey("Bucket", null=True, blank=True)
+    index = models.ForeignKey("Index", null=True, blank=True)
     collector = models.CharField(max_length=32)
 
     def __str__(self):
@@ -78,5 +95,6 @@ class Snapshot(models.Model):
 admin.site.register(Cluster)
 admin.site.register(Server)
 admin.site.register(Bucket)
+admin.site.register(Index)
 admin.site.register(Observable)
 admin.site.register(Snapshot)

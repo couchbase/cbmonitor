@@ -194,6 +194,9 @@ class Plotter(object):
             return "[{}] {}".format(observable.bucket, metric)
         elif observable.server:
             return "[{}] {}".format(observable.server, metric)
+        elif observable.index and "." in observable.index:
+            name = observable.index.split(".")
+            return "[{}] [{}] {}".format(name[0], name[1], metric)
         else:
             return metric
 
@@ -261,6 +264,7 @@ class Plotter(object):
         """End-point method that orchestrates concurrent extraction and
         plotting."""
         observables = Report(snapshots)()
+
         rebalances = self.detect_rebalance(observables[0])
 
         # Asynchronously extract data
