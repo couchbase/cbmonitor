@@ -1,3 +1,4 @@
+import dateutil.parser
 import os
 import re
 from collections import defaultdict
@@ -216,9 +217,9 @@ class Plotter(object):
         series.dropna()  # otherwise it may break kde
         if metric in constants.NON_ZERO_VALUES and (series == 0).all():
             return None
-        series.index = series.index.astype("uint64")
+        series.rename(lambda x: dateutil.parser.parse(x), inplace=True)
+        series.rename(lambda x: int(x.strftime('%s')), inplace=True)
         series.rename(lambda x: x - series.index.values.min(), inplace=True)
-        series.rename(lambda x: x / 1000, inplace=True)  # ms -> s
         return series
 
     def extract(self, observables, skip_df=False):

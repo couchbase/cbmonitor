@@ -1,5 +1,3 @@
-from calendar import timegm
-
 import seriesly
 
 
@@ -24,29 +22,17 @@ class SerieslyHandler(object):
         return db_name
 
     def query_data(self, observable):
-        """Read data from seriesly database. Use snapshot time range if
-        possible."""
-        query_params = {"ptr": "/{}".format(observable.name), "reducer": "avg",
-                        "group": self.MIN_GROUP_INTERVAL}
-        if observable.snapshot.ts_from and observable.snapshot.ts_to:
-            ts_from = timegm(observable.snapshot.ts_from.timetuple()) * 1000
-            ts_to = timegm(observable.snapshot.ts_to.timetuple()) * 1000
-            if ts_from - ts_to > self.GROUPING_THRESHOLD:
-                group = self.MAX_GROUP_INTERVAL
-            else:
-                group = self.MIN_GROUP_INTERVAL
-            query_params.update({"from": ts_from, "to": ts_to, "group": group})
+        """Read data from seriesly database."""
         db_name = self.build_dbname(observable.snapshot.cluster.name,
                                     observable.server, observable.bucket,
                                     observable.index, observable.collector)
         if db_name in self.all_dbs:
             try:
-                raw_data = self.db[db_name].query(query_params)
-                return {k: v[0] for k, v in raw_data.items()}
+                raw_data = self.db[db_name].get_all()
+                return {k: v[observable.name] for k, v in raw_data.items()
+                        if observable.name in v}
             except seriesly.exceptions.ConnectionError:
                 return
-        else:
-            return
 
     def query_raw_data(self, db_name, name):
         params = {"ptr": "/{}".format(name), "reducer": "avg", "group": 5000}
