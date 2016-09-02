@@ -166,7 +166,13 @@ class Report(object):
             "num_compactions",
             "num_rows_returned",
             "flush_queue_size",
-            "avg_scan_wait_latency"
+            "avg_scan_wait_latency",
+            "timings_storage_commit",
+            "timings_storage_del",
+            "timings_storage_get",
+            "timings_storage_set",
+            "timings_storage_snapshot_create",
+            "timings_dcp_getseqs",
         ]),
         ("atop", [
             "sync_gateway_rss",
