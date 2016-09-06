@@ -106,6 +106,7 @@ class Report(object):
             "avg_bg_wait_time",
             "avg_disk_commit_time",
             "avg_disk_update_time",
+            "vb_avg_total_queue_age",
             "couch_docs_data_size",
             "couch_docs_actual_disk_size",
             "couch_views_data_size",

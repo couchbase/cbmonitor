@@ -26,6 +26,7 @@ LABELS = {
     "avg_bg_wait_time": "BgFetcher wait time, us",
     "avg_disk_commit_time": "Disk commit time, s",
     "avg_disk_update_time": "Disk update time, us",
+    "vb_avg_total_queue_age": "Average age of all items in the disk write queue, sec",
     "couch_docs_data_size": "Docs data size, bytes",
     "couch_docs_actual_disk_size": "Docs total disk size, bytes",
     "couch_docs_fragmentation": "Docs fragmentation, %",
