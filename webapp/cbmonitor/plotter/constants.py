@@ -228,6 +228,9 @@ NON_ZERO_VALUES = (
 
     "hibernated_waked",
 
+    "ep_dcp_2i_items_sent",
+    "ep_dcp_2i_items_remaining",
+
     "ep_tmp_oom_errors",
     "disk_write_queue",
     "ep_diskqueue_drain",
