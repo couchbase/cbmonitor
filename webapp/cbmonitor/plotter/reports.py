@@ -102,6 +102,8 @@ class Report(object):
             "disk_write_queue",
             "ep_cache_miss_rate",
             "ep_bg_fetched",
+            "ep_ops_create",
+            "ep_ops_update",
             "ep_diskqueue_drain",
             "avg_bg_wait_time",
             "avg_disk_commit_time",
