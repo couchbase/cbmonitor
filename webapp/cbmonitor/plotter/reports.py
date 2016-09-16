@@ -67,6 +67,19 @@ class Report(object):
             "latency_set",
             "latency_get",
         ]),
+        ("xdcr_stats", [
+            "changes_left",
+            "percent_completeness",
+            "docs_written",
+            "docs_filtered",
+            "docs_failed_cr_source",
+            "rate_replicated",
+            "bandwidth_usage",
+            "rate_doc_opt_repd",
+            "rate_doc_checks",
+            "wtavg_meta_latency",
+            "wtavg_docs_latency",
+        ]),
         ("ns_server", [
             "ep_dcp_2i_items_sent",
             "ep_dcp_2i_items_remaining",
@@ -80,13 +93,6 @@ class Report(object):
             "ep_num_ops_get_meta",
             "ep_num_ops_set_meta",
             "ep_num_ops_del_meta",
-            "replication_changes_left",
-            "replication_rate_replication",
-            "replication_bandwidth_usage",
-            "replication_active_vbreps",
-            "replication_waiting_vbreps",
-            "replication_num_failedckpts",
-            "replication_docs_latency_wt",
             "curr_connections",
             "curr_items",
             "mem_used",
@@ -356,7 +362,7 @@ class Report(object):
                             for snapshot in self.snapshots
                         ])
             # Per-bucket metrics
-            if collector in ("active_tasks", "ns_server",
+            if collector in ("active_tasks", "xdcr_stats", "ns_server",
                              "spring_latency", "spring_query_latency",
                              "durability", "observe",  "xdcr_lag",
                              "secondary_stats", "secondary_debugstats_bucket"):
