@@ -184,20 +184,18 @@ class Report(object):
             "timings_dcp_getseqs",
         ]),
         ("atop", [
-            "sync_gateway_rss",
-            "sync_gateway_cpu",
             "beam.smp_rss",
             "beam.smp_cpu",
             "memcached_rss",
             "memcached_cpu",
+            "goxdcr_rss",
+            "goxdcr_cpu",
             "indexer_rss",
             "indexer_cpu",
             "projector_rss",
             "projector_cpu",
             "cbq-engine_rss",
             "cbq-engine_cpu",
-            "backup_rss",
-            "backup_cpu",
             "cbft_rss",
             "cbft_cpu",
         ]),
@@ -210,10 +208,6 @@ class Report(object):
             "index_wbps",
             "index_avgqusz",
             "index_util",
-            "backup_rbps",
-            "backup_wbps",
-            "backup_avgqusz",
-            "backup_util",
         ]),
         ("net", [
             "in_bytes_per_sec",
@@ -346,15 +340,16 @@ class Report(object):
 
         for collector, metrics in self.METRICS.iteritems():
             # Cluster-wide metrics
-            if collector in ("active_tasks", "sync_latency", "n1ql_stats",
-                             "fts_stats", "fts_query_stats", "fts_latency","secondary_debugstats",):
+            if collector in ("active_tasks", "n1ql_stats",
+                             "fts_stats", "fts_query_stats", "fts_latency",
+                             "secondary_debugstats",):
                 for metric in metrics:
                     observables.append([
                         _all[""][snapshot.cluster][collector].get(metric)
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
-            if collector in ("atop", "iostat", "net", "sync_gateway"):
+            if collector in ("atop", "iostat", "net"):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
@@ -373,7 +368,7 @@ class Report(object):
                             for snapshot in self.snapshots
                         ])
             # Per-index metrics
-            if collector in ("secondary_debugstats_index",):
+            if collector in ("secondary_debugstats_index", ):
                 for metric in metrics:
                     for index in self.indexes:
                         observables.append([
