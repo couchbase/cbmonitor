@@ -135,6 +135,7 @@ class Report(object):
             "cbft_num_bytes_live_data",
             "cbft_total_bytes_indexed",
             "cbft_num_recs_to_persist",
+            "cbft_avg_queries_latency",
         ]),
         ("fts_query_stats", [
             "cbft_query_slow",
