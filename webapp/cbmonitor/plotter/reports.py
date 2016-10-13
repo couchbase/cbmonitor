@@ -150,6 +150,7 @@ class Report(object):
             "index_items_count",
             "index_num_docs_indexed",
             "index_num_docs_pending",
+            "index_num_docs_queued",
             "index_num_requests",
             "index_num_rows_returned",
             "index_scan_bytes_read",
