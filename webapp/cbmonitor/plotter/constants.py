@@ -192,22 +192,9 @@ ZOOM_HISTOGRAMS = (
     "elastic_latency_get",
 )
 
-KDE = (
-    "latency_query",
-    "latency_get",
-    "latency_set",
-    "xdcr_lag",
-    "cbft_latency_get",
-    "elastic_latency_get",
-)
+KDE = ()
 
-SMOOTH_SUBPLOTS = (
-    "latency_query",
-    "latency_get",
-    "latency_set",
-    "cbft_latency_get",
-    "elastic_latency_get"
-)
+SMOOTH_SUBPLOTS = ()
 
 NON_ZERO_VALUES = (
     "rebalance_progress",
