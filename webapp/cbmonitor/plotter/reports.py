@@ -159,6 +159,9 @@ class Report(object):
             "index_fragmentation",
             "index_total_scan_duration",
         ]),
+        ("secondaryscan_latency", [
+            "Nth-latency",
+        ]),
         ("secondary_debugstats", [
             "num_connections",
             "memory_used_storage",
@@ -344,7 +347,7 @@ class Report(object):
             # Cluster-wide metrics
             if collector in ("active_tasks", "n1ql_stats",
                              "fts_stats", "fts_query_stats", "fts_latency",
-                             "secondary_debugstats",):
+                             "secondary_debugstats", "secondaryscan_latency",):
                 for metric in metrics:
                     observables.append([
                         _all[""][snapshot.cluster][collector].get(metric)

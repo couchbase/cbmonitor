@@ -115,6 +115,7 @@ LABELS = {
     "avg_ts_items_count": "Average ts items count, items",
     "num_compactions": "Number of compactions",
     "num_rows_returned": "Number of rows returned",
+    "Nth-latency": "latency, ns",
     "flush_queue_size": "Flush queue size, items",
     "avg_scan_wait_latency": "Average scan wait latency, ns",
     "timings_storage_commit": "Average timings storage commit, ns",
@@ -181,6 +182,7 @@ HISTOGRAMS = (
     "query_avg_svc_time",
     "cbft_latency_get",
     "elastic_latency_get",
+    "Nth-latency",
 )
 
 ZOOM_HISTOGRAMS = (
@@ -190,6 +192,7 @@ ZOOM_HISTOGRAMS = (
     "avg_bg_wait_time",
     "cbft_latency_get",
     "elastic_latency_get",
+    "Nth-latency",
 )
 
 KDE = ()
