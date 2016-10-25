@@ -95,6 +95,7 @@ class Report(object):
             "ep_num_ops_del_meta",
             "curr_connections",
             "curr_items",
+            "vb_replica_curr_items",
             "mem_used",
             "ep_meta_data_memory",
             "vb_active_resident_items_ratio",
