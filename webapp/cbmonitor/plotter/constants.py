@@ -9,6 +9,7 @@ LABELS = {
     "hibernated_waked": "Streaming requests wakeups per sec",
     "curr_items": "Active items",
     "vb_replica_curr_items": "Replica items",
+    "vb_pending_curr_items": "Pending items",
     "mem_used": "Memory used, bytes",
     "ep_meta_data_memory": "Metadata in RAM, bytes",
     "vb_active_resident_items_ratio": "Active docs resident, %",
