@@ -221,6 +221,10 @@ NON_ZERO_VALUES = (
 
     "ep_dcp_2i_items_sent",
     "ep_dcp_2i_items_remaining",
+    "ep_dcp_replica_items_remaining",
+    "ep_dcp_replica_total_bytes",
+    "ep_dcp_other_items_remaining",
+    "ep_dcp_other_total_bytes",
 
     "ep_tmp_oom_errors",
     "disk_write_queue",
@@ -233,11 +237,19 @@ NON_ZERO_VALUES = (
     "avg_bg_wait_time",
     "avg_disk_commit_time",
     "avg_disk_update_time",
+    "vb_replica_curr_items",
+    "vb_pending_curr_items",
+    "vb_avg_total_queue_age",
 
     "xdc_ops",
     "ep_num_ops_get_meta",
     "ep_num_ops_set_meta",
     "ep_num_ops_del_meta",
+    "docs_failed_cr_source",
+    "docs_filtered",
+    "docs_failed_cr_source",
+    "rate_doc_opt_repd",
+    "rate_doc_checks",
 
     "replication_changes_left",
     "replication_size_rep_queue",
@@ -259,6 +271,18 @@ NON_ZERO_VALUES = (
     "query_requests_1000ms",
     "query_requests_5000ms",
     "query_invalid_requests",
+
+    "index_fragmentation",
+    "index_items_count",
+    "index_num_docs_indexed",
+    "index_num_docs_pending",
+    "index_num_docs_queued",
+    "index_num_requests",
+    "index_num_rows_returned",
+    "index_scan_bytes_read",
+    "index_data_size",
+    "index_disk_size",
+    "index_total_scan_duration",
 
     "swap_used",
 
