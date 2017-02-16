@@ -147,6 +147,7 @@ class Report(object):
             "cbft_query_total",
             "cbft_total_bytes_query_results",
             "cbft_writer_execute_batch_count",
+            "cbft_query_throughput",
         ]),
         ("secondary_stats", [
             "index_items_count",

@@ -155,6 +155,7 @@ LABELS = {
     "cbft_writer_execute_batch_count": "FTS writer batch count",
     "cbft_latency_get": "FTS latency in ms",
     "cbft_avg_queries_latency": "FTS average queries latency (server)",
+    "cbft_query_throughput": "FTS average queries per second", 
     "elastic_latency_get": "ElasticSearch latency in ms",
     "cbft_total_bytes_indexed": "FTS total index size",
     "cbft_num_recs_to_persist": "FTS number of records in queue",
