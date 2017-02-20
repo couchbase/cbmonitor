@@ -191,6 +191,24 @@ class Report(object):
             "timings_storage_snapshot_create",
             "timings_dcp_getseqs",
         ]),
+        ("secondary_storage_stats", [
+            "memory_size",
+            "num_cached_pages",
+            "num_pages",
+            "num_pages_swapout",
+            "num_pages_swapin",
+            "bytes_incoming",
+            "bytes_written",
+            "write_amp",
+            "lss_fragmentation",
+            "cache_hits",
+            "cache_misses",
+            "cache_hit_ratio",
+            "resident_ratio",
+            "allocated",
+            "freed",
+            "reclaimed",
+        ]),
         ("atop", [
             "beam.smp_rss",
             "beam.smp_cpu",
@@ -376,7 +394,7 @@ class Report(object):
                             for snapshot in self.snapshots
                         ])
             # Per-index metrics
-            if collector in ("secondary_debugstats_index", ):
+            if collector in ("secondary_debugstats_index", "secondary_storage_stats", ):
                 for metric in metrics:
                     for index in self.indexes:
                         observables.append([
