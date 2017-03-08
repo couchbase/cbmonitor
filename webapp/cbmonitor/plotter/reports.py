@@ -167,6 +167,7 @@ class Report(object):
         ]),
         ("secondary_debugstats", [
             "num_connections",
+            "memory_used",
             "memory_used_storage",
             "memory_used_queue",
         ]),
@@ -208,6 +209,7 @@ class Report(object):
             "MainStore_allocated",
             "MainStore_freed",
             "MainStore_reclaimed",
+            "MainStore_reclaim_pending",
             "BackStore_memory_size",
             "BackStore_num_cached_pages",
             "BackStore_num_pages",
@@ -224,6 +226,7 @@ class Report(object):
             "BackStore_allocated",
             "BackStore_freed",
             "BackStore_reclaimed",
+            "BackStore_reclaim_pending",
         ]),
         ("atop", [
             "beam.smp_rss",

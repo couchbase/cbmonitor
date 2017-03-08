@@ -108,6 +108,7 @@ LABELS = {
     "index_total_scan_duration": "Total time spent by 2i on scans",
     "index_items_count": "Current total indexed document count",
     "num_connections": "Number of connections to index node",
+    "memory_used": "Memory used, index node, bytes",
     "memory_used_storage": "Memory used for storage, index node, bytes",
     "memory_used_queue": "Memory used for queue on index node, bytes",
     "mutation_queue_size": "Mutation queue size on index node, items",
@@ -144,6 +145,7 @@ LABELS = {
     "MainStore_allocated": "Memory allocated for plasma",
     "MainStore_freed": "Memory feed by plasma",
     "MainStore_reclaimed": "Memory reclaimed by plasma",
+    "MainStore_reclaim_pending": "Memory reclaim pending by plasma",
     "BackStore_memory_size": "Memory used by plasma",
     "BackStore_num_cached_pages": "Number of pages cached pages by plasma",
     "BackStore_num_pages": "Total number of pages by plasma",
@@ -160,6 +162,7 @@ LABELS = {
     "BackStore_allocated": "Memory allocated for plasma",
     "BackStore_freed": "Memory feed by plasma",
     "BackStore_reclaimed": "Memory reclaimed by plasma",
+    "BackStore_reclaim_pending": "Memory reclaim pending by plasma",
     "query_requests": "Number of N1QL requests processed per sec",
     "query_selects": "Number of N1QL selects processed per sec",
     "query_avg_req_time": "Average end-to-end time to process a query, sec",
@@ -337,6 +340,8 @@ NON_ZERO_VALUES = (
     "MainStore_allocated",
     "MainStore_freed",
     "MainStore_reclaimed",
+    "MainStore_reclaim_pending",
+
     "BackStore_memory_size",
     "BackStore_num_cached_pages",
     "BackStore_num_pages",
@@ -353,6 +358,7 @@ NON_ZERO_VALUES = (
     "BackStore_allocated",
     "BackStore_freed",
     "BackStore_reclaimed",
+    "BackStore_reclaim_pending",
 
     "swap_used",
 
