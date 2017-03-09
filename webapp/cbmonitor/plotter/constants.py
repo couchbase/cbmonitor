@@ -123,6 +123,7 @@ LABELS = {
     "Nth-latency": "latency, ns",
     "flush_queue_size": "Flush queue size, items",
     "avg_scan_wait_latency": "Average scan wait latency, ns",
+    "disk_store_duration": "Indexer disk store duration, ms",
     "timings_storage_commit": "Average timings storage commit, ns",
     "timings_storage_del": "Average timings storage del, ns",
     "timings_storage_get": "Average timings storage get, ns",

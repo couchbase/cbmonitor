@@ -185,6 +185,7 @@ class Report(object):
             "num_rows_returned",
             "flush_queue_size",
             "avg_scan_wait_latency",
+            "disk_store_duration",
             "timings_storage_commit",
             "timings_storage_del",
             "timings_storage_get",
