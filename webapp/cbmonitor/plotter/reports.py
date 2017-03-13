@@ -281,6 +281,11 @@ class Report(object):
             "BackStore_reclaimed",
             "BackStore_reclaim_pending",
         ]),
+        ("secondary_storage_stats_mm", [
+            "mm_allocated",
+            "mm_resident",
+            "mm_metadata",
+        ]),
         ("atop", [
             "beam.smp_rss",
             "beam.smp_cpu",
