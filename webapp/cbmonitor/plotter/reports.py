@@ -443,7 +443,7 @@ class Report(object):
 
         for collector, metrics in self.METRICS.iteritems():
             # Cluster-wide metrics
-            if collector in ("active_tasks", "n1ql_stats",
+            if collector in ("active_tasks", "ns_server", "n1ql_stats",
                              "fts_totals", "fts_latency",
                              "secondary_debugstats", "secondaryscan_latency",
                              "secondary_storage_stats_mm",):
