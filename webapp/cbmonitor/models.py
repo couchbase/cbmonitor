@@ -81,8 +81,8 @@ class Observable(models.Model):
 class Snapshot(models.Model):
 
     name = models.CharField(max_length=256, primary_key=True, blank=False)
-    ts_from = models.DateTimeField()
-    ts_to = models.DateTimeField()
+    ts_from = models.DateTimeField(blank=True, null=True)
+    ts_to = models.DateTimeField(blank=True, null=True)
     cluster = models.ForeignKey("Cluster")
 
     def __str__(self):
