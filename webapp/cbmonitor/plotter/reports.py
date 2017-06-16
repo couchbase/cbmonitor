@@ -293,6 +293,12 @@ class Report(object):
             "mm_metadata",
         ]),
         ("atop", [
+            "cbbackupmgr_rss",
+            "cbbackupmgr_cpu",
+            "cbexport_rss",
+            "cbexport_cpu",
+            "cbimport_rss",
+            "cbimport_cpu",
             "beam.smp_rss",
             "beam.smp_cpu",
             "memcached_rss",
