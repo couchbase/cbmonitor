@@ -315,6 +315,10 @@ class Report(object):
             "cbft_cpu",
         ]),
         ("iostat", [
+            "tools_rbps",
+            "tools_wbps",
+            "tools_avgqusz",
+            "tools_util",
             "data_rbps",
             "data_wbps",
             "data_avgqusz",
