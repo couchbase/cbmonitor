@@ -330,6 +330,9 @@ class Report(object):
             "index_avgqusz",
             "index_util",
         ]),
+        ("pcstat", [
+            "data_avg_page_cache_rr",
+        ]),
         ("net", [
             "in_bytes_per_sec",
             "out_bytes_per_sec",
@@ -471,7 +474,7 @@ class Report(object):
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
-            if collector in ("atop", "iostat", "net", "fts_stats"):
+            if collector in ("atop", "iostat", "net", "fts_stats", "pcstat"):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
