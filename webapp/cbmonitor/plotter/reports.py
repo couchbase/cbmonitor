@@ -266,6 +266,8 @@ class Report(object):
             "MainStore_freed",
             "MainStore_reclaimed",
             "MainStore_reclaim_pending",
+            "MainStore_mvcc_purge_ratio",
+            "MainStore_memory_quota",
             "BackStore_memory_size",
             "BackStore_num_cached_pages",
             "BackStore_num_pages",
@@ -286,6 +288,7 @@ class Report(object):
             "BackStore_freed",
             "BackStore_reclaimed",
             "BackStore_reclaim_pending",
+            "BackStore_mvcc_purge_ratio",
         ]),
         ("secondary_storage_stats_mm", [
             "mm_allocated",

@@ -150,6 +150,8 @@ LABELS = {
     "MainStore_allocated": "Memory allocated for plasma",
     "MainStore_freed": "Memory feed by plasma",
     "MainStore_reclaimed": "Memory reclaimed by plasma",
+    "MainStore_mvcc_purge_ratio": "MVCC purge ratio",
+    "MainStore_memory_quota": "Indexer Memory quota, bytes",
     "MainStore_reclaim_pending": "Memory reclaim pending by plasma",
     "BackStore_memory_size": "Memory used by plasma",
     "BackStore_num_cached_pages": "Number of pages cached pages by plasma",
@@ -171,6 +173,7 @@ LABELS = {
     "BackStore_freed": "Memory feed by plasma",
     "BackStore_reclaimed": "Memory reclaimed by plasma",
     "BackStore_reclaim_pending": "Memory reclaim pending by plasma",
+    "BackStore_mvcc_purge_ratio": "MVCC purge ratio",
     "mm_allocated": "Memory allocated, Indexer, bytes",
     "mm_resident": "Memory resident, Indexer, bytes",
     "mm_metadata": "Memory metadata, Indexer, bytes",
@@ -355,6 +358,8 @@ NON_ZERO_VALUES = (
     "MainStore_freed",
     "MainStore_reclaimed",
     "MainStore_reclaim_pending",
+    "MainStore_mvcc_purge_ratio",
+    "MainStore_memory_quota",
 
     "BackStore_memory_size",
     "BackStore_num_cached_pages",
@@ -376,6 +381,7 @@ NON_ZERO_VALUES = (
     "BackStore_freed",
     "BackStore_reclaimed",
     "BackStore_reclaim_pending",
+    "BackStore_mvcc_purge_ratio"
 
     "swap_used",
 
