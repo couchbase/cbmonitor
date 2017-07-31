@@ -86,6 +86,7 @@ LABELS = {
     "data_avgqusz": "The average queue length",
     "data_util": "Disk bandwidth utilization, %",
     "data_avg_page_cache_rr": "Average page cache resident ratio, %",
+    'page_cache_hit_ratio': 'Page cache hit ratio, %',
     "index_rbps": "Bytes read/sec",
     "index_wbps": "Bytes written/sec",
     "index_avgqusz": "The average queue length",

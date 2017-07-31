@@ -334,6 +334,7 @@ class Report(object):
             "index_util",
         ]),
         ("pcstat", [
+            "page_cache_hit_ratio",
             "data_avg_page_cache_rr",
         ]),
         ("net", [
