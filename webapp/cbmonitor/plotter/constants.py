@@ -81,8 +81,10 @@ LABELS = {
     "latency_observe": "OBSERVE latency, ms",
     "latency_persist_to": "persistTo=1 latency, ms",
     "latency_replicate_to": "replicateTo=1 latency, ms",
-    "data_rbps": "Bytes read/sec",
-    "data_wbps": "Bytes written/sec",
+    "data_rps": "Disk reads/sec (after merges)",
+    "data_wps": "Disk writes/sec (after merges)",
+    "data_rbps": "Bytes/sec read from the disk",
+    "data_wbps": "Bytes/sec written to the disk",
     "data_avgqusz": "The average queue length",
     "data_util": "Disk bandwidth utilization, %",
     "data_avg_page_cache_rr": "Average page cache resident ratio, %",
@@ -386,6 +388,8 @@ NON_ZERO_VALUES = (
 
     "swap_used",
 
+    "data_rps",
+    "data_wps",
     "data_rbps",
     "data_wbps",
     "data_avgqusz",

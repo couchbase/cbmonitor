@@ -324,6 +324,8 @@ class Report(object):
             "tools_wbps",
             "tools_avgqusz",
             "tools_util",
+            "data_rps",
+            "data_wps",
             "data_rbps",
             "data_wbps",
             "data_avgqusz",
