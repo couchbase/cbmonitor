@@ -319,6 +319,12 @@ class Report(object):
             "cbft_rss",
             "cbft_cpu",
         ]),
+        ("sysdig", [
+            "indexer_pread",
+            "indexer_pwrite",
+            "memcached_pread",
+            "memcached_pwrite",
+        ]),
         ("iostat", [
             "tools_rbps",
             "tools_wbps",
@@ -481,7 +487,7 @@ class Report(object):
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
-            if collector in ("atop", "iostat", "net", "fts_stats", "pcstat"):
+            if collector in ("atop", "iostat", "net", "fts_stats", "pcstat", "sysdig"):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([

@@ -219,6 +219,10 @@ LABELS = {
     "elastic_filter_cache_size": "Elasticsearch filter cache size",
     "elastic_active_search": "Elasticsearch active search",
     "elastic_query_total": "Elasticsearch total query",
+    "indexer_pread": "indexer pread system calls/sec",
+    "indexer_pwrite": "indexer pwrite system calls/sec",
+    "memcached_pread": "memcached pread system calls/sec",
+    "memcached_pwrite": "memcached pwrite system calls/sec",
 }
 
 HISTOGRAMS = (
