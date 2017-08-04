@@ -77,11 +77,7 @@ SECRET_KEY = "c9j1v$z(t#-(_%i38wu@(n+&amp;^w6ki@$c!k0b80ts8=(@hb+*ln"
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    ("pyjade.ext.django.Loader", (
-        "django.template.loaders.filesystem.Loader",
-        "django.template.loaders.app_directories.Loader",
-        "django.template.loaders.eggs.Loader",
-    )),
+    "django.template.loaders.app_directories.Loader",
 )
 
 MIDDLEWARE_CLASSES = (
@@ -105,7 +101,6 @@ INSTALLED_APPS = (
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "pyjade",
     "cbmonitor",
 )
 

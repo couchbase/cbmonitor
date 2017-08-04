@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>cbmonitor</title>
+    <link rel="stylesheet" href="/static/css/vendor/bootstrap.css">
+  </head>
+  <body>
+    <div class="text-center">
+      {% for id, title, url in urls %}
+        <h4 class="text-info chart-title">
+          <a id="{{ id }}" href="#{{ id }}">{{ title }}</a>
+        </h4>
+        <img src="{{ url }}" class="text-center">
+        <hr>
+      {% endfor %}
+    </div>
+  </body>
+</html>

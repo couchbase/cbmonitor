@@ -30,7 +30,7 @@ def html_report(request):
     urls = [(id_from_url(url), title, url) for title, url in images]
 
     if urls:
-        return render_to_response("report.jade", {"urls": urls})
+        return render_to_response("report.html", {"urls": urls})
     else:
         return HttpResponse("No metrics found", status=400)
 
