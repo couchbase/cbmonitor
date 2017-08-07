@@ -223,6 +223,10 @@ LABELS = {
     "indexer_pwrite": "indexer pwrite system calls/sec",
     "memcached_pread": "memcached pread system calls/sec",
     "memcached_pwrite": "memcached pwrite system calls/sec",
+    'MemFree': 'The amount of physical memorynot used by the system, bytes',
+    'Dirty': 'Memory waiting to be written back to disk, bytes',
+    'Buffers': 'Memory in buffer cache, bytes',
+    'Cached': 'Memory in the pagecache, bytes',
 }
 
 HISTOGRAMS = (
@@ -389,7 +393,7 @@ NON_ZERO_VALUES = (
     "BackStore_freed",
     "BackStore_reclaimed",
     "BackStore_reclaim_pending",
-    "BackStore_mvcc_purge_ratio"
+    "BackStore_mvcc_purge_ratio",
 
     "swap_used",
 

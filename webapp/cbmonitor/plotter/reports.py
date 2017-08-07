@@ -346,6 +346,12 @@ class Report(object):
             "page_cache_total_hits",
             "data_avg_page_cache_rr",
         ]),
+        ("meminfo", [
+            "MemFree",
+            "Dirty",
+            "Buffers",
+            "Cached",
+        ]),
         ("net", [
             "in_bytes_per_sec",
             "out_bytes_per_sec",
@@ -487,7 +493,7 @@ class Report(object):
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
-            if collector in ("atop", "iostat", "net", "fts_stats", "pcstat", "sysdig"):
+            if collector in ("atop", "iostat", "net", "fts_stats", "pcstat", "meminfo", "sysdig"):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
