@@ -7,4 +7,5 @@ def pragma_synchronous_off(sender, connection, **kwargs):
         cursor = connection.cursor()
         cursor.execute("PRAGMA synchronous=OFF;")
 
+
 connection_created.connect(pragma_synchronous_off)

@@ -341,16 +341,16 @@ class Report(object):
             "index_avgqusz",
             "index_util",
         ]),
-        ("pcstat", [
-            "page_cache_hit_ratio",
-            "page_cache_total_hits",
-            "data_avg_page_cache_rr",
-        ]),
         ("meminfo", [
             "MemFree",
             "Dirty",
             "Buffers",
             "Cached",
+        ]),
+        ("pcstat", [
+            "page_cache_hit_ratio",
+            "page_cache_total_hits",
+            "data_avg_page_cache_rr",
         ]),
         ("net", [
             "in_bytes_per_sec",
@@ -379,7 +379,6 @@ class Report(object):
                 self.buckets = buckets
             else:
                 self.buckets = buckets & self.buckets
-            print "Buckets: {}".format(buckets)
 
             indexes = {
                 i.name for i in models.Index.objects.filter(cluster=snapshot.cluster)
@@ -388,7 +387,6 @@ class Report(object):
                 self.indexes = indexes
             else:
                 self.indexes = indexes & self.indexes
-            print "Indexes: {}".format(indexes)
 
             servers = {
                 s.address for s in models.Server.objects.filter(cluster=snapshot.cluster)
@@ -397,7 +395,6 @@ class Report(object):
                 self.servers = servers
             else:
                 self.servers = servers & self.servers
-            print "Servers: {}".format(servers)
 
     def get_all_observables(self):
         """Get all stored in database Observable objects that match provided
@@ -448,7 +445,7 @@ class Report(object):
             # Per-index metrics
             for index in self.indexes:
                 _index = models.Index.objects.get(cluster=snapshot.cluster,
-                                                    name=index)
+                                                  name=index)
                 observables = defaultdict(dict)
                 for o in models.Observable.objects.filter(cluster=snapshot.cluster,
                                                           bucket__isnull=True,
@@ -483,17 +480,29 @@ class Report(object):
 
         for collector, metrics in self.METRICS.iteritems():
             # Cluster-wide metrics
-            if collector in ("active_tasks", "ns_server", "n1ql_stats",
-                             "fts_totals", "fts_latency",
-                             "secondary_debugstats", "secondaryscan_latency",
-                             "secondary_storage_stats_mm",):
+            if collector in ("active_tasks",
+                             "ns_server",
+                             "n1ql_stats",
+                             "fts_totals",
+                             "fts_latency",
+                             "secondary_debugstats",
+                             "secondaryscan_latency",
+                             "secondary_storage_stats_mm",
+                             ):
                 for metric in metrics:
                     observables.append([
                         _all[""][snapshot.cluster][collector].get(metric)
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
-            if collector in ("atop", "iostat", "net", "fts_stats", "pcstat", "meminfo", "sysdig"):
+            if collector in ("atop",
+                             "iostat",
+                             "net",
+                             "fts_stats",
+                             "meminfo",
+                             "pcstat",
+                             "sysdig",
+                             ):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
@@ -501,10 +510,17 @@ class Report(object):
                             for snapshot in self.snapshots
                         ])
             # Per-bucket metrics
-            if collector in ("active_tasks", "xdcr_stats", "ns_server",
-                             "spring_latency", "spring_query_latency",
-                             "durability", "observe",  "xdcr_lag",
-                             "secondary_stats", "secondary_debugstats_bucket"):
+            if collector in ("active_tasks",
+                             "xdcr_stats",
+                             "ns_server",
+                             "spring_latency",
+                             "spring_query_latency",
+                             "durability",
+                             "observe",
+                             "xdcr_lag",
+                             "secondary_stats",
+                             "secondary_debugstats_bucket",
+                             ):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables.append([
@@ -512,12 +528,14 @@ class Report(object):
                             for snapshot in self.snapshots
                         ])
             # Per-index metrics
-            if collector in ("secondary_debugstats_index", "secondary_storage_stats", ):
+            if collector in ("secondary_debugstats_index",
+                             "secondary_storage_stats",
+                             ):
                 for metric in metrics:
                     for index in self.indexes:
                         observables.append([
-                               _all[index][snapshot.cluster][collector].get(metric)
-                               for snapshot in self.snapshots
+                            _all[index][snapshot.cluster][collector].get(metric)
+                            for snapshot in self.snapshots
                         ])
         # Skip full mismatch and return tuple with Observable objects
         return tuple(_ for _ in observables if set(_) != {None})

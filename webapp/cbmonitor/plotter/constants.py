@@ -194,23 +194,23 @@ LABELS = {
     "query_requests_1000ms": "Number of queries that take longer than 1000ms per sec",
     "query_requests_5000ms": "Number of queries that take longer than 5000ms per sec",
     "query_invalid_requests": "Number of requests for unsupported endpoints per sec",
-    "cbft_num_bytes_used_disk": "FTS index size on disk in GB ",
+    "cbft_num_bytes_used_disk": "FTS index size on disk in GB",
     "cbft_doc_count": "FTS indexing rate",
     "cbft_num_bytes_used_ram": "FTS ram used by cbft process",
     "cbft_pct_cpu_gc": "FTS garbage collection CPU usage",
     "cbft_query_slow": "FTS slow query",
     "cbft_query_timeout": "FTS timeout query",
     "cbft_query_error": "FTS error query",
-    "cbft_batch_merge_count":"FTS batch merge_count ",
-    "cbft_total_gc" : "FTS garbage collector count",
+    "cbft_batch_merge_count": "FTS batch merge_count",
+    "cbft_total_gc": "FTS garbage collector count",
     "cbft_num_bytes_live_data": "FTS live data size",
-    "cbft_total_term_searchers": "FTS total term search ",
-    "cbft_query_total" : "FTS total queries",
+    "cbft_total_term_searchers": "FTS total term search",
+    "cbft_query_total": "FTS total queries",
     "cbft_total_bytes_query_results": "FTS total query bytes",
     "cbft_writer_execute_batch_count": "FTS writer batch count",
     "cbft_latency_get": "FTS latency in ms",
     "cbft_avg_queries_latency": "FTS average queries latency (server)",
-    "cbft_query_throughput": "FTS average queries per second", 
+    "cbft_query_throughput": "FTS average queries per second",
     "elastic_latency_get": "ElasticSearch latency in ms",
     "cbft_total_bytes_indexed": "FTS total index size",
     "cbft_num_recs_to_persist": "FTS number of records in queue",
@@ -260,10 +260,6 @@ ZOOM_HISTOGRAMS = (
     "elastic_latency_get",
     "Nth-latency",
 )
-
-KDE = ()
-
-SMOOTH_SUBPLOTS = ()
 
 NON_ZERO_VALUES = (
     "rebalance_progress",

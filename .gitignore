@@ -6,9 +6,7 @@
 .installed.cfg
 .mr.developer.cfg
 *.egg-info
-webapp/media/*.png
-webapp/media/*.pdf
-webapp/media/*.txt
+webapp/media
 db
 webapp/cbmonitor/static/admin
 env

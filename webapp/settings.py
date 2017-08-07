@@ -18,12 +18,6 @@ DATABASES = {
     }
 }
 
-COUCHBASE_SERVER = {
-    "host": "127.0.0.1",
-    "port": 8091,
-    "password": "password",
-}
-
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
@@ -76,7 +70,6 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    # "django.contrib.staticfiles.finders.DefaultStorageFinder",
 )
 
 # Make this unique, and don"t share it with anybody.
@@ -98,7 +91,6 @@ MIDDLEWARE_CLASSES = (
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 )
 
 ROOT_URLCONF = "urls"
@@ -107,19 +99,14 @@ ROOT_URLCONF = "urls"
 WSGI_APPLICATION = "wsgi.application"
 
 INSTALLED_APPS = (
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django.contrib.admin",
-    "django.contrib.admindocs",
     "pyjade",
     "cbmonitor",
-    "django_coverage",
-    "debug_toolbar",
 )
 
 LOGGING = {
@@ -164,8 +151,5 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True
         },
-        "requests": {
-            "level": "WARNING",
-        }
     }
 }

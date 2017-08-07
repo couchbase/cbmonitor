@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.db import models
 
 
@@ -8,9 +7,6 @@ class Cluster(models.Model):
 
     def __str__(self):
         return self.name
-
-    class Admin:
-        pass
 
 
 class Server(models.Model):
@@ -24,9 +20,6 @@ class Server(models.Model):
     def __str__(self):
         return self.address
 
-    class Admin:
-        pass
-
 
 class Bucket(models.Model):
 
@@ -39,9 +32,6 @@ class Bucket(models.Model):
     def __str__(self):
         return self.name
 
-    class Admin:
-        pass
-
 
 class Index(models.Model):
 
@@ -53,10 +43,6 @@ class Index(models.Model):
 
     def __str__(self):
         return self.name
-
-    class Admin:
-        pass
-
 
 
 class Observable(models.Model):
@@ -74,9 +60,6 @@ class Observable(models.Model):
     def __str__(self):
         return self.name
 
-    class Admin:
-        pass
-
 
 class Snapshot(models.Model):
 
@@ -87,14 +70,3 @@ class Snapshot(models.Model):
 
     def __str__(self):
         return self.name
-
-    class Admin:
-        pass
-
-
-admin.site.register(Cluster)
-admin.site.register(Server)
-admin.site.register(Bucket)
-admin.site.register(Index)
-admin.site.register(Observable)
-admin.site.register(Snapshot)

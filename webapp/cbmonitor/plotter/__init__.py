@@ -6,31 +6,40 @@ from itertools import cycle
 from multiprocessing import Pool, cpu_count
 
 import matplotlib
-matplotlib.use("Agg")
-matplotlib.rcParams.update({"font.size": 5})
-matplotlib.rcParams.update({"lines.linewidth": 0.5})
-matplotlib.rcParams.update({"lines.marker": "."})
-matplotlib.rcParams.update({"lines.markersize": 3})
-matplotlib.rcParams.update({"lines.linestyle": "None"})
-matplotlib.rcParams.update({"axes.linewidth": 0.5})
-matplotlib.rcParams.update({"axes.grid": True})
-matplotlib.rcParams.update({"axes.formatter.limits": (-6, 6)})
-matplotlib.rcParams.update({"legend.numpoints": 1})
-matplotlib.rcParams.update({"legend.fancybox": True})
-matplotlib.rcParams.update({"legend.markerscale": 1.5})
-matplotlib.rcParams.update({"legend.loc": "best"})
-matplotlib.rcParams.update({"legend.frameon": True})
 import matplotlib.pyplot as plt
-
 import numpy as np
 import pandas as pd
 from django.conf import settings
 from eventlet import GreenPool
-from scipy import stats
 
 from cbmonitor.helpers import SerieslyHandler
 from cbmonitor.plotter import constants
 from cbmonitor.plotter.reports import Report
+
+matplotlib.rcParams.update({
+    'axes.formatter.limits': (-6, 6),
+    'axes.grid': True,
+    'axes.linewidth': 0.4,
+    'axes.xmargin': 0,
+    'font.size': 5,
+    'grid.linestyle': 'dotted',
+    'grid.linewidth': 0.5,
+    'legend.fancybox': True,
+    'legend.loc': 'upper right',
+    'legend.markerscale': 2,
+    'legend.numpoints': 1,
+    'lines.antialiased': False,
+    'lines.linestyle': 'None',
+    'lines.marker': '.',
+    'lines.markersize': 1.8,
+    'xtick.direction': 'in',
+    'xtick.major.size': 4,
+    'xtick.major.width': 0.4,
+    'ytick.direction': 'in',
+    'ytick.major.size': 4,
+    'ytick.major.width': 0.4,
+    'ytick.right': True,
+})
 
 
 def plot_as_png(filename, series, labels, colors, ylabel, chart_id, rebalances):
@@ -41,21 +50,6 @@ def plot_as_png(filename, series, labels, colors, ylabel, chart_id, rebalances):
 
     if chart_id in ("_lt90", "_gt80", "_histo"):
         plot_percentiles(ax, series, labels, colors, ylabel, chart_id)
-    elif chart_id == "_subplot":
-        plot_subplot_frame(ax, ylabel)
-
-        ax = init_ax(fig, dim=(2, 1, 1))
-        plot_rolling_subplot(ax, series, labels, colors)
-        highlight_rebalance(rebalances, colors)
-
-        ax = init_ax(fig, dim=(2, 1, 2))
-        plot_time_series(ax, series, labels, colors, ylabel=None)
-        highlight_rebalance(rebalances, colors)
-    elif chart_id == "_kde":
-        plot_kde(ax, series, labels, colors, ylabel)
-    elif chart_id == "_score":
-        plot_score(ax, series, labels, colors, ylabel)
-        highlight_rebalance(rebalances, colors)
     else:
         plot_time_series(ax, series, labels, colors, ylabel)
         highlight_rebalance(rebalances, colors)
@@ -112,46 +106,6 @@ def plot_percentiles(ax, series, labels, colors, ylabel, chart_id):
         y = np.percentile(s, percentiles)
         ax.bar(x, y, linewidth=0.0, label=label,
                width=width.next(), align=align.next(), color=color)
-
-
-def plot_score(ax, series, labels, colors, ylabel):
-    """Score plot where score is calculated as 90th percentile. Quite useful
-    for trends and dips analysis."""
-    ax.set_ylabel("Percentile of score ({})".format(ylabel))
-    ax.set_xlabel("Time elapsed, sec")
-    for s, label, color in zip(series, labels, colors):
-        scoref = lambda x: stats.percentileofscore(x, s.quantile(0.9))
-        rolling_score = pd.rolling_apply(s, min(len(s) / 15, 40), scoref)
-        ax.plot(s.index, rolling_score, label=label, color=color)
-        plt.ylim(ymin=0, ymax=105)
-
-
-def plot_kde(ax, series, labels, colors, ylabel):
-    """KDE plot for values less than 99th percentile."""
-    ax.set_ylabel("Kernel density estimation")
-    ax.set_xlabel(ylabel)
-    for s, label, color in zip(series, labels, colors):
-        x = np.linspace(0, int(s.quantile(0.99)), 200)
-        kde = stats.kde.gaussian_kde(s)
-        ax.plot(x, kde(x), label=label, color=color)
-
-
-def plot_subplot_frame(ax, ylabel):
-    """Create a frame (common Y label) for figure with multiple subplots."""
-    ax.set_ylabel(ylabel)
-    map(lambda s: s.set_color("None"), ax.spines.values())
-    ax.tick_params(top="off", bottom="off", left="off", right="off",
-                   labelcolor="w")
-    ax.grid(None)
-
-
-def plot_rolling_subplot(ax, series, labels, colors):
-    """Subplot with smoothed values (using moving median)."""
-    for s, label, color in zip(series, labels, colors):
-        rolling_median = pd.rolling_median(s, window=5)
-        ax.plot(s.index, rolling_median, label=label, color=color)
-        ymin, ymax = ax.get_ylim()
-        plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
 
 
 def highlight_rebalance(rebalances, colors):
@@ -281,11 +235,6 @@ class Plotter(object):
                     chart_ids += ["_histo"]
                 if metric in constants.ZOOM_HISTOGRAMS:
                     chart_ids += ["_lt90", "_gt80"]
-                if metric in constants.KDE:
-                    chart_ids += ["_kde"]
-                if metric in constants.SMOOTH_SUBPLOTS:
-                    chart_ids[0] = "_subplot"
-                    chart_ids += ["_score"]
 
                 for chart_id in chart_ids:
                     fname = filename.format(suffix=chart_id)
@@ -300,79 +249,3 @@ class Plotter(object):
         # Plot all charts in parallel
         for result in apply_results:
             result.get()
-
-
-class Comparator(Plotter):
-
-    ALLOWED_NOISE = 0.1  # 10%
-    MAX_CONFIDENCE = 7.0
-    MIN_DATA_POINTS = 50
-    MAX_SIZE_DIFF = 1.25  # 25%
-
-    def estimate_diff(self, s1, s2):
-        l1 = float(len(s1))
-        l2 = float(len(s2))
-
-        # Don't estimate time series that have huge difference in number of
-        # elements
-        if max(l1, l2) / min(l1, l2) > self.MAX_SIZE_DIFF:
-            return -1
-
-        # Don't estimate very small time series
-        if min(l1, l2) < self.MIN_DATA_POINTS:
-            return -1
-
-        # Heuristic coefficient
-        confidence = 0.0
-
-        # Compare correlation coefficient
-        if s1.corr(s2) < 0.9:
-            confidence += 1.0
-        # Compare mean values
-        diff = abs(s1.mean() - s2.mean())
-        if diff > self.ALLOWED_NOISE * s1.mean():
-            confidence += 1.0
-        # Compare 4 different percentiles
-        for q in (0.5, 0.75, 0.9, 0.95):
-            diff = abs(s1.quantile(q) - s2.quantile(q))
-            if diff > self.ALLOWED_NOISE * s1.quantile(q):
-                confidence += 0.5
-        # Compare maximum values
-        diff = abs(s1.max() - s2.max())
-        if diff > self.ALLOWED_NOISE * s1.max():
-            confidence += 1.0
-
-        # Primary trend comparison
-        t1 = pd.rolling_median(s1, window=5)
-        t2 = pd.rolling_median(s1, window=5)
-        if abs((t1 - t2).mean()) > self.ALLOWED_NOISE * t1.mean():
-            confidence += 2.0
-
-        # Return confidence as rounded percentage value
-        return round(100 * confidence / self.MAX_CONFIDENCE)
-
-    def compare(self, snapshots):
-        """Return a list with metric/confidence pairs or None if snapshots are
-        not comparable"""
-        diffs = []
-        invalid_counter = 0
-
-        # Asynchronously extract data
-        for data in self.eventlet_pool.imap(self.extract, Report(snapshots)()):
-            series, _, _, title, _, _ = data
-            if len(series) == 2:
-                diff = self.estimate_diff(*series)
-                if diff != - 1:
-                    metric = title.split()[-1]
-                    label = constants.LABELS.get(metric, metric)
-
-                    diffs.append((
-                        '{} ({})'.format(label, metric),
-                        diff
-                    ))
-
-                    invalid_counter -= 1
-                else:
-                    invalid_counter += 1
-        if invalid_counter < 0:
-            return diffs
