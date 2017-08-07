@@ -4,7 +4,7 @@ from cbmonitor import models
 
 
 Observable = namedtuple(
-    "Observable", ["snapshot", "server", "bucket", "index", "name", "collector"]
+    "Observable", ["cluster", "server", "bucket", "index", "name", "collector"]
 )
 
 
@@ -396,7 +396,7 @@ class Report(object):
             else:
                 self.servers = servers & self.servers
 
-    def get_all_observables(self):
+    def get_observables(self):
         """Get all stored in database Observable objects that match provided
         snapshots. There are three expensive queries per snapshot:
         -- get all cluster-wide metrics
@@ -424,7 +424,7 @@ class Report(object):
                                                       index__isnull=True):
 
                 observables[o.collector][o.name] = Observable(
-                    snapshot, "", "", "", o.name, o.collector
+                    snapshot.cluster.name, "", "", "", o.name, o.collector
                 )
             all_observables[""][snapshot.cluster] = observables
 
@@ -438,7 +438,7 @@ class Report(object):
                                                           server__isnull=True,
                                                           index__isnull=True):
                     observables[o.collector][o.name] = Observable(
-                        snapshot, "", bucket, "", o.name, o.collector
+                        snapshot.cluster.name, "", bucket, "", o.name, o.collector
                     )
                 all_observables[bucket][snapshot.cluster] = observables
 
@@ -452,7 +452,7 @@ class Report(object):
                                                           server__isnull=True,
                                                           index=_index):
                     observables[o.collector][o.name] = Observable(
-                        snapshot, "", "", index, o.name, o.collector
+                        snapshot.cluster.name, "", "", index, o.name, o.collector
                     )
                 all_observables[index][snapshot.cluster] = observables
 
@@ -466,15 +466,15 @@ class Report(object):
                                                           server=_server,
                                                           index__isnull=True):
                     observables[o.collector][o.name] = Observable(
-                        snapshot, server, "", "", o.name, o.collector
+                        snapshot.cluster.name, server, "", "", o.name, o.collector
                     )
                 all_observables[server][snapshot.cluster] = observables
         return all_observables
 
-    def __call__(self):
+    def get_report(self):
         """Primary class method that return tuple with valid Observable objects
         """
-        _all = self.get_all_observables()
+        all_observables = self.get_observables()
 
         observables = []
 
@@ -491,7 +491,7 @@ class Report(object):
                              ):
                 for metric in metrics:
                     observables.append([
-                        _all[""][snapshot.cluster][collector].get(metric)
+                        all_observables[""][snapshot.cluster][collector].get(metric)
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
@@ -506,7 +506,7 @@ class Report(object):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
-                            _all[server][snapshot.cluster][collector].get(metric)
+                            all_observables[server][snapshot.cluster][collector].get(metric)
                             for snapshot in self.snapshots
                         ])
             # Per-bucket metrics
@@ -524,7 +524,7 @@ class Report(object):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables.append([
-                            _all[bucket][snapshot.cluster][collector].get(metric)
+                            all_observables[bucket][snapshot.cluster][collector].get(metric)
                             for snapshot in self.snapshots
                         ])
             # Per-index metrics
@@ -534,7 +534,7 @@ class Report(object):
                 for metric in metrics:
                     for index in self.indexes:
                         observables.append([
-                            _all[index][snapshot.cluster][collector].get(metric)
+                            all_observables[index][snapshot.cluster][collector].get(metric)
                             for snapshot in self.snapshots
                         ])
         # Skip full mismatch and return tuple with Observable objects

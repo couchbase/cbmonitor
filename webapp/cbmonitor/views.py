@@ -22,12 +22,12 @@ def html_report(request):
     except ObjectDoesNotExist:
         return HttpResponse("Wrong or missing snapshot", status=400)
     plotter = Plotter()
-    plotter.plot(snapshots)
+    images = plotter.plot(snapshots)
 
     def id_from_url(url):
         return url.split("/")[2].split(".")[0]
 
-    urls = [(id_from_url(url), title, url) for title, url in plotter.urls]
+    urls = [(id_from_url(url), title, url) for title, url in images]
 
     if urls:
         return render_to_response("report.jade", {"urls": urls})
@@ -37,15 +37,9 @@ def html_report(request):
 
 def parse_snapshots(request):
     snapshots = []
-    if "all_data" in request.GET.getlist("snapshot"):
-        for cluster in request.GET.getlist("cluster"):
-            cluster = models.Cluster(name=cluster)
-            snapshot = models.Snapshot(name=cluster.name, cluster=cluster)
-            snapshots.append(snapshot)
-    else:
-        for snapshot in request.GET.getlist("snapshot"):
-            snapshot = models.Snapshot.objects.get(name=snapshot)
-            snapshots.append(snapshot)
+    for snapshot in request.GET.getlist("snapshot"):
+        snapshot = models.Snapshot.objects.get(name=snapshot)
+        snapshots.append(snapshot)
     return snapshots
 
 

@@ -1,18 +1,15 @@
-import dateutil.parser
 import os
-import re
-from collections import defaultdict
 from itertools import cycle
-from multiprocessing import Pool, cpu_count
 
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+
 import numpy as np
 import pandas as pd
+import requests
 from django.conf import settings
-from eventlet import GreenPool
 
-from cbmonitor.helpers import SerieslyHandler
 from cbmonitor.plotter import constants
 from cbmonitor.plotter.reports import Report
 
@@ -25,7 +22,6 @@ matplotlib.rcParams.update({
     'grid.linestyle': 'dotted',
     'grid.linewidth': 0.5,
     'legend.fancybox': True,
-    'legend.loc': 'upper right',
     'legend.markerscale': 2,
     'legend.numpoints': 1,
     'lines.antialiased': False,
@@ -42,14 +38,14 @@ matplotlib.rcParams.update({
 })
 
 
-def plot_as_png(filename, series, labels, colors, ylabel, chart_id, rebalances):
+def plot_as_png(filename, series, labels, colors, ylabel, chart, rebalances):
     """Primary routine that serves as plot selector. The function and all
     sub-functions are defined externally in order to be pickled."""
     fig = plt.figure(figsize=(4.66, 2.625))
     ax = init_ax(fig)
 
-    if chart_id in ("_lt90", "_gt80", "_histo"):
-        plot_percentiles(ax, series, labels, colors, ylabel, chart_id)
+    if chart in ("_lt90", "_gt80", "_histo"):
+        plot_percentiles(ax, series, labels, colors, ylabel, chart)
     else:
         plot_time_series(ax, series, labels, colors, ylabel)
         highlight_rebalance(rebalances, colors)
@@ -80,7 +76,7 @@ def plot_time_series(ax, series, labels, colors, ylabel=None):
     plt.ylim(ymin=0, ymax=max(1, ymax * 1.05))
 
 
-def plot_percentiles(ax, series, labels, colors, ylabel, chart_id):
+def plot_percentiles(ax, series, labels, colors, ylabel, chart):
     """Bar plot with 3 possible percentile ranges and sub-ranges:
     -- 1 to 99 (linear)
     -- 1 to 89 (linear)
@@ -90,11 +86,11 @@ def plot_percentiles(ax, series, labels, colors, ylabel, chart_id):
     ax.set_xlabel("Percentile")
     width = cycle((0.6, 0.4))
     align = cycle(("edge", "center"))
-    if chart_id == "_lt90":
+    if chart == "_lt90":
         percentiles = range(1, 90)
         x = percentiles
         plt.xlim(0, 90)
-    elif chart_id == "_gt80":
+    elif chart == "_gt80":
         percentiles = (80, 85, 90, 95, 97.5, 99, 99.9, 99.99, 99.999)
         x = range(len(percentiles))
         plt.xticks(x, percentiles)
@@ -109,14 +105,90 @@ def plot_percentiles(ax, series, labels, colors, ylabel, chart_id):
 
 
 def highlight_rebalance(rebalances, colors):
-    """Transparent span that highlights rebalance start and end. Makes sense
-    only for similar reports (e.g., rebalance+views vs. rebalance+views).
-    Otherwise disorder in colors may happen."""
+    """Add a transparent vertical span that highlights rebalance start and end.
+    """
     for (start, end), color in zip(rebalances, colors):
         plt.axvspan(start, end, facecolor=color, alpha=0.1, linewidth=0.5)
 
 
-class Colors(object):
+def generate_title(observable):
+    """Generate user-friendly chart title.
+
+    The title is generated using this format:
+
+        [server/bucket] metric.
+    """
+    metric = observable.name.replace("/", "_")
+    if observable.bucket:
+        return "[{}] {}".format(observable.bucket, metric)
+    elif observable.server:
+        return "[{}] {}".format(observable.server, metric)
+    elif observable.index and "." in observable.index:
+        name = observable.index.split(".")
+        return "[{}] [{}] {}".format(name[0], name[1], metric)
+    else:
+        return metric
+
+
+def generate_paths(clusters, metric, suffix):
+    """Generate file name and URL using the unique attributes."""
+    filename = "{}{}{}.png".format(''.join(clusters), metric, suffix)
+
+    media_url = settings.MEDIA_URL + filename
+    media_path = os.path.join(settings.MEDIA_ROOT, filename)
+
+    return media_url, media_path
+
+
+def build_dbname(cluster, server, bucket, index, collector):
+    """Each seriesly db name is built from observable object attributes."""
+    db_name = (collector or "") + cluster + (bucket or "") + (index or "") + (server or "")
+    for char in "[]/\;.,><&*:%=+@!#^()|?^'\"":
+        db_name = db_name.replace(char, "")
+    return db_name
+
+
+def generate_series(data):
+    """Convert array of data points to Pandas series.
+
+    perfdb returns data in the following format:
+
+        [[timestamp, measurement], [timestamp, measurement], ...]
+
+    The new series will create index based on timestamp. Measurements are used
+    as values.
+
+    The function also normalizes and sort data.
+    """
+    series = pd.Series(index=[d[0] for d in data], data=[d[1] for d in data])
+
+    # Subtract the smallest timestamp value so that series starts from 0.
+    starting_point = series.index.values.min()
+    series.rename(lambda timestamp: timestamp - starting_point, inplace=True)
+
+    # Convert milliseconds to seconds
+    series.rename(lambda timestamp: timestamp / 10 ** 3, inplace=True)
+
+    # Return data sorted by timestamp
+    return series.sort_index()
+
+
+def is_all_zeroes(metric, series):
+    """Check if series should be skipped because it contains only zero values.
+    """
+    return metric in constants.NON_ZERO_VALUES and (series == 0).all()
+
+
+def generate_chart_types(metric):
+    charts = ["scatter"]
+    if metric in constants.HISTOGRAMS:
+        charts += ["_histo"]
+    if metric in constants.ZOOM_HISTOGRAMS:
+        charts += ["_lt90", "_gt80"]
+    return charts
+
+
+class Palette:
 
     def __init__(self):
         self.cycle = cycle(constants.PALETTE)
@@ -125,127 +197,98 @@ class Colors(object):
         return self.cycle.next()
 
 
-class Plotter(object):
+class DataClient:
 
-    """Plotter helper that reads data from seriesly database and generates
-    handy charts with url/filesystem meta information."""
+    def __init__(self, host='127.0.0.1', port=8080):
+        self.session = requests.Session()
+        self.base_url = 'http://{}:{}/{{db}}/{{metric}}'.format(host, port)
+
+    def get(self, db, metric):
+        url = self.base_url.format(db=db, metric=metric)
+
+        response = self.session.get(url)
+        if response.status_code == 200:
+            return response.json()
+
+
+class Plotter:
 
     def __init__(self):
-        self.urls = list()  # The only thing that caller (view) needs
-
-        self.eventlet_pool = GreenPool()  # for seriesly requests
-        self.mp_pool = Pool(cpu_count())  # for plotting
-
-        self.seriesly = SerieslyHandler()
-
-    def __del__(self):
-        self.mp_pool.close()
-
-    @staticmethod
-    def generate_title(observable):
-        """[server/bucket] metric"""
-        metric = observable.name.replace("/", "_")
-        if observable.bucket:
-            return "[{}] {}".format(observable.bucket, metric)
-        elif observable.server:
-            return "[{}] {}".format(observable.server, metric)
-        elif observable.index and "." in observable.index:
-            name = observable.index.split(".")
-            return "[{}] [{}] {}".format(name[0], name[1], metric)
-        else:
-            return metric
-
-    def generate_png_meta(self, snapshot, cluster, title):
-        """Generate output filenames and URLs based on object attributes."""
-        filename = "".join((snapshot, cluster, title))
-        filename = re.sub(r"[\[\]/\\:\*\?\"<>\|& ]", "", filename)
-        filename += "{suffix}.png"
-
-        media_url = settings.MEDIA_URL + filename
-        media_path = os.path.join(settings.MEDIA_ROOT, filename)
-        return media_url, media_path
-
-    def get_series(self, metric, data):
-        """Convert raw data to Pandas time series."""
-        series = pd.Series(data)
-        series.dropna()  # otherwise it may break kde
-        if metric in constants.NON_ZERO_VALUES and (series == 0).all():
-            return None
-        series.rename(lambda x: dateutil.parser.parse(x), inplace=True)
-        series.rename(lambda x: int(x.strftime('%s')), inplace=True)
-        series.rename(lambda x: x - series.index.values.min(), inplace=True)
-        return series
-
-    def extract(self, observables, skip_df=False):
-        """Top-level abstraction for data and metadata extraction."""
-        merge = defaultdict(list)
-        title = ""
-        colors = Colors()
-        for observable in observables:
-            color = colors.next()
-            if observable:
-                data = self.seriesly.query_data(observable)
-                if data:
-                    series = self.get_series(metric=observable.name, data=data)
-                    if series is not None:
-                        merge["series"].append(series)
-                        merge["labels"].append(observable.snapshot.name)
-                        merge["colors"].append(color)
-                        merge["clusters"].append(observable.snapshot.cluster.name)
-                        merge["snapshots"].append(observable.snapshot.name)
-                        title = self.generate_title(observable)
-
-        url, fname = self.generate_png_meta("".join(merge["snapshots"]),
-                                            "".join(merge["clusters"]),
-                                            title)
-
-        return merge["series"], merge["labels"], merge["colors"], title, fname, url
+        self.data_client = DataClient()
 
     def detect_rebalance(self, observables):
-        """Check first observable object which is expected to be rebalance
-        progress characteristic."""
+        if observables[0].name != "rebalance_progress":
+            return []
+
+        _series = []
+        for observable in observables:
+            series = self.get_series(observable)
+            if series is not None and not (series == 0).all():
+                _series.append(series)
+            else:
+                return []
+
         rebalances = []
-        if observables[0] and observables[0].name == "rebalance_progress":
-            series, _, _, _, _, _ = self.extract(observables, skip_df=True)
-            for s in series:
-                s = s.dropna()
-                if (s == 0).all():
-                    return []
-                rebalance = s[s > 0]
-                rebalances.append((rebalance.index[0], rebalance.index[-1]))
+        for series in _series:
+            series = series[series > 0]  # Filter rebalance progress
+            rebalances.append([series.index.min, series.index.max])
         return rebalances
 
+    def get_series(self, observable):
+        db = build_dbname(observable.cluster,
+                          observable.server,
+                          observable.bucket,
+                          observable.index,
+                          observable.collector)
+        data = self.data_client.get(db, observable.name)
+        if data:
+            return generate_series(data)
+
+    def generate_chart_data(self, observables):
+        palette = Palette()
+
+        _series = []
+        _clusters = []
+        _colors = []
+
+        for observable in observables:
+            color = palette.next()
+            series = self.get_series(observable)
+            if series is not None and not is_all_zeroes(observable.name, series):
+                _series.append(series)
+                _colors.append(color)
+                _clusters.append(observable.cluster)
+
+        return _series, _clusters, _colors
+
     def plot(self, snapshots):
-        """End-point method that orchestrates concurrent extraction and
-        plotting."""
-        observables = Report(snapshots)()
+        report = Report(snapshots).get_report()
 
-        rebalances = self.detect_rebalance(observables[0])
+        rebalances = self.detect_rebalance(report[0])
 
-        # Asynchronously extract data
-        apply_results = list()
-        for data in self.eventlet_pool.imap(self.extract, observables):
-            series, labels, colors, title, filename, url = data
-            if series:
-                metric = title.split()[-1]
-                ylabel = constants.LABELS.get(metric, metric)
+        images = []
+        for observables in report:
+            series, clusters, colors = self.generate_chart_data(observables)
+            if not series:  # Bad or missing data
+                continue
 
-                chart_ids = [""]
-                if metric in constants.HISTOGRAMS:
-                    chart_ids += ["_histo"]
-                if metric in constants.ZOOM_HISTOGRAMS:
-                    chart_ids += ["_lt90", "_gt80"]
+            metric = observables[0].name
+            title = generate_title(observables[0])
+            ylabel = constants.LABELS.get(metric, metric)
 
-                for chart_id in chart_ids:
-                    fname = filename.format(suffix=chart_id)
-                    if not os.path.exists(fname):
-                        apply_results.append(self.mp_pool.apply_async(
-                            plot_as_png,
-                            args=(fname,
-                                  series, labels, colors, ylabel, chart_id,
-                                  rebalances)
-                        ))
-                    self.urls.append([title, url.format(suffix=chart_id)])
-        # Plot all charts in parallel
-        for result in apply_results:
-            result.get()
+            for chart in generate_chart_types(metric):
+                url, filename = generate_paths(clusters=clusters,
+                                               metric=metric,
+                                               suffix=chart)
+
+                images.append([title, url])
+
+                if not os.path.exists(filename):  # Try cache
+                    plot_as_png(filename=filename,
+                                series=series,
+                                labels=clusters,
+                                colors=colors,
+                                ylabel=ylabel,
+                                chart=chart,
+                                rebalances=rebalances)
+        return images

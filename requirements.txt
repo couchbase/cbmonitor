@@ -1,10 +1,9 @@
 django==1.5.5
-eventlet==0.12.1
 flup==1.0.2
 matplotlib==2.0.2
 numpy==1.12.1
 pandas==0.20.2
 flake8==3.3.0
-pyjade
-python-memcached
-seriesly
+pyjade==4.0.0
+python-memcached==1.58
+requests==2.18.3
