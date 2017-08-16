@@ -231,7 +231,7 @@ class Plotter:
         rebalances = []
         for series in _series:
             series = series[series > 0]  # Filter rebalance progress
-            rebalances.append([series.index.min, series.index.max])
+            rebalances.append([series.index.min(), series.index.max()])
         return rebalances
 
     def get_series(self, observable):
