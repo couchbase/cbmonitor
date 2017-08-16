@@ -132,10 +132,15 @@ def generate_title(observable):
 
 def generate_paths(clusters, metric, suffix):
     """Generate file name and URL using the unique attributes."""
-    filename = "{}{}{}.png".format(''.join(clusters), metric, suffix)
+    sub_folder = ''.join(clusters)
+    filename = "{}{}.png".format(metric, suffix)
+    path = os.path.join(sub_folder, filename)
 
-    media_url = settings.MEDIA_URL + filename
-    media_path = os.path.join(settings.MEDIA_ROOT, filename)
+    if not os.path.exists(os.path.join(settings.MEDIA_ROOT, sub_folder)):
+        os.makedirs(os.path.join(settings.MEDIA_ROOT, sub_folder))
+
+    media_url = settings.MEDIA_URL + path
+    media_path = os.path.join(settings.MEDIA_ROOT, path)
 
     return media_url, media_path
 
