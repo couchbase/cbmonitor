@@ -341,6 +341,10 @@ class Report(object):
             "index_avgqusz",
             "index_util",
         ]),
+        ("disk", [
+            "data_bytes_read",
+            "data_bytes_written",
+        ]),
         ("meminfo", [
             "MemFree",
             "Dirty",
@@ -496,6 +500,7 @@ class Report(object):
                     ])
             # Per-server metrics
             if collector in ("atop",
+                             "disk",
                              "iostat",
                              "net",
                              "fts_stats",
