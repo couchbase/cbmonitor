@@ -21,8 +21,13 @@ def html_report(request):
         snapshots = parse_snapshots(request)
     except ObjectDoesNotExist:
         return HttpResponse("Wrong or missing snapshot", status=400)
+
+    labels = request.GET.getlist("label")
+    if labels and len(labels) != len(snapshots):
+        return HttpResponse("Snapshot and labels do not match", status=400)
+
     plotter = Plotter()
-    images = plotter.plot(snapshots)
+    images = plotter.plot(snapshots, custom_labels=labels)
 
     def id_from_url(url):
         return url.split("/")[2].split(".")[0]

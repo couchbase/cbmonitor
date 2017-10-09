@@ -130,9 +130,9 @@ def generate_title(observable):
         return metric
 
 
-def generate_paths(clusters, metric, suffix):
+def generate_paths(clusters, labels, metric, suffix):
     """Generate file name and URL using the unique attributes."""
-    sub_folder = ''.join(clusters)
+    sub_folder = ''.join(clusters + labels)
     filename = "{}{}.png".format(metric, suffix)
     path = os.path.join(sub_folder, filename)
 
@@ -266,8 +266,14 @@ class Plotter:
 
         return _series, _clusters, _colors
 
-    def plot(self, snapshots):
+    def plot(self, snapshots, custom_labels):
         report = Report(snapshots).get_report()
+        all_clusters = [snapshot.cluster.name for snapshot in snapshots]
+        if custom_labels:
+            mapping = {cluster: label
+                       for cluster, label in zip(all_clusters, custom_labels)}
+        else:
+            mapping = {cluster: cluster for cluster in all_clusters}
 
         rebalances = self.detect_rebalance(report[0])
 
@@ -277,12 +283,14 @@ class Plotter:
             if not series:  # Bad or missing data
                 continue
 
+            labels = [mapping[cluster] for cluster in clusters]
             metric = observables[0].name
             title = generate_title(observables[0])
             ylabel = constants.LABELS.get(metric, metric)
 
             for chart in generate_chart_types(metric):
-                url, filename = generate_paths(clusters=clusters,
+                url, filename = generate_paths(clusters=all_clusters,
+                                               labels=custom_labels,
                                                metric=metric,
                                                suffix=chart)
 
@@ -291,7 +299,7 @@ class Plotter:
                 if not os.path.exists(filename):  # Try cache
                     plot_as_png(filename=filename,
                                 series=series,
-                                labels=clusters,
+                                labels=labels,
                                 colors=colors,
                                 ylabel=ylabel,
                                 chart=chart,
