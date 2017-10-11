@@ -1,5 +1,6 @@
 import os
 from itertools import cycle
+from hashlib import md5
 
 import matplotlib
 matplotlib.use('Agg')
@@ -130,10 +131,10 @@ def generate_title(observable):
         return metric
 
 
-def generate_paths(clusters, labels, metric, suffix):
+def generate_paths(clusters, labels, metric):
     """Generate file name and URL using the unique attributes."""
     sub_folder = ''.join(clusters + labels)
-    filename = "{}{}.png".format(metric, suffix)
+    filename = "{}.png".format(metric)
     path = os.path.join(sub_folder, filename)
 
     if not os.path.exists(os.path.join(settings.MEDIA_ROOT, sub_folder)):
@@ -291,8 +292,7 @@ class Plotter:
             for chart in generate_chart_types(metric):
                 url, filename = generate_paths(clusters=all_clusters,
                                                labels=custom_labels,
-                                               metric=metric,
-                                               suffix=chart)
+                                               metric=md5(title + chart).hexdigest())
 
                 images.append([title, url])
 
