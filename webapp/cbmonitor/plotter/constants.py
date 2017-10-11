@@ -229,6 +229,10 @@ LABELS = {
     'Cached': 'Memory in the pagecache, bytes',
     'data_bytes_read': 'Total bytes read from the disk',
     'data_bytes_written': 'Total bytes written to the disk',
+    "DCP_MUTATION": "DCP mutations processed by function",
+    "TIMER_EVENTS": "Timer events processed by function",
+    "eventing-produc_rss": "eventing-producer resident set size, bytes",
+    "eventing-produc_cpu": "eventing-producer CPU utilization, %",
 }
 
 HISTOGRAMS = (
@@ -392,6 +396,9 @@ NON_ZERO_VALUES = (
     "BackStore_reclaimed",
     "BackStore_reclaim_pending",
     "BackStore_mvcc_purge_ratio",
+
+    "DCP_MUTATION",
+    "TIMER_EVENTS",
 
     "swap_used",
 

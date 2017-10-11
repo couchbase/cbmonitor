@@ -201,6 +201,10 @@ class Report(object):
             "pct_cpu_gc",
             "total_gc",
         ]),
+        ("eventing_stats", [
+            "DCP_MUTATION",
+            "TIMER_EVENTS",
+        ]),
         ("secondary_stats", [
             "index_items_count",
             "index_num_docs_indexed",
@@ -318,6 +322,8 @@ class Report(object):
             "cbq-engine_cpu",
             "cbft_rss",
             "cbft_cpu",
+            "eventing-produc_rss",
+            "eventing-produc_cpu",
         ]),
         ("sysdig", [
             "indexer_pread",
@@ -525,6 +531,7 @@ class Report(object):
                              "xdcr_lag",
                              "secondary_stats",
                              "secondary_debugstats_bucket",
+                             "eventing_stats",
                              ):
                 for metric in metrics:
                     for bucket in self.buckets:
