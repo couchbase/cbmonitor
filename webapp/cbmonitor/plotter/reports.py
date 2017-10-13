@@ -365,8 +365,6 @@ class Report(object):
         ("net", [
             "in_bytes_per_sec",
             "out_bytes_per_sec",
-            "in_packets_per_sec",
-            "out_packets_per_sec",
             "ESTABLISHED",
             "TIME_WAIT",
         ]),
