@@ -80,6 +80,9 @@ class Report(object):
             "wtavg_meta_latency",
             "wtavg_docs_latency",
         ]),
+        ("ns_server_system", [
+            "cpu_utilization",
+        ]),
         ("ns_server", [
             "ep_dcp_2i_items_sent",
             "ep_dcp_2i_items_remaining",
@@ -511,6 +514,7 @@ class Report(object):
                              "meminfo",
                              "pcstat",
                              "sysdig",
+                             "ns_server_system",
                              ):
                 for metric in metrics:
                     for server in self.servers:
