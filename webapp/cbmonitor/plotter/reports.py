@@ -206,7 +206,8 @@ class Report(object):
         ]),
         ("eventing_stats", [
             "DCP_MUTATION",
-            "TIMER_EVENTS",
+            "DOC_TIMER_EVENTS",
+            "CRON_TIMER_EVENTS",
         ]),
         ("secondary_stats", [
             "index_items_count",

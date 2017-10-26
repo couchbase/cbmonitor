@@ -231,7 +231,8 @@ LABELS = {
     'data_bytes_read': 'Total bytes read from the disk',
     'data_bytes_written': 'Total bytes written to the disk',
     "DCP_MUTATION": "DCP mutations processed by function",
-    "TIMER_EVENTS": "Timer events processed by function",
+    "DOC_TIMER_EVENTS": "DOC timer events processed by function",
+    "CRON_TIMER_EVENTS": "CRON timer events processed by function",
     "eventing-produc_rss": "eventing-producer resident set size, bytes",
     "eventing-produc_cpu": "eventing-producer CPU utilization, %",
     "ep_tmp_oom_errors": "Number of back-offs sent per second due to OOM",
@@ -400,7 +401,8 @@ NON_ZERO_VALUES = (
     "BackStore_mvcc_purge_ratio",
 
     "DCP_MUTATION",
-    "TIMER_EVENTS",
+    "DOC_TIMER_EVENTS",
+    "CRON_TIMER_EVENTS",
 
     "swap_used",
 
