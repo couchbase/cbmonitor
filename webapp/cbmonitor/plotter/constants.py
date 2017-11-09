@@ -418,6 +418,31 @@ NON_ZERO_VALUES = (
     "index_util",
 
     "TIME_WAIT",
+
+    "syncGateway_rest__requests_0000ms",
+    "syncGateway_rest__requests_0100ms",
+    "syncGateway_rest__requests_0200ms",
+    "syncGateway_rest__requests_0300ms",
+    "syncGateway_rest__requests_0700ms",
+    "syncGateway_rest__requests_0800ms",
+    "syncGateway_rest__requests_0900ms",
+    "syncGateway_rest__requests_1000ms",
+    "syncGateway_stats__bulkApi.BulkDocsRollingMean",
+    "syncGateway_stats__bulkApi.BulkGetPerDocRollingMean",
+    "syncGateway_stats__bulkApi.BulkGetRollingMean",
+    "syncGateway_stats__bulkApi_BulkDocsPerDocRollingMean",
+    "syncGateway_stats__indexReader.getChanges.Count",
+    "syncGateway_stats__indexReader.getChanges.Time",
+    "syncGateway_stats__indexReader.getChanges.UseCached",
+    "syncGateway_stats__indexReader.getChanges.UseIndexed",
+    "syncGateway_stats__indexReader.numReaders.OneShot",
+    "syncGateway_stats__indexReader.numReaders.Persistent",
+    "syncGateway_stats__indexReader.pollPrincipals.Count",
+    "syncGateway_stats__indexReader.pollPrincipals.Time:",
+    "syncGateway_stats__indexReader.pollReaders.Count",
+    "syncGateway_stats__indexReader.pollReaders.Time",
+    "syncGateway_stats__indexReader.seqHasher.GetClockTime",
+    "syncGateway_stats__indexReader.seqHasher.GetHash",
 )
 
 PALETTE = (
