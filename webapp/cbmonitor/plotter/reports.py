@@ -212,6 +212,10 @@ class Report(object):
         ("eventing_per_node_stats", [
             "DcpEventsRemaining",
         ]),
+        ("eventing_consumer_stats", [
+            "eventing_consumer_rss",
+            "eventing_consumer_cpu",
+        ]),
         ("secondary_stats", [
             "index_items_count",
             "index_num_docs_indexed",
@@ -550,6 +554,7 @@ class Report(object):
         Every model object is converted to extended named tuple.
         """
         all_observables = defaultdict(dict)
+        all_observables[""] = defaultdict(dict)
         for snapshot in self.snapshots:
             # Cluster-wide metrics
             observables = defaultdict(dict)
@@ -561,7 +566,7 @@ class Report(object):
                 observables[o.collector][o.name] = Observable(
                     snapshot.cluster.name, "", "", "", o.name, o.collector
                 )
-            all_observables[""][snapshot.cluster] = observables
+            all_observables[""][""][snapshot.cluster] = observables
 
             # Per-bucket metrics
             for bucket in self.buckets:
@@ -575,7 +580,7 @@ class Report(object):
                     observables[o.collector][o.name] = Observable(
                         snapshot.cluster.name, "", bucket, "", o.name, o.collector
                     )
-                all_observables[bucket][snapshot.cluster] = observables
+                all_observables[""][bucket][snapshot.cluster] = observables
 
             # Per-index metrics
             for index in self.indexes:
@@ -589,7 +594,7 @@ class Report(object):
                     observables[o.collector][o.name] = Observable(
                         snapshot.cluster.name, "", "", index, o.name, o.collector
                     )
-                all_observables[index][snapshot.cluster] = observables
+                all_observables[""][index][snapshot.cluster] = observables
 
             # Per-server metrics
             for server in self.servers:
@@ -603,7 +608,26 @@ class Report(object):
                     observables[o.collector][o.name] = Observable(
                         snapshot.cluster.name, server, "", "", o.name, o.collector
                     )
-                all_observables[server][snapshot.cluster] = observables
+                all_observables[""][server][snapshot.cluster] = observables
+
+            # Per-server Per-Bucket metrics
+            for server in self.servers:
+                all_observables[server] = defaultdict(dict)
+                for bucket in self.buckets:
+                    _server = models.Server.objects.get(cluster=snapshot.cluster,
+                                                        address=server)
+                    _bucket = models.Bucket.objects.get(cluster=snapshot.cluster,
+                                                        name=bucket)
+                    observables = defaultdict(dict)
+                    for o in models.Observable.objects.filter(cluster=snapshot.cluster,
+                                                              bucket=_bucket,
+                                                              server=_server,
+                                                              index__isnull=True):
+                        observables[o.collector][o.name] = Observable(
+                            snapshot.cluster.name, server, bucket, "", o.name, o.collector
+                        )
+                    all_observables[server][bucket][snapshot.cluster] = observables
+
         return all_observables
 
     def get_report(self):
@@ -627,7 +651,7 @@ class Report(object):
                              ):
                 for metric in metrics:
                     observables.append([
-                        all_observables[""][snapshot.cluster][collector].get(metric)
+                        all_observables[""][""][snapshot.cluster][collector].get(metric)
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
@@ -646,7 +670,7 @@ class Report(object):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
-                            all_observables[server][snapshot.cluster][collector].get(metric)
+                            all_observables[""][server][snapshot.cluster][collector].get(metric)
                             for snapshot in self.snapshots
                         ])
             # Per-bucket metrics
@@ -665,7 +689,7 @@ class Report(object):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables.append([
-                            all_observables[bucket][snapshot.cluster][collector].get(metric)
+                            all_observables[""][bucket][snapshot.cluster][collector].get(metric)
                             for snapshot in self.snapshots
                         ])
             # Per-index metrics
@@ -675,8 +699,19 @@ class Report(object):
                 for metric in metrics:
                     for index in self.indexes:
                         observables.append([
-                            all_observables[index][snapshot.cluster][collector].get(metric)
+                            all_observables[""][index][snapshot.cluster][collector].get(metric)
                             for snapshot in self.snapshots
                         ])
+            # Per-server, Per-bucket metrics
+            if collector in ("eventing_consumer_stats",
+                             ):
+                for metric in metrics:
+                    for server in self.servers:
+                        for bucket in self.buckets:
+                            observables.append([
+                                all_observables[server][bucket][snapshot.cluster][collector].get(metric)
+                                for snapshot in self.snapshots
+                            ])
+
         # Skip full mismatch and return tuple with Observable objects
         return tuple(_ for _ in observables if set(_) != {None})
