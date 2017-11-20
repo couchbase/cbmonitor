@@ -242,6 +242,7 @@ LABELS = {
     "eventing-produc_rss": "eventing-producer resident set size, bytes",
     "eventing-produc_cpu": "eventing-producer CPU utilization, %",
     "ep_tmp_oom_errors": "Number of back-offs sent per second due to OOM",
+    "DcpEventsRemaining": "DCP events remaining",
 }
 
 HISTOGRAMS = (

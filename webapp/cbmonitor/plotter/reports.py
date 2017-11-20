@@ -209,6 +209,9 @@ class Report(object):
             "DOC_TIMER_EVENTS",
             "CRON_TIMER_EVENTS",
         ]),
+        ("eventing_per_node_stats", [
+            "DcpEventsRemaining",
+        ]),
         ("secondary_stats", [
             "index_items_count",
             "index_num_docs_indexed",
@@ -638,6 +641,7 @@ class Report(object):
                              "sysdig",
                              "ns_server_system",
                              "syncgateway_node_stats",
+                             "eventing_per_node_stats",
                              ):
                 for metric in metrics:
                     for server in self.servers:
