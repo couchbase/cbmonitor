@@ -612,7 +612,8 @@ class Report(object):
 
             # Per-server Per-Bucket metrics
             for server in self.servers:
-                all_observables[server] = defaultdict(dict)
+                if server not in all_observables:
+                    all_observables[server] = defaultdict(dict)
                 for bucket in self.buckets:
                     _server = models.Server.objects.get(cluster=snapshot.cluster,
                                                         address=server)
@@ -708,10 +709,12 @@ class Report(object):
                 for metric in metrics:
                     for server in self.servers:
                         for bucket in self.buckets:
-                            observables.append([
-                                all_observables[server][bucket][snapshot.cluster][collector].get(metric)
-                                for snapshot in self.snapshots
-                            ])
+                            if bucket in all_observables[server]:
+                                observables.append([
+                                    all_observables[server][bucket][snapshot.cluster][collector].get(metric)
+                                    for snapshot in self.snapshots
+                                    if snapshot.cluster in all_observables[server][bucket]
+                                ])
 
         # Skip full mismatch and return tuple with Observable objects
         return tuple(_ for _ in observables if set(_) != {None})
