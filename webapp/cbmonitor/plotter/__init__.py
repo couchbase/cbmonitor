@@ -259,8 +259,15 @@ class Plotter:
 
         for observable in observables:
             color = palette.next()
+
+            if observable is None:
+                continue
+
             series = self.get_series(observable)
-            if series is not None and not is_all_zeroes(observable.name, series):
+            if series is None:
+                continue
+
+            if not is_all_zeroes(observable.name, series):
                 _series.append(series)
                 _colors.append(color)
                 _clusters.append(observable.cluster)
