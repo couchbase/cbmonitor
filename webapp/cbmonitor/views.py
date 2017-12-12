@@ -30,7 +30,7 @@ def html_report(request):
     images = plotter.plot(snapshots, custom_labels=labels)
 
     def id_from_url(url):
-        return url.split("/")[2].split(".")[0]
+        return url.split("/")[-1].split(".")[0]
 
     urls = [(id_from_url(url), title, url) for title, url in images]
 
