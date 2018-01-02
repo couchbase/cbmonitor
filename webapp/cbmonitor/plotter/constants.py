@@ -226,6 +226,8 @@ LABELS = {
     "elastic_filter_cache_size": "Elasticsearch filter cache size",
     "elastic_active_search": "Elasticsearch active search",
     "elastic_query_total": "Elasticsearch total query",
+    "jts_throughput": "JTS Throughput, queries/second",
+    "jts_latency": "JTS Latency, ms",
     "indexer_pread": "indexer pread system calls/second",
     "indexer_pwrite": "indexer pwrite system calls/second",
     "memcached_pread": "memcached pread system calls/second",

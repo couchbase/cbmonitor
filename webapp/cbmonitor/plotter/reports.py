@@ -209,6 +209,10 @@ class Report(object):
             "DOC_TIMER_EVENTS",
             "CRON_TIMER_EVENTS",
         ]),
+        ("jts_stats", [
+            "jts_throughput",
+            "jts_latency",
+        ]),
         ("eventing_per_node_stats", [
             "DcpEventsRemaining",
         ]),
@@ -686,6 +690,7 @@ class Report(object):
                              "secondary_stats",
                              "secondary_debugstats_bucket",
                              "eventing_stats",
+                             "jts_stats",
                              ):
                 for metric in metrics:
                     for bucket in self.buckets:
