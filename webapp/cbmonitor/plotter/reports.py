@@ -348,7 +348,8 @@ class Report(object):
             "sync_gateway_cpu",
             "sync_gateway_rss",
             "sync_gateway_vsize",
-
+            "java_rss",
+            "java_cpu",
         ]),
         ("sysdig", [
             "indexer_pread",

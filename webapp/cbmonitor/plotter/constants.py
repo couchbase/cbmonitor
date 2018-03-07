@@ -73,6 +73,8 @@ LABELS = {
     "cbq-engine_cpu": "cbq-engine CPU utilization, %",
     "cbft_rss": "FTS resident set size, bytes",
     "cbft_cpu": "FTS CPU utilization, %",
+    "java_rss": "Java resident set size, bytes",
+    "java_cpu": "Java CPU utilization, %",
     "xdcr_lag": "Total XDCR lag (from memory to memory), ms",
     "xdcr_persistence_time": "Observe latency, ms",
     "xdcr_diff": "Replication lag, ms",
