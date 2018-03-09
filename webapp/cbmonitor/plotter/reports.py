@@ -519,6 +519,14 @@ class Report(object):
             "syncGateway_stats__revisionCache_hits",
             "syncGateway_stats__revisionCache_misses",
         ]),
+        ("analytics", [
+            "heap_used",
+            "gc_count",
+            "gc_time",
+            "io_reads",
+            "io_writes",
+            "system_load_average",
+        ]),
     ))
 
     def __init__(self, snapshots):
@@ -677,6 +685,7 @@ class Report(object):
                     ])
             # Per-server metrics
             if collector in ("atop",
+                             "analytics",
                              "disk",
                              "iostat",
                              "net",

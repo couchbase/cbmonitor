@@ -264,6 +264,12 @@ LABELS = {
     "eventing_consumer_cpu": "Eventing consumer CPU utilization, %",
     "eventing_consumer_rss": "Eventing consumer rss used, Bytes",
     "DcpEventsRemaining": "DCP events remaining",
+    "heap_used": "JVM heap used, bytes",
+    "gc_count": "GC count",
+    "gc_time": "GC time, ms",
+    "io_reads": "IO reads, bytes",
+    "io_writes": "IO writes, bytes",
+    "system_load_average": "Average load",
 }
 
 HISTOGRAMS = (
