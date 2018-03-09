@@ -130,6 +130,14 @@ class Report(object):
             "cpu_utilization_rate",
             "swap_used",
         ]),
+        ("analytics", [
+            "heap_used",
+            "gc_count",
+            "gc_time",
+            "io_reads",
+            "io_writes",
+            "system_load_average",
+        ]),
         ("fts_totals", [
             "batch_merge_count",
             "doc_count",
@@ -518,14 +526,6 @@ class Report(object):
             "syncGateway_stats__requests_total",
             "syncGateway_stats__revisionCache_hits",
             "syncGateway_stats__revisionCache_misses",
-        ]),
-        ("analytics", [
-            "heap_used",
-            "gc_count",
-            "gc_time",
-            "io_reads",
-            "io_writes",
-            "system_load_average",
         ]),
     ))
 
