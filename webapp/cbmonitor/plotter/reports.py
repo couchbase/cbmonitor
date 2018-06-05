@@ -362,6 +362,8 @@ class Report(object):
             "sync_gateway_vsize",
             "java_rss",
             "java_cpu",
+            "cbc-pillowfight_rss",
+            "cbc-pillowfight_cpu",
         ]),
         ("sysdig", [
             "indexer_pread",
