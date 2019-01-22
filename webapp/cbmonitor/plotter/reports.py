@@ -477,6 +477,10 @@ class Report(object):
             "syncGateway_stats__requests_total",
             "syncGateway_stats__revisionCache_hits",
             "syncGateway_stats__revisionCache_misses",
+            "syncgateway__global__resource_utilization__process_cpu_percent_utilization",
+            "syncgateway__global__resource_utilization__go_memstats_heapinuse",
+            "syncgateway__per_db__db__database__doc_writes_bytes_blip",
+            "syncgateway__per_db__db__database__doc_reads_bytes_blip",
         ]),
         ("syncgateway_cluster_stats", [
             "syncGateway_changeCache__lag-queue-0000ms",
@@ -532,6 +536,10 @@ class Report(object):
             "syncGateway_stats__requests_total",
             "syncGateway_stats__revisionCache_hits",
             "syncGateway_stats__revisionCache_misses",
+            "syncgateway__global__resource_utilization__process_cpu_percent_utilization",
+            "syncgateway__global__resource_utilization__go_memstats_heapinuse",
+            "syncgateway__per_db__db__database__doc_writes_bytes_blip",
+            "syncgateway__per_db__db__database__doc_reads_bytes_blip",
         ]),
     ))
 
