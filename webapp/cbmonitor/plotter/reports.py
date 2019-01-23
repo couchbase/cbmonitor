@@ -481,6 +481,9 @@ class Report(object):
             "syncgateway__global__resource_utilization__go_memstats_heapinuse",
             "syncgateway__per_db__db__database__doc_writes_bytes_blip",
             "syncgateway__per_db__db__database__doc_reads_bytes_blip",
+            "syncgateway__per_db__db__cache__rev_cache_hits",
+            "syncgateway__per_db__db__rev_cache_misses",
+            "syncgateway__per_db__db__chan_cache_misses",
         ]),
         ("syncgateway_cluster_stats", [
             "syncGateway_changeCache__lag-queue-0000ms",
@@ -540,6 +543,9 @@ class Report(object):
             "syncgateway__global__resource_utilization__go_memstats_heapinuse",
             "syncgateway__per_db__db__database__doc_writes_bytes_blip",
             "syncgateway__per_db__db__database__doc_reads_bytes_blip",
+            "syncgateway__per_db__db__cache__rev_cache_hits",
+            "syncgateway__per_db__db__rev_cache_misses",
+            "syncgateway__per_db__db__chan_cache_misses",
         ]),
     ))
 
