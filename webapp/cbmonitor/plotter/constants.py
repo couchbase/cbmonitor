@@ -276,6 +276,10 @@ LABELS = {
     "syncgateway__global__resource_utilization__go_memstats_heapinuse": "go_memstats_heapinuse",
     "syncgateway__per_db__db__database__doc_writes_bytes_blip": "doc_writes_bytes_blip",
     "syncgateway__per_db__db__database__doc_reads_bytes_blip": "doc_reads_bytes_blip",
+    "syncgateway__per_db__db__delta_sync__delta_cache_hit": "delta_cache_hit",
+    "syncgateway__per_db__db__delta_sync__delta_cache_miss": "delta_cache_miss",
+    "syncgateway__per_db__db__cache__rev_cache_hits": "rev_cache_hits",
+    "syncgateway__per_db__db__cache__rev_cache_misses": "rev_cache_misses",
 }
 
 HISTOGRAMS = (
