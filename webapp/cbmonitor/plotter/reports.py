@@ -364,6 +364,9 @@ class Report(object):
             "java_cpu",
             "cbc-pillowfight_rss",
             "cbc-pillowfight_cpu",
+            "cblite_cpu",
+            "cblite_rss",
+            "cblite_vsize",
         ]),
         ("sysdig", [
             "indexer_pread",
