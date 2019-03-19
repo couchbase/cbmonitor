@@ -240,6 +240,8 @@ LABELS = {
     "elastic_latency_get": "ElasticSearch latency in ms",
     "cbft_total_bytes_indexed": "FTS total index size",
     "cbft_num_recs_to_persist": "FTS number of records in queue",
+    "cbft_num_root_memorysegments": "FTS number of memory segments at root",
+    "cbft_num_root_filesegments": "FTS number of disk segments at root",
     "elastic_cache_hit": "Elasticsearch query cache hit",
     "elastic_cache_size": "Elasticsearch query cache size",
     "elastic_filter_cache_size": "Elasticsearch filter cache size",
