@@ -528,6 +528,7 @@ class Report(object):
             "syncgateway__per_db__db__delta_sync__delta_push_doc_count",
             "syncgateway__per_db__db__delta_sync__deltas_requested",
             "syncgateway__per_db__db__delta_sync__deltas_sent",
+            "syncGateway_import__import_count",
         ]),
         ("syncgateway_cluster_stats", [
             "syncGateway_changeCache__lag-queue-0000ms",
@@ -628,6 +629,7 @@ class Report(object):
             "syncgateway__per_db__db__delta_sync__delta_push_doc_count",
             "syncgateway__per_db__db__delta_sync__deltas_requested",
             "syncgateway__per_db__db__delta_sync__deltas_sent",
+            "syncGateway_import__import_count",
         ]),
     ))
 

@@ -319,6 +319,7 @@ LABELS = {
     "syncgateway__per_db__db__delta_sync__delta_push_doc_count": "delta_push_doc_count",
     "syncgateway__per_db__db__delta_sync__deltas_requested": "deltas_requested",
     "syncgateway__per_db__db__delta_sync__deltas_sent": "deltas_sent",
+    "syncGateway_import__import_count": "import_count",
 }
 
 HISTOGRAMS = (
