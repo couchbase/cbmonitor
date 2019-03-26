@@ -320,6 +320,7 @@ LABELS = {
     "syncgateway__per_db__db__delta_sync__deltas_requested": "deltas_requested",
     "syncgateway__per_db__db__delta_sync__deltas_sent": "deltas_sent",
     "syncGateway_import__import_count": "import_count",
+    "sgimport_latency": "sgimport_latency",
 }
 
 HISTOGRAMS = (
@@ -342,6 +343,7 @@ HISTOGRAMS = (
     "cbft_latency_get",
     "elastic_latency_get",
     "Nth-latency",
+    "sgimport_latency",
 )
 
 ZOOM_HISTOGRAMS = (

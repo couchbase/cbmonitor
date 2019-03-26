@@ -29,6 +29,9 @@ class Report(object):
             "xdcr_persistence_time",
             "xdcr_diff",
         ]),
+        ("sgimport_latency", [
+            "sgimport_latency",
+        ]),
         ("spring_query_latency", [
             "latency_query",
         ]),
@@ -800,6 +803,7 @@ class Report(object):
                              "ns_server_system",
                              "syncgateway_node_stats",
                              "eventing_per_node_stats",
+                             "sgimport_latency",
                              ):
                 for metric in metrics:
                     for server in self.servers:
