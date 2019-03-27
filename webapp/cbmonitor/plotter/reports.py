@@ -784,6 +784,7 @@ class Report(object):
                              "secondaryscan_latency",
                              "secondary_storage_stats_mm",
                              "syncgateway_cluster_stats",
+                             "sgimport_latency",
                              ):
                 for metric in metrics:
                     observables.append([
@@ -824,6 +825,7 @@ class Report(object):
                              "secondary_debugstats_bucket",
                              "eventing_stats",
                              "jts_stats",
+                             "sgimport_latency",
                              ):
                 for metric in metrics:
                     for bucket in self.buckets:
