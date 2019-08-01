@@ -539,6 +539,9 @@ class Report(object):
             "syncgateway__per_db__db__security__auth_failed_count",
             "syncgateway__per_db__db__security__total_auth_time",
             "syncGateway_import__import_count",
+            "syncgateway__per_db__db__gsi_views__access_count",
+            "syncgateway__per_db__db__gsi_views__roleAccess_count",
+            "syncgateway__per_db__db__gsi_views__channels_count",
         ]),
         ("syncgateway_cluster_stats", [
             "syncgateway__global__resource_utilization__process_cpu_percent_utilization",
@@ -646,6 +649,9 @@ class Report(object):
             "syncgateway__per_db__db__security__auth_failed_count",
             "syncgateway__per_db__db__security__total_auth_time",
             "syncGateway_import__import_count",
+            "syncgateway__per_db__db__gsi_views__access_count",
+            "syncgateway__per_db__db__gsi_views__roleAccess_count",
+            "syncgateway__per_db__db__gsi_views__channels_count",
         ]),
     ))
 

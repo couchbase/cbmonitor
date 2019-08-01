@@ -380,6 +380,9 @@ LABELS = {
     "syncgateway__per_db__db__security__total_auth_time": "total_auth_time",
     "syncGateway_import__import_count": "import_count",
     "sgimport_latency": "sgimport_latency",
+    "syncgateway__per_db__db__gsi_views__access_count": "gsi_views__access_count",
+    "syncgateway__per_db__db__gsi_views__roleAccess_count": "gsi_views__roleAccess_count",
+    "syncgateway__per_db__db__gsi_views__channels_count": "gsi_views__channels_count",
 }
 
 HISTOGRAMS = (
