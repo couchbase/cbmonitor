@@ -95,6 +95,10 @@ LABELS = {
     "data_avg_page_cache_rr": "Average page cache resident ratio, %",
     'page_cache_hit_ratio': 'Page cache hit ratio, %',
     'page_cache_total_hits': 'Page cache total hits per second',
+    "CompactionBytesRead": "Number of bytes",
+    "CompactionBytesWritten": "Number of bytes",
+    "TotalBytesRead": "Number of bytes",
+    "TotalBytesWritten": "Number of bytes",
     "index_rbps": "Bytes read/second",
     "index_wbps": "Bytes written/second",
     "index_avgqusz": "The average queue length",
@@ -459,6 +463,11 @@ NON_ZERO_VALUES = (
     "vb_replica_curr_items",
     "vb_pending_curr_items",
     "vb_avg_total_queue_age",
+
+    "CompactionBytesRead",
+    "CompactionBytesWritten",
+    "TotalBytesRead",
+    "TotalBytesWritten",
 
     "xdc_ops",
     "ep_num_ops_get_meta",

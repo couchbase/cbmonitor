@@ -35,6 +35,12 @@ class Report(object):
         ("spring_query_latency", [
             "latency_query",
         ]),
+        ("kvstore_stats", [
+            "CompactionBytesRead",
+            "CompactionBytesWritten",
+            "TotalBytesRead",
+            "TotalBytesWritten",
+        ]),
         ("n1ql_stats", [
             "query_requests",
             "query_selects",
