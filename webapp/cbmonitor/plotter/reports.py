@@ -856,6 +856,7 @@ class Report(object):
                              "syncgateway_node_stats",
                              "eventing_per_node_stats",
                              "sgimport_latency",
+                             "kvstore_stats",
                              ):
                 for metric in metrics:
                     for server in self.servers:
