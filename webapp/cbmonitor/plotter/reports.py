@@ -877,6 +877,7 @@ class Report(object):
                              "eventing_stats",
                              "jts_stats",
                              "sgimport_latency",
+                             "kvstore_stats",
                              ):
                 for metric in metrics:
                     for bucket in self.buckets:
@@ -896,7 +897,6 @@ class Report(object):
                         ])
             # Per-server, Per-bucket metrics
             if collector in ("eventing_consumer_stats",
-                             "kvstore_stats",
                              ):
                 for metric in metrics:
                     for server in self.servers:
