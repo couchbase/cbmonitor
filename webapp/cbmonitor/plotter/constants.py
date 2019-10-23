@@ -95,6 +95,8 @@ LABELS = {
     "data_avg_page_cache_rr": "Average page cache resident ratio, %",
     'page_cache_hit_ratio': 'Page cache hit ratio, %',
     'page_cache_total_hits': 'Page cache total hits per second',
+    "BlockCacheQuota": "Number of bytes",
+    "WriteCacheQuota": "Number of bytes",
     "BlockCacheMemUsed": "Number of bytes",
     "BlockCacheHits": "Number of hits",
     "BlockCacheMisses": "Number of misses",
@@ -490,6 +492,8 @@ NON_ZERO_VALUES = (
     "vb_pending_curr_items",
     "vb_avg_total_queue_age",
 
+    "BlockCacheQuota",
+    "WriteCacheQuota",
     "BlockCacheMemUsed",
     "BlockCacheHits",
     "BlockCacheMisses",

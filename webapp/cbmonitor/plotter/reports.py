@@ -36,6 +36,8 @@ class Report(object):
             "latency_query",
         ]),
         ("kvstore_stats", [
+            "BlockCacheQuota",
+            "WriteCacheQuota",
             "BlockCacheMemUsed",
             "BlockCacheHits",
             "BlockCacheMisses",
