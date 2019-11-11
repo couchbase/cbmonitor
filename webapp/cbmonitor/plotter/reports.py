@@ -68,6 +68,7 @@ class Report(object):
             "TotalMemUsed",
             "WriteAmp",
             "WriteCacheMemUsed",
+            "NCompacts",
         ]),
         ("n1ql_stats", [
             "query_requests",
