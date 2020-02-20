@@ -468,6 +468,9 @@ class Report(object):
             "ESTABLISHED",
             "TIME_WAIT",
         ]),
+        ("vmstat", [
+            "allocstall",
+        ]),
         ("syncgateway_node_stats", [
             "syncgateway__global__resource_utilization__process_cpu_percent_utilization",
             "syncgateway__global__resource_utilization__process_memory_resident",
@@ -859,6 +862,7 @@ class Report(object):
                              "syncgateway_node_stats",
                              "eventing_per_node_stats",
                              "sgimport_latency",
+                             "vmstat",
                              ):
                 for metric in metrics:
                     for server in self.servers:

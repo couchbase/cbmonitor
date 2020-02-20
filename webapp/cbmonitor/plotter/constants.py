@@ -307,6 +307,7 @@ LABELS = {
     "io_reads": "IO reads, bytes",
     "io_writes": "IO writes, bytes",
     "system_load_average": "Average load",
+    "allocstall": "direct reclaim calls",
     "syncgateway__global__resource_utilization__process_cpu_percent_utilization": "process_cpu_percent_utilization",
     "syncgateway__global__resource_utilization__go_memstats_heapinuse": "go_memstats_heapinuse",
     "syncgateway__per_db__db__database__doc_writes_bytes_blip": "doc_writes_bytes_blip",
