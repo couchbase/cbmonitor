@@ -1,4 +1,4 @@
-django==1.5.5
+django==1.11.29
 flup==1.0.2
 matplotlib==2.0.2
 numpy==1.12.1
