@@ -59,6 +59,8 @@ class Report(object):
             "NSyncs",
             "NTablesCreated",
             "NTablesDeleted",
+            "NTableFiles",
+            "NFileCountCompacts",
             "NWriteBytes",
             "NWriteBytesCompact",
             "NWriteIOs",
