@@ -119,6 +119,7 @@ LABELS = {
     "NTablesCreated": "Number of tables",
     "NTablesDeleted": "Number of tables",
     "NTableFiles": "Number of table files",
+    "TableMetaMemUsed": "Memory used by table metadata",
     "NFileCountCompacts": "Number of file count compactions",
     "NWriteBytes": "Number of bytes",
     "NWriteBytesCompact": "Number of bytes",

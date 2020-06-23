@@ -60,6 +60,7 @@ class Report(object):
             "NTablesCreated",
             "NTablesDeleted",
             "NTableFiles",
+            "TableMetaMemUsed",
             "NFileCountCompacts",
             "NWriteBytes",
             "NWriteBytesCompact",
