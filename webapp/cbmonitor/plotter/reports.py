@@ -71,6 +71,8 @@ class Report(object):
             "TotalMemUsed",
             "WriteAmp",
             "WriteCacheMemUsed",
+            "ActiveBloomFilterMemUsed",
+            "TotalBlockCacheMemUsed",
             "NCompacts",
         ]),
         ("n1ql_stats", [
