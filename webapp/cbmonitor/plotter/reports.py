@@ -158,6 +158,7 @@ class Report(object):
             "ep_ops_update",
             "ep_diskqueue_drain",
             "ep_diskqueue_fill",
+            "ep_queue_size",
             "avg_bg_wait_time",
             "avg_disk_commit_time",
             "avg_disk_update_time",
