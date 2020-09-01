@@ -69,6 +69,8 @@ class Report(object):
             "ReadAmpGet",
             "ReadIOAmp",
             "TotalMemUsed",
+            "BufferMemUsed",
+            "WALMemUsed",
             "WriteAmp",
             "WriteCacheMemUsed",
             "ActiveBloomFilterMemUsed",
