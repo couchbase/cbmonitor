@@ -137,6 +137,7 @@ LABELS = {
     "WriteAmp": "Amplification",
     "WriteCacheMemUsed": "Number of bytes",
     "NCompacts": "Number of compactions",
+    "TxnSizeEstimate": "Number of bytes",
     "index_rbps": "Bytes read/second",
     "index_wbps": "Bytes written/second",
     "index_avgqusz": "The average queue length",
@@ -545,6 +546,7 @@ NON_ZERO_VALUES = (
     "WriteAmp",
     "WriteCacheMemUsed",
     "NCompacts",
+    "TxnSizeEstimate",
 
     "xdc_ops",
     "ep_num_ops_get_meta",

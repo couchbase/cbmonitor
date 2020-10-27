@@ -76,6 +76,7 @@ class Report(object):
             "ActiveBloomFilterMemUsed",
             "TotalBlockCacheMemUsed",
             "NCompacts",
+            "TxnSizeEstimate",
         ]),
         ("n1ql_stats", [
             "query_requests",
