@@ -77,6 +77,7 @@ class Report(object):
             "TotalBlockCacheMemUsed",
             "NCompacts",
             "TxnSizeEstimate",
+            "NFlushes",
         ]),
         ("n1ql_stats", [
             "query_requests",
