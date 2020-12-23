@@ -445,6 +445,7 @@ HISTOGRAMS = (
     "avg_bg_wait_time",
     "avg_disk_commit_time",
     "avg_disk_update_time",
+    "vb_avg_total_queue_age",
     "query_avg_req_time",
     "query_avg_svc_time",
     "cbft_latency_get",
