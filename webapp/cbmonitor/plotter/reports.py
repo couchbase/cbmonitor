@@ -921,6 +921,7 @@ class Report(object):
                              "jts_stats",
                              "sgimport_latency",
                              "kvstore_stats",
+                             "eventing_per_handler_stats",
                              ):
                 for metric in metrics:
                     for bucket in self.buckets:
