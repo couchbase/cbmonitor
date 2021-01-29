@@ -301,6 +301,9 @@ class Report(object):
         ("eventing_per_node_stats", [
             "DcpEventsRemaining",
         ]),
+         ("eventing_per_handler_stats", [
+            "on_update_success"
+        ]),
         ("eventing_consumer_stats", [
             "eventing_consumer_rss",
             "eventing_consumer_cpu",

@@ -334,6 +334,7 @@ LABELS = {
     "ep_tmp_oom_errors": "Number of back-offs sent per second due to OOM",
     "eventing_consumer_cpu": "Eventing consumer CPU utilization, %",
     "eventing_consumer_rss": "Eventing consumer rss used, Bytes",
+    "on_update_success": "OnUpdate() Successful events",
     "DcpEventsRemaining": "DCP events remaining",
     "heap_used": "JVM heap used, bytes",
     "gc_count": "GC count",
