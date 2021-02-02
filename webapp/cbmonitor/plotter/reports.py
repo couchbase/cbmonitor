@@ -100,6 +100,8 @@ class Report(object):
             "RecentReadAmpGet",
             "RecentReadIOAmp",
             "RecentBytesPerRead",
+            "NGetStatsPerSec",
+            "NGetStatsComputedPerSec",
         ]),
         ("n1ql_stats", [
             "query_requests",
