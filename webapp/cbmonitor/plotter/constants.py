@@ -344,6 +344,8 @@ LABELS = {
     "io_reads": "IO reads, bytes",
     "io_writes": "IO writes, bytes",
     "system_load_average": "Average load",
+    "disk_used": "Total disk used in bytes",
+    "thread_count": "Number of threads in use",
     "allocstall": "direct reclaim calls",
     "syncgateway__global__resource_utilization__process_cpu_percent_utilization": "process_cpu_percent_utilization",
     "syncgateway__global__resource_utilization__go_memstats_heapinuse": "go_memstats_heapinuse",

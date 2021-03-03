@@ -210,6 +210,8 @@ class Report(object):
             "io_reads",
             "io_writes",
             "system_load_average",
+            "disk_used",
+            "thread_count",
         ]),
         ("fts_totals", [
             "batch_merge_count",
