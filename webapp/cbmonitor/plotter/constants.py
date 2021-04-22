@@ -326,6 +326,7 @@ LABELS = {
     'Dirty': 'Memory waiting to be written back to disk, bytes',
     'Buffers': 'Memory in buffer cache, bytes',
     'Cached': 'Memory in the pagecache, bytes',
+    'SUnreclaim': 'Memory cannot be reclaimed, bytes',
     'data_bytes_read': 'Total bytes read from the disk',
     'data_bytes_written': 'Total bytes written to the disk',
     "DCP_MUTATION": "DCP mutations processed by function",

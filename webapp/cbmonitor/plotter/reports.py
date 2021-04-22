@@ -498,6 +498,7 @@ class Report(object):
             "Dirty",
             "Buffers",
             "Cached",
+            "SUnreclaim",
         ]),
         ("pcstat", [
             "page_cache_hit_ratio",
