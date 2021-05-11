@@ -169,8 +169,8 @@ LABELS = {
     "RecentBytesPerRead": "Number of bytes",
     "NGetStatsPerSec": "Number of get stats per second",
     "NGetStatsComputedPerSec": "Number of get stats computed per second",
-    "FlushQueueSize": "Number of items in the queue, items",
-    "CompactQueueSize": "Number of items in the queue, items",
+    "FlushQueueSize": "Number of tasks in the queue",
+    "CompactQueueSize": "Number of tasks in the queue",
 
     "index_rbps": "Bytes read/second",
     "index_wbps": "Bytes written/second",
