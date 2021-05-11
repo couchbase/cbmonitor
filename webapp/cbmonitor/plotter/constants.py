@@ -169,6 +169,8 @@ LABELS = {
     "RecentBytesPerRead": "Number of bytes",
     "NGetStatsPerSec": "Number of get stats per second",
     "NGetStatsComputedPerSec": "Number of get stats computed per second",
+    "FlushQueueSize": "Number of items in the queue, items",
+    "CompactQueueSize": "Number of items in the queue, items",
 
     "index_rbps": "Bytes read/second",
     "index_wbps": "Bytes written/second",
@@ -615,6 +617,8 @@ NON_ZERO_VALUES = (
     "RecentBytesPerRead",
     "NGetStatsPerSec",
     "NGetStatsComputedPerSec",
+    "FlushQueueSize",
+    "CompactQueueSize",
 
     "xdc_ops",
     "ep_num_ops_get_meta",

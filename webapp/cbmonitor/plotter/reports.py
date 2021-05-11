@@ -102,6 +102,8 @@ class Report(object):
             "RecentBytesPerRead",
             "NGetStatsPerSec",
             "NGetStatsComputedPerSec",
+            "FlushQueueSize",
+            "CompactQueueSize",
         ]),
         ("n1ql_stats", [
             "query_requests",
