@@ -423,6 +423,8 @@ class Report(object):
             "mm_metadata",
         ]),
         ("atop", [
+            "cbindex_cpu",
+            "cbindex_rss",
             "cbindexperf_cpu",
             "cbindexperf_rss",
             "dcptest_rss",
