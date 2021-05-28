@@ -341,6 +341,7 @@ class Report(object):
             "memory_used",
             "memory_used_storage",
             "memory_used_queue",
+            "average_indexer_resident_ratio"
         ]),
         ("secondary_debugstats_bucket", [
             "mutation_queue_size",
