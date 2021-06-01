@@ -85,6 +85,8 @@ LABELS = {
     "java_cpu": "Java CPU utilization, %",
     "cbc-pillowfight_rss": "cbc-pillowfight resident set size, bytes",
     "cbc-pillowfight_cpu": "cbc-pillowfight CPU utilization, %",
+    "prometheus_rss": "prometheus resident set size, bytes",
+    "prometheus_cpu": "prometheus CPU utilization, %",
     "xdcr_lag": "Total XDCR lag (from memory to memory), ms",
     "xdcr_persistence_time": "Observe latency, ms",
     "xdcr_diff": "Replication lag, ms",

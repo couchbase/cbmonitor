@@ -462,6 +462,8 @@ class Report(object):
             "cblite_cpu",
             "cblite_rss",
             "cblite_vsize",
+            "prometheus_rss",
+            "prometheus_cpu",
         ]),
         ("sysdig", [
             "indexer_pread",
