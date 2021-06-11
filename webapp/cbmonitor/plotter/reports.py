@@ -104,6 +104,9 @@ class Report(object):
             "NGetStatsComputedPerSec",
             "FlushQueueSize",
             "CompactQueueSize",
+            "NBloomFilterHits",
+            "NBloomFilterMisses",
+            "BloomFilterFPR",
         ]),
         ("n1ql_stats", [
             "query_requests",

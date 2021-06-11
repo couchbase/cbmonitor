@@ -173,6 +173,9 @@ LABELS = {
     "NGetStatsComputedPerSec": "Number of get stats computed per second",
     "FlushQueueSize": "Number of tasks in the queue",
     "CompactQueueSize": "Number of tasks in the queue",
+    "NBloomFilterHits": "Number of times a key didn't exist and filter correctly suggested it didn't",
+    "NBloomFilterMisses": "Number of times a key didn't exist and filter incorrectly suggested it did",
+    "BloomFilterFPR": "False positive ratio of the bloom filter.",
 
     "index_rbps": "Bytes read/second",
     "index_wbps": "Bytes written/second",
@@ -621,6 +624,9 @@ NON_ZERO_VALUES = (
     "NGetStatsComputedPerSec",
     "FlushQueueSize",
     "CompactQueueSize",
+    "NBloomFilterHits",
+    "NBloomFilterMisses",
+    "BloomFilterFPR",
 
     "xdc_ops",
     "ep_num_ops_get_meta",
