@@ -107,6 +107,9 @@ class Report(object):
             "NBloomFilterHits",
             "NBloomFilterMisses",
             "BloomFilterFPR",
+            "NumNormalFlushes",
+            "NumPersistentFlushes",
+            "NumSyncFlushes",
         ]),
         ("n1ql_stats", [
             "query_requests",
