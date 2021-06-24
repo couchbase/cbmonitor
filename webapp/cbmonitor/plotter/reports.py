@@ -50,6 +50,7 @@ class Report(object):
             "NCommitBatches",
             "NDeletes",
             "NGets",
+            "NInserts",
             "NReadBytes",
             "NReadBytesCompact",
             "NReadBytesGet",
