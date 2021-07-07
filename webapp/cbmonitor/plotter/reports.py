@@ -72,6 +72,8 @@ class Report(object):
             "TotalMemUsed",
             "BufferMemUsed",
             "WALMemUsed",
+            "WALBufferMemUsed",
+            "HistogramMemUsed",
             "WriteAmp",
             "WriteCacheMemUsed",
             "ActiveBloomFilterMemUsed",
