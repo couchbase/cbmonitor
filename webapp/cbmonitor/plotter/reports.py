@@ -74,6 +74,7 @@ class Report(object):
             "WALMemUsed",
             "WALBufferMemUsed",
             "HistogramMemUsed",
+            "TreeSnapshotMemoryUsed",
             "WriteAmp",
             "WriteCacheMemUsed",
             "ActiveBloomFilterMemUsed",
