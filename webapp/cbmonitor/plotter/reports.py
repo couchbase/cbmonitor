@@ -117,6 +117,10 @@ class Report(object):
             "NumNormalFlushes",
             "NumPersistentFlushes",
             "NumSyncFlushes",
+            "BlockCacheHitsPerSec",
+            "BlockCacheMissesPerSec",
+            "NBloomFilterHitsPerSec",
+            "NBloomFilterMissesPerSec",
         ]),
         ("n1ql_stats", [
             "query_requests",

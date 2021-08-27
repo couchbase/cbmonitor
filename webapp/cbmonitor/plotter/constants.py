@@ -186,6 +186,10 @@ LABELS = {
     "NumNormalFlushes": "Number of normal write cache flushes",
     "NumPersistentFlushes": "Number of persistent write cache flushes",
     "NumSyncFlushes": "Number of sync write cache flushes",
+    "BlockCacheHitsPerSec": "Number of hits per second",
+    "BlockCacheMissesPerSec": "Number of misses per second",
+    "NBloomFilterHitsPerSec": "Number of hits per second",
+    "NBloomFilterMissesPerSec": "Number of misses per second",
 
     "index_rbps": "Bytes read/second",
     "index_wbps": "Bytes written/second",
@@ -647,6 +651,10 @@ NON_ZERO_VALUES = (
     "NumNormalFlushes",
     "NumPersistentFlushes",
     "NumSyncFlushes",
+    "BlockCacheHitsPerSec",
+    "BlockCacheMissesPerSec",
+    "NBloomFilterHitsPerSec",
+    "NBloomFilterMissesPerSec",
 
     "xdc_ops",
     "ep_num_ops_get_meta",
