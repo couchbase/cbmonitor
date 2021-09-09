@@ -190,6 +190,8 @@ LABELS = {
     "BlockCacheMissesPerSec": "Number of misses per second",
     "NBloomFilterHitsPerSec": "Number of hits per second",
     "NBloomFilterMissesPerSec": "Number of misses per second",
+    "RecentBlockCacheHitRatio": "Hit ratio",
+    "BlockCacheHitRatio": "Hit ratio",
 
     "index_rbps": "Bytes read/second",
     "index_wbps": "Bytes written/second",
@@ -655,6 +657,8 @@ NON_ZERO_VALUES = (
     "BlockCacheMissesPerSec",
     "NBloomFilterHitsPerSec",
     "NBloomFilterMissesPerSec",
+    "RecentBlockCacheHitRatio",
+    "BlockCacheHitRatio",
 
     "xdc_ops",
     "ep_num_ops_get_meta",

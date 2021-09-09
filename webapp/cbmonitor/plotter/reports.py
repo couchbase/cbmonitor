@@ -121,6 +121,8 @@ class Report(object):
             "BlockCacheMissesPerSec",
             "NBloomFilterHitsPerSec",
             "NBloomFilterMissesPerSec",
+            "RecentBlockCacheHitRatio",
+            "BlockCacheHitRatio",
         ]),
         ("n1ql_stats", [
             "query_requests",
