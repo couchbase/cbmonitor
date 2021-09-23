@@ -123,6 +123,12 @@ class Report(object):
             "NBloomFilterMissesPerSec",
             "RecentBlockCacheHitRatio",
             "BlockCacheHitRatio",
+            "ReadIOAmpSet",
+            "RecentReadIOAmpSet",
+            "NReadBytesSet",
+            "NReadIOsSet",
+            "NReadBytesSetPerSec",
+            "NReadIOsSetPerSec",
         ]),
         ("n1ql_stats", [
             "query_requests",
