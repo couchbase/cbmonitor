@@ -92,6 +92,8 @@ LABELS = {
     "xdcr_diff": "Replication lag, ms",
     "latency_set": "SET ops latency, ms",
     "latency_get": "GET ops latency, ms",
+    "total_latency_set": "SET ops latency including TMP error retries, ms",
+    "total_latency_get": "GET ops latency including TMP error retries, ms",
     "latency_query": "Query latency, ms",
     "latency_observe": "OBSERVE latency, ms",
     "latency_persist_to": "persistTo=1 latency, ms",
@@ -497,6 +499,8 @@ LABELS = {
 HISTOGRAMS = (
     "latency_get",
     "latency_set",
+    "total_latency_get",
+    "total_latency_set",
     "latency_query",
     "latency_observe",
     "latency_persist_to",
@@ -521,6 +525,8 @@ HISTOGRAMS = (
 ZOOM_HISTOGRAMS = (
     "latency_get",
     "latency_set",
+    "total_latency_get",
+    "total_latency_set",
     "latency_query",
     "avg_bg_wait_time",
     "cbft_latency_get",
