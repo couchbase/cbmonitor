@@ -164,10 +164,8 @@ class Report(object):
         ("spring_latency", [
             "latency_set",
             "latency_get",
-        ]),
-        ("spring_total_latency", [
-            "total_latency_set",
-            "total_latency_get",
+            "latency_total_set",
+            "latency_total_get",
         ]),
         ("xdcr_stats", [
             "changes_left",
@@ -960,7 +958,6 @@ class Report(object):
                              "xdcr_stats",
                              "ns_server",
                              "spring_latency",
-                             "spring_total_latency",
                              "spring_query_latency",
                              "durability",
                              "observe",
