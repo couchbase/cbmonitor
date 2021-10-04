@@ -130,6 +130,10 @@ class Report(object):
             "NReadBytesSetPerSec",
             "NReadIOsSetPerSec",
         ]),
+        ("cbstats_memory", [
+            "ep_mem_used_secondary",
+            "ep_mem_used_primary",
+        ]),
         ("n1ql_stats", [
             "query_requests",
             "query_selects",

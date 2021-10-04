@@ -201,6 +201,9 @@ LABELS = {
     "NReadBytesSetPerSec": "Bytes read from disk by sets per second",
     "NReadIOsSetPerSec": "Number of read IOs performed by sets per second",
 
+    "ep_mem_used_secondary": "Memory used, bytes",
+    "ep_mem_used_primary": "Memory used, bytes",
+
     "index_rbps": "Bytes read/second",
     "index_wbps": "Bytes written/second",
     "index_avgqusz": "The average queue length",
@@ -677,6 +680,9 @@ NON_ZERO_VALUES = (
     "NReadIOsSet",
     "NReadBytesSetPerSec",
     "NReadIOsSetPerSec",
+
+    "ep_mem_used_secondary",
+    "ep_mem_used_primary",
 
     "xdc_ops",
     "ep_num_ops_get_meta",
