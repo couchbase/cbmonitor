@@ -973,6 +973,7 @@ class Report(object):
                              "sgimport_latency",
                              "kvstore_stats",
                              "eventing_per_handler_stats",
+                             "cbstats_memory",
                              ):
                 for metric in metrics:
                     for bucket in self.buckets:
