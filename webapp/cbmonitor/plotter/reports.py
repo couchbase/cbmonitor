@@ -424,6 +424,8 @@ class Report(object):
             "MainStore_lss_blk_read_bs",
             "MainStore_lss_blk_gc_reads_bs",
             "MainStore_lss_blk_rdr_reads_bs",
+            "MainStore_lss_fragmentation",
+            "MainStore_rlss_num_reads",
             "BackStore_memory_size",
             "BackStore_num_cached_pages",
             "BackStore_num_pages",
@@ -448,6 +450,8 @@ class Report(object):
             "BackStore_lss_blk_read_bs",
             "BackStore_lss_blk_gc_reads_bs",
             "BackStore_lss_blk_rdr_reads_bs",
+            "BackStore_lss_fragmentation",
+            "BackStore_rlss_num_reads"
         ]),
         ("secondary_storage_stats_mm", [
             "mm_allocated",
