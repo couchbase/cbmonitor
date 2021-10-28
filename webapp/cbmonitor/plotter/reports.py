@@ -129,6 +129,7 @@ class Report(object):
             "NReadIOsSet",
             "NReadBytesSetPerSec",
             "NReadIOsSetPerSec",
+            "ActiveIndexBlocksSize",
         ]),
         ("cbstats_memory", [
             "ep_mem_used_secondary",

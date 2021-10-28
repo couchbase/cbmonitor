@@ -200,6 +200,7 @@ LABELS = {
     "NReadIOsSet": "Number of read IOs performed by sets",
     "NReadBytesSetPerSec": "Bytes read from disk by sets per second",
     "NReadIOsSetPerSec": "Number of read IOs performed by sets per second",
+    "ActiveIndexBlocksSize": "Size of all index blocks",
 
     "ep_mem_used_secondary": "Memory used, bytes",
     "ep_mem_used_primary": "Memory used, bytes",
@@ -696,6 +697,7 @@ NON_ZERO_VALUES = (
     "NReadIOsSet",
     "NReadBytesSetPerSec",
     "NReadIOsSetPerSec",
+    "ActiveIndexBlocksSize",
 
     "ep_mem_used_secondary",
     "ep_mem_used_primary",
