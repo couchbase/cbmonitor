@@ -73,9 +73,7 @@ class Report(object):
             "BufferMemUsed",
             "WALMemUsed",
             "WALBufferMemUsed",
-            "HistogramMemUsed",
             "TreeSnapshotMemoryUsed",
-            "LSMTreeObjectMemUsed",
             "ReadAheadBufferMemUsed",
             "TableObjectMemUsed",
             "WriteAmp",
@@ -135,6 +133,11 @@ class Report(object):
         ("cbstats_memory", [
             "ep_mem_used_secondary",
             "ep_mem_used_primary",
+        ]),
+        ("cbstats_all", [
+            "mem_used_secondary",
+            "ep_magma_total_mem_used",
+            "ep_magma_mem_used_diff",
         ]),
         ("n1ql_stats", [
             "query_requests",
@@ -992,6 +995,7 @@ class Report(object):
                              "kvstore_stats",
                              "eventing_per_handler_stats",
                              "cbstats_memory",
+                             "cbstats_all",
                              ):
                 for metric in metrics:
                     for bucket in self.buckets:

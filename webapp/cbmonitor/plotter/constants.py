@@ -146,9 +146,7 @@ LABELS = {
     "BufferMemUsed": "Number of bytes",
     "WALMemUsed": "Number of bytes",
     "WALBufferMemUsed": "Number of bytes",
-    "HistogramMemUsed": "Number of bytes",
     "TreeSnapshotMemoryUsed": "Number of bytes",
-    "LSMTreeObjectMemUsed": "Number of bytes",
     "ReadAheadBufferMemUsed": "Number of bytes",
     "TableObjectMemUsed": "Number of bytes",
     "WriteAmp": "Amplification",
@@ -205,6 +203,10 @@ LABELS = {
 
     "ep_mem_used_secondary": "Memory used, bytes",
     "ep_mem_used_primary": "Memory used, bytes",
+
+    "mem_used_secondary": "Memory used, bytes",
+    "ep_magma_total_mem_used": "Memory used, bytes",
+    "ep_magma_mem_used_diff": "Memory used, bytes",
 
     "index_rbps": "Bytes read/second",
     "index_wbps": "Bytes written/second",
@@ -644,9 +646,7 @@ NON_ZERO_VALUES = (
     "BufferMemUsed",
     "WALMemUsed",
     "WALBufferMemUsed",
-    "HistogramMemUsed",
     "TreeSnapshotMemoryUsed",
-    "LSMTreeObjectMemUsed",
     "ReadAheadBufferMemUsed",
     "TableObjectMemUsed",
     "WriteAmp",
@@ -703,6 +703,10 @@ NON_ZERO_VALUES = (
 
     "ep_mem_used_secondary",
     "ep_mem_used_primary",
+
+    "mem_used_secondary",
+    "ep_magma_total_mem_used",
+    "ep_magma_mem_used_diff",
 
     "xdc_ops",
     "ep_num_ops_get_meta",
