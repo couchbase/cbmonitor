@@ -69,7 +69,6 @@ class Report(object):
             "ReadAmp",
             "ReadAmpGet",
             "ReadIOAmp",
-            "TotalMemUsed",
             "BufferMemUsed",
             "WALMemUsed",
             "WALBufferMemUsed",
@@ -131,7 +130,6 @@ class Report(object):
             "NBlocksCached",
         ]),
         ("cbstats_memory", [
-            "ep_mem_used_secondary",
             "ep_mem_used_primary",
         ]),
         ("cbstats_all", [

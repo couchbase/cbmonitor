@@ -142,7 +142,6 @@ LABELS = {
     "ReadAmp": "Amplification",
     "ReadAmpGet": "Amplification",
     "ReadIOAmp": "Amplification",
-    "TotalMemUsed": "Number of bytes",
     "BufferMemUsed": "Number of bytes",
     "WALMemUsed": "Number of bytes",
     "WALBufferMemUsed": "Number of bytes",
@@ -201,7 +200,6 @@ LABELS = {
     "ActiveIndexBlocksSize": "Size of all index blocks",
     "NBlocksCached": "Number of blocks in the block cache",
 
-    "ep_mem_used_secondary": "Memory used, bytes",
     "ep_mem_used_primary": "Memory used, bytes",
 
     "mem_used_secondary": "Memory used, bytes",
@@ -642,7 +640,6 @@ NON_ZERO_VALUES = (
     "ReadAmp",
     "ReadAmpGet",
     "ReadIOAmp",
-    "TotalMemUsed",
     "BufferMemUsed",
     "WALMemUsed",
     "WALBufferMemUsed",
@@ -701,7 +698,6 @@ NON_ZERO_VALUES = (
     "ActiveIndexBlocksSize",
     "NBlocksCached",
 
-    "ep_mem_used_secondary",
     "ep_mem_used_primary",
 
     "mem_used_secondary",
