@@ -198,6 +198,7 @@ LABELS = {
     "NReadIOsSetPerSec": "Number of read IOs performed by sets per second",
     "ActiveIndexBlocksSize": "Size of all index blocks",
     "NBlocksCached": "Number of blocks in the block cache",
+    "CheckpointOverheadPeriod": "Avg checkpoint overhead period without causing overflow",
 
     "ep_mem_used_primary": "Memory used, bytes",
 
@@ -695,6 +696,7 @@ NON_ZERO_VALUES = (
     "NReadIOsSetPerSec",
     "ActiveIndexBlocksSize",
     "NBlocksCached",
+    "CheckpointOverheadPeriod",
 
     "ep_mem_used_primary",
 

@@ -127,6 +127,7 @@ class Report(object):
             "NReadIOsSetPerSec",
             "ActiveIndexBlocksSize",
             "NBlocksCached",
+            "CheckpointOverheadPeriod",
         ]),
         ("cbstats_memory", [
             "ep_mem_used_primary",
