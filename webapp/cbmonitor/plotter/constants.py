@@ -199,6 +199,7 @@ LABELS = {
     "ActiveIndexBlocksSize": "Size of all index blocks",
     "NBlocksCached": "Number of blocks in the block cache",
     "CheckpointOverheadPeriod": "Avg checkpoint overhead period without causing overflow",
+    "CheckpointOverheadRatio": "Ratio of total disk usage of the LSMTrees",
 
     "ep_mem_used_primary": "Memory used, bytes",
 
@@ -697,6 +698,7 @@ NON_ZERO_VALUES = (
     "ActiveIndexBlocksSize",
     "NBlocksCached",
     "CheckpointOverheadPeriod",
+    "CheckpointOverheadRatio",
 
     "ep_mem_used_primary",
 
