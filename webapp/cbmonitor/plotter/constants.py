@@ -303,6 +303,7 @@ LABELS = {
     "MainStore_lss_cached_pages_percent": "lss_cached_pages, %",
     "MainStore_num_burst_visits": "Burst Visits",
     "MainStore_num_periodic_visits": "Periodic Visits",
+    "MainStore_inserts": "Number of inserts",
     "BackStore_memory_size": "Memory used by plasma",
     "BackStore_avg_throttle_dur_other" : "Average timings, ns",
     "BackStore_avg_throttle_dur_reader" : "Average timings, ns",
@@ -338,6 +339,7 @@ LABELS = {
     "BackStore_lss_cached_pages_percent": "lss_cached_pages, %",
     "BackStore_num_burst_visits": "Burst Visits",
     "BackStore_num_periodic_visits": "Periodic Visits",
+    "BackStore_inserts": "Number of inserts",
     "mm_allocated": "Memory allocated, Indexer, bytes",
     "mm_resident": "Memory resident, Indexer, Bytes",
     "mm_metadata": "Memory metadata, Indexer, Bytes",
@@ -787,6 +789,7 @@ NON_ZERO_VALUES = (
     "MainStore_avg_throttle_dur_other",
     "MainStore_avg_throttle_dur_reader",
     "MainStore_avg_throttle_dur_writer",
+    "MainStore_inserts",
 
     "BackStore_memory_size",
     "BackStore_num_cached_pages",
@@ -819,6 +822,7 @@ NON_ZERO_VALUES = (
     "BackStore_avg_throttle_dur_other",
     "BackStore_avg_throttle_dur_reader",
     "BackStore_avg_throttle_dur_writer",
+    "BackStore_inserts",
 
     "DCP_MUTATION",
     "DOC_TIMER_EVENTS",
