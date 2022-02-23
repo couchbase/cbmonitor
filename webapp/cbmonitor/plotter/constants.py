@@ -786,10 +786,6 @@ NON_ZERO_VALUES = (
     "MainStore_lss_cached_pages_percent",
     "MainStore_num_burst_visits",
     "MainStore_num_periodic_visits",
-    "MainStore_avg_throttle_dur_other",
-    "MainStore_avg_throttle_dur_reader",
-    "MainStore_avg_throttle_dur_writer",
-    "MainStore_inserts",
 
     "BackStore_memory_size",
     "BackStore_num_cached_pages",
@@ -819,10 +815,6 @@ NON_ZERO_VALUES = (
     "BackStore_lss_cached_pages_percent",
     "BackStore_num_burst_visits",
     "BackStore_num_periodic_visits",
-    "BackStore_avg_throttle_dur_other",
-    "BackStore_avg_throttle_dur_reader",
-    "BackStore_avg_throttle_dur_writer",
-    "BackStore_inserts",
 
     "DCP_MUTATION",
     "DOC_TIMER_EVENTS",
