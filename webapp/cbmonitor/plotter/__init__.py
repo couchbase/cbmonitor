@@ -166,7 +166,7 @@ def generate_series(data):
 
     The function also normalizes and sort data.
     """
-    series = pd.Series(index=[d[0] for d in data], data=[d[1] for d in data])
+    series = pd.Series(index=[d[0] for d in data], data=[float(d[1]) for d in data])
 
     # Subtract the smallest timestamp value so that series starts from 0.
     starting_point = series.index.values.min()
