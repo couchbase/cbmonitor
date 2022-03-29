@@ -201,6 +201,7 @@ LABELS = {
     "CheckpointOverheadPeriod": "Avg checkpoint overhead period without causing overflow",
     "CheckpointOverheadRatio": "Ratio of total disk usage of the LSMTrees",
     "NBlocksDropped": "Number of blocks",
+    "BlockCacheBlockSize": "Block size, bytes",
 
     "ep_mem_used_primary": "Memory used, bytes",
 
@@ -721,6 +722,7 @@ NON_ZERO_VALUES = (
     "CheckpointOverheadPeriod",
     "CheckpointOverheadRatio",
     "NBlocksDropped",
+    "BlockCacheBlockSize",
 
     "ep_mem_used_primary",
 
