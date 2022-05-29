@@ -394,6 +394,7 @@ class Report(object):
             "flush_queue_size",
             "num_compactions",
             "num_completed_requests",
+            "num_docs_indexed",
             "num_rows_returned",
             "num_rows_scanned_aggr",
             "scan_cache_hit_aggr",

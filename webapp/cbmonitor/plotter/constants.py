@@ -236,6 +236,7 @@ LABELS = {
     "ESTABLISHED": "Connections in ESTABLISHED state",
     "TIME_WAIT": "Connections in TIME_WAIT state",
     "index_num_rows_returned": "Number of rows returned by 2i",
+    "num_docs_indexed": "Number of docs indexed by 2i",
     "index_scan_bytes_read": "Number of bytes per second read by a scan",
     "index_num_requests": "Number of requests served by the indexer per second",
     "index_num_docs_indexed": "Number of documents indexed by the indexer per second",
@@ -768,6 +769,7 @@ NON_ZERO_VALUES = (
     "index_num_docs_queued",
     "index_num_requests",
     "index_num_rows_returned",
+    "num_docs_indexed"
     "index_scan_bytes_read",
     "index_data_size",
     "index_disk_size",
