@@ -492,10 +492,10 @@ class Report(object):
             "BackStore_eviction_rate_swapper",
             "BackStore_eviction_rate_other",
         ]),
-        ("secondary_storage_stats_mm", [
-            "mm_allocated",
-            "mm_resident",
-            "mm_metadata",
+        ("secondary_storage_stats_mm_json", [
+            "mm_allocated_js",
+            "mm_resident_js",
+            "mm_metadata_js",
             "bin_10240_FragPercent",
             "bin_10240_Resident",
             "bin_1024_FragPercent",
@@ -569,7 +569,7 @@ class Report(object):
             "bin_96_FragPercent",
             "bin_96_Resident",
         ]),
-        ("secondary_storage_stats_mm_json", [
+        ("secondary_storage_stats_mm", [
             "mm_allocated_js",
             "mm_resident_js",
             "mm_metadata_js",
