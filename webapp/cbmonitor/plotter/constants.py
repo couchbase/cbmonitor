@@ -202,6 +202,7 @@ LABELS = {
     "CheckpointOverheadRatio": "Ratio of total disk usage of the LSMTrees",
     "NBlocksDropped": "Number of blocks",
     "BlockCacheBlockSize": "Block size, bytes",
+    "NMemoryOptimisedCommitBatches": "Number of commit batches written in memory optimised mode",
 
     "ep_mem_used_primary": "Memory used, bytes",
 
@@ -799,6 +800,7 @@ NON_ZERO_VALUES = (
     "CheckpointOverheadRatio",
     "NBlocksDropped",
     "BlockCacheBlockSize",
+    "NMemoryOptimisedCommitBatches",
 
     "ep_mem_used_primary",
 
