@@ -1,7 +1,7 @@
 django==1.5.5
 flup==1.0.2
 matplotlib==2.0.2
-numpy==1.12.1
+numpy==1.21.0
 pandas==0.20.2
 flake8==3.3.0
 python-memcached==1.58
