@@ -11,7 +11,7 @@ INTERNAL_IPS = ("127.0.0.1",)
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "cbmonitor.db",
+        "NAME": "/opt/cbmonitor/cbmonitor.db",
         "OPTIONS": {
             "timeout": 30,
         },
