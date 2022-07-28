@@ -131,7 +131,8 @@ class Report(object):
             "CheckpointOverheadRatio",
             "NBlocksDropped",
             "BlockCacheBlockSize",
-            "NMemoryOptimisedCommitBatches"
+            "NMemoryOptimisedCommitBatches",
+            "TotalDiskUsage"
         ]),
         ("cbstats_memory", [
             "ep_mem_used_primary",
