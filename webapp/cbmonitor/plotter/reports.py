@@ -923,6 +923,14 @@ class Report(object):
             "syncgateway__per_db__db__gsi_views__roleAccess_count",
             "syncgateway__per_db__db__gsi_views__channels_count",
         ]),
+        ("metrics_rest_api_metering", [
+            "kv_meter_ru_total",
+            "kv_meter_wu_total",
+            "kv_meter_cu_total",
+            "index_meter_ru_total",
+            "index_meter_wu_total",
+            "n1ql_meter_cu_total",
+        ]),
     ))
 
     def __init__(self, snapshots):
@@ -1122,6 +1130,7 @@ class Report(object):
                              "eventing_per_handler_stats",
                              "cbstats_memory",
                              "cbstats_all",
+                             "metrics_rest_api_metering",
                              ):
                 for metric in metrics:
                     for bucket in self.buckets:

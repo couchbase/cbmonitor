@@ -636,6 +636,12 @@ LABELS = {
     "syncgateway__per_db__db__gsi_views__access_count": "gsi_views__access_count",
     "syncgateway__per_db__db__gsi_views__roleAccess_count": "gsi_views__roleAccess_count",
     "syncgateway__per_db__db__gsi_views__channels_count": "gsi_views__channels_count",
+    "kv_meter_ru_total": "Read Units per sec",
+    "kv_meter_wu_total": "Write Units per sec",
+    "kv_meter_cu_total": "Compute Units per sec",
+    "index_meter_ru_total": "Read Units per sec",
+    "index_meter_wu_total": "Write Units per sec",
+    "n1ql_meter_cu_total": "Compute Units per sec",
 }
 
 HISTOGRAMS = (
