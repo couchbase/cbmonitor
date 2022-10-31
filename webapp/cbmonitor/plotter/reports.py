@@ -132,7 +132,8 @@ class Report(object):
             "NBlocksDropped",
             "BlockCacheBlockSize",
             "NMemoryOptimisedCommitBatches",
-            "TotalDiskUsage"
+            "TotalDiskUsage",
+            "NonResidentBloomFilterSize",
         ]),
         ("cbstats_memory", [
             "ep_mem_used_primary",
