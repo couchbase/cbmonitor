@@ -643,6 +643,8 @@ LABELS = {
     "index_meter_ru_total": "Read Units per sec",
     "index_meter_wu_total": "Write Units per sec",
     "n1ql_meter_cu_total": "Compute Units per sec",
+    "fts_meter_ru_total": "Read Units per sec",
+    "fts_meter_wu_total": "Write Units per sec",
 }
 
 HISTOGRAMS = (

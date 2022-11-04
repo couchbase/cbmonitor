@@ -931,6 +931,8 @@ class Report(object):
             "index_meter_ru_total",
             "index_meter_wu_total",
             "n1ql_meter_cu_total",
+            "fts_meter_ru_total",
+            "fts_meter_wu_total",
         ]),
     ))
 
