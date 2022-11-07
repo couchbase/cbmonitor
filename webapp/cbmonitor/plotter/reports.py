@@ -353,7 +353,7 @@ class Report(object):
         ("eventing_per_node_stats", [
             "DcpEventsRemaining",
         ]),
-         ("eventing_per_handler_stats", [
+        ("eventing_per_handler_stats", [
             "on_update_success"
         ]),
         ("eventing_consumer_stats", [
@@ -934,6 +934,20 @@ class Report(object):
             "fts_meter_ru_total",
             "fts_meter_wu_total",
         ]),
+        ("regulator_stats", [
+            "total_RUs_metered",
+            "total_WUs_metered",
+            "total_read_ops_capped",
+            "total_read_ops_rejected",
+            "total_write_ops_rejected",
+            "total_read_throttle_seconds",
+            "total_write_throttle_seconds",
+            "total_read_ops_metering_errs",
+            "total_write_ops_metering_errs",
+            "total_ops_timed_out_while_metering",
+            "total_batch_limting_timeouts",
+            "total_batch_rejection_backoff_time_ms"
+        ]),
     ))
 
     def __init__(self, snapshots):
@@ -1134,6 +1148,7 @@ class Report(object):
                              "cbstats_memory",
                              "cbstats_all",
                              "metrics_rest_api_metering",
+                             "regulator_stats"
                              ):
                 for metric in metrics:
                     for bucket in self.buckets:

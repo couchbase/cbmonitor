@@ -385,7 +385,7 @@ LABELS = {
     "mm_resident_js": "Memory resident, Indexer, Bytes",
     "mm_metadata_js": "Memory metadata, Indexer, Bytes",
     "bin_10240_FragPercent": "Fragmentation %",
-    "bin_10240_Resident" : "Memory resident, Bytes",
+    "bin_10240_Resident": "Memory resident, Bytes",
     "bin_1024_FragPercent": "Fragmentation %",
     "bin_1024_Resident": "Memory resident, Bytes",
     "bin_112_FragPercent": "Fragmentation %",
@@ -645,6 +645,18 @@ LABELS = {
     "n1ql_meter_cu_total": "Compute Units per sec",
     "fts_meter_ru_total": "Read Units per sec",
     "fts_meter_wu_total": "Write Units per sec",
+    "total_RUs_metered": "Total RU metered",
+    "total_WUs_metered": "Total WU metered",
+    "total_read_ops_capped": "Total Read ops capped",
+    "total_read_ops_rejected": "Total Read ops rejected",
+    "total_write_ops_rejected": "Total write ops capped",
+    "total_read_throttle_seconds": "Total Read throlled capped",
+    "total_write_throttle_seconds": "total_write_throttle_seconds",
+    "total_read_ops_metering_errs": "total_read_ops_metering_errs" ,
+    "total_write_ops_metering_errs": "total_write_ops_metering_errs",
+    "total_ops_timed_out_while_metering": "total_ops_timed_out_while_metering",
+    "total_batch_limting_timeouts": "total_batch_limting_timeouts",
+    "total_batch_rejection_backoff_time_ms":"total_batch_limting_timeouts",
 }
 
 HISTOGRAMS = (
