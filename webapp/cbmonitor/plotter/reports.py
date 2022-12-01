@@ -134,6 +134,7 @@ class Report(object):
             "NMemoryOptimisedCommitBatches",
             "TotalDiskUsage",
             "NonResidentBloomFilterSize",
+            "RecentBloomFilterCacheHitRatio",
         ]),
         ("cbstats_memory", [
             "ep_mem_used_primary",

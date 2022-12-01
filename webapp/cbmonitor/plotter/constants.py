@@ -225,6 +225,7 @@ LABELS = {
     "NMemoryOptimisedCommitBatches": "Number of commit batches written in memory optimised mode",
     "TotalDiskUsage": "Uncompressed disk size of all versions of the LSM Trees",
     "NonResidentBloomFilterSize": "Memory reclaimed by evicting bloom filters",
+    "RecentBloomFilterCacheHitRatio": "Bloom filter cache hit ratio",
 
     "ep_mem_used_primary": "Memory used, bytes",
 
@@ -838,6 +839,7 @@ NON_ZERO_VALUES = (
     "NMemoryOptimisedCommitBatches",
     "TotalDiskUsage",
     "NonResidentBloomFilterSize",
+    "RecentBloomFilterCacheHitRatio",
 
     "ep_mem_used_primary",
 
