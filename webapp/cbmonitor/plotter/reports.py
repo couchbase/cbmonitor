@@ -939,7 +939,9 @@ class Report(object):
             "total_read_ops_rejected",
             "total_write_ops_rejected",
             "total_write_throttle_seconds",
-            "total_batch_rejection_backoff_time_ms"
+            "total_batch_rejection_backoff_time_ms",
+            "total_read_ops_capped",
+            "total_batch_limting_timeouts"
         ]),
     ))
 
