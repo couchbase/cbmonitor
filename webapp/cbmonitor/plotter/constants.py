@@ -652,6 +652,8 @@ LABELS = {
     "total_batch_rejection_backoff_time_ms":"Total ms spent in exponential backoff",
     "total_batch_limting_timeouts": "Total batch executions timed out in exponential backoff (during batch execution rejects",
     "total_read_ops_capped": "Total read ops (queries) capped (because of their huge RUs)",
+    "utilization:cpuPercent": "Utilisation Cpu Percentage by FTS ",
+    "utilization:memoryBytesPercent": "Utilisation Memory Percentage by FTS",
 
 }
 

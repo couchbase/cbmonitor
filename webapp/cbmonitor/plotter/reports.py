@@ -342,6 +342,10 @@ class Report(object):
             "pct_cpu_gc",
             "total_gc",
         ]),
+        ("utilisation_stats", [
+            "utilization:cpuPercent",
+            "utilization:memoryBytesPercent"
+        ]),
         ("eventing_stats", [
             "DCP_MUTATION",
             "DOC_TIMER_EVENTS",
@@ -1117,6 +1121,7 @@ class Report(object):
                              "eventing_per_node_stats",
                              "sgimport_latency",
                              "vmstat",
+                             "utilisation_stats",
                              ):
                 for metric in metrics:
                     for server in self.servers:
