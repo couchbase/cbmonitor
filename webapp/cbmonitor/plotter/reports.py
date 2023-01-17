@@ -344,7 +344,7 @@ class Report(object):
         ]),
         ("utilisation_stats", [
             "utilization:cpuPercent",
-            "utilization:memoryBytesPercent"
+            "utilization:memoryBytes"
         ]),
         ("eventing_stats", [
             "DCP_MUTATION",
