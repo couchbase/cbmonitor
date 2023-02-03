@@ -654,7 +654,8 @@ LABELS = {
     "total_read_ops_capped": "Total read ops (queries) capped (because of their huge RUs)",
     "utilization:cpuPercent": "Utilisation Cpu Percentage by FTS ",
     "utilization:memoryBytes": "Utilisation Memory Percentage by FTS",
-
+    "kv_ep_total_enqueued_rate": "Mutations enqueued per sec in checkpoints",
+    "kv_ep_total_deduplicated_rate": "Mutations deduplicated per sec in checkpoints",
 }
 
 HISTOGRAMS = (

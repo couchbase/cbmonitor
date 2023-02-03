@@ -947,6 +947,10 @@ class Report(object):
             "total_read_ops_capped",
             "total_batch_limting_timeouts"
         ]),
+        ("metrics_rest_api_dedup", [
+            "kv_ep_total_enqueued_rate",
+            "kv_ep_total_deduplicated_rate",
+        ])
     ))
 
     def __init__(self, snapshots):
@@ -1168,6 +1172,8 @@ class Report(object):
             # Per-server, Per-bucket metrics
             if collector in ("eventing_consumer_stats",
                              "regulator_stats",
+                             "kv_ep_total_enqueued_rate",
+                             "kv_ep_total_deduplicated_rate",
                              ):
                 for metric in metrics:
                     for server in self.servers:
