@@ -233,10 +233,10 @@ LABELS = {
     "ep_magma_total_mem_used": "Memory used, bytes",
     "ep_magma_mem_used_diff": "Memory used, bytes",
 
-    "ep_data_blocks_uncompressed_size": "Uncompressed size, bytes",
-    "ep_data_blocks_compressed_size": "Compressed size, bytes",
-    "ep_data_blocks_compression_ratio": "Compression ratio",
-    "ep_data_blocks_space_reduction_estimate_pct": "Estimate percent, %",
+    "ep_magma_data_blocks_uncompressed_size": "Uncompressed size, bytes",
+    "ep_magma_data_blocks_compressed_size": "Compressed size, bytes",
+    "ep_magma_data_blocks_compression_ratio": "Compression ratio",
+    "ep_magma_data_blocks_space_reduction_estimate_pct": "Estimate percent, %",
 
     "index_rbps": "Bytes read/second",
     "index_wbps": "Bytes written/second",
@@ -958,10 +958,10 @@ NON_ZERO_VALUES = (
     "ep_magma_total_mem_used",
     "ep_magma_mem_used_diff",
 
-    "ep_data_blocks_uncompressed_size",
-    "ep_data_blocks_compressed_size",
-    "ep_data_blocks_compression_ratio",
-    "ep_data_blocks_space_reduction_estimate_pct",
+    "ep_magma_data_blocks_uncompressed_size",
+    "ep_magma_data_blocks_compressed_size",
+    "ep_magma_data_blocks_compression_ratio",
+    "ep_magma_data_blocks_space_reduction_estimate_pct",
 
     "xdc_ops",
     "ep_num_ops_get_meta",
