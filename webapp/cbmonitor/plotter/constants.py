@@ -761,6 +761,7 @@ LABELS = {
     "utilization:memoryBytes": "Utilisation Memory Percentage by FTS",
     "kv_ep_total_enqueued_rate": "Mutations enqueued per sec in checkpoints",
     "kv_ep_total_deduplicated_rate": "Mutations deduplicated per sec in checkpoints",
+    "kv_ep_total_deduplicated_flusher_rate": "Mutations deduplicated per sec in flushers"
 }
 
 HISTOGRAMS = (
