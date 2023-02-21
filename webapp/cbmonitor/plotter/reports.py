@@ -135,6 +135,9 @@ class Report(object):
             "TotalDiskUsage",
             "NonResidentBloomFilterSize",
             "RecentBloomFilterCacheHitRatio",
+            "CheckpointOverhead",
+            "ActiveDataSize",
+            "ActiveDiskUsage",
         ]),
         ("cbstats_memory", [
             "ep_mem_used_primary",

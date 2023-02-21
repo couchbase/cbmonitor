@@ -226,6 +226,9 @@ LABELS = {
     "TotalDiskUsage": "Uncompressed disk size of all versions of the LSM Trees",
     "NonResidentBloomFilterSize": "Memory reclaimed by evicting bloom filters",
     "RecentBloomFilterCacheHitRatio": "Bloom filter cache hit ratio",
+    "CheckpointOverhead": "Overhead of persistent snapshots compared to actual disk usage",
+    "ActiveDataSize": "Normalize logical data size based on max size on disk",
+    "ActiveDiskUsage": "Uncompressed disk size of latest version of the LSM Trees",
 
     "ep_mem_used_primary": "Memory used, bytes",
 
@@ -952,6 +955,9 @@ NON_ZERO_VALUES = (
     "TotalDiskUsage",
     "NonResidentBloomFilterSize",
     "RecentBloomFilterCacheHitRatio",
+    "CheckpointOverhead",
+    "ActiveDataSize",
+    "ActiveDiskUsage",
 
     "ep_mem_used_primary",
 
