@@ -120,15 +120,20 @@ def generate_title(observable):
         [server/bucket] metric.
     """
     metric = observable.name.replace("/", "_")
-    if observable.bucket:
-        return "[{}] {}".format(observable.bucket, metric)
-    elif observable.server:
-        return "[{}] {}".format(observable.server, metric)
-    elif observable.index and "." in observable.index:
-        name = observable.index.split(".")
-        return "[{}] [{}] {}".format(name[0], name[1], metric)
+    prefixes = []
+
+    if observable.index and "." in observable.index:
+        names = observable.index.split(".")
+        prefixes = ["[{}]".format(name) for name in names]
     else:
-        return metric
+        if observable.bucket:
+            prefixes.append("[{}]".format(observable.bucket))
+
+        if observable.server:
+            prefixes.append("[{}]".format(observable.server))
+
+    title = ' '.join(prefixes + [metric])
+    return title
 
 
 def generate_paths(clusters, labels, metric):
