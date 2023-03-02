@@ -133,6 +133,8 @@ class Report(object):
             "BlockCacheBlockSize",
             "NMemoryOptimisedCommitBatches",
             "TotalDiskUsage",
+            "HistoryDiskUsage",
+            "HistoryDataSize",
             "NonResidentBloomFilterSize",
             "RecentBloomFilterCacheHitRatio",
             "CheckpointOverhead",
