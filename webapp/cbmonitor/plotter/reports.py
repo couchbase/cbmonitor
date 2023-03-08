@@ -140,6 +140,8 @@ class Report(object):
             "CheckpointOverhead",
             "ActiveDataSize",
             "ActiveDiskUsage",
+            "CheckpointOverheadKeyIndex",
+            "CheckpointOverheadSeqIndex",
         ]),
         ("cbstats_memory", [
             "ep_mem_used_primary",

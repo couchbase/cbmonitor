@@ -231,6 +231,8 @@ LABELS = {
     "CheckpointOverhead": "Overhead of persistent snapshots compared to actual disk usage",
     "ActiveDataSize": "Normalize logical data size based on max size on disk",
     "ActiveDiskUsage": "Uncompressed disk size of latest version of the LSM Trees",
+    "CheckpointOverheadKeyIndex": "Overhead of KeyIndex",
+    "CheckpointOverheadSeqIndex": "Overhead of SeqIndex",
 
     "ep_mem_used_primary": "Memory used, bytes",
 
@@ -962,6 +964,8 @@ NON_ZERO_VALUES = (
     "CheckpointOverhead",
     "ActiveDataSize",
     "ActiveDiskUsage",
+    "CheckpointOverheadKeyIndex",
+    "CheckpointOverheadSeqIndex",
 
     "ep_mem_used_primary",
 
