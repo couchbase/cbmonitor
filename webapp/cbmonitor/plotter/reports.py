@@ -701,6 +701,7 @@ class Report(object):
         ]),
         ("meminfo", [
             "MemFree",
+            "MemAvailable",
             "Dirty",
             "Buffers",
             "Cached",
