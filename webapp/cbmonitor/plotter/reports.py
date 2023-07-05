@@ -45,6 +45,8 @@ class Report(object):
             "BytesIncoming",
             "BytesOutgoing",
             "BytesPerRead",
+            "FSReadBytes",
+            "FSWriteBytes",
             "IndexBlocksSize",
             "MemoryQuota",
             "NCommitBatches",
