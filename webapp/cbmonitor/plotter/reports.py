@@ -145,6 +145,10 @@ class Report(object):
             "CheckpointOverheadKeyIndex",
             "CheckpointOverheadSeqIndex",
         ]),
+        ("distribution", [
+            "distribution_point_cpu_util",
+            "distribution_point_mem_usage",
+        ]),
         ("cbstats_memory", [
             "ep_mem_used_primary",
         ]),
@@ -1218,6 +1222,7 @@ class Report(object):
                              "secondary_storage_stats_mm_json",
                              "syncgateway_cluster_stats",
                              "sgimport_latency",
+                             "distribution",
                              ):
                 for metric in metrics:
                     observables.append([
