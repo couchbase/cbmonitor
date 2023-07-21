@@ -3,7 +3,7 @@ import logging
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, StreamingHttpResponse
 from django.shortcuts import render_to_response
 from django.views.decorators.cache import cache_page
 
@@ -114,7 +114,7 @@ def add_index(request):
 def get_clusters(request):
     clusters = [c.name for c in models.Cluster.objects.all()]
     content = json.dumps(sorted(clusters))
-    return HttpResponse(content)
+    return StreamingHttpResponse(content)
 
 
 @validation
