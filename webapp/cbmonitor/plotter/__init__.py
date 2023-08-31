@@ -297,8 +297,14 @@ class Plotter:
                 continue
 
             labels = [mapping[cluster] for cluster in clusters]
-            metric = observables[0].name
-            title = generate_title(observables[0])
+            good_observable = None
+            for observable in observables:
+                if observable is None:
+                    continue
+                good_observable = observable
+                break
+            metric = good_observable.name
+            title = generate_title(good_observable)
             ylabel = constants.LABELS.get(metric, metric)
 
             for chart in generate_chart_types(metric):
