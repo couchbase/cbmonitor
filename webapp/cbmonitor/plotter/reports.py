@@ -727,6 +727,7 @@ class Report(object):
             "allocstall",
         ]),
         ("syncgateway_node_stats", [
+            "syncgateway__global__resource_utilization__node_cpu_percent_utilization",
             "syncgateway__global__resource_utilization__process_cpu_percent_utilization",
             "syncgateway__global__resource_utilization__process_memory_resident",
             "syncgateway__global__resource_utilization__system_memory_total",
@@ -945,6 +946,7 @@ class Report(object):
             "syncgateway__per_db__db__gsi_views__access_count",
             "syncgateway__per_db__db__gsi_views__roleAccess_count",
             "syncgateway__per_db__db__gsi_views__channels_count",
+            "sgw_resource_utilization_node_cpu_percent_utilization",
             "sgw_resource_utilization_process_cpu_percent_utilization",
             "sgw_resource_utilization_process_memory_resident",
             "sgw_resource_utilization_system_memory_total",
