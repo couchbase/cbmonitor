@@ -38,7 +38,7 @@ LABELS = {
     "ep_diskqueue_fill": "Fill rate, items/second",
     "ep_queue_size": "Number of items in the queue, items",
     "avg_bg_wait_time": "BgFetcher wait time, us",
-    "   time": "Disk commit time, s",
+    "avg_disk_commit_time": "Disk commit time, s",
     "avg_disk_update_time": "Disk update time, us",
     "vb_avg_total_queue_age": "Average age of all items in the disk write queue, second",
     "couch_docs_data_size": "Docs data size, bytes",
@@ -1039,6 +1039,7 @@ NON_ZERO_VALUES = (
     "index_data_size",
     "index_disk_size",
     "index_total_scan_duration",
+    "num_rows_scanned_aggr"
 
     "MainStore_memory_size",
     "MainStore_num_cached_pages",
