@@ -612,6 +612,8 @@ class Report(object):
             "cbexport_cpu",
             "cbimport_rss",
             "cbimport_cpu",
+            "celery_cpu",
+            "celery_rss",
             "beam.smp_rss",
             "beam.smp_cpu",
             "memcached_rss",
