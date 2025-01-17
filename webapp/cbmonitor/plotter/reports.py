@@ -268,6 +268,12 @@ class Report(object):
             "cpu_utilization_rate",
             "swap_used",
         ]),
+        ("metrics_rest_api_deks", [
+            "cm_key_manager_deks_in_use",
+            "cm_key_manager_drop_deks_total",
+            "cm_key_manager_generate_key_total",
+            "cm_key_manager_retire_key_total",
+        ]),
         ("analytics", [
             "heap_used",
             "gc_count",
@@ -1257,6 +1263,7 @@ class Report(object):
                              "sgimport_latency",
                              "vmstat",
                              "utilisation_stats",
+                             "metrics_rest_api_deks",
                              ):
                 for metric in metrics:
                     for server in self.servers:

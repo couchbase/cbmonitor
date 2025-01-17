@@ -785,6 +785,10 @@ LABELS = {
     "kv_ep_total_deduplicated_flusher_rate": "Mutations deduplicated per sec in flushers",
     "distribution_point_cpu_util": "Observability distribution point cpu utilisation",
     "distribution_point_mem_usage": "Observability distribution point memory usage",
+    "cm_key_manager_deks_in_use": "DEKs that currently exist",
+    "cm_key_manager_drop_deks_total": "Count of DEKs dropped",
+    "cm_key_manager_generate_key_total": "Count of new DEKs",
+    "cm_key_manager_retire_key_total": "Count of retired DEKs",
 }
 
 HISTOGRAMS = (
