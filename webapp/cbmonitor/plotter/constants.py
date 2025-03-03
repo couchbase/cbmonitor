@@ -789,6 +789,14 @@ LABELS = {
     "cm_key_manager_drop_deks_total": "Count of DEKs dropped",
     "cm_key_manager_generate_key_total": "Count of new DEKs",
     "cm_key_manager_retire_key_total": "Count of retired DEKs",
+    "contbk_backed_up_parts": "Number of backed up parts",
+    "contbk_backed_up_bytes": "Number of bytes in backed up parts",
+    "contbk_backed_up_part_size": "Size of the backed up parts",
+    "contbk_backed_up_part_time": "Time between backed up parts",
+    "contbk_worker_queue_length": "Number of items in the worker queue",
+    "contbk_gaps": "Number of gaps in the backup",
+    "cbcontbk_rss": "cbcontbk resident set size, bytes",
+    "cbcontbk_cpu": "cbcontbk CPU utilization, %",
 }
 
 HISTOGRAMS = (
@@ -816,6 +824,8 @@ HISTOGRAMS = (
     "Nth-latency",
     "sgimport_latency",
     "jts_latency",
+    "contbk_backed_up_part_size",
+    "contbk_backed_up_part_time",
 )
 
 ZOOM_HISTOGRAMS = (

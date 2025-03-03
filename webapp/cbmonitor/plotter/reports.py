@@ -648,6 +648,8 @@ class Report(object):
             "cblite_vsize",
             "prometheus_rss",
             "prometheus_cpu",
+            "cbcontbk_rss",
+            "cbcontbk_cpu",
         ]),
         ("metrics_rest_api_processes", [
             "memcached_sysproc_cpu_utilization",
@@ -1086,6 +1088,14 @@ class Report(object):
             "kv_ep_total_enqueued_rate",
             "kv_ep_total_deduplicated_rate",
             "kv_ep_total_deduplicated_flusher_rate"
+        ]),
+        ("metrics_rest_api_contbk", [
+            "contbk_backed_up_parts",
+            "contbk_backed_up_bytes",
+            "contbk_backed_up_part_size",
+            "contbk_backed_up_part_time",
+            "contbk_worker_queue_length",
+            "contbk_gaps"
         ])
     ))
 
@@ -1264,6 +1274,7 @@ class Report(object):
                              "vmstat",
                              "utilisation_stats",
                              "metrics_rest_api_deks",
+                             "metrics_rest_api_contbk",
                              ):
                 for metric in metrics:
                     for server in self.servers:
