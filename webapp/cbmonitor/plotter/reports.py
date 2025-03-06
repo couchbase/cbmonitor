@@ -1238,44 +1238,45 @@ class Report(object):
 
         for collector, metrics in self.METRICS.iteritems():
             # Cluster-wide metrics
-            if collector in ("active_tasks",
-                             "ns_server",
-                             "n1ql_stats",
-                             "fts_totals",
-                             "fts_latency",
-                             "secondary_debugstats",
-                             "secondaryscan_latency",
-                             "secondary_storage_stats_mm",
-                             "secondary_storage_stats_mm_json",
-                             "syncgateway_cluster_stats",
-                             "sgimport_latency",
-                             "distribution",
-                             ):
+            if collector in (
+                "active_tasks",
+                "ns_server",
+                "n1ql_stats",
+                "fts_totals",
+                "fts_latency",
+                "secondary_debugstats",
+                "secondaryscan_latency",
+                "secondary_storage_stats_mm",
+                "secondary_storage_stats_mm_json",
+                "syncgateway_cluster_stats",
+                "sgimport_latency",
+                "distribution",
+            ):
                 for metric in metrics:
                     observables.append([
                         all_observables[""][""][snapshot.cluster][collector].get(metric)
                         for snapshot in self.snapshots
                     ])
             # Per-server metrics
-            if collector in ("atop",
-                             "metrics_rest_api_processes",
-                             "analytics",
-                             "disk",
-                             "iostat",
-                             "net",
-                             "fts_stats",
-                             "meminfo",
-                             "pcstat",
-                             "sysdig",
-                             "ns_server_system",
-                             "syncgateway_node_stats",
-                             "eventing_per_node_stats",
-                             "sgimport_latency",
-                             "vmstat",
-                             "utilisation_stats",
-                             "metrics_rest_api_deks",
-                             "metrics_rest_api_contbk",
-                             ):
+            if collector in (
+                "atop",
+                "metrics_rest_api_processes",
+                "analytics",
+                "disk",
+                "iostat",
+                "net",
+                "fts_stats",
+                "meminfo",
+                "pcstat",
+                "sysdig",
+                "ns_server_system",
+                "syncgateway_node_stats",
+                "eventing_per_node_stats",
+                "sgimport_latency",
+                "vmstat",
+                "utilisation_stats",
+                "metrics_rest_api_deks",
+            ):
                 for metric in metrics:
                     for server in self.servers:
                         observables.append([
@@ -1283,25 +1284,26 @@ class Report(object):
                             for snapshot in self.snapshots
                         ])
             # Per-bucket metrics
-            if collector in ("active_tasks",
-                             "xdcr_stats",
-                             "ns_server",
-                             "spring_latency",
-                             "spring_query_latency",
-                             "durability",
-                             "observe",
-                             "xdcr_lag",
-                             "secondary_stats",
-                             "secondary_debugstats_bucket",
-                             "eventing_stats",
-                             "jts_stats",
-                             "sgimport_latency",
-                             "kvstore_stats",
-                             "eventing_per_handler_stats",
-                             "cbstats_memory",
-                             "cbstats_all",
-                             "metrics_rest_api_metering",
-                             ):
+            if collector in (
+                "active_tasks",
+                "xdcr_stats",
+                "ns_server",
+                "spring_latency",
+                "spring_query_latency",
+                "durability",
+                "observe",
+                "xdcr_lag",
+                "secondary_stats",
+                "secondary_debugstats_bucket",
+                "eventing_stats",
+                "jts_stats",
+                "sgimport_latency",
+                "kvstore_stats",
+                "eventing_per_handler_stats",
+                "cbstats_memory",
+                "cbstats_all",
+                "metrics_rest_api_metering",
+            ):
                 for metric in metrics:
                     for bucket in self.buckets:
                         observables.append([
@@ -1309,9 +1311,10 @@ class Report(object):
                             for snapshot in self.snapshots
                         ])
             # Per-index metrics
-            if collector in ("secondary_debugstats_index",
-                             "secondary_storage_stats",
-                             ):
+            if collector in (
+                "secondary_debugstats_index",
+                "secondary_storage_stats",
+            ):
                 for metric in metrics:
                     for index in self.indexes:
                         observables.append([
@@ -1319,10 +1322,12 @@ class Report(object):
                             for snapshot in self.snapshots
                         ])
             # Per-server, Per-bucket metrics
-            if collector in ("eventing_consumer_stats",
-                             "regulator_stats",
-                             "metrics_rest_api_dedup",
-                             ):
+            if collector in (
+                "eventing_consumer_stats",
+                "regulator_stats",
+                "metrics_rest_api_dedup",
+                "metrics_rest_api_contbk",
+            ):
                 for metric in metrics:
                     for server in self.servers:
                         for bucket in self.buckets:
