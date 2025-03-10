@@ -1092,8 +1092,8 @@ class Report(object):
         ("metrics_rest_api_contbk", [
             "contbk_backed_up_parts",
             "contbk_backed_up_bytes",
-            "contbk_backed_up_part_size",
-            "contbk_backed_up_part_time",
+            "contbk_backed_up_part_size_bucket",
+            "contbk_backed_up_part_time_bucket",
             "contbk_worker_queue_length",
             "contbk_gaps"
         ])
