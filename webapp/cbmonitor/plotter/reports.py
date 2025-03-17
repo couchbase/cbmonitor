@@ -1442,6 +1442,7 @@ class Report(object):
                 "vmstat",
                 "utilisation_stats",
                 "metrics_rest_api_deks",
+                "metrics_rest_api_app_telemetry",
             ):
                 for metric in metrics:
                     for server in self.servers:
