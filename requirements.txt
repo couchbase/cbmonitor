@@ -5,4 +5,4 @@ numpy==1.12.1
 pandas==0.20.2
 flake8==3.3.0
 python-memcached==1.58
-requests==2.18.3
+requests==2.31.0
