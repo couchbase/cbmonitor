@@ -107,6 +107,8 @@ LABELS = {
     "goxdcr_sysproc_mem_resident": "goxdcr resident set size, bytes",
     "java_sysproc_cpu_utilization": "Java CPU utilization, %",
     "java_sysproc_mem_resident": "Java resident set size, bytes",
+    "cbcontbk_sysproc_cpu_utilization": "cbcontbk CPU utilization, %",
+    "cbcontbk_sysproc_mem_resident": "cbcontbk resident set size, bytes",
     "xdcr_lag": "Total XDCR lag (from memory to memory), ms",
     "xdcr_persistence_time": "Observe latency, ms",
     "xdcr_diff": "Replication lag, ms",

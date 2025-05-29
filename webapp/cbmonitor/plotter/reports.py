@@ -771,6 +771,8 @@ class Report(object):
                     "goxdcr_sysproc_mem_resident",
                     "java_sysproc_cpu_utilization",
                     "java_sysproc_mem_resident",
+                    "cbcontbk_sysproc_cpu_utilization",
+                    "cbcontbk_sysproc_mem_resident",
                 ],
             ),
             (
