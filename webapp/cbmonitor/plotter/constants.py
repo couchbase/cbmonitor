@@ -816,6 +816,15 @@ LABELS = {
     "sdk_eventing_r_total": "Total SDK Eventing requests operations",
     "sdk_eventing_r_timedout": "Total SDK timedout Eventing requests operations",
     "sdk_eventing_r_cancelled": "Total SDK cancelled Eventing requests operations",
+    "numEmbeddingRequests": "Total number of embedding requests",
+    "numEmbeddingServiceFailures": "Total number of embedding service failures",
+    "numEmbeddingServiceTimeouts": "Total number of embedding service timeouts",
+    "numFailedFiles": "Total number of failed processing files",
+    "numMutationsReceived": "Total number of mutations received",
+    "numRateLimits": "Total number of rate limits errors",
+    "numSuccessfulEmbeddingWrites": "Total number of successful embedding writes",
+    "numSuccessfulFiles": "Total number of successfully processed files",
+    "numTokensProcessed": "Total number of tokens processed",
 }
 
 HISTOGRAMS = (

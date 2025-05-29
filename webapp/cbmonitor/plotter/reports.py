@@ -1264,6 +1264,20 @@ class Report(object):
                     "sdk_eventing_r_cancelled",
                 ],
             ),
+            (
+                "ai_workflow_stats",
+                [
+                    "numEmbeddingRequests",
+                    "numEmbeddingServiceFailures",
+                    "numEmbeddingServiceTimeouts",
+                    "numFailedFiles",
+                    "numMutationsReceived",
+                    "numRateLimits",
+                    "numSuccessfulEmbeddingWrites",
+                    "numSuccessfulFiles",
+                    "numTokensProcessed",
+                ]
+            )
         )
     )
 
@@ -1472,6 +1486,7 @@ class Report(object):
                 "cbstats_memory",
                 "cbstats_all",
                 "metrics_rest_api_metering",
+                "ai_workflow_stats",
             ):
                 for metric in metrics:
                     for bucket in self.buckets:
