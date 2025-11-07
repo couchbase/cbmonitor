@@ -1326,6 +1326,15 @@ class Report(object):
                     "numSuccessfulFiles",
                     "numTokensProcessed",
                 ]
+            ),
+            (
+                "metrics_rest_api_fusion_disk",
+                [
+                    "sys_disk_write_bytes",
+                    "sys_disk_read_bytes",
+                    "sys_disk_reads",
+                    "sys_disk_writes",
+                ]
             )
         )
     )
@@ -1508,6 +1517,7 @@ class Report(object):
                 "utilisation_stats",
                 "metrics_rest_api_deks",
                 "metrics_rest_api_app_telemetry",
+                "metrics_rest_api_fusion_disk",
             ):
                 for metric in metrics:
                     for server in self.servers:
