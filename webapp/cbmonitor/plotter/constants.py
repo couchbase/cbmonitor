@@ -786,10 +786,10 @@ LABELS = {
     "kv_ep_total_deduplicated_flusher_rate": "Mutations deduplicated per sec in flushers",
     "distribution_point_cpu_util": "Observability distribution point cpu utilisation",
     "distribution_point_mem_usage": "Observability distribution point memory usage",
-    "cm_key_manager_deks_in_use": "DEKs that currently exist",
-    "cm_key_manager_drop_deks_total": "Count of DEKs dropped",
-    "cm_key_manager_generate_key_total": "Count of new DEKs",
-    "cm_key_manager_retire_key_total": "Count of retired DEKs",
+    "cm_encr_at_rest_deks_in_use": "DEKs that currently exist",
+    "cm_encr_at_rest_drop_deks_events_total": "Count of DEKs dropped",
+    "cm_encr_at_rest_generate_dek_total": "Count of new DEKs",
+    "cm_encr_at_rest_generate_dek_failures_total": "Count of DEK generation failures",
     "contbk_backed_up_parts": "Number of backed up parts",
     "contbk_backed_up_bytes": "Number of bytes in backed up parts",
     "contbk_backed_up_part_size_bucket": "Size of the backed up parts",
@@ -1280,6 +1280,8 @@ NON_ZERO_VALUES = (
     "FileMapMemUsed",
     "LogStoreWriteAmp",
     "LogStoreFragmentationRatio",
+
+    "cm_encr_at_rest_generate_dek_failures_total",
 )
 
 PALETTE = (

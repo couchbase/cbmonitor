@@ -363,10 +363,10 @@ class Report(object):
             (
                 "metrics_rest_api_deks",
                 [
-                    "cm_key_manager_deks_in_use",
-                    "cm_key_manager_drop_deks_total",
-                    "cm_key_manager_generate_key_total",
-                    "cm_key_manager_retire_key_total",
+                    "cm_encr_at_rest_deks_in_use",
+                    "cm_encr_at_rest_drop_deks_events_total",
+                    "cm_encr_at_rest_generate_dek_total",
+                    "cm_encr_at_rest_generate_dek_failures_total",
                 ],
             ),
             (
@@ -1515,7 +1515,6 @@ class Report(object):
                 "sgimport_latency",
                 "vmstat",
                 "utilisation_stats",
-                "metrics_rest_api_deks",
                 "metrics_rest_api_app_telemetry",
                 "metrics_rest_api_fusion_disk",
             ):
@@ -1570,6 +1569,7 @@ class Report(object):
                 "regulator_stats",
                 "metrics_rest_api_dedup",
                 "metrics_rest_api_contbk",
+                "metrics_rest_api_deks",
             ):
                 for metric in metrics:
                     for server in self.servers:
