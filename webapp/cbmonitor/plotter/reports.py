@@ -275,8 +275,10 @@ class Report(object):
                 "spring_latency",
                 [
                     "latency_set",
+                    "latency_durable_set",
                     "latency_get",
                     "latency_total_set",
+                    "latency_total_durable_set",
                     "latency_total_get",
                 ],
             ),
