@@ -871,12 +871,11 @@ LABELS = {
     "FileMapMemUsed": "Memory used by the file map",
     "LogStoreWriteAmp": "Write amplification of the log store",
     "LogStoreFragmentationRatio": "Fragmentation ratio of the log store",
-    # Fusion prometheus disk stats
-    "sys_disk_write_bytes": "Number of bytes written to the disk",
-    "sys_disk_read_bytes": "Number of bytes read from the disk",
-    "sys_disk_reads": "Number of reads from the disk",
-    "sys_disk_writes": "Number of writes to the disk",
 
+    "sys_disk_write_bytes": "Number of bytes written to the disk per second",
+    "sys_disk_read_bytes": "Number of bytes read from the disk per second",
+    "sys_disk_reads": "Number of reads from the disk per second",
+    "sys_disk_writes": "Number of writes to the disk per second",
 }
 
 HISTOGRAMS = (
