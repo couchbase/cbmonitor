@@ -876,6 +876,12 @@ LABELS = {
     "sys_disk_read_bytes": "Number of bytes read from the disk per second",
     "sys_disk_reads": "Number of reads from the disk per second",
     "sys_disk_writes": "Number of writes to the disk per second",
+
+    "bg_load_p50": "P50 bg_load time, us",
+    "bg_load_p90": "P90 bg_load time, us",
+    "bg_load_p95": "P95 bg_load time, us",
+    "bg_load_p99": "P99 bg_load time, us",
+    "bg_load_p99.9": "P99.9 bg_load time, us",
 }
 
 HISTOGRAMS = (

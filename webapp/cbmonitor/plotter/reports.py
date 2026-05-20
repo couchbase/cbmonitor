@@ -1335,7 +1335,17 @@ class Report(object):
                     "sys_disk_reads",
                     "sys_disk_writes",
                 ]
-            )
+            ),
+            (
+                "mcstat_histogram_stats",
+                [
+                    "bg_load_p50",
+                    "bg_load_p90",
+                    "bg_load_p95",
+                    "bg_load_p99",
+                    "bg_load_p99.9",
+                ],
+            ),
         )
     )
 
@@ -1570,6 +1580,7 @@ class Report(object):
                 "metrics_rest_api_dedup",
                 "metrics_rest_api_contbk",
                 "metrics_rest_api_deks",
+                "mcstat_histogram_stats",
             ):
                 for metric in metrics:
                     for server in self.servers:
